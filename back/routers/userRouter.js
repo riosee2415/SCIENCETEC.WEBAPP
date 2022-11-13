@@ -22,11 +22,14 @@ router.post("/list", isAdminCheck, async (req, res, next) => {
   const selectQuery = `
   SELECT	ROW_NUMBER() OVER(ORDER	BY createdAt)		AS num,
           id,
+          userId,
           email,
           username,
-          nickname,
           mobile,
           level,
+          kakaoId,
+          isKakao,
+          isPremium,
           isExit,
           CASE
             WHEN	level = 1	THEN "일반회원"
@@ -313,7 +316,9 @@ router.get("/signin", async (req, res, next) => {
     if (req.user) {
       const fullUserWithoutPassword = await User.findOne({
         where: { id: req.user.id },
-        attributes: ["id", "nickname", "email", "level"],
+        attributes: {
+          exclude: ["password", "secret"],
+        },
       });
 
       console.log("🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀🍀");
@@ -349,7 +354,9 @@ router.post("/signin", (req, res, next) => {
 
       const fullUserWithoutPassword = await User.findOne({
         where: { id: user.id },
-        attributes: ["id", "nickname", "email", "level", "username"],
+        attributes: {
+          exclude: ["password", "secret"],
+        },
       });
 
       return res.status(200).json(fullUserWithoutPassword);
@@ -382,7 +389,9 @@ router.post("/signin/admin", (req, res, next) => {
 
       const fullUserWithoutPassword = await User.findOne({
         where: { id: user.id },
-        attributes: ["id", "nickname", "email", "level", "username"],
+        attributes: {
+          exclude: ["password", "secret"],
+        },
       });
 
       return res.status(200).json(fullUserWithoutPassword);
@@ -391,37 +400,173 @@ router.post("/signin/admin", (req, res, next) => {
 });
 
 router.post("/signup", async (req, res, next) => {
-  const { email, username, nickname, mobile, password, terms } = req.body;
+  const {
+    userId,
+    email,
+    username,
+    password,
+    mobile,
+    kakaoId,
+    isKakao,
+    isPremium,
+    terms,
+  } = req.body;
 
   if (!terms) {
     return res.status(401).send("이용약관에 동의해주세요.");
   }
 
-  try {
-    const exUser = await User.findOne({
-      where: { email: email },
-    });
+  const findUserIdQuery = `
+  SELECT  id
+    FROM  users
+   WHERE  userId = "${userId}"
+  `;
 
-    if (exUser) {
-      return res.status(401).send("이미 가입된 이메일 입니다.");
+  const findEmailQuery = `
+  SELECT  id
+    FROM  users
+   WHERE  email = "${email}"
+  `;
+
+  try {
+    const findUserId = await models.sequelize.query(findUserIdQuery);
+
+    if (findUserId[0].length !== 0) {
+      return res.status(401).send("이미 사용중인 아이디 입니다.");
+    }
+
+    const findEmail = await models.sequelize.query(findEmailQuery);
+
+    if (findEmail[0].length !== 0) {
+      return res.status(401).send("이미 사용중인 이메일 입니다.");
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const result = await User.create({
-      email,
-      username,
-      nickname,
-      mobile,
-      terms,
-      password: hashedPassword,
-    });
+    const insertQuery = `
+   INSERT INTO  users
+   (
+    userId,
+    email,
+    username,
+    password,
+    mobile,
+    kakaoId,
+    isKakao,
+    isPremium,
+    terms,
+    createdAt,
+    updatedAt
+   )
+   VALUES
+   (
+    "${userId}",
+    "${email}",
+    "${username}",
+    "${hashedPassword}",
+    "${mobile}",
+    ${kakaoId ? `"${kakaoId}"` : null},
+    ${isKakao},
+    ${isPremium},
+    ${terms},
+    NOW(),
+    NOW()
+   )
+   `;
+
+    await models.sequelize.query(insertQuery);
 
     res.status(201).send("SUCCESS");
   } catch (error) {
     console.error(error);
     next(error);
   }
+});
+
+router.post("/snsLogin", (req, res, next) => {
+  passport.authenticate("local", async (err, user, info) => {
+    const { userId, email, kakaoId, password, username, isPremium, isKakao } =
+      req.body;
+    if (user) {
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
+
+      if (info) {
+        console.log(`❌ LOGIN FAILED : ${info.reason}`);
+        return res.status(401).send(info.reason);
+      }
+
+      return req.login(user, async (loginErr) => {
+        if (loginErr) {
+          console.error(loginErr);
+          return next(loginErr);
+        }
+
+        const fullUserWithoutPassword = await User.findOne({
+          where: { id: user.id },
+          attributes: {
+            exclude: ["password", "secret"],
+          },
+        });
+
+        return res.status(200).json(fullUserWithoutPassword);
+      });
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 12);
+
+      const insertQuery = `
+    INSERT INTO users
+    (
+      userId,
+      email,
+      username,
+      password,
+      mobile,
+      kakaoId,
+      isKakao,
+      isPremium,
+      terms,
+      createdAt,
+      updatedAt
+    )
+    VALUES
+    (
+      ${userId},
+      ${email},
+      ${username},
+      "${hashedPassword}",
+      NULL,
+      ${kakaoId ? `"${kakaoId}"` : null},,
+      ${isKakao},
+      ${isPremium},
+      1,
+      ${NOW},
+      ${NOW}
+      )
+    `;
+
+      const insertResult = await models.sequelize.query(insertQuery);
+
+      const findUserQuery = `
+      SELECT  *
+        FROM  users
+       WHERE  id = ${insertResult[0].insertId}
+      `;
+
+      const findUser = await models.sequelize.query(findUserQuery);
+
+      return req.login(findUser[0][0], async (loginErr) => {
+        if (loginErr) {
+          console.error(loginErr);
+          return next(loginErr);
+        }
+
+        return res.status(200).json(findUser[0][0]);
+      });
+    }
+  })(req, res, next);
 });
 
 router.get("/me", isLoggedIn, async (req, res, next) => {
@@ -434,7 +579,7 @@ router.get("/me", isLoggedIn, async (req, res, next) => {
 });
 
 router.post("/me/update", isLoggedIn, async (req, res, next) => {
-  const { id, nickname, mobile } = req.body;
+  const { id, username, mobile } = req.body;
 
   try {
     const exUser = await User.findOne({ where: { id: parseInt(id) } });
@@ -444,7 +589,7 @@ router.post("/me/update", isLoggedIn, async (req, res, next) => {
     }
 
     const updateUser = await User.update(
-      { nickname, mobile },
+      { username, mobile },
       {
         where: { id: parseInt(id) },
       }
@@ -457,63 +602,66 @@ router.post("/me/update", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post("/findemail", async (req, res, next) => {
-  const { nickname, mobile } = req.body;
+router.post("/findeUserId", async (req, res, next) => {
+  const { username, mobile } = req.body;
+
+  const findQuery = `
+  SELECT  userId
+    FROM  users
+   WHERE  username = "${username}"
+     AND  mobile = "${mobile}"
+  `;
 
   try {
-    const exUser = await User.findOne({
-      where: {
-        nickname,
-        mobile,
-      },
-    });
+    const findUser = await models.sequelize.query(findQuery);
 
-    if (exUser) {
-      return res.status(200).json({ email: exUser.email });
+    if (findUser[0].length !== 0) {
+      return res.status(200).json({ userId: findUser[0][0].userId });
     } else {
-      return res.status(200).json({ email: false });
+      return res.status(401).send("일치하는 정보가 없습니다.");
     }
   } catch (error) {
     console.error(error);
-    return res.status(401).send("아이디를 찾을 수 없습니다.");
+    return res.status(401).send("이메일을 찾을 수 없습니다.");
   }
 });
 
-router.post("/modifypass", isLoggedIn, async (req, res, next) => {
-  const { email, nickname, mobile } = req.body;
+router.post("/modifypass", async (req, res, next) => {
+  const { userId, username } = req.body;
+
+  const findUserQuery = `
+  SELECT  id,
+          email
+    FROM  users
+   WHERE  userId = "${userId}"
+     AND  username = "${username}"
+  `;
 
   try {
-    const cookieEmail = req.user.dataValues.email;
-    const cookieNickname = req.user.dataValues.nickname;
-    const cookieMobile = req.user.dataValues.mobile;
+    const findUserData = await models.sequelize.query(findUserQuery);
 
-    if (
-      email === cookieEmail &&
-      nickname === cookieNickname &&
-      mobile === cookieMobile
-    ) {
-      const currentUserId = req.user.dataValues.id;
+    if (findUserData[0].length === 0) {
+      return res.status(401).send("일치하는 정보가 없습니다.");
+    }
 
-      const UUID = generateUUID();
+    const UUID = generateUUID();
 
-      const updateResult = await User.update(
-        { secret: UUID },
-        {
-          where: { id: parseInt(currentUserId) },
-        }
-      );
+    const userUpdateQuery = `
+    UPDATE  users
+       SET  secret = "${UUID}"
+     WHERE  userId = "${userId}"
+    `;
 
-      if (updateResult[0] > 0) {
-        // 이메일 전송
+    await models.sequelize.query(userUpdateQuery);
 
-        await sendSecretMail(
-          cookieEmail,
-          `🔐 [보안 인증코드 입니다.] ㅁㅁㅁㅁ 에서 비밀번호 변경을 위한 보안인증 코드를 발송했습니다.`,
-          `
+    await sendSecretMail(
+      findUserData[0][0].email,
+      `🔐 [보안 인증코드 입니다.] 과학기술연결 플랫폼 사회적 협동조합에서 비밀번호 변경을 위한 보안인증 코드를 발송했습니다.`,
+      `
           <div>
-            <h3>ㅁㅁㅁㅁ</h3>
+            <h3>과학기술연결 플랫폼 사회적 협동조합/h3>
             <hr />
-            <p>보안 인증코드를 발송해드립니다. ㅁㅁㅁㅁ 홈페이지의 인증코드 입력란에 정확히 입력해주시기 바랍니다.</p>
+            <p>보안 인증코드를 발송해드립니다. 과학기술연결 플랫폼 사회적 협동조합홈페이지의 인증코드 입력란에 정확히 입력해주시기 바랍니다.</p>
             <p>인증코드는 [<strong>${UUID}</strong>] 입니다. </p>
 
             <br /><hr />
@@ -522,53 +670,67 @@ router.post("/modifypass", isLoggedIn, async (req, res, next) => {
             </article>
           </div>
           `
-        );
+    );
 
-        return res.status(200).json({ result: true });
-      } else {
-        return res
-          .status(401)
-          .send("요청이 올바르지 않습니다. 다시 시도해주세요.");
-      }
-    } else {
-      return res
-        .status(401)
-        .send("입력하신 정보가 잘못되었습니다. 다시 확인해주세요.");
-    }
+    return res.status(200).json({ result: true });
   } catch (error) {
     console.error(error);
     return res.status(401).send("잘못된 요청 입니다. [CODE097]");
   }
 });
 
-router.patch("/modifypass/update", isLoggedIn, async (req, res, next) => {
-  const { secret, password } = req.body;
+router.post("/checkSecret", async (req, res, next) => {
+  const { secret } = req.body;
+
+  const findUser = `
+  SELECT  id
+    FROM  users
+   WHERE  secret = "${secret}"
+  `;
 
   try {
-    const exUser = await User.findOne({
-      where: { id: req.user.dataValues.id },
-    });
+    const userData = await models.sequelize.query(findUser);
 
-    if (!exUser) {
-      return res
-        .status(401)
-        .send("잘못된 요청 입니다. 다시 로그인 후 이용해주세요.");
+    if (userData[0].length === 0) {
+      return res.status(401).send("인증코드를 잘못 입력하셨습니다.");
+    }
+
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("잘못된 요청 입니다.");
+  }
+});
+
+router.patch("/modifypass/update", async (req, res, next) => {
+  const { userId, password } = req.body;
+
+  const findUser = `
+  SELECT  id
+    FROM  users
+   WHERE  userId = "${userId}"
+  `;
+
+  try {
+    const userData = await models.sequelize.query(findUser);
+
+    if (userData[0].length === 0) {
+      return res.status(401).send("잠시 후 다시 시도하여 주십시오.");
     }
 
     const hashPassord = await bcrypt.hash(password, 12);
 
-    const updateResult = await User.update(
-      { password: hashPassord },
-      {
-        where: { id: req.user.dataValues.id },
-      }
-    );
+    const userUpdateQuery = `
+    UPDATE  users
+       SET  password = "${hashPassord}",
+            updatedAt = now(),
+            secret = NULL
+     WHERE  email = "${email}"
+    `;
 
-    if (updateResult[0] === 1) {
-      return res.status(200).json({ result: true });
-    } else {
-      return res.status(200).json({ result: false });
-    }
+    const updateResult = await models.sequelize.query(userUpdateQuery);
+
+    return res.status(200).json({ result: true });
   } catch (error) {
     console.error(error);
     return res.status(401).send("잘못된 요청 입니다.");
@@ -671,13 +833,14 @@ router.get(
   }
 );
 
-router.post("/exit/update/true", isAdminCheck, async (req, res, next) => {
-  const { id } = req.body;
+router.post("/exit", isLoggedIn, async (req, res, next) => {
+  const { id, exitReason } = req.body;
 
   const updateQuery = `
       UPDATE users
-         SET isExit = TRUE
-           exitedAt = NOW()
+         SET isExit = 1,
+             exitReason = "${exitReason}",
+             exitedAt = NOW()
        WHERE id = ${id}
   `;
 
@@ -687,25 +850,6 @@ router.post("/exit/update/true", isAdminCheck, async (req, res, next) => {
     return res.status(200).json({ result: true });
   } catch (error) {
     console.log(error);
-    return res.status(400).send("요청을 처리할 수 없습니다.");
-  }
-});
-
-router.post("/exit/update/false", isAdminCheck, async (req, res, next) => {
-  const { id } = req.body;
-
-  const updateQuery = `
-    UPDATE  users
-       SET  isExit = FALSE
-     WHERE  id = ${id}
-  `;
-
-  try {
-    await models.sequelize.query(updateQuery);
-
-    return res.status(200).json({ result: true });
-  } catch (error) {
-    console.error(error);
     return res.status(400).send("요청을 처리할 수 없습니다.");
   }
 });
