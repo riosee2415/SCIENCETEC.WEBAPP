@@ -10,8 +10,12 @@ module.exports = class NoticeHistory extends Model {
           allowNull: true, // 필수
         },
         title: {
-          type: DataTypes.STRING(300), // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+          type: DataTypes.STRING(2000), // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
           allowNull: true, // 필수
+        },
+        type: {
+          type: DataTypes.STRING(30),
+          allowNull: false,
         },
         updator: {
           type: DataTypes.INTEGER,

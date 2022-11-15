@@ -5,27 +5,82 @@ module.exports = class User extends Model {
   static init(sequelize) {
     return super.init(
       {
-        // id가 기본적으로 들어있다.
+        type: {
+          type: DataTypes.INTEGER, // [1. 개인 | 2. 조합장]
+          allowNull: false,
+        },
         userId: {
-          type: DataTypes.STRING(60), // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
-          allowNull: false, // 필수
-        },
-        email: {
-          type: DataTypes.STRING(60), // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
-          allowNull: false, // 필수
-          unique: true, // 고유한 값
-        },
-        username: {
-          type: DataTypes.STRING(30), // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
-          allowNull: false, // 필수
-        },
-        mobile: {
-          type: DataTypes.STRING(30),
-          allowNull: false, // 필수
+          type: DataTypes.STRING(60), // 아이디
+          allowNull: false,
         },
         password: {
-          type: DataTypes.STRING(100),
-          allowNull: false, // 필수
+          type: DataTypes.STRING(100), // 비밀번호
+          allowNull: false,
+        },
+        combiName: {
+          type: DataTypes.STRING(100), // 조합명
+          allowNull: true,
+        },
+        combiHomepage: {
+          type: DataTypes.STRING(100), // 조합 홈페이지
+          allowNull: true,
+        },
+        combiEstimateDate: {
+          type: DataTypes.DATE, // 설립날짜
+          allowNull: true,
+        },
+        combiArea: {
+          type: DataTypes.STRING(100), // 지역 (8개 도만 들어옵니다.) 강원도, 충청남도, 충청북도, 경기도, 경상남도, 경상북도, 전라남도, 전라북도
+          allowNull: true,
+        },
+        corporationCnt: {
+          type: DataTypes.INTEGER, // 법인 조합원수
+          allowNull: true,
+        },
+        personalCnt: {
+          type: DataTypes.INTEGER, // 개인 조합원수
+          allowNull: true,
+        },
+        repreName: {
+          type: DataTypes.STRING(100), // 이사장명
+          allowNull: true,
+        },
+        address: {
+          type: DataTypes.STRING(500), // 주소
+          allowNull: true,
+        },
+        mobile: {
+          type: DataTypes.STRING(30), // 전화
+          allowNull: false,
+        },
+        email: {
+          type: DataTypes.STRING(60), // 이메일
+          allowNull: false,
+          unique: true,
+        },
+        username: {
+          type: DataTypes.STRING(30),
+          allowNull: true,
+        },
+        importantBusiness1: {
+          type: DataTypes.STRING(100), // 주요사업 1
+          allowNull: true,
+        },
+        importantBusiness2: {
+          type: DataTypes.STRING(100), // 주요사업 2
+          allowNull: true,
+        },
+        importantBusiness3: {
+          type: DataTypes.STRING(100), // 주요사업 3
+          allowNull: true,
+        },
+        importantBusinessCapital: {
+          type: DataTypes.INTEGER, // 주요사업 자본금
+          allowNull: true,
+        },
+        importantBusinessPrice: {
+          type: DataTypes.INTEGER, // 주요사업 매출액
+          allowNull: true,
         },
         level: {
           // 사용자 권한 [1 : 일반회원, 2 : 비어있음, 3: 운영자, 4: 최고관리자, 5: 개발사]
@@ -39,16 +94,16 @@ module.exports = class User extends Model {
           defaultValue: null,
         },
         kakaoId: {
-          type: DataTypes.STRING(50),
+          type: DataTypes.STRING(50), // 카카오톡 ID
           allowNull: true,
         },
         isKakao: {
-          type: DataTypes.BOOLEAN,
+          type: DataTypes.BOOLEAN, // 카카오 수신 동의 여부
           allowNull: false, //
           defaultValue: false,
         },
         isPremium: {
-          type: DataTypes.BOOLEAN,
+          type: DataTypes.BOOLEAN, // 유료회원 여부
           allowNull: false, //
           defaultValue: false,
         },

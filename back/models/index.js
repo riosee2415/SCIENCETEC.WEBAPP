@@ -23,6 +23,12 @@ const faqhistory = require("./faqhistory");
 const questionhistory = require("./questionhistory");
 const noticeHistory = require("./noticeHistory");
 const galleryImage = require("./galleryImage");
+const noticecomment = require("./noticecomment");
+const userbusinesstype = require("./userbusinesstype");
+const usercombitype = require("./usercombitype");
+const usersector = require("./usersector");
+const businessquestion = require("./businessquestion");
+const businessquestionhistory = require("./businessquestionhistory");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -59,6 +65,12 @@ db.FaqHistory = faqhistory;
 db.QuestionHistory = questionhistory;
 db.NoticeHistory = noticeHistory;
 db.GalleryImage = galleryImage;
+db.NoticeComment = noticecomment;
+db.UserBusinessType = userbusinesstype;
+db.UserCombiType = usercombitype;
+db.UserSector = usersector;
+db.BusinessQuestion = businessquestion;
+db.BusinessQuestionHistory = businessquestionhistory;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);

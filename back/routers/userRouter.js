@@ -10,6 +10,43 @@ const sendSecretMail = require("../utils/mailSender");
 
 const router = express.Router();
 
+router.post("/business/graph", async (req, res, next) => {
+  const selectQuery = `
+SELECT	value,
+	      COUNT(id)			AS cnt
+  FROM	userBusinessTypes
+ GROUP	BY value
+  `;
+
+  try {
+    const list = await models.sequelize.query(selectQuery);
+
+    return res.status(200).json(list[0]);
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("데이터를 조회할 수 없습니다.");
+  }
+});
+
+router.post("/city/graph", async (req, res, next) => {
+  const selectQuery = `
+  SELECT  combiArea,
+          COUNT(id)        AS cnt
+    FROM  users
+   WHERE  isExit = 0
+   GROUP  BY combiArea
+  `;
+
+  try {
+    const list = await models.sequelize.query(selectQuery);
+
+    return res.status(200).json(list[0]);
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("데이터를 조회할 수 없습니다.");
+  }
+});
+
 router.post("/list", isAdminCheck, async (req, res, next) => {
   const { searchData, searchLevel, searchExit } = req.body;
 
@@ -20,31 +57,52 @@ router.post("/list", isAdminCheck, async (req, res, next) => {
   const _searchExit = searchExit ? searchExit : false;
 
   const selectQuery = `
-  SELECT	ROW_NUMBER() OVER(ORDER	BY createdAt)		AS num,
-          id,
-          userId,
-          email,
-          username,
-          mobile,
-          level,
+SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
+        id,
+        type,
+        CASE
+            WHEN	type = 1 THEN "개인"
+            WHEN	type = 2 THEN "조합장"
+        END									        		AS viewType,
+        userId,
+        combiName,
+        combiHomepage,
+        combiEstimateDate,
+        DATE_FORMAT(combiEstimateDate, "%Y년 %m월 %d일")		AS viewEstimateDate,
+        combiArea,
+        corporationCnt,
+        personalCnt,
+        repreName,
+        address,
+        mobile,
+        email,
+        username,
+        importantBusiness1,
+        importantBusiness2,
+        importantBusiness3,
+        importantBusinessCapital,
+        CONCAT(FORMAT(importantBusinessCapital, 0), "원")	AS viewBusinessCapital,
+        importantBusinessPrice,
+        CONCAT(FORMAT(importantBusinessPrice, 0), "원")		AS viewBusinessPrice,
+        level,
+        CASE
+              WHEN	level = 1	THEN "일반회원"
+              WHEN	level = 2	THEN "비어있음"
+              WHEN	level = 3	THEN "운영자"
+              WHEN	level = 4	THEN "최고관리자"
+              WHEN	level = 5	THEN "개발사"
+          END											        AS viewLevel,
           kakaoId,
           isKakao,
           isPremium,
-          isExit,
-          CASE
-            WHEN	level = 1	THEN "일반회원"
-            WHEN	level = 2	THEN "비어있음"
-            WHEN	level = 3	THEN "운영자"
-            WHEN	level = 4	THEN "최고관리자"
-            WHEN	level = 5	THEN "개발사"
-          END											AS viewLevel,
           terms,
+          isExit,
+          exitReason,
+          exitedAt,
           createdAt,
           updatedAt,
-          exitedAt,
-          DATE_FORMAT(createdAt, "%Y년 %m월 %d일")		AS viewCreatedAt,
-		      DATE_FORMAT(updatedAt, "%Y년 %m월 %d일")		AS viewUpdatedAt,
-		      DATE_FORMAT(exitedAt, "%Y년 %m월 %d일")		AS viewExitedAt
+          DATE_FORMAT(createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
+          DATE_FORMAT(updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
     FROM	users
    WHERE	CONCAT(username, email) LIKE '%${_searchData}%'
           ${
@@ -89,7 +147,7 @@ router.post("/adminList", async (req, res, next) => {
           mobile,
           DATE_FORMAT(createdAt, "%Y년 %m월 %d일") AS viewCreatedAt,
           DATE_FORMAT(updatedAt, "%Y년 %m월 %d일") AS updatedAt,
-          DATE_FORMAT(exitedAt, "%Y년 %m월 %d일") AS viewExitedAt,
+          DATE_FORMAT(exitedAt, "%Y년 %m월 %d일")  AS viewExitedAt,
           menuRight1,
           menuRight2,
           menuRight3,
@@ -401,19 +459,48 @@ router.post("/signin/admin", (req, res, next) => {
 
 router.post("/signup", async (req, res, next) => {
   const {
+    type,
     userId,
+    password,
+    combiName,
+    combiHomepage,
+    combiEstimateDate,
+    combiArea,
+    corporationCnt,
+    personalCnt,
+    repreName,
+    address,
+    mobile,
     email,
     username,
-    password,
-    mobile,
+    importantBusiness1,
+    importantBusiness2,
+    importantBusiness3,
+    importantBusinessCapital,
+    importantBusinessPrice,
     kakaoId,
     isKakao,
     isPremium,
     terms,
+    businessType,
+    combiType,
+    sector,
   } = req.body;
 
   if (!terms) {
     return res.status(401).send("이용약관에 동의해주세요.");
+  }
+
+  if (!Array.isArray(businessType)) {
+    return res.status(401).send("잘못된 요청입니다.");
+  }
+
+  if (!Array.isArray(combiType)) {
+    return res.status(401).send("잘못된 요청입니다.");
+  }
+
+  if (!Array.isArray(sector)) {
+    return res.status(401).send("잘못된 요청입니다.");
   }
 
   const findUserIdQuery = `
@@ -446,11 +533,25 @@ router.post("/signup", async (req, res, next) => {
     const insertQuery = `
    INSERT INTO  users
    (
+    type,
     userId,
+    password,
+    combiName,
+    combiHomepage,
+    combiEstimateDate,
+    combiArea,
+    corporationCnt,
+    personalCnt,
+    repreName,
+    address,
+    mobile,
     email,
     username,
-    password,
-    mobile,
+    importantBusiness1,
+    importantBusiness2,
+    importantBusiness3,
+    importantBusinessCapital,
+    importantBusinessPrice,
     kakaoId,
     isKakao,
     isPremium,
@@ -460,11 +561,25 @@ router.post("/signup", async (req, res, next) => {
    )
    VALUES
    (
+    ${type},
     "${userId}",
-    "${email}",
-    "${username}",
     "${hashedPassword}",
+    ${combiName ? `"${combiName}"` : null},
+    ${combiHomepage ? `"${combiHomepage}"` : null},
+    ${combiEstimateDate ? `"${combiEstimateDate}"` : null},
+    ${combiArea ? `"${combiArea}"` : null},
+    ${corporationCnt ? `"${corporationCnt}"` : null},
+    ${personalCnt ? `"${personalCnt}"` : null},
+    ${repreName ? `"${repreName}"` : null},
+    ${address ? `"${address}"` : null},
     "${mobile}",
+    "${email}",
+    ${username ? `"${username}"` : null},
+    ${importantBusiness1 ? `"${importantBusiness1}"` : null},
+    ${importantBusiness2 ? `"${importantBusiness2}"` : null},
+    ${importantBusiness3 ? `"${importantBusiness3}"` : null},
+    ${importantBusinessCapital ? `"${importantBusinessCapital}"` : null},
+    ${importantBusinessPrice ? `"${importantBusinessPrice}"` : null},
     ${kakaoId ? `"${kakaoId}"` : null},
     ${isKakao},
     ${isPremium},
@@ -474,7 +589,76 @@ router.post("/signup", async (req, res, next) => {
    )
    `;
 
-    await models.sequelize.query(insertQuery);
+    const insertResult = await models.sequelize.query(insertQuery);
+
+    await Promise.all(
+      businessType.map(async (data) => {
+        const insertQuery = `
+        INSERT  INTO  userBusinessTypes
+        (
+          value,
+          createdAt,
+          updatedAt,
+          UserId
+        )
+        VALUES
+        (
+          "${data}",
+          NOW(),
+          NOW(),
+          ${insertResult[0]}
+        )
+        `;
+
+        await models.sequelize.query(insertQuery);
+      })
+    );
+
+    await Promise.all(
+      combiType.map(async (data) => {
+        const insertQuery = `
+        INSERT  INTO  userCombiTypes
+        (
+          value,
+          createdAt,
+          updatedAt,
+          UserId
+        )
+        VALUES
+        (
+          "${data}",
+          NOW(),
+          NOW(),
+          ${insertResult[0]}
+        )
+        `;
+
+        await models.sequelize.query(insertQuery);
+      })
+    );
+
+    await Promise.all(
+      sector.map(async (data) => {
+        const insertQuery = `
+        INSERT  INTO  userSectors
+        (
+          value,
+          createdAt,
+          updatedAt,
+          UserId
+        )
+        VALUES
+        (
+          "${data}",
+          NOW(),
+          NOW(),
+          ${insertResult[0]}
+        )
+        `;
+
+        await models.sequelize.query(insertQuery);
+      })
+    );
 
     res.status(201).send("SUCCESS");
   } catch (error) {
@@ -603,13 +787,13 @@ router.post("/me/update", isLoggedIn, async (req, res, next) => {
 });
 
 router.post("/findeUserId", async (req, res, next) => {
-  const { username, mobile } = req.body;
+  const { username, email } = req.body;
 
   const findQuery = `
   SELECT  userId
     FROM  users
    WHERE  username = "${username}"
-     AND  mobile = "${mobile}"
+     AND  email = "${email}"
   `;
 
   try {
