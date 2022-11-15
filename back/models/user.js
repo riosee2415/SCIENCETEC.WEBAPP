@@ -45,8 +45,16 @@ module.exports = class User extends Model {
           type: DataTypes.STRING(100), // 이사장명
           allowNull: true,
         },
+        postCode: {
+          type: DataTypes.STRING(10), // 우편번호
+          allowNull: true,
+        },
         address: {
           type: DataTypes.STRING(500), // 주소
+          allowNull: true,
+        },
+        detailAddress: {
+          type: DataTypes.STRING(500), // 상세주소
           allowNull: true,
         },
         mobile: {
