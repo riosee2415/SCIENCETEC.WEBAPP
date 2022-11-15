@@ -31,6 +31,8 @@ const businessquestion = require("./businessquestion");
 const businessquestionhistory = require("./businessquestionhistory");
 const forum = require("./forum");
 const forumhistory = require("./forumhistory");
+const shareproject = require("./shareproject");
+const shareprojecthistory = require("./shareprojecthistory");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -75,6 +77,8 @@ db.BusinessQuestion = businessquestion;
 db.BusinessQuestionHistory = businessquestionhistory;
 db.Forum = forum;
 db.ForumHistory = forumhistory;
+db.ShareProject = shareproject;
+db.ShareProjectHistory = shareprojecthistory;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);

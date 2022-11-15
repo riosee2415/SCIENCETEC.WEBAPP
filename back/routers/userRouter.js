@@ -132,6 +132,107 @@ SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
   }
 });
 
+router.post("/status/list", async (req, res, next) => {
+  const { searchCombiName } = req.body;
+
+  const _searchCombiName = searchCombiName ? searchCombiName : ``;
+
+  const selectQuery = `
+    SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt DESC)			AS num,
+            id,
+            type,
+            CASE
+                WHEN	type = 1 THEN "개인"
+                WHEN	type = 2 THEN "조합장"
+            END									        		AS viewType,
+            userId,
+            combiName,
+            combiHomepage,
+            combiEstimateDate,
+            DATE_FORMAT(combiEstimateDate, "%Y년 %m월 %d일")		AS viewEstimateDate,
+            combiArea,
+            corporationCnt,
+            personalCnt,
+            repreName,
+            address,
+            mobile,
+            email,
+            username,
+            importantBusiness1,
+            importantBusiness2,
+            importantBusiness3,
+            importantBusinessCapital,
+            CONCAT(FORMAT(importantBusinessCapital, 0), "원")	AS viewBusinessCapital,
+            importantBusinessPrice,
+            CONCAT(FORMAT(importantBusinessPrice, 0), "원")		AS viewBusinessPrice,
+            kakaoId,
+            isKakao,
+            isPremium,
+            terms,
+            createdAt,
+            updatedAt,
+            DATE_FORMAT(createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
+            DATE_FORMAT(updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
+      FROM	users
+     WHERE	type = 2
+       AND  isExit = 0
+       AND  combiName LIKE '%${_searchCombiName}%'
+     ORDER	BY num ASC
+    `;
+
+  try {
+    const userList = await models.sequelize.query(selectQuery);
+
+    if (userList[0].length === 0) {
+      return res.status(200).json([]);
+    }
+
+    let userIds = [];
+
+    await Promise.all(
+      userList[0].map((data) => {
+        userIds.push(data.id);
+      })
+    );
+
+    const combiTypeQuery = `
+    SELECT  value,
+            UserId
+      FROM  userCombiTypes
+     WHERE  UserId IN (${userIds})
+    `;
+
+    const businessTypeQuery = `
+    SELECT  value,
+            UserId
+      FROM  userBusinessTypes
+     WHERE  UserId IN (${userIds})
+    `;
+
+    const sectorQuery = `
+    SELECT  value,
+            UserId
+      FROM  userSectors
+     WHERE  UserId IN (${userIds})
+    `;
+
+    const combiTypeList = await models.sequelize.query(combiTypeQuery);
+    const businessTypeList = await models.sequelize.query(businessTypeQuery);
+    const sectorList = await models.sequelize.query(sectorQuery);
+
+    return res.status(200).json({
+      userList: userList[0], // 현황 리스트
+      combiTypeList: combiTypeList[0].length !== 0 ? combiTypeList[0] : [], // 조합유형
+      businessTypeList:
+        businessTypeList[0].length !== 0 ? businessTypeList[0] : [], // 사업유형
+      sectorList: sectorList[0].length !== 0 ? sectorList[0] : [], // 사업분야
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("현황 목록을 불러올 수 없습니다.");
+  }
+});
+
 // 권한메뉴 관리자 리스트
 router.post("/adminList", async (req, res, next) => {
   const { username, type } = req.body;
