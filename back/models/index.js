@@ -29,6 +29,8 @@ const usercombitype = require("./usercombitype");
 const usersector = require("./usersector");
 const businessquestion = require("./businessquestion");
 const businessquestionhistory = require("./businessquestionhistory");
+const forum = require("./forum");
+const forumhistory = require("./forumhistory");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -71,6 +73,8 @@ db.UserCombiType = usercombitype;
 db.UserSector = usersector;
 db.BusinessQuestion = businessquestion;
 db.BusinessQuestionHistory = businessquestionhistory;
+db.Forum = forum;
+db.ForumHistory = forumhistory;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);
