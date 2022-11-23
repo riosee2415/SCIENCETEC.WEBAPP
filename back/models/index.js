@@ -27,12 +27,14 @@ const noticecomment = require("./noticecomment");
 const userbusinesstype = require("./userbusinesstype");
 const usercombitype = require("./usercombitype");
 const usersector = require("./usersector");
-const businessquestion = require("./businessquestion");
-const businessquestionhistory = require("./businessquestionhistory");
 const forum = require("./forum");
 const forumhistory = require("./forumhistory");
 const shareproject = require("./shareproject");
 const shareprojecthistory = require("./shareprojecthistory");
+const survey = require("./survey");
+const surveyquestion = require("./surveyquestion");
+const surveyinnerquestion = require("./surveyinnerquestion");
+const surveyhistory = require("./surveyhistory");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -73,12 +75,14 @@ db.NoticeComment = noticecomment;
 db.UserBusinessType = userbusinesstype;
 db.UserCombiType = usercombitype;
 db.UserSector = usersector;
-db.BusinessQuestion = businessquestion;
-db.BusinessQuestionHistory = businessquestionhistory;
 db.Forum = forum;
 db.ForumHistory = forumhistory;
 db.ShareProject = shareproject;
 db.ShareProjectHistory = shareprojecthistory;
+db.Survey = survey;
+db.SurveyQuestion = surveyquestion;
+db.SurveyInnerQuestion = surveyinnerquestion;
+db.SurveyHistory = surveyhistory;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);
