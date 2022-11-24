@@ -93,11 +93,11 @@ export const menus = [
   },
   {
     menuName: "회원조합소개",
-    menuLink: "/intro/greeting",
+    menuLink: "/association",
     subMenus: [
       {
         subMenuName: "회원조합소개",
-        subMenuLink: "/intro/greeting",
+        subMenuLink: "/association",
       },
     ],
   },
