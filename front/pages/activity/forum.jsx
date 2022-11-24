@@ -71,7 +71,7 @@ const Forum = () => {
   return (
     <>
       <Head>
-        <title>iCAST</title>
+        <title>iCAST | 포럼</title>
       </Head>
 
       <ClientLayout>

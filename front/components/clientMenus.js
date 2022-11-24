@@ -87,7 +87,7 @@ export const menus = [
       },
       {
         subMenuName: "기술매칭사업",
-        subMenuLink: "/activity",
+        subMenuLink: "/activity/matching",
       },
     ],
   },

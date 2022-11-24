@@ -545,7 +545,7 @@ export const TextInput = styled.input`
   &::placeholder {
     font-size: 14px;
     line-height: 1.6;
-    color: ${(props) => props.theme.lightGrey2_C};
+    color: ${(props) => props.theme.grey_C};
   }
 `;
 
@@ -553,13 +553,14 @@ export const TextArea = styled.textarea`
   width: ${(props) => props.width};
   height: ${(props) => props.height || `100px`};
   padding: ${(props) => props.padding || `10px`};
-  border: ${(props) => props.border || `1px solid ${props.theme.grey_C}`};
+  border: ${(props) => props.border || `1px solid ${props.theme.lightGrey2_C}`};
   border-radius: ${(props) => props.theme.radius};
   background: ${(props) => props.bgColor};
   transition: ${(props) => props.transition || props.theme.transition};
   margin: ${(props) => props.margin};
   resize: none;
-  border-radius: ${(props) => props.radius || `10px`};
+  border-radius: ${(props) => props.radius || `5px`};
+  transition: 0.3s;
 
   &:focus {
     outline: none;
@@ -569,7 +570,7 @@ export const TextArea = styled.textarea`
   &::placeholder {
     font-size: 14px;
     line-height: 1.6;
-    color: ${(props) => props.theme.lightGrey_C};
+    color: ${(props) => props.theme.grey_C};
   }
 `;
 

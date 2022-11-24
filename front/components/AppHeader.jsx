@@ -390,7 +390,7 @@ const AppHeader = () => {
                     <a>공동 비즈니스</a>
                   </Link>
                 </Text>
-                <Link href={`/`}>
+                <Link href={`/activity/matching`}>
                   <a>
                     <Text>기술매칭사업</Text>
                   </a>

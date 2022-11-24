@@ -32,7 +32,7 @@ const Project = () => {
   return (
     <>
       <Head>
-        <title>iCAST</title>
+        <title>iCAST | 공동 프로젝트</title>
       </Head>
 
       <ClientLayout>
