@@ -7,10 +7,8 @@ import axios from "axios";
 import { END } from "redux-saga";
 import { useSelector } from "react-redux";
 import {
-  CustomPage,
   Image,
   RsWrapper,
-  Text,
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
@@ -19,6 +17,30 @@ import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
+import { RightCircleOutlined } from "@ant-design/icons";
+
+const Btn = styled(Wrapper)`
+  width: 335px;
+  height: 180px;
+  flex-direction: row;
+  font-size: 20px;
+  font-weight: bold;
+  border: 1px solid ${Theme.basicTheme_C};
+  background: ${(props) =>
+    props.isActive ? props.theme.basicTheme_C : props.theme.white_C};
+  color: ${(props) =>
+    props.isActive ? props.theme.white_C : props.theme.basicTheme_C};
+
+  &:hover {
+    cursor: pointer;
+    background: ${Theme.basicTheme_C};
+    color: ${Theme.white_C};
+  }
+
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
 
 const Demand = () => {
   ////// GLOBAL STATE //////
@@ -37,7 +59,7 @@ const Demand = () => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper minHeight={`calc(100vh - 137px)`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
             <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
@@ -55,7 +77,18 @@ const Demand = () => {
                   width={`14px`}
                   margin={`0 6px 0 0`}
                 />
-                기관형 과학기술인 협동조합 성장지원 사업 수행 안내
+                기관형 과학기술인 커뮤니티 조사
+              </Wrapper>
+
+              <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 100px`}>
+                <Btn margin={width < 800 ? `0 0 20px` : `0 20px 0 0`}>
+                  사업수행 현황조사 참여하기&nbsp;
+                  <RightCircleOutlined />
+                </Btn>
+                <Btn>
+                  사업 수요조사 참여하기&nbsp;
+                  <RightCircleOutlined />
+                </Btn>
               </Wrapper>
             </Wrapper>
           </RsWrapper>
