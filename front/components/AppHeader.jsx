@@ -351,21 +351,26 @@ const AppHeader = () => {
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/operate/knowHow`}>
                     <a>운영 노하우</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/operate/demand`}>
+                    <a>수요조사</a>
+                  </Link>
+                </Text>
+                <Text margin={`0 0 14px`}>
+                  <Link href={`/operate`}>
                     <a>커뮤니티</a>
                   </Link>
                 </Text>
-                <Link href={`/`}>
+                <Link href={`/operate`}>
                   <a>
                     <Text margin={`0 0 14px`}>자료실</Text>
                   </a>
                 </Link>
-                <Link href={`/`}>
+                <Link href={`/operate`}>
                   <a>
                     <Text>공지사항</Text>
                   </a>
@@ -656,8 +661,17 @@ const AppHeader = () => {
                     al={`flex-start`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/operate/design`}>
+                    <Link href={`/operate/knowHow`}>
                       <a>운영 노하우</a>
+                    </Link>
+                  </Wrapper>
+                  <Wrapper
+                    margin={`0 0 10px`}
+                    al={`flex-start`}
+                    onClick={drawarToggle}
+                  >
+                    <Link href={`/operate/demand`}>
+                      <a>수요조사</a>
                     </Link>
                   </Wrapper>
                   <Wrapper

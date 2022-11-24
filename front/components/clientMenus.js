@@ -56,6 +56,14 @@ export const menus = [
         subMenuLink: "/operate/perform",
       },
       {
+        subMenuName: "운영 노하우",
+        subMenuLink: "/operate/knowHow",
+      },
+      {
+        subMenuName: "수요조사",
+        subMenuLink: "/operate/demand",
+      },
+      {
         subMenuName: "커뮤니티",
         subMenuLink: "/operate/operation",
       },

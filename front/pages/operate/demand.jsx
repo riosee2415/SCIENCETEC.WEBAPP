@@ -20,7 +20,7 @@ import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
 
-const Perform = () => {
+const Demand = () => {
   ////// GLOBAL STATE //////
   ////// HOOKS //////
   const width = useWidth();
@@ -33,7 +33,7 @@ const Perform = () => {
   return (
     <>
       <Head>
-        <title>iCAST | 사업수행</title>
+        <title>iCAST | 수요조사</title>
       </Head>
 
       <ClientLayout>
@@ -57,15 +57,6 @@ const Perform = () => {
                 />
                 기관형 과학기술인 협동조합 성장지원 사업 수행 안내
               </Wrapper>
-              <Image
-                margin={`30px 0 0`}
-                alt="process"
-                src={
-                  width < 900
-                    ? `https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/operate-page/img_process_m.png`
-                    : `https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/operate-page/img_process.png`
-                }
-              />
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
@@ -96,4 +87,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default Perform;
+export default Demand;
