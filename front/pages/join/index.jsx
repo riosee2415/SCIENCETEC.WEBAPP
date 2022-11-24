@@ -6,11 +6,12 @@ import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
 import { useSelector } from "react-redux";
+import useWidth from "../../hooks/useWidth";
 
-const Intro = () => {
+const Index = () => {
   ////// GLOBAL STATE //////
-
   ////// HOOKS //////
+  const width = useWidth();
   ////// REDUX //////
   ////// USEEFFECT //////
   ////// TOGGLE //////
@@ -52,4 +53,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default Intro;
+export default Index;

@@ -154,7 +154,7 @@ export const Wrapper = styled.div`
 `;
 
 export const RsWrapper = styled.article`
-  width: 1350px;
+  width: 1450px;
   height: ${(props) => props.height || `100%`};
   ${(props) => props.minHeight}
   color: ${(props) => props.color};
@@ -174,7 +174,7 @@ export const RsWrapper = styled.article`
   font-size: ${(props) => props.fontSize};
   position: ${(props) => props.position};
 
-  @media (max-width: 1500px) {
+  @media (max-width: 1450px) {
     width: 1350px;
   }
   @media (max-width: 1350px) {
@@ -205,10 +205,11 @@ export const CommonButton = styled(Button)`
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   font-size: ${(props) => props.fontSize};
-  color: ${(props) => props.color || props.theme.subTheme2_C};
-  border-radius: ${(props) => props.radius || `7px`};
+  color: ${(props) => props.color || props.theme.white_C};
+  border: ${(props) => props.border || `1px solid ${props.theme.basicTheme_C}`};
+  border-radius: ${(props) => props.radius};
 
-  ${(props) => !props.kindOf && `background : ${props.theme.white_C};`}
+  ${(props) => !props.kindOf && `background : ${props.theme.basicTheme_C};`}
   ${(props) =>
     props.kindOf === `white` && `background : ${props.theme.basicTheme_C};`}
   ${(props) => props.kindOf === `white` && `color : ${props.theme.subTheme_C};`}
@@ -240,10 +241,10 @@ export const CommonButton = styled(Button)`
 
 
 &:hover {
-    background: ${(props) => props.theme.white_C};
-    color: ${(props) => props.theme.basicTheme_C};
+    background: ${(props) => props.theme.subTheme3_C};
+    color: ${(props) => props.theme.white_C};
     ${(props) =>
-      !props.kindOf && `border :1px solid ${props.theme.basicTheme_C};`}
+      !props.kindOf && `border :1px solid ${props.theme.subTheme3_C};`}
     ${(props) =>
       props.kindOf === `white` && `background ${props.theme.basicTheme_C};`}
     ${(props) => props.kindOf === `white` && `color ${props.theme.white_C};`}
@@ -295,6 +296,7 @@ export const Text = styled.p`
   left: ${(props) => props.left};
   right: ${(props) => props.right};
   font-style: ${(props) => props.fontStyle};
+  font-family: ${(props) => props.isNeo && `'NanumSquare Neo', sans-serif`};
   cursor: ${(props) => props.cursor};
   z-index: 1;
   white-space: pre-wrap;
@@ -311,6 +313,16 @@ export const Text = styled.p`
     text-overflow: ellipsis;
   `
       : ``}
+
+  ${(props) =>
+    props.isHover &&
+    `
+    transition : 0.5s;
+    cursor:pointer;
+    &:hover{
+      color :${props.theme.basicTheme_C};
+    }
+  `};
 `;
 
 export const PagenationWrapper = styled.div`
