@@ -60,6 +60,7 @@ const MobileRow = styled(WholeWrapper)`
   left: 0;
   z-index: 1000;
   transition: 0.5s;
+
   .ant-drawer-content-wrapper {
     width: 100% !important;
   }
@@ -198,8 +199,18 @@ const AppHeader = () => {
               color={Theme.darkGrey_C}
               fontSize={`15px`}
             >
-              <Text margin={`0 22px 0 0`}>로그인</Text>
-              <Text>회원가입</Text>
+              <Link href={`/login`}>
+                <a>
+                  <Text isHover margin={`0 22px 0 0`}>
+                    로그인
+                  </Text>
+                </a>
+              </Link>
+              <Link href={`/join`}>
+                <a>
+                  <Text isHover>회원가입</Text>
+                </a>
+              </Link>
             </Wrapper>
           </RsWrapper>
         </Wrapper>
@@ -399,6 +410,58 @@ const AppHeader = () => {
       </WebRow>
       {/* mobile */}
       <MobileRow justify={`center`} bgColor={Theme.white_C}>
+        <Wrapper
+          bgColor={Theme.lightGrey_C}
+          borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+          padding={`8px 0`}
+        >
+          <RsWrapper dr={`row`} ju={`space-between`}>
+            <Wrapper width={`auto`} dr={`row`}>
+              <Image
+                alt="faceicon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_face-book.png`}
+                width={`30px`}
+                margin={`0 8px 0 0`}
+              />
+              <Image
+                alt="youtubeicon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_youtube.png`}
+                width={`30px`}
+                margin={`0 8px 0 0`}
+              />
+              <Image
+                alt="instaicon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_insta.png`}
+                width={`30px`}
+                margin={`0 8px 0 0`}
+              />
+              <Image
+                alt="blogicon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_blog.png`}
+                width={`30px`}
+              />
+            </Wrapper>
+            <Wrapper
+              width={`auto`}
+              dr={`row`}
+              color={Theme.darkGrey_C}
+              fontSize={`15px`}
+            >
+              <Link href={`/login`}>
+                <a>
+                  <Text isHover margin={`0 22px 0 0`}>
+                    로그인
+                  </Text>
+                </a>
+              </Link>
+              <Link href={`/join`}>
+                <a>
+                  <Text isHover>회원가입</Text>
+                </a>
+              </Link>
+            </Wrapper>
+          </RsWrapper>
+        </Wrapper>
         <Wrapper position={`relative`}>
           <RsWrapper dr={`row`} padding={`10px 0`} ju={`space-between`}>
             <ATag width={`auto`} href="/">
