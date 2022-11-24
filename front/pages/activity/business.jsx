@@ -32,7 +32,7 @@ const Business = () => {
   return (
     <>
       <Head>
-        <title>iCAST</title>
+        <title>iCAST | 공동 비지니스</title>
       </Head>
 
       <ClientLayout>

@@ -350,7 +350,7 @@ const Index = () => {
                   <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
                     <Checkbox>개발자</Checkbox>
                   </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                  <Wrapper width={`auto`} margin={`0 20px 0 0`}>
                     <Checkbox>기타</Checkbox>
                   </Wrapper>
                 </Wrapper>
@@ -380,7 +380,7 @@ const Index = () => {
                   <Wrapper al={`flex-start`} margin={`0 0 10px`}>
                     <Checkbox>경력연계형</Checkbox>
                   </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
+                  <Wrapper al={`flex-start`}>
                     <Checkbox>기타</Checkbox>
                   </Wrapper>
                 </Wrapper>
@@ -428,7 +428,7 @@ const Index = () => {
                   <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
                     <Checkbox>의약과</Checkbox>
                   </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                  <Wrapper width={`auto`} margin={`0 20px 0 0`}>
                     <Checkbox>기타</Checkbox>
                   </Wrapper>
                 </Wrapper>

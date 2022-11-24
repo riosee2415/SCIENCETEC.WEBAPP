@@ -49,23 +49,31 @@ export const menus = [
   },
   {
     menuName: "운영안내",
-    menuLink: "/intro/greeting",
+    menuLink: "/operate/perform",
     subMenus: [
       {
         subMenuName: "사업수행",
-        subMenuLink: "/intro/greeting",
+        subMenuLink: "/operate/perform",
+      },
+      {
+        subMenuName: "운영 노하우",
+        subMenuLink: "/operate/knowHow",
+      },
+      {
+        subMenuName: "수요조사",
+        subMenuLink: "/operate/demand",
       },
       {
         subMenuName: "커뮤니티",
-        subMenuLink: "/intro/operation",
+        subMenuLink: "/operate/operation",
       },
       {
         subMenuName: "자료실",
-        subMenuLink: "/intro/organization",
+        subMenuLink: "/operate/organization",
       },
       {
         subMenuName: "공지사항",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/operate/intro",
       },
     ],
   },
@@ -87,17 +95,17 @@ export const menus = [
       },
       {
         subMenuName: "기술매칭사업",
-        subMenuLink: "/activity",
+        subMenuLink: "/activity/matching",
       },
     ],
   },
   {
     menuName: "회원조합소개",
-    menuLink: "/intro/greeting",
+    menuLink: "/association",
     subMenus: [
       {
         subMenuName: "회원조합소개",
-        subMenuLink: "/intro/greeting",
+        subMenuLink: "/association",
       },
     ],
   },

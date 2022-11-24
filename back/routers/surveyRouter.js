@@ -43,6 +43,7 @@ router.post("/list", async (req, res, next) => {
             A.innerType,
             A.sort,
             A.questionValue,
+            A.placeholderValue,
             A.SurveyQuestionId,
             B.username                                AS updator,
             A.createdAt,
@@ -253,6 +254,7 @@ router.post("/inner/list", async (req, res, next) => {
           A.innerType,
           A.sort,
           A.questionValue,
+          A.placeholderValue,
           A.SurveyQuestionId,
           B.username                                AS updator,
           A.createdAt,
@@ -279,7 +281,8 @@ router.post("/inner/list", async (req, res, next) => {
 });
 
 router.post("/inner/create", async (req, res, next) => {
-  const { surveyQuestionId, innerType, sort, questionValue } = req.body;
+  const { surveyQuestionId, innerType, sort, questionValue, placeholderValue } =
+    req.body;
 
   const insertQuery = `
   INSERT    INTO    surveyInnerQuestion
@@ -287,6 +290,7 @@ router.post("/inner/create", async (req, res, next) => {
     innerType,
     sort,
     questionValue,
+    placeholderValue,
     SurveyQuestionId,
     createdAt,
     updatedAt,
@@ -297,6 +301,7 @@ router.post("/inner/create", async (req, res, next) => {
     ${innerType},
     ${sort},
     ${questionValue ? `"${questionValue}"` : null},
+    ${placeholderValue ? `"${placeholderValue}"` : null},
     ${surveyQuestionId},
     NOW(),
     NOW(),
@@ -335,13 +340,16 @@ router.post("/inner/create", async (req, res, next) => {
 });
 
 router.post("/inner/update", async (req, res, next) => {
-  const { id, innerType, sort, questionValue } = req.body;
+  const { id, innerType, sort, questionValue, placeholderValue } = req.body;
 
   const updateQuery = `
   UPDATE  surveyInnerQuestion
      SET  innerType = ${innerType},
           sort = ${sort},
           questionValue = ${questionValue ? `"${questionValue}"` : null},
+          placeholderValue = ${
+            placeholderValue ? `"${placeholderValue}"` : null
+          },
           updatedAt = NOW()
    WHERE  id = ${id}
   `;

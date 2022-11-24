@@ -247,11 +247,11 @@ const AppHeader = () => {
                 </Menu>
               </a>
             </Link>
-            <Link href={``}>
+            <Link href={`/operate/perform`}>
               <a>
                 <Menu
                   color={
-                    router.pathname.includes(`/service`) && Theme.subTheme_C
+                    router.pathname.includes(`/operate`) && Theme.subTheme_C
                   }
                 >
                   운영안내
@@ -269,12 +269,12 @@ const AppHeader = () => {
                 </Menu>
               </a>
             </Link>
-            <Link href={`/`}>
+            <Link href={`/association`}>
               <a>
                 <Menu
                   margin={`0`}
                   color={
-                    router.pathname.includes(`/happiness`) && Theme.subTheme_C
+                    router.pathname.includes(`/association`) && Theme.subTheme_C
                   }
                 >
                   회원조합소개
@@ -346,26 +346,31 @@ const AppHeader = () => {
               <Text className="menu">운영안내</Text>
               <Wrapper fontSize={`17px`}>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/operate/perform`}>
                     <a>사업수행</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/operate/knowHow`}>
                     <a>운영 노하우</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/operate/demand`}>
+                    <a>수요조사</a>
+                  </Link>
+                </Text>
+                <Text margin={`0 0 14px`}>
+                  <Link href={`/operate`}>
                     <a>커뮤니티</a>
                   </Link>
                 </Text>
-                <Link href={`/`}>
+                <Link href={`/operate`}>
                   <a>
                     <Text margin={`0 0 14px`}>자료실</Text>
                   </a>
                 </Link>
-                <Link href={`/`}>
+                <Link href={`/operate`}>
                   <a>
                     <Text>공지사항</Text>
                   </a>
@@ -390,7 +395,7 @@ const AppHeader = () => {
                     <a>공동 비즈니스</a>
                   </Link>
                 </Text>
-                <Link href={`/`}>
+                <Link href={`/activity/matching`}>
                   <a>
                     <Text>기술매칭사업</Text>
                   </a>
@@ -401,7 +406,7 @@ const AppHeader = () => {
               <Text className="menu">회원조합소개</Text>
               <Wrapper fontSize={`17px`}>
                 <Text>
-                  <Link href={`/`}>
+                  <Link href={`/association`}>
                     <a>회원조합소개</a>
                   </Link>
                 </Text>
@@ -647,7 +652,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use`}>
+                    <Link href={`/operate/perform`}>
                       <a>사업수행</a>
                     </Link>
                   </Wrapper>
@@ -656,8 +661,17 @@ const AppHeader = () => {
                     al={`flex-start`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use/design`}>
+                    <Link href={`/operate/knowHow`}>
                       <a>운영 노하우</a>
+                    </Link>
+                  </Wrapper>
+                  <Wrapper
+                    margin={`0 0 10px`}
+                    al={`flex-start`}
+                    onClick={drawarToggle}
+                  >
+                    <Link href={`/operate/demand`}>
+                      <a>수요조사</a>
                     </Link>
                   </Wrapper>
                   <Wrapper
@@ -665,7 +679,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use/admission`}>
+                    <Link href={`/operate/admission`}>
                       <a>커뮤니티</a>
                     </Link>
                   </Wrapper>
@@ -675,12 +689,12 @@ const AppHeader = () => {
                     al={`flex-start`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use/list`}>
+                    <Link href={`/operate/list`}>
                       <a>자료실</a>
                     </Link>
                   </Wrapper>
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/use/wait`}>
+                    <Link href={`/operate/wait`}>
                       <a>공지사항</a>
                     </Link>
                   </Wrapper>
@@ -710,7 +724,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/happiness/info`}>
+                    <Link href={`/activity/forum`}>
                       <a>포럼</a>
                     </Link>
                   </Wrapper>
@@ -719,7 +733,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/happiness/info`}>
+                    <Link href={`/activity/project`}>
                       <a>공동 프로젝트</a>
                     </Link>
                   </Wrapper>
@@ -728,12 +742,12 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/happiness/support`}>
+                    <Link href={`/activity/business`}>
                       <a>공동 비즈니스</a>
                     </Link>
                   </Wrapper>
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/happiness/support`}>
+                    <Link href={`/activity/matching`}>
                       <a>기술매칭사업</a>
                     </Link>
                   </Wrapper>
@@ -759,7 +773,7 @@ const AppHeader = () => {
                   borderBottom={`1px solid ${Theme.lightGrey_C}`}
                 >
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/garden/notice`}>
+                    <Link href={`/association`}>
                       <a>회원조합소개</a>
                     </Link>
                   </Wrapper>
