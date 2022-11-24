@@ -35,6 +35,8 @@ const survey = require("./survey");
 const surveyquestion = require("./surveyquestion");
 const surveyinnerquestion = require("./surveyinnerquestion");
 const surveyhistory = require("./surveyhistory");
+const usersurvey = require("./usersurvey");
+const usersurveyquestion = require("./usersurveyquestion");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -83,6 +85,8 @@ db.Survey = survey;
 db.SurveyQuestion = surveyquestion;
 db.SurveyInnerQuestion = surveyinnerquestion;
 db.SurveyHistory = surveyhistory;
+db.UserSurvey = usersurvey;
+db.UserSurveyQuestion = usersurveyquestion;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);
