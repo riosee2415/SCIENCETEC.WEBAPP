@@ -330,6 +330,47 @@ const Home = ({}) => {
               />
             </Wrapper>
           </RsWrapper>
+          <Wrapper
+            bgColor={Theme.lightGrey_C}
+            padding={`30px 0`}
+            wrap={`nowrap`}
+            overflow={`auto`}
+          >
+            <RsWrapper>
+              <Wrapper dr={`row`} ju={`space-between`} minWidth={`900px`}>
+                <Image
+                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_gover.png"
+                  alt="logo"
+                  width={`15%`}
+                />
+                <Image
+                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_nrf.png"
+                  alt="logo"
+                  width={`10%`}
+                />
+                <Image
+                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_coop.png"
+                  alt="logo"
+                  width={`10%`}
+                />
+                <Image
+                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_setcoop.png"
+                  alt="logo"
+                  width={`18%`}
+                />
+                <Image
+                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_social.png"
+                  alt="logo"
+                  width={`10%`}
+                />
+                <Image
+                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_posep.png"
+                  alt="logo"
+                  width={`20%`}
+                />
+              </Wrapper>
+            </RsWrapper>
+          </Wrapper>
         </WholeWrapper>
       </ClientLayout>
     </>
