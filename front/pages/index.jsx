@@ -16,10 +16,14 @@ import {
   Image,
   WholeWrapper,
   Wrapper,
+  RsWrapper,
+  SpanText,
+  Text,
+  CommonButton,
 } from "../components/commonComponents";
 import useWidth from "../hooks/useWidth";
 import Theme from "../components/Theme";
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import Head from "next/head";
 import Popup from "../components/popup/popup";
 import Mainslider from "../components/slide/MainSlider";
@@ -37,28 +41,295 @@ const Home = ({}) => {
   ////// HANDLER //////
   ////// DATAVIEW //////
 
-  const getEditContent = (contentValue) => {
-    console.log(contentValue);
-  };
-
   return (
     <>
       <Head>
-        <title>ALAL</title>
+        <title>ICAST</title>
       </Head>
 
       <ClientLayout>
         <WholeWrapper>
-          <Mainslider />
+          <Wrapper bgColor={Theme.lightGrey_C} padding={`50px 0`}>
+            <RsWrapper>
+              <Wrapper dr={`row`} ju={`space-between`} margin={`0 0 100px`}>
+                <Wrapper
+                  width={width < 700 ? `100%` : `49%`}
+                  radius={`20px`}
+                  overflow={`hidden`}
+                >
+                  <Mainslider />
+                </Wrapper>
 
-          <ToastEditorComponent
-            action={getEditContent}
-            // placeholder="placeholder"
-          />
+                <Wrapper
+                  width={width < 700 ? `100%` : `49%`}
+                  margin={width < 700 ? `20px 0 0` : `0`}
+                  height={width < 700 ? `350px` : `440px`}
+                  bgColor={Theme.white_C}
+                  radius={`20px`}
+                ></Wrapper>
+              </Wrapper>
 
-          <CC01 />
+              <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 25px`}>
+                <Text fontSize={`24px`} isNeo={true} color={Theme.subTheme_C}>
+                  <SpanText color={Theme.basicTheme_C}>공지</SpanText>
+                  사항
+                </Text>
 
-          <Popup />
+                <Text fontSize={`16px`} margin={`0 0 0 20px`}>
+                  기관형 과학기술인 협동조합 교류화의 소식
+                </Text>
+              </Wrapper>
+            </RsWrapper>
+          </Wrapper>
+
+          <RsWrapper>
+            <Wrapper
+              padding={`40px`}
+              border={`6px solid ${Theme.subTheme2_C}`}
+              radius={`10px`}
+              dr={`row`}
+              margin={`0 0 100px`}
+            >
+              <Wrapper
+                width={width < 1280 ? `100%` : `calc(100% - 450px)`}
+                padding={width < 1280 ? `0 0 30px` : `0 50px 0 0`}
+              >
+                <Wrapper
+                  dr={`row`}
+                  ju={width < 700 ? `space-around` : `flex-start`}
+                  margin={`0 0 30px`}
+                >
+                  <CommonButton
+                    kindOf={`white`}
+                    width={`auto`}
+                    height={width < 700 ? `30px` : `50px`}
+                    padding={width < 700 ? `0 10px` : `0 30px`}
+                    radius={`50px`}
+                    margin={width < 700 ? `0 0 5px` : `0`}
+                  >
+                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                      전체
+                    </Text>
+                  </CommonButton>
+                  <CommonButton
+                    kindOf={`white`}
+                    width={`auto`}
+                    height={width < 700 ? `30px` : `50px`}
+                    padding={width < 700 ? `0 10px` : `0 30px`}
+                    radius={`50px`}
+                    margin={width < 700 ? `0 0 5px` : `0`}
+                  >
+                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                      공지사항
+                    </Text>
+                  </CommonButton>
+                  <CommonButton
+                    kindOf={`white`}
+                    width={`auto`}
+                    height={width < 700 ? `30px` : `50px`}
+                    padding={width < 700 ? `0 10px` : `0 30px`}
+                    radius={`50px`}
+                    margin={width < 700 ? `0 0 5px` : `0`}
+                  >
+                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                      열린알림방
+                    </Text>
+                  </CommonButton>
+                  <CommonButton
+                    kindOf={`white`}
+                    width={`auto`}
+                    height={width < 700 ? `30px` : `50px`}
+                    padding={width < 700 ? `0 10px` : `0 30px`}
+                    radius={`50px`}
+                    margin={width < 700 ? `0 0 5px` : `0`}
+                  >
+                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                      자료실
+                    </Text>
+                  </CommonButton>
+                  <CommonButton
+                    kindOf={`white`}
+                    width={`auto`}
+                    height={width < 700 ? `30px` : `50px`}
+                    padding={width < 700 ? `0 10px` : `0 30px`}
+                    radius={`50px`}
+                    margin={width < 700 ? `0 0 5px` : `0`}
+                  >
+                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                      FAQ
+                    </Text>
+                  </CommonButton>
+                </Wrapper>
+
+                <Wrapper
+                  dr={`row`}
+                  height={`60px`}
+                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
+                >
+                  <Wrapper
+                    al={`flex-start`}
+                    width={width < 700 ? `25%` : `10%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                    fontWeight={`700`}
+                    color={Theme.subTheme_C}
+                  >
+                    공지사항
+                  </Wrapper>
+                  <Wrapper
+                    al={`flex-start`}
+                    width={`75%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                  >
+                    지
+                  </Wrapper>
+                  <Wrapper
+                    display={width < 700 ? `none` : `flex`}
+                    al={`flex-end`}
+                    width={`15%`}
+                    fontSize={`16px`}
+                    color={Theme.grey_C}
+                  >
+                    2022.12.12
+                  </Wrapper>
+                </Wrapper>
+
+                <Wrapper
+                  dr={`row`}
+                  height={`60px`}
+                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
+                >
+                  <Wrapper
+                    al={`flex-start`}
+                    width={width < 700 ? `25%` : `10%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                    fontWeight={`700`}
+                    color={Theme.subTheme_C}
+                  >
+                    공지사항
+                  </Wrapper>
+                  <Wrapper
+                    al={`flex-start`}
+                    width={`75%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                  >
+                    지
+                  </Wrapper>
+                  <Wrapper
+                    display={width < 700 ? `none` : `flex`}
+                    al={`flex-end`}
+                    width={`15%`}
+                    fontSize={`16px`}
+                    color={Theme.grey_C}
+                  >
+                    2022.12.12
+                  </Wrapper>
+                </Wrapper>
+
+                <Wrapper
+                  dr={`row`}
+                  height={`60px`}
+                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
+                >
+                  <Wrapper
+                    al={`flex-start`}
+                    width={width < 700 ? `25%` : `10%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                    fontWeight={`700`}
+                    color={Theme.subTheme_C}
+                  >
+                    공지사항
+                  </Wrapper>
+                  <Wrapper
+                    al={`flex-start`}
+                    width={`75%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                  >
+                    지
+                  </Wrapper>
+                  <Wrapper
+                    display={width < 700 ? `none` : `flex`}
+                    al={`flex-end`}
+                    width={`15%`}
+                    fontSize={`16px`}
+                    color={Theme.grey_C}
+                  >
+                    2022.12.12
+                  </Wrapper>
+                </Wrapper>
+
+                <Wrapper
+                  dr={`row`}
+                  height={`60px`}
+                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
+                >
+                  <Wrapper
+                    al={`flex-start`}
+                    width={width < 700 ? `25%` : `10%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                    fontWeight={`700`}
+                    color={Theme.subTheme_C}
+                  >
+                    공지사항
+                  </Wrapper>
+                  <Wrapper
+                    al={`flex-start`}
+                    width={`75%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                  >
+                    지
+                  </Wrapper>
+                  <Wrapper
+                    display={width < 700 ? `none` : `flex`}
+                    al={`flex-end`}
+                    width={`15%`}
+                    fontSize={`16px`}
+                    color={Theme.grey_C}
+                  >
+                    2022.12.12
+                  </Wrapper>
+                </Wrapper>
+
+                <Wrapper
+                  dr={`row`}
+                  height={`60px`}
+                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
+                >
+                  <Wrapper
+                    al={`flex-start`}
+                    width={width < 700 ? `25%` : `10%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                    fontWeight={`700`}
+                    color={Theme.subTheme_C}
+                  >
+                    공지사항
+                  </Wrapper>
+                  <Wrapper
+                    al={`flex-start`}
+                    width={`75%`}
+                    fontSize={width < 700 ? `13px` : `16px`}
+                  >
+                    지
+                  </Wrapper>
+                  <Wrapper
+                    display={width < 700 ? `none` : `flex`}
+                    al={`flex-end`}
+                    width={`15%`}
+                    fontSize={`16px`}
+                    color={Theme.grey_C}
+                  >
+                    2022.12.12
+                  </Wrapper>
+                </Wrapper>
+              </Wrapper>
+              <Image
+                src=""
+                alt="img"
+                height={`380px`}
+                width={width < 1280 ? `100%` : `450px`}
+                display={width < 700 ? `none` : `flex`}
+              />
+            </Wrapper>
+          </RsWrapper>
         </WholeWrapper>
       </ClientLayout>
     </>
