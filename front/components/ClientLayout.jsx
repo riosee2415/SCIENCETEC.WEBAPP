@@ -32,7 +32,7 @@ const ClientLayout = ({ children, width }) => {
       */}
 
       {/* content */}
-      <WholeWrapper margin={width < 900 ? `109px` : `137px`}>
+      <WholeWrapper margin={width < 900 ? `109px 0 0` : `137px 0 0`}>
         {children}
       </WholeWrapper>
 
