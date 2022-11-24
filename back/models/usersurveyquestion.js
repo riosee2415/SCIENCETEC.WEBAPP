@@ -10,7 +10,7 @@ module.exports = class UserSurveyQuestion extends Model {
           allowNull: false,
         },
         content: {
-          type: DataTypes.STRING(2000),
+          type: DataTypes.TEXT,
           allowNull: false,
         },
         sort: {

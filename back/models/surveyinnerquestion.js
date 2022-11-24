@@ -17,6 +17,10 @@ module.exports = class SurveyInnerQuestion extends Model {
           type: DataTypes.STRING(300),
           allowNull: true,
         },
+        placeholderValue: {
+          type: DataTypes.STRING(300),
+          allowNull: true,
+        },
         isDelete: {
           type: DataTypes.BOOLEAN,
           allowNull: false,
