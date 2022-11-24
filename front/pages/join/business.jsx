@@ -11,12 +11,15 @@ import {
   CommonButton,
   Image,
   RsWrapper,
+  SpanText,
   Text,
+  TextInput,
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
 import styled from "styled-components";
 import Theme from "../../components/Theme";
+import { Checkbox } from "antd";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -51,7 +54,6 @@ const Circle = styled(Wrapper)`
 
 const Index = () => {
   ////// GLOBAL STATE //////
-  const [currentTab, setCurrentTab] = useState(0);
   ////// HOOKS //////
   const width = useWidth();
   ////// REDUX //////
@@ -79,82 +81,440 @@ const Index = () => {
                 회원가입
               </Text>
               <Wrapper dr={`row`} margin={`26px 0 35px`}>
-                <Btn
-                  isActive={currentTab === 0}
-                  onClick={() => setCurrentTab(0)}
-                  margin={`0 6px 0 0`}
-                >
-                  개인회원
-                </Btn>
-                <Btn
-                  isActive={currentTab === 1}
-                  onClick={() => setCurrentTab(1)}
-                >
-                  조합회원
-                </Btn>
+                <Btn margin={`0 6px 0 0`}>개인회원</Btn>
+                <Btn isActive>조합회원</Btn>
               </Wrapper>
 
-              {currentTab === 0 ? (
-                <>
-                  {" "}
-                  <CommonButton width={`100%`} height={`70px`} kindOf={`grey`}>
-                    <Wrapper position={`relative`} fontSize={`18px`}>
-                      <Circle>
-                        <Image
-                          alt="google"
-                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
-                        />
-                      </Circle>
-                      구글로 시작하기
-                    </Wrapper>
-                  </CommonButton>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  아이디
+                </Text>
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="아이디를 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  비밀번호
+                </Text>
+                <TextInput
+                  type="password"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="비밀번호를 입력해주세요."
+                  radius={`5px`}
+                  margin={`0 0 8px`}
+                />
+                <TextInput
+                  type="password"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="비밀번호를 재입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  조합명
+                </Text>
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="조합명을 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  조합 홈페이지
+                </Text>
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="조합 홈페이지 주소를 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  설립년도
+                </Text>
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="조합 설립년도를 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  지역
+                </Text>
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="조합 활동 지역을 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  법인조합원수
+                </Text>
+                <Wrapper dr={`row`} ju={`space-between`}>
+                  <TextInput
+                    type="text"
+                    width={`96%`}
+                    height={`55px`}
+                    placeholder="법인조합원수를 입력해주세요."
+                    radius={`5px`}
+                  />
+                  인
+                </Wrapper>
+                <Text fontWeight={`bold`} color={Theme.basicTheme_C} isHover>
+                  + 추가
+                </Text>
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  개인조합원수
+                </Text>
+                <Wrapper dr={`row`} ju={`space-between`}>
+                  <TextInput
+                    type="text"
+                    width={`96%`}
+                    height={`55px`}
+                    placeholder="개인조합원수를 입력해주세요."
+                    radius={`5px`}
+                  />
+                  인
+                </Wrapper>
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  이사장명
+                </Text>
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="이사장명을 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  주소
+                </Text>
+                <Wrapper dr={`row`} ju={`space-between`}>
+                  <TextInput
+                    readOnly
+                    type="text"
+                    width={`calc(100% - 150px)`}
+                    height={`55px`}
+                    placeholder="우편주소를 입력해주세요."
+                    radius={`5px`}
+                  />
                   <CommonButton
-                    width={`100%`}
-                    height={`70px`}
-                    kindOf={`grey`}
-                    margin={`10px 0`}
+                    width={`146px`}
+                    height={`55px`}
+                    kindOf={`subTheme`}
+                    radius={`5px`}
                   >
-                    <Wrapper position={`relative`} fontSize={`18px`}>
-                      <Circle>
-                        <Image
-                          alt="kakao"
-                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_kakao.png`}
-                        />
-                      </Circle>
-                      카카오로 시작하기
-                    </Wrapper>
+                    우편주소 검색
                   </CommonButton>
-                  <CommonButton width={`100%`} height={`70px`} kindOf={`grey`}>
-                    <Wrapper position={`relative`} fontSize={`18px`}>
-                      <Circle>
-                        <Image
-                          alt="naver"
-                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_naver.png`}
-                        />
-                      </Circle>
-                      네이버로 시작하기
-                    </Wrapper>
-                  </CommonButton>
-                  <Text
-                    color={Theme.grey_C}
-                    fontSize={`16px`}
-                    margin={`40px 0 16px`}
-                  >
-                    일발 회원가입
-                  </Text>
-                  <CommonButton
-                    width={`100%`}
-                    height={`70px`}
-                    fontSize={`18px`}
-                    kindOf={`grey2`}
-                    onClick={() => setCurrentTab(1)}
-                  >
-                    ID / PW로 회원가입
-                  </CommonButton>
-                </>
-              ) : (
-                <></>
-              )}
+                </Wrapper>
+                <TextInput
+                  type="text"
+                  readOnly
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="주소를 입력해주세요."
+                  radius={`5px`}
+                  margin={`8px 0`}
+                />
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="상세주소를 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  전화
+                </Text>
+                <TextInput
+                  type="number"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="전화번호를 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  이메일
+                </Text>
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="이메일을 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  조합유형
+                  <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
+                </Text>
+                <Wrapper dr={`row`} ju={`flex-start`}>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>다중이해</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>생산자</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>소비자</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>사업자</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>직원</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>개발자</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>기타</Checkbox>
+                  </Wrapper>
+                </Wrapper>
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  조합사업유형
+                  <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
+                </Text>
+                <Wrapper dr={`row`} ju={`flex-start`}>
+                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
+                    <Checkbox>R&D형</Checkbox>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
+                    <Checkbox>비즈니스형</Checkbox>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
+                    <Checkbox>교육훈련 및 문화활동형</Checkbox>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
+                    <Checkbox>지역사회문제해결형</Checkbox>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
+                    <Checkbox>경력연계형</Checkbox>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
+                    <Checkbox>기타</Checkbox>
+                  </Wrapper>
+                </Wrapper>
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  사업분야
+                  <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
+                </Text>
+                <Wrapper dr={`row`} ju={`flex-start`}>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>ICT</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>화학</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>기계</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>로보틱스</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>환경</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>에너지</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>교육</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>국방</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>우주항공</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>기초과학</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>의약과</Checkbox>
+                  </Wrapper>
+                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                    <Checkbox>기타</Checkbox>
+                  </Wrapper>
+                </Wrapper>
+              </Wrapper>
+
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  주요사업
+                </Text>
+
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="1. 주요사업을 입력해주세요."
+                  radius={`5px`}
+                />
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="2. 주요사업을 입력해주세요."
+                  radius={`5px`}
+                  margin={`8px 0`}
+                />
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="3. 주요사업을 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  자본금
+                </Text>
+
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="자본금을 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+
+              <Wrapper al={`flex-start`}>
+                <Text
+                  fontWeight={`bold`}
+                  margin={`0 0 14px`}
+                  color={Theme.grey2_C}
+                >
+                  매출액
+                </Text>
+
+                <TextInput
+                  type="text"
+                  width={`100%`}
+                  height={`55px`}
+                  placeholder="매출액을 입력해주세요."
+                  radius={`5px`}
+                />
+              </Wrapper>
+
+              <Wrapper margin={`30px 0 14px`} al={`flex-start`}>
+                <Checkbox>(필수)개인정보처리방침에 동의합니다.</Checkbox>
+              </Wrapper>
+              <CommonButton
+                width={`100%`}
+                height={`55px`}
+                kindOf={`subTheme`}
+                radius={`5px`}
+                fontSize={`18px`}
+                fontWeight={`bold`}
+              >
+                회원가입
+              </CommonButton>
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
