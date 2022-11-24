@@ -155,10 +155,18 @@ const Index = () => {
                   fontSize={`16px`}
                   color={Theme.grey2_C}
                 >
-                  <Text isHover margin={`0 14px 0 0`}>
-                    ID찾기
-                  </Text>
-                  <Text isHover>PW재설정</Text>
+                  <Link href={`/find/id`}>
+                    <a>
+                      <Text isHover margin={`0 14px 0 0`}>
+                        ID찾기
+                      </Text>
+                    </a>
+                  </Link>
+                  <Link href={`/find/pw`}>
+                    <a>
+                      <Text isHover>PW재설정</Text>
+                    </a>
+                  </Link>
                 </Wrapper>
                 <Link href={`/join`}>
                   <a>
