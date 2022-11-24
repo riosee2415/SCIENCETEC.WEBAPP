@@ -96,7 +96,7 @@ const Status = ({}) => {
                   <Wrapper
                     width={`calc(100% - 14px - 10px)`}
                     al={`flex-start`}
-                    fontSize={`20px`}
+                    fontSize={width < 700 ? `18px` : `20px`}
                     fontWeight={`600`}
                   >
                     기관형 과학기술인 협동조합 교류회 현황
