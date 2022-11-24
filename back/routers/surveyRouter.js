@@ -1,5 +1,6 @@
 const express = require("express");
 const isAdminCheck = require("../middlewares/isAdminCheck");
+const isLoggedIn = require("../middlewares/isLoggedIn");
 const models = require("../models");
 
 const router = express.Router();
@@ -414,6 +415,245 @@ router.post("/inner/delete", async (req, res, next) => {
     return res.status(401).send("데이터를 삭제할 수 없습니다.");
   }
 });
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+router.post("/user/list", isAdminCheck, async (req, res, next) => {
+  const { userId, type, isCompleted } = req.body;
+
+  const _userId = parseInt(userId) || false;
+  const _isCompleted = parseInt(isCompleted) || 3;
+  const _type = parseInt(type) || 4;
+
+  const selectQuery = `
+  SELECT    ROW_NUMBER()    OVER(ORDER  BY A.createdAt)     AS num,
+            A.id,
+            A.isCompleted,
+            A.completedAt,
+            A.createdAt,
+            A.updatedAt,
+            DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")        AS viewCreatedAt,
+            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")        AS viewUpdatedAt,
+            A.UserId,
+            A.SurveyId,
+            B.username,
+            C.type,
+            CASE
+                WHEN  C.type = 1 THEN "사업수행 현황조사"
+                WHEN  C.type = 2 THEN "사업 수요조사"
+                WHEN  C.type = 3 THEN "기술매칭서비스 신청"
+            END                                              AS viewSurveyType
+    FROM    userSurvey      A
+   INNER
+    JOIN    users           B
+      ON    A.UserId = B.id
+   INNER
+    JOIN    survey          C
+      ON    A.SurveyId = C.id
+   WHERE    1 = 1
+            ${_userId ? `AND A.UserId = ${_userId}` : ``}
+            ${
+              _isCompleted === 1
+                ? `AND A.isCompleted = 0`
+                : _isCompleted === 2
+                ? `AND A.isCompleted = 1`
+                : _isCompleted === 3
+                ? ``
+                : ``
+            }
+            ${
+              _type === 1
+                ? `AND C.type = 1`
+                : _type === 2
+                ? `AND C.type = 2`
+                : _type === 3
+                ? `AND C.type = 3`
+                : _type === 4
+                ? ``
+                : ``
+            }
+   ORDER    BY num DESC
+  `;
+
+  try {
+    const list = await models.sequelize.query(selectQuery);
+
+    return res.status(200).json(list[0]);
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("데이터를 조회할 수 없습니다.");
+  }
+});
+
+router.post("/user/detail", async (req, res, next) => {
+  const { id } = req.body;
+
+  const detailQuery = `
+  SELECT    A.id,
+            A.isCompleted,
+            A.completedAt,
+            A.createdAt,
+            A.updatedAt,
+            DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")        AS viewCreatedAt,
+            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")        AS viewUpdatedAt,
+            A.UserId,
+            A.SurveyId,
+            B.username,
+            C.type,
+            CASE
+                WHEN  C.type = 1 THEN "사업수행 현황조사"
+                WHEN  C.type = 2 THEN "사업 수요조사"
+                WHEN  C.type = 3 THEN "기술매칭서비스 신청"
+            END                                              AS viewSurveyType
+    FROM    userSurvey      A
+   INNER
+    JOIN    users           B
+      ON    A.UserId = B.id
+   INNER
+    JOIN    survey          C
+      ON    A.SurveyId = C.id
+   WHERE    1 = 1
+     AND    A.id = ${id}
+  `;
+
+  const questionQuery = `
+  SELECT  ROW_NUMBER()  OVER(ORDER  BY sort) AS num,
+          id,
+          questionName,
+          content,
+          sort,
+          createdAt,
+          updatedAt,
+          UserSurveyId
+    FROM  userSurveyQuestion
+   WHERE  UserSurveyId = ${id}
+   ORDER  BY num ASC
+  `;
+
+  try {
+    const detailData = await models.sequelize.query(detailQuery);
+
+    if (detailData[0].length === 0) {
+      return res.status(401).send("존재하지 않는 데이터입니다.");
+    }
+
+    const questionList = await models.sequelize.query(questionQuery);
+
+    return res
+      .status(200)
+      .json({ detailData: detailData[0][0], questionList: questionList[0] });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("데이터를 조회할 수 없습니다.");
+  }
+});
+
+router.post("/user/create", isLoggedIn, async (req, res, next) => {
+  const { surveyId, questionValues } = req.body;
+
+  if (!Array.isArray(questionValues)) {
+    return res.status(401).send("잘못된 요청입니다.");
+  }
+
+  const insertQuery = `
+INSERT    INTO  userSurvey
+(
+    UserId,
+    SurveyId,
+    createdAt,
+    updatedAt
+)
+VALUES
+(
+    ${req.user.id},
+    ${surveyId},
+    NOW(),
+    NOW()
+)
+  `;
+
+  try {
+    const insertResult = await models.sequelize.query(insertQuery);
+
+    await Promise.all(
+      questionValues.map(async (data) => {
+        const quetsionInsertQuery = `
+            INSERT  INTO    userSurveyQuestion
+            (
+                questionName,
+                content,
+                sort,
+                UserSurveyId,
+                createdAt,
+                updatedAt
+            )
+            VALUES
+            (
+                "${data.questionName}",
+                "${data.content}",
+                ${data.sort},     
+                ${insertResult[0].insertId},
+                NOW(),
+                NOW()    
+            )
+            `;
+
+        await models.sequelize.query(quetsionInsertQuery);
+      })
+    );
+
+    return res.status(201).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("설문조사를 진행할 수 없습니다.");
+  }
+});
+
+router.post("/user/update", isAdminCheck, async (req, res, next) => {
+  const { id, username } = req.body;
+
+  const updateQuery = `
+  UPDATE  userSurvey
+     SET  isCompleted = 1,
+          completedAt = NOW()
+   WHERE  id = ${id}
+  `;
+
+  const historyInsertQuery = `
+  INSERT    INTO    surveyHistory
+  (
+    content,
+    title,
+    updator,
+    createdAt,
+    updatedAt
+  )
+  VALUES
+  (
+    "설문조사 확인처리",
+    "${username}",
+    ${req.user.id},
+    NOW(),
+    NOW()
+  )
+  `;
+
+  try {
+    await models.sequelize.query(updateQuery);
+    await models.sequelize.query(historyInsertQuery);
+
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("설문조사를 확인처리할 수 없습니다.");
+  }
+});
+
+//////////////////////////////////////////////////////////////////////////////////////÷
+//////////////////////////////////////////////////////////////////////////////////////÷
+//////////////////////////////////////////////////////////////////////////////////////÷
 
 router.post("/history/list", isAdminCheck, async (req, res, next) => {
   const { datePick } = req.body;
