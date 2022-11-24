@@ -381,12 +381,12 @@ const AppHeader = () => {
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/activity/project`}>
                     <a>공동 프로젝트</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/activity/business`}>
                     <a>공동 비즈니스</a>
                   </Link>
                 </Text>
