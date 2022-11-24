@@ -265,7 +265,9 @@ const Id = ({}) => {
                     al={`flex-start`}
                     fontSize={`16px`}
                   >
-                    2023년 기관형 과학기술인 협동조합 성장지원 사업 공고
+                    <Text isEllipsis={true} width={`100%`}>
+                      2023년 기관형 과학기술인 협동조합 성장지원 사업 공고
+                    </Text>
                   </Wrapper>
                 </Wrapper>
                 <Wrapper dr={`row`}>
@@ -285,7 +287,9 @@ const Id = ({}) => {
                     al={`flex-start`}
                     fontSize={`16px`}
                   >
-                    2023년 기관형 과학기술인 협동조합 성장지원 사업 공고
+                    <Text isEllipsis={true} width={`100%`}>
+                      2023년 기관형 과학기술인 협동조합 성장지원 사업 공고
+                    </Text>
                   </Wrapper>
                 </Wrapper>
               </Wrapper>
