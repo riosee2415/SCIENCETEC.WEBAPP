@@ -223,7 +223,16 @@ export const CommonButton = styled(Button)`
     props.kindOf === `grey` && `background : ${props.theme.white_C};`}
   ${(props) => props.kindOf === `grey` && `color : ${props.theme.darkGrey_C};`}
   ${(props) =>
-    props.kindOf === `grey` && `border : 1px solid ${props.theme.grey_C};`}
+    props.kindOf === `grey` &&
+    `border : 1px solid ${props.theme.lightGrey2_C};`}
+
+  /* grey2 */
+  ${(props) =>
+    props.kindOf === `grey2` && `background : ${props.theme.lightGrey_C};`}
+  ${(props) => props.kindOf === `grey2` && `color : ${props.theme.grey2_C};`}
+  ${(props) =>
+    props.kindOf === `grey2` &&
+    `border : 1px solid ${props.theme.lightGrey_C};`}
   
   /* subTheme */
   ${(props) =>
@@ -266,11 +275,20 @@ export const CommonButton = styled(Button)`
 
     /* grey */
     ${(props) =>
-      props.kindOf === `grey` && `background : ${props.theme.white_C};`}
+      props.kindOf === `grey` && `background : ${props.theme.lightGrey_C};`}
     ${(props) =>
       props.kindOf === `grey` && `color : ${props.theme.darkGrey_C};`}
     ${(props) =>
       props.kindOf === `grey` && `border : 1px solid ${props.theme.grey_C};`}
+
+        /* grey2 */
+    ${(props) =>
+      props.kindOf === `grey2` && `background : ${props.theme.white_C};`}
+    ${(props) =>
+      props.kindOf === `grey2` && `color : ${props.theme.darkGrey_C};`}
+    ${(props) =>
+      props.kindOf === `grey2` &&
+      `border : 1px solid ${props.theme.lightGrey2_C};`}
   
     /* subTheme */
     ${(props) =>
