@@ -27,6 +27,7 @@ const faqRouter = require("./routers/faqRouter");
 const forumRouter = require("./routers/forumRouter");
 const shareProjectRouter = require("./routers/shareProjectRouter");
 const surveyRouter = require("./routers/surveyRouter");
+const mainRouter = require("./routers/mainRouter");
 
 // Config Settings
 db.sequelize
@@ -109,6 +110,7 @@ app.use("/api/faq", faqRouter);
 app.use("/api/forum", forumRouter);
 app.use("/api/share", shareProjectRouter);
 app.use("/api/survey", surveyRouter);
+app.use("/api/main", mainRouter);
 
 // second minute hour day-of-month month day-of-week
 const task = cron.schedule(
