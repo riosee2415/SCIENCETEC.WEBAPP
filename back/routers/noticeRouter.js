@@ -430,9 +430,44 @@ router.post("/detail", async (req, res, next) => {
 
     const commentList = await models.sequelize.query(selectQuery);
 
-    return res
-      .status(200)
-      .json({ detailData: detailData[0][0], commentList: commentList[0] });
+    const nextDataQuery = `
+  SELECT  id,
+          title
+    FROM  notices
+   WHERE  id > ${id}
+     AND  isDelete = 0
+     AND  type = "${detailData[0][0].type}"
+   LIMIT  1
+  `;
+
+    const prevDataQuery = `
+  SELECT  id,
+          title
+    FROM  notices
+   WHERE  id < ${id}
+     AND  isDelete = 0
+     AND  type = "${detailData[0][0].type}"
+  `;
+
+    const nextData = await models.sequelize.query(nextDataQuery);
+
+    const prevData = await models.sequelize.query(prevDataQuery);
+
+    console.log(!nextData[0]);
+    console.log(!prevData[0]);
+
+    return res.status(200).json({
+      detailData: detailData[0][0],
+      commentList: commentList[0],
+      nextNotice:
+        nextData[0].length !== 0
+          ? nextData[0][0]
+          : "다음글이 존재하지 않습니다.", // 다음 게시글
+      prevNotice:
+        prevData[0].length !== 0
+          ? prevData[0][prevData[0].length - 1]
+          : "이전글이 존재하지 않습니다.", // 이전 게시글
+    });
   } catch (error) {
     console.error(error);
     return res.status(401).send("게시글 정보를 불러올 수 없습니다. [CODE 107]");

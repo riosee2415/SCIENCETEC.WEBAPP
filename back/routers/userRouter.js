@@ -10,43 +10,6 @@ const sendSecretMail = require("../utils/mailSender");
 
 const router = express.Router();
 
-router.post("/business/graph", async (req, res, next) => {
-  const selectQuery = `
-SELECT	value,
-	      COUNT(id)			AS cnt
-  FROM	userBusinessTypes
- GROUP	BY value
-  `;
-
-  try {
-    const list = await models.sequelize.query(selectQuery);
-
-    return res.status(200).json(list[0]);
-  } catch (error) {
-    console.error(error);
-    return res.status(401).send("데이터를 조회할 수 없습니다.");
-  }
-});
-
-router.post("/city/graph", async (req, res, next) => {
-  const selectQuery = `
-  SELECT  combiArea,
-          COUNT(id)        AS cnt
-    FROM  users
-   WHERE  isExit = 0
-   GROUP  BY combiArea
-  `;
-
-  try {
-    const list = await models.sequelize.query(selectQuery);
-
-    return res.status(200).json(list[0]);
-  } catch (error) {
-    console.error(error);
-    return res.status(401).send("데이터를 조회할 수 없습니다.");
-  }
-});
-
 router.post("/list", isAdminCheck, async (req, res, next) => {
   const { searchData, searchLevel, searchExit } = req.body;
 
