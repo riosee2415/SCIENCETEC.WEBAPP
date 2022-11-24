@@ -20,6 +20,7 @@ import {
   SpanText,
   Text,
   CommonButton,
+  CustomSelect,
 } from "../../components/commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
@@ -32,9 +33,9 @@ import CC01 from "../../components/common/CC01";
 import { DownloadOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCallback } from "react";
-import { Modal } from "antd";
+import { Modal, Select } from "antd";
 
-const Home = ({}) => {
+const Status = ({}) => {
   const width = useWidth();
   ////// GLOBAL STATE //////
 
@@ -53,7 +54,7 @@ const Home = ({}) => {
   return (
     <>
       <Head>
-        <title>ICAST</title>
+        <title>ICAST | 교류회</title>
       </Head>
 
       <ClientLayout>
@@ -62,14 +63,14 @@ const Home = ({}) => {
             <Wrapper dr={`row`}>
               <Wrapper width={`240px`}></Wrapper>
               <Wrapper
-                width={width < 700 ? `100%` : `calc(100% - 240px)`}
-                height={width < 700 ? `auto` : `100vh`}
+                width={`calc(100% - 240px)`}
+                height={`100vh`}
                 ju={`flex-start`}
-                padding={width < 700 ? `0` : `0 0 0 40px`}
+                padding={`0 0 0 40px`}
                 al={`flex-start`}
               >
                 <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                  교류회란?
+                  현황
                 </Text>
 
                 <Wrapper
@@ -94,93 +95,18 @@ const Home = ({}) => {
                       fontSize={`20px`}
                       fontWeight={`600`}
                     >
-                      기관형 과학기술인 협동조합 교류회(Institutional
-                      Cooperative Association of Scientists and Technologists)
+                      기관형 과학기술인 협동조합 교류회 현황
                     </Wrapper>
                   </Wrapper>
 
-                  <Wrapper
-                    dr={`row`}
-                    ju={`space-between`}
-                    al={`flex-start`}
-                    margin={`0 0 25px`}
-                  >
-                    <Text color={Theme.basicTheme_C} fontSize={`18px`}>
-                      •
-                    </Text>
-                    <Wrapper fontSize={`18px`} width={`calc(100% -  15px)`}>
-                      기관형 과학기술인 협동조합(기과협)이란
-                      「협동조합기본법」에 따라 설립된 협동조합 중 조합원이
-                      과학기술인이 중심이 되어 과학기술 관련 서비스 등을 주된
-                      사업으로 활동하는 협동조합으로서 이공계(과학기술인)
-                      개인조합원이 5명 이상 또는 50%, 법인 조합원이 최소 5개
-                      이상 또는 50% 이상인 협동조합을 말한다.
-                    </Wrapper>
-                  </Wrapper>
-
-                  <Wrapper
-                    dr={`row`}
-                    ju={`space-between`}
-                    al={`flex-start`}
-                    margin={`0 0 25px`}
-                  >
-                    <Text color={Theme.basicTheme_C} fontSize={`18px`}>
-                      •
-                    </Text>
-                    <Wrapper fontSize={`18px`} width={`calc(100% -  15px)`}>
-                      과학기술정보통신부가 2019년부터 지원해 오고 있는
-                      [지역혁신공동체 혁신지원 사업]의 일환으로 기관형
-                      과학기술인 협동조합 성장지원 사업을 지원해 오고 있다. 이
-                      사업의 수행 주관기관 협동조합과, 동 부처가 지원해 오고
-                      있는 [과학기술인 협동조합 육성지원사업] 중 기과협 조건에
-                      해당하는 협동조합 및 예비 기관협 협동조합들간의 협의체가
-                      기관형 과학기술인 협동조합 교류회다.
-                    </Wrapper>
-                  </Wrapper>
-
-                  <Wrapper
-                    dr={`row`}
-                    ju={`space-between`}
-                    al={`flex-start`}
-                    margin={`0 0 30px`}
-                  >
-                    <Text color={Theme.basicTheme_C} fontSize={`18px`}>
-                      •
-                    </Text>
-                    <Wrapper
-                      fontSize={`18px`}
-                      width={`calc(100% -  15px)`}
-                      fontWeight={`600`}
-                      al={`flex-start`}
-                    >
-                      위에 해당하는 모든 협동조합은 교류회 회원조합이 될 자격이
-                      있다.
-                    </Wrapper>
-                  </Wrapper>
-
-                  <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 30px`}>
-                    <Image
-                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
-                      alt="icon"
-                      width={`14px`}
-                      margin={`0 10px 0 0`}
-                    />
-                    <Text fontSize={`20px`} fontWeight={`600`}>
-                      정관 미리보기
-                    </Text>
-
-                    <CommonButton
-                      kindOf={`grey3`}
-                      fontSize={`14px`}
-                      padding={`0 0 2px`}
-                      width={`80px`}
-                      height={`20px`}
-                      margin={`0 0 0 10px`}
-                      onClick={downToggle}
-                    >
-                      다운로드
-                      <DownloadOutlined />
-                    </CommonButton>
+                  <Wrapper dr={`row`} ju={`flex-start`}>
+                    <CustomSelect>
+                      <Select>
+                        <Select.Option>1</Select.Option>
+                        <Select.Option>1</Select.Option>
+                        <Select.Option>1</Select.Option>
+                      </Select>
+                    </CustomSelect>
                   </Wrapper>
                 </Wrapper>
               </Wrapper>
@@ -239,4 +165,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
     await context.store.sagaTask.toPromise();
   }
 );
-export default Home;
+export default Status;
