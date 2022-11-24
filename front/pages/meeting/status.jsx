@@ -21,6 +21,7 @@ import {
   Text,
   CommonButton,
   CustomSelect,
+  TextInput,
 } from "../../components/commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
@@ -59,14 +60,13 @@ const Status = ({}) => {
 
       <ClientLayout>
         <WholeWrapper>
-          <RsWrapper>
+          <RsWrapper padding={`0 0 160px`}>
             <Wrapper dr={`row`}>
               <Wrapper width={`240px`}></Wrapper>
               <Wrapper
-                width={`calc(100% - 240px)`}
-                height={`100vh`}
+                width={width < 700 ? `100%` : `calc(100% - 240px)`}
                 ju={`flex-start`}
-                padding={`0 0 0 40px`}
+                padding={width < 700 ? `0` : `0 0 0 40px`}
                 al={`flex-start`}
               >
                 <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
@@ -99,45 +99,274 @@ const Status = ({}) => {
                     </Wrapper>
                   </Wrapper>
 
-                  <Wrapper dr={`row`} ju={`flex-start`}>
+                  <Wrapper
+                    dr={`row`}
+                    ju={width < 700 ? `space-between` : `flex-start`}
+                    margin={`0 0 20px`}
+                  >
                     <CustomSelect>
-                      <Select>
+                      <Select defaultValue={"전체"}>
                         <Select.Option>1</Select.Option>
                         <Select.Option>1</Select.Option>
                         <Select.Option>1</Select.Option>
                       </Select>
                     </CustomSelect>
+
+                    <TextInput
+                      width={width < 700 ? `160px` : `230px`}
+                      height={`40px`}
+                      margin={`0 10px`}
+                      placeholder="검색어를 입력해주세요."
+                    />
+
+                    <CommonButton height={`40px`} fontSize={`16px`}>
+                      검색하기
+                    </CommonButton>
+                  </Wrapper>
+
+                  <Wrapper overflow={`auto`} wrap={`nowrap`} al={`flex-start`}>
+                    <Wrapper minWidth={`1100px`}>
+                      <Wrapper
+                        borderTop={`2px solid ${Theme.basicTheme_C}`}
+                        dr={`row`}
+                        height={`48px`}
+                      >
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`5%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            번호
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`21%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            조합명
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`7%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            지역
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`7%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            설립 년도
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            법인 조합원
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            개인 조합원
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            조합유형
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            사업유형
+                          </Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          bgColor={Theme.lightGrey_C}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          borderRight={`none`}
+                          width={`12%`}
+                        >
+                          <Text
+                            fontSize={`14px`}
+                            isNeo={true}
+                            fontWeight={`700`}
+                          >
+                            주요사업
+                          </Text>
+                        </Wrapper>
+                      </Wrapper>
+                      <Wrapper dr={`row`} height={`48px`}>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`5%`}
+                        >
+                          <Text fontSize={`16px`}>번호</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`21%`}
+                        >
+                          <Text fontSize={`16px`}>조합명</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`7%`}
+                        >
+                          <Text fontSize={`16px`}>지역</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`7%`}
+                        >
+                          <Text fontSize={`16px`}>설립 년도</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text fontSize={`16px`}>법인 조합원</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text fontSize={`16px`}>개인 조합원</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text fontSize={`16px`}>조합유형</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          width={`12%`}
+                        >
+                          <Text fontSize={`16px`}>사업유형</Text>
+                        </Wrapper>
+                        <Wrapper
+                          height={`100%`}
+                          border={`1px solid ${Theme.lightGrey2_C}`}
+                          borderTop={`none`}
+                          borderLeft={`none`}
+                          borderRight={`none`}
+                          width={`12%`}
+                        >
+                          <Text fontSize={`16px`}>주요사업</Text>
+                        </Wrapper>
+                      </Wrapper>
+                    </Wrapper>
                   </Wrapper>
                 </Wrapper>
               </Wrapper>
             </Wrapper>
           </RsWrapper>
-
-          <Modal visible={isDown} footer={null} closable={false}>
-            <Wrapper padding={`50px 0`}>
-              <Text fontSize={`24px`} isNeo={true}>
-                자료 준비 중
-              </Text>
-
-              <Text fontSize={`16px`} margin={`15px 0 0`}>
-                해당 자료는 협회에서 준비 중입니다.
-              </Text>
-              <Text fontSize={`16px`} margin={`0 0 30px`}>
-                빠른 시일내로 자료를 제공해드리도록 하겠습니다.
-              </Text>
-
-              <CommonButton
-                kindOf={`subTheme`}
-                width={`130px`}
-                height={`45px`}
-                fontSize={`18px`}
-                fontWeight={`600`}
-                onClick={downToggle}
-              >
-                확인
-              </CommonButton>
-            </Wrapper>
-          </Modal>
         </WholeWrapper>
       </ClientLayout>
     </>

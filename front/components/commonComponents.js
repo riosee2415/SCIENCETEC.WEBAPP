@@ -604,6 +604,10 @@ export const CustomSelect = styled(Wrapper)`
   html {
     --antd-wave-shadow-color: ${(props) => props.theme.basicTheme_C} !important;
   }
+
+  @media (max-width: 700px) {
+    width: 80px;
+  }
 `;
 
 export const CustomPage = styled(Pagination)`
