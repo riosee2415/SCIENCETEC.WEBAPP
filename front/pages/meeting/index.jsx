@@ -33,6 +33,8 @@ import { DownloadOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCallback } from "react";
 import { Modal } from "antd";
+import LeftMenu from "../../components/LeftMenu";
+import BreadCrumb from "../../components/BreadCrumb";
 
 const Home = ({}) => {
   const width = useWidth();
@@ -58,130 +60,129 @@ const Home = ({}) => {
 
       <ClientLayout>
         <WholeWrapper>
-          <RsWrapper>
-            <Wrapper dr={`row`}>
-              <Wrapper width={`240px`}></Wrapper>
+          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
+            <LeftMenu />
+
+            <Wrapper
+              width={width < 1100 ? `100%` : `calc(100% - 280px)`}
+              ju={`flex-start`}
+              al={`flex-start`}
+              margin={`0 0 100px`}
+            >
+              <BreadCrumb />
+              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
+                교류회란?
+              </Text>
+
               <Wrapper
-                width={width < 700 ? `100%` : `calc(100% - 240px)`}
-                height={width < 700 ? `auto` : `100vh`}
-                ju={`flex-start`}
-                padding={width < 700 ? `0` : `0 0 0 40px`}
-                al={`flex-start`}
+                borderTop={`1px solid ${Theme.lightGrey2_C}`}
+                padding={`25px 0 0`}
               >
-                <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                  교류회란?
-                </Text>
+                <Wrapper
+                  dr={`row`}
+                  ju={`flex-start`}
+                  margin={`0 0 30px`}
+                  al={width < 700 ? `flex-start` : `center`}
+                >
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
+                    alt="icon"
+                    width={`14px`}
+                    margin={width < 700 ? `6px 10px 0 0` : `0 10px 0 0`}
+                  />
+                  <Wrapper
+                    width={`calc(100% - 14px - 10px)`}
+                    al={`flex-start`}
+                    fontSize={`20px`}
+                    fontWeight={`600`}
+                  >
+                    기관형 과학기술인 협동조합 교류회(Institutional Cooperative
+                    Association of Scientists and Technologists)
+                  </Wrapper>
+                </Wrapper>
 
                 <Wrapper
-                  borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                  padding={`25px 0 0`}
+                  dr={`row`}
+                  ju={`space-between`}
+                  al={`flex-start`}
+                  margin={`0 0 25px`}
                 >
-                  <Wrapper
-                    dr={`row`}
-                    ju={`flex-start`}
-                    margin={`0 0 30px`}
-                    al={width < 700 ? `flex-start` : `center`}
-                  >
-                    <Image
-                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
-                      alt="icon"
-                      width={`14px`}
-                      margin={width < 700 ? `6px 10px 0 0` : `0 10px 0 0`}
-                    />
-                    <Wrapper
-                      width={`calc(100% - 14px - 10px)`}
-                      al={`flex-start`}
-                      fontSize={`20px`}
-                      fontWeight={`600`}
-                    >
-                      기관형 과학기술인 협동조합 교류회(Institutional
-                      Cooperative Association of Scientists and Technologists)
-                    </Wrapper>
+                  <Text color={Theme.basicTheme_C} fontSize={`18px`}>
+                    •
+                  </Text>
+                  <Wrapper fontSize={`18px`} width={`calc(100% -  15px)`}>
+                    기관형 과학기술인 협동조합(기과협)이란 「협동조합기본법」에
+                    따라 설립된 협동조합 중 조합원이 과학기술인이 중심이 되어
+                    과학기술 관련 서비스 등을 주된 사업으로 활동하는
+                    협동조합으로서 이공계(과학기술인) 개인조합원이 5명 이상 또는
+                    50%, 법인 조합원이 최소 5개 이상 또는 50% 이상인 협동조합을
+                    말한다.
                   </Wrapper>
+                </Wrapper>
 
+                <Wrapper
+                  dr={`row`}
+                  ju={`space-between`}
+                  al={`flex-start`}
+                  margin={`0 0 25px`}
+                >
+                  <Text color={Theme.basicTheme_C} fontSize={`18px`}>
+                    •
+                  </Text>
+                  <Wrapper fontSize={`18px`} width={`calc(100% -  15px)`}>
+                    과학기술정보통신부가 2019년부터 지원해 오고 있는
+                    [지역혁신공동체 혁신지원 사업]의 일환으로 기관형 과학기술인
+                    협동조합 성장지원 사업을 지원해 오고 있다. 이 사업의 수행
+                    주관기관 협동조합과, 동 부처가 지원해 오고 있는 [과학기술인
+                    협동조합 육성지원사업] 중 기과협 조건에 해당하는 협동조합 및
+                    예비 기관협 협동조합들간의 협의체가 기관형 과학기술인
+                    협동조합 교류회다.
+                  </Wrapper>
+                </Wrapper>
+
+                <Wrapper
+                  dr={`row`}
+                  ju={`space-between`}
+                  al={`flex-start`}
+                  margin={`0 0 30px`}
+                >
+                  <Text color={Theme.basicTheme_C} fontSize={`18px`}>
+                    •
+                  </Text>
                   <Wrapper
-                    dr={`row`}
-                    ju={`space-between`}
+                    fontSize={`18px`}
+                    width={`calc(100% -  15px)`}
+                    fontWeight={`600`}
                     al={`flex-start`}
-                    margin={`0 0 25px`}
                   >
-                    <Text color={Theme.basicTheme_C} fontSize={`18px`}>
-                      •
-                    </Text>
-                    <Wrapper fontSize={`18px`} width={`calc(100% -  15px)`}>
-                      기관형 과학기술인 협동조합(기과협)이란
-                      「협동조합기본법」에 따라 설립된 협동조합 중 조합원이
-                      과학기술인이 중심이 되어 과학기술 관련 서비스 등을 주된
-                      사업으로 활동하는 협동조합으로서 이공계(과학기술인)
-                      개인조합원이 5명 이상 또는 50%, 법인 조합원이 최소 5개
-                      이상 또는 50% 이상인 협동조합을 말한다.
-                    </Wrapper>
+                    위에 해당하는 모든 협동조합은 교류회 회원조합이 될 자격이
+                    있다.
                   </Wrapper>
+                </Wrapper>
 
-                  <Wrapper
-                    dr={`row`}
-                    ju={`space-between`}
-                    al={`flex-start`}
-                    margin={`0 0 25px`}
+                <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 30px`}>
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
+                    alt="icon"
+                    width={`14px`}
+                    margin={`0 10px 0 0`}
+                  />
+                  <Text fontSize={`20px`} fontWeight={`600`}>
+                    정관 미리보기
+                  </Text>
+
+                  <CommonButton
+                    kindOf={`grey3`}
+                    fontSize={`14px`}
+                    padding={`0 0 2px`}
+                    width={`80px`}
+                    height={`20px`}
+                    margin={`0 0 0 10px`}
+                    onClick={downToggle}
                   >
-                    <Text color={Theme.basicTheme_C} fontSize={`18px`}>
-                      •
-                    </Text>
-                    <Wrapper fontSize={`18px`} width={`calc(100% -  15px)`}>
-                      과학기술정보통신부가 2019년부터 지원해 오고 있는
-                      [지역혁신공동체 혁신지원 사업]의 일환으로 기관형
-                      과학기술인 협동조합 성장지원 사업을 지원해 오고 있다. 이
-                      사업의 수행 주관기관 협동조합과, 동 부처가 지원해 오고
-                      있는 [과학기술인 협동조합 육성지원사업] 중 기과협 조건에
-                      해당하는 협동조합 및 예비 기관협 협동조합들간의 협의체가
-                      기관형 과학기술인 협동조합 교류회다.
-                    </Wrapper>
-                  </Wrapper>
-
-                  <Wrapper
-                    dr={`row`}
-                    ju={`space-between`}
-                    al={`flex-start`}
-                    margin={`0 0 30px`}
-                  >
-                    <Text color={Theme.basicTheme_C} fontSize={`18px`}>
-                      •
-                    </Text>
-                    <Wrapper
-                      fontSize={`18px`}
-                      width={`calc(100% -  15px)`}
-                      fontWeight={`600`}
-                      al={`flex-start`}
-                    >
-                      위에 해당하는 모든 협동조합은 교류회 회원조합이 될 자격이
-                      있다.
-                    </Wrapper>
-                  </Wrapper>
-
-                  <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 30px`}>
-                    <Image
-                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
-                      alt="icon"
-                      width={`14px`}
-                      margin={`0 10px 0 0`}
-                    />
-                    <Text fontSize={`20px`} fontWeight={`600`}>
-                      정관 미리보기
-                    </Text>
-
-                    <CommonButton
-                      kindOf={`grey3`}
-                      fontSize={`14px`}
-                      padding={`0 0 2px`}
-                      width={`80px`}
-                      height={`20px`}
-                      margin={`0 0 0 10px`}
-                      onClick={downToggle}
-                    >
-                      다운로드
-                      <DownloadOutlined />
-                    </CommonButton>
-                  </Wrapper>
+                    다운로드
+                    <DownloadOutlined />
+                  </CommonButton>
                 </Wrapper>
               </Wrapper>
             </Wrapper>
