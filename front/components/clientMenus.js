@@ -49,23 +49,23 @@ export const menus = [
   },
   {
     menuName: "운영안내",
-    menuLink: "/intro/greeting",
+    menuLink: "/operate/perform",
     subMenus: [
       {
         subMenuName: "사업수행",
-        subMenuLink: "/intro/greeting",
+        subMenuLink: "/operate/perform",
       },
       {
         subMenuName: "커뮤니티",
-        subMenuLink: "/intro/operation",
+        subMenuLink: "/operate/operation",
       },
       {
         subMenuName: "자료실",
-        subMenuLink: "/intro/organization",
+        subMenuLink: "/operate/organization",
       },
       {
         subMenuName: "공지사항",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/operate/intro",
       },
     ],
   },

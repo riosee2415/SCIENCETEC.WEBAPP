@@ -247,11 +247,11 @@ const AppHeader = () => {
                 </Menu>
               </a>
             </Link>
-            <Link href={``}>
+            <Link href={`/operate/perform`}>
               <a>
                 <Menu
                   color={
-                    router.pathname.includes(`/service`) && Theme.subTheme_C
+                    router.pathname.includes(`/operate`) && Theme.subTheme_C
                   }
                 >
                   운영안내
@@ -346,7 +346,7 @@ const AppHeader = () => {
               <Text className="menu">운영안내</Text>
               <Wrapper fontSize={`17px`}>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/operate/perform`}>
                     <a>사업수행</a>
                   </Link>
                 </Text>
@@ -647,7 +647,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use`}>
+                    <Link href={`/operate/perform`}>
                       <a>사업수행</a>
                     </Link>
                   </Wrapper>
@@ -656,7 +656,7 @@ const AppHeader = () => {
                     al={`flex-start`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use/design`}>
+                    <Link href={`/operate/design`}>
                       <a>운영 노하우</a>
                     </Link>
                   </Wrapper>
@@ -665,7 +665,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use/admission`}>
+                    <Link href={`/operate/admission`}>
                       <a>커뮤니티</a>
                     </Link>
                   </Wrapper>
@@ -675,12 +675,12 @@ const AppHeader = () => {
                     al={`flex-start`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/use/list`}>
+                    <Link href={`/operate/list`}>
                       <a>자료실</a>
                     </Link>
                   </Wrapper>
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/use/wait`}>
+                    <Link href={`/operate/wait`}>
                       <a>공지사항</a>
                     </Link>
                   </Wrapper>
