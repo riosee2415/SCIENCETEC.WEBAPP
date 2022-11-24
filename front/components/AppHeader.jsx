@@ -229,7 +229,7 @@ const AppHeader = () => {
               <a>
                 <Menu
                   color={
-                    router.pathname.includes(`/company`) && Theme.subTheme2_C
+                    router.pathname.includes(`/company`) && Theme.subTheme_C
                   }
                 >
                   교류회
@@ -240,7 +240,7 @@ const AppHeader = () => {
               <a>
                 <Menu
                   color={
-                    router.pathname.includes(`/service`) && Theme.subTheme2_C
+                    router.pathname.includes(`/service`) && Theme.subTheme_C
                   }
                 >
                   설립안내
@@ -251,17 +251,19 @@ const AppHeader = () => {
               <a>
                 <Menu
                   color={
-                    router.pathname.includes(`/service`) && Theme.subTheme2_C
+                    router.pathname.includes(`/service`) && Theme.subTheme_C
                   }
                 >
                   운영안내
                 </Menu>
               </a>
             </Link>
-            <Link href={`/`}>
+            <Link href={`/activity/forum`}>
               <a>
                 <Menu
-                  color={router.pathname.includes(`/use`) && Theme.subTheme2_C}
+                  color={
+                    router.pathname.includes(`/activity`) && Theme.subTheme_C
+                  }
                 >
                   주요활동
                 </Menu>
@@ -272,7 +274,7 @@ const AppHeader = () => {
                 <Menu
                   margin={`0`}
                   color={
-                    router.pathname.includes(`/happiness`) && Theme.subTheme2_C
+                    router.pathname.includes(`/happiness`) && Theme.subTheme_C
                   }
                 >
                   회원조합소개
@@ -374,7 +376,7 @@ const AppHeader = () => {
               <Text className="menu">주요활동</Text>
               <Wrapper fontSize={`17px`}>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/activity/forum`}>
                     <a>포럼</a>
                   </Link>
                 </Text>

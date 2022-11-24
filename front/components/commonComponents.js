@@ -1,4 +1,4 @@
-import { Row, Col, Button, Form, Input, Select } from "antd";
+import { Row, Col, Button, Form, Input, Select, Pagination } from "antd";
 import styled from "styled-components";
 import {
   HomeOutlined,
@@ -603,6 +603,75 @@ export const CustomSelect = styled(Wrapper)`
   }
   html {
     --antd-wave-shadow-color: ${(props) => props.theme.basicTheme_C} !important;
+  }
+`;
+
+export const CustomPage = styled(Pagination)`
+  margin: 0 0 100px;
+
+  & .ant-pagination-next > button,
+  .ant-pagination-item,
+  & .ant-pagination-prev > button {
+    border: none;
+    border-radius: 100%;
+  }
+
+  & {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  & .ant-pagination-next,
+  & .ant-pagination-prev,
+  & .ant-pagination-item-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${(props) => props.theme.white_C} !important;
+    border: none;
+  }
+
+  .ant-pagination-item:hover a {
+    color: ${(props) => props.theme.basicTheme_C};
+  }
+
+  .ant-pagination-item:hover {
+    background-color: ${(props) => props.theme.subTheme2_C} !important;
+    color: ${(props) => props.theme.basicTheme_C} !important;
+  }
+
+  & .ant-pagination-item a {
+    color: ${(props) => props.theme.black_C};
+  }
+
+  & .ant-pagination-item-active a {
+    color: ${(props) => props.theme.basicTheme_C};
+  }
+
+  & .ant-pagination-item-active {
+    background-color: ${(props) => props.theme.subTheme2_C} !important;
+    color: ${(props) => props.theme.basicTheme_C} !important;
+    border: none;
+  }
+
+  & .ant-pagination-item:focus-visible a {
+    color: ${(props) => props.theme.basicTheme_C};
+  }
+
+  & .ant-pagination-item-link svg {
+    font-weight: bold;
+  }
+
+  @media (max-width: 700px) {
+    & .ant-pagination-item,
+    & .ant-pagination-next,
+    & .ant-pagination-prev {
+      width: 25px;
+      min-width: 25px;
+      height: 25px;
+      line-height: 25px;
+    }
   }
 `;
 
