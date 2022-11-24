@@ -79,11 +79,11 @@ export const menus = [
       },
       {
         subMenuName: "공동 프로젝트",
-        subMenuLink: "/activity",
+        subMenuLink: "/activity/project",
       },
       {
         subMenuName: "공동 비즈니스",
-        subMenuLink: "/activity",
+        subMenuLink: "/activity/business",
       },
       {
         subMenuName: "기술매칭사업",
