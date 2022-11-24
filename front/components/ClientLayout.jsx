@@ -7,6 +7,7 @@ import { withResizeDetector } from "react-resize-detector";
 import { AlignRightOutlined } from "@ant-design/icons";
 import AppHeader from "./AppHeader";
 import AppFooter from "./AppFooter";
+import { WholeWrapper } from "./commonComponents";
 
 const ClientLayout = ({ children, width }) => {
   return (
@@ -31,11 +32,9 @@ const ClientLayout = ({ children, width }) => {
       */}
 
       {/* content */}
-      <Row>
-        <Col span={0}>LEFT</Col>
-        <Col span={24}>{children}</Col>
-        <Col span={0}>RIGHT</Col>
-      </Row>
+      <WholeWrapper margin={width < 900 ? `62px` : `137px`}>
+        {children}
+      </WholeWrapper>
 
       {/* Footer */}
 

@@ -48,7 +48,7 @@ const WebRow = styled(WholeWrapper)`
       visibility: visible;
     }
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 900px) {
     display: none;
   }
 `;
@@ -66,7 +66,7 @@ const MobileRow = styled(WholeWrapper)`
   .ant-drawer-header-no-title .ant-drawer-close {
     display: none;
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 900px) {
     display: flex;
   }
 `;
@@ -269,7 +269,7 @@ const AppHeader = () => {
               </a>
             </Link>
           </Wrapper>
-          <Wrapper width={`205px`}></Wrapper>
+          <Wrapper width={width < 1100 ? `0` : `205px`}></Wrapper>
         </RsWrapper>
 
         <HoverWrapper>
