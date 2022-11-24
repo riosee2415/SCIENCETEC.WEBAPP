@@ -210,21 +210,31 @@ export const CommonButton = styled(Button)`
   border-radius: ${(props) => props.radius};
 
   ${(props) => !props.kindOf && `background : ${props.theme.basicTheme_C};`}
+
+  /* white */
   ${(props) =>
-    props.kindOf === `white` && `background : ${props.theme.basicTheme_C};`}
-  ${(props) => props.kindOf === `white` && `color : ${props.theme.subTheme_C};`}
+    props.kindOf === `white` && `background : ${props.theme.white_C};`}
+  ${(props) => props.kindOf === `white` && `color : ${props.theme.grey2_C};`}
   ${(props) =>
-    props.kindOf === `white` && `border : 1px solid ${props.theme.subTheme_C};`}
+    props.kindOf === `white` && `border : 1px solid ${props.theme.white_C};`}
+
+  /* grey */
   ${(props) =>
-    props.kindOf === `black` && `background : ${props.theme.black_C};`}
-  ${(props) => props.kindOf === `black` && `color : ${props.theme.white_C};`}
+    props.kindOf === `grey` && `background : ${props.theme.white_C};`}
+  ${(props) => props.kindOf === `grey` && `color : ${props.theme.darkGrey_C};`}
+  ${(props) =>
+    props.kindOf === `grey` && `border : 1px solid ${props.theme.grey_C};`}
   
+  /* subTheme */
   ${(props) =>
-    props.kindOf === `subTheme` && `background : ${props.theme.subTheme_C};`}
-  ${(props) => props.kindOf === `subTheme` && `color : ${props.theme.white_C};`}
+    props.kindOf === `subTheme` && `background : ${props.theme.white_C};`}
+  ${(props) =>
+    props.kindOf === `subTheme` && `color : ${props.theme.basicTheme_C};`}
   ${(props) =>
     props.kindOf === `subTheme` &&
-    `border : 1px solid ${props.theme.subTheme_C};`}
+    `border : 1px solid ${props.theme.basicTheme_C};`}
+
+    
   ${(props) =>
     props.kindOf === `kakao` && `background : ${props.theme.kakao_C};`}
   ${(props) =>
@@ -245,18 +255,32 @@ export const CommonButton = styled(Button)`
     color: ${(props) => props.theme.white_C};
     ${(props) =>
       !props.kindOf && `border :1px solid ${props.theme.subTheme3_C};`}
+
+    /* white */
     ${(props) =>
       props.kindOf === `white` && `background ${props.theme.basicTheme_C};`}
     ${(props) => props.kindOf === `white` && `color ${props.theme.white_C};`}
     ${(props) =>
-      props.kindOf === `black` && `background : ${props.theme.white_C};`}
-    ${(props) => props.kindOf === `black` && `color : ${props.theme.black_C};`}
+      props.kindOf === `white` &&
+      `border: 1px sold ${props.theme.basicTheme_C};`}
+
+    /* grey */
     ${(props) =>
-      props.kindOf === `black` && `border : 1px solid ${props.theme.black_C};`}
+      props.kindOf === `grey` && `background : ${props.theme.white_C};`}
     ${(props) =>
-      props.kindOf === `subTheme` && `color ${props.theme.subTheme_C};`}
+      props.kindOf === `grey` && `color : ${props.theme.darkGrey_C};`}
     ${(props) =>
-      props.kindOf === `subTheme` && `background ${props.theme.white_C};`}
+      props.kindOf === `grey` && `border : 1px solid ${props.theme.grey_C};`}
+  
+    /* subTheme */
+    ${(props) =>
+      props.kindOf === `subTheme` && `background : ${props.theme.lightGrey_C};`}
+    ${(props) =>
+      props.kindOf === `subTheme` && `color : ${props.theme.darkGrey_C};`}
+    ${(props) =>
+      props.kindOf === `subTheme` &&
+      `border : 1px solid ${props.theme.basicTheme_C};`}
+
     ${(props) =>
       props.kindOf === `kakao` && `background : ${props.theme.kakao_C};`}
     ${(props) =>
@@ -458,12 +482,12 @@ export const SpanText = styled.span`
 export const TextInput = styled.input`
   width: ${(props) => props.width};
   height: ${(props) => props.height || `40px`};
-  border: ${(props) => props.border || `1px solid ${props.theme.grey_C}`};
+  border: ${(props) => props.border || `1px solid ${props.theme.lightGrey2_C}`};
   border-bottom: ${(props) => props.borderBottom};
   padding: ${(props) => props.padding || `10px`};
   transition: ${(props) => props.transition || props.theme.transition};
   margin: ${(props) => props.margin};
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.bgColor || props.theme.white_C};
   border-radius: ${(props) => props.radius};
   font-size: ${(props) => props.fontSize};
   cursor: ${(props) => props.cursor};
@@ -487,7 +511,7 @@ export const TextInput = styled.input`
   &::placeholder {
     font-size: 14px;
     line-height: 1.6;
-    color: ${(props) => props.theme.lightGrey_C};
+    color: ${(props) => props.theme.lightGrey2_C};
   }
 `;
 
