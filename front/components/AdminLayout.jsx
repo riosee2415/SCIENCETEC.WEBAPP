@@ -151,7 +151,13 @@ export const items = {
       useYn: true,
     },
   ],
-  서버관리: [],
+  서버관리: [
+    {
+      name: "포럼관리",
+      link: "/admin/forum",
+      useYn: true,
+    },
+  ],
 };
 
 const AdminLayout = ({ children }) => {
