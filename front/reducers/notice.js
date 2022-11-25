@@ -7,6 +7,8 @@ export const initailState = {
   detailModal: false,
   uploadFilePath: null,
   noticeHistory: [],
+  viewType: "list",
+  tempType: "",
   //
   st_noticeListLoading: false, // 공지사항 가져오기
   st_noticeListDone: false,
@@ -81,6 +83,7 @@ export const DETAIL_MODAL_OPEN_REQUEST = "DETAIL_MODAL_OPEN_REQUEST";
 export const DETAIL_MODAL_CLOSE_REQUEST = "DETAIL_MODAL_CLOSE_REQUEST";
 
 export const UPLOAD_PATH_INIT = "UPLOAD_PATH_INIT";
+export const SET_TEMP_TYPE = "SET_TEMP_TYPE";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -274,6 +277,12 @@ const reducer = (state = initailState, action) =>
 
       case UPLOAD_PATH_INIT:
         draft.uploadFilePath = null;
+        break;
+      ///////////////////////////////////////////////////////
+
+      case SET_TEMP_TYPE:
+        draft.tempType = action.data.boardType;
+        draft.viewType = action.data.viewType;
         break;
       ///////////////////////////////////////////////////////
 
