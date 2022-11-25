@@ -42,7 +42,7 @@ const Notice = () => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
             <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
