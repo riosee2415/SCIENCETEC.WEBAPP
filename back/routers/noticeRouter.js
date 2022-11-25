@@ -312,7 +312,7 @@ router.post("/update", isLoggedIn, async (req, res, next) => {
 });
 
 router.post("/update/file", isAdminCheck, async (req, res, next) => {
-  const { id, filepath, title } = req.body;
+  const { id, filepath, title, type } = req.body;
 
   const updateQ = `
       UPDATE  notices
@@ -323,14 +323,24 @@ router.post("/update/file", isAdminCheck, async (req, res, next) => {
     `;
 
   const insertQuery2 = `
-    INSERT INTO noticeHistory (content, title, updator, createdAt, updatedAt) VALUES 
-    (
-      "파일정보 수정",
-      "${title}",
-      ${req.user.id},
-      now(),
-      now()
-    )
+  INSERT INTO noticeHistory
+  (
+    content,
+    title,
+    type,
+    updator,
+    createdAt,
+    updatedAt
+  )
+  VALUES 
+  (
+    "파일정보 수정",
+    "${title}",
+    "${type}",
+    ${req.user.id},
+    now(),
+    now()
+  )
     `;
 
   try {
