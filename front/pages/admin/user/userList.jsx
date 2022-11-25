@@ -28,22 +28,23 @@ import {
   SearchForm,
   SearchFormItem,
   SettingBtn,
+  DetailBtn,
+  Text,
+  Wrapper,
+  PopWrapper,
 } from "../../../components/commonComponents";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
 import { END } from "redux-saga";
 import { items } from "../../../components/AdminLayout";
 import axios from "axios";
-import {
-  Text,
-  Wrapper,
-  PopWrapper,
-} from "../../../components/commonComponents";
 import Theme from "../../../components/Theme";
 import { HomeOutlined, RightOutlined } from "@ant-design/icons";
 
 const TypeButton = styled(Button)`
   margin-right: 5px;
+
+  /* <CopyOutlined /> */
 `;
 
 const GuideDiv = styled.div`
@@ -270,28 +271,33 @@ const UserList = ({}) => {
       dataIndex: "num",
     },
     {
-      title: "회원이름",
-      render: (data) => <div>{data.username}</div>,
+      title: "유형",
+      dataIndex: "viewType",
     },
     {
-      title: "닉네임",
-      render: (data) => <div>{data.nickname}</div>,
+      title: "조합명",
+      dataIndex: "combiName",
     },
+    {
+      title: "회원이름",
+      dataIndex: "username",
+    },
+
     {
       title: "이메일",
-      render: (data) => <div>{data.email}</div>,
+      dataIndex: "email",
     },
     {
       title: "전화번호",
-      render: (data) => <div>{data.mobile}</div>,
+      dataIndex: "mobile",
     },
     {
       title: "가입일",
-      render: (data) => <div>{data.viewCreatedAt}</div>,
+      dataIndex: "viewCreatedAt",
     },
     {
       title: "권한",
-      render: (data) => <div>{data.viewLevel}</div>,
+      dataIndex: "viewLevel",
     },
     {
       title: "권한수정",
@@ -305,9 +311,19 @@ const UserList = ({}) => {
         </SettingBtn>
       ),
     },
+    {
+      title: "상세정보",
+      render: (data) => (
+        <DetailBtn
+          size="small"
+          type="primary"
+          onClick={() => updateModalOpen(data)}
+        >
+          상세
+        </DetailBtn>
+      ),
+    },
   ];
-
-  console.log("얍");
 
   return (
     <AdminLayout>
@@ -339,7 +355,7 @@ const UserList = ({}) => {
       </Wrapper>
 
       {/* GUIDE */}
-      <Wrapper margin={`10px 0px 0px 10px`}>
+      <Wrapper padding={`10px 0px 0px 10px`}>
         <GuideUl>
           <GuideLi isImpo={true}>
             해당 메뉴에서 홈페이지에 가입된 회원의 정보를 확인할 수 있습니다.
