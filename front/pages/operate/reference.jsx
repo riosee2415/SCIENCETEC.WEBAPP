@@ -24,6 +24,21 @@ import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
 import { Select } from "antd";
 
+const Box = styled(Wrapper)`
+  height: 40px;
+  border-bottom: 1px solid ${Theme.lightGrey2_C};
+  flex-direction: row;
+
+  &:hover {
+    cursor: pointer;
+    background: ${Theme.lightGrey_C};
+  }
+
+  @media (max-width: 700px) {
+    font-size: 12px;
+  }
+`;
+
 const Reference = () => {
   ////// GLOBAL STATE //////
   ////// HOOKS //////
@@ -100,13 +115,7 @@ const Reference = () => {
                   <Text isNeo>게시자</Text>
                 </Wrapper>
               </Wrapper>
-
-              <Wrapper
-                height={`48px`}
-                borderBottom={`1px solid ${Theme.lightGrey2_C}`}
-                dr={`row`}
-                fontSize={width < 900 ? `12px` : `14px`}
-              >
+              <Box>
                 <Wrapper width={`8%`} display={width < 900 ? `none` : `flex`}>
                   10
                 </Wrapper>
@@ -119,7 +128,7 @@ const Reference = () => {
                   2022.10.13
                 </Wrapper>
                 <Wrapper width={width < 900 ? `19%` : `15%`}>Science</Wrapper>
-              </Wrapper>
+              </Box>
 
               <Wrapper al={`flex-end`} margin={`30px 0 20px`}>
                 <CommonButton
