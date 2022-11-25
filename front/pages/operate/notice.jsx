@@ -91,7 +91,7 @@ const Notice = () => {
                 </>
               )}
               {viewType === "write" && <OpWrite />}
-              {viewType === "detail" && null}
+              {viewType === "detail" && <OpWrite />}
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>

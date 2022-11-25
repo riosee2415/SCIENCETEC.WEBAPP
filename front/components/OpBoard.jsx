@@ -33,7 +33,7 @@ const OpBoard = ({ boardType }) => {
       type: SET_TEMP_TYPE,
       data: {
         boardType,
-        viewType: "write",
+        viewType: "detail",
       },
     });
   }, [boardType]);
