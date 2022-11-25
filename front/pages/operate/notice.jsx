@@ -90,8 +90,8 @@ const Notice = () => {
                   <OpBoard boardType="공지사항" />
                 </>
               )}
-              {viewType === "write" && <OpWrite />}
-              {viewType === "detail" && <OpWrite />}
+              {/* {viewType === "write" && <OpWrite />} */}
+              {viewType === "detail" && null}
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>

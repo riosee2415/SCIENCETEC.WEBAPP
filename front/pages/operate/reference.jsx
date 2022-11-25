@@ -90,7 +90,7 @@ const Reference = () => {
                   <OpBoard boardType="자료실" />
                 </>
               )}
-              {viewType === "write" && <OpWrite />}
+              {/* {viewType === "write" && <OpWrite />} */}
               {viewType === "detail" && null}
             </Wrapper>
           </RsWrapper>

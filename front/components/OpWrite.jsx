@@ -16,14 +16,19 @@ import useWidth from "../hooks/useWidth";
 import Theme from "./Theme";
 
 const OpWrite = () => {
-  const { tempType } = useSelector((state) => state.notice);
+  const { tempType, boardType } = useSelector((state) => state.notice);
   const dispatch = useDispatch();
   const width = useWidth();
 
   useEffect(() => {
     if (!tempType || tempType === "") {
       alert("잘못된 접근입니다.");
-      // 뒤로가기
+      dispatch({
+        type: SET_TEMP_TYPE,
+        data: {
+          boardType: "list",
+        },
+      });
     }
   }, []);
 
@@ -85,7 +90,7 @@ const OpWrite = () => {
           fontSize={`18px`}
           margin={`0 10px 0 0`}
           fontWeight={`bold`}
-          onClick={listHandler}
+          onClick={() => listHandler()}
         >
           이전으로
         </CommonButton>

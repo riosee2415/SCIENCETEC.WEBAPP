@@ -4,9 +4,10 @@ import Theme from "./Theme";
 import styled from "styled-components";
 import useWidth from "../hooks/useWidth";
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SET_TEMP_TYPE } from "../reducers/notice";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Box = styled(Wrapper)`
   height: 40px;
@@ -24,6 +25,8 @@ const Box = styled(Wrapper)`
 `;
 
 const OpBoard = ({ boardType }) => {
+  const { boardType: bt } = useSelector((state) => state.notice);
+
   const width = useWidth();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -33,7 +36,7 @@ const OpBoard = ({ boardType }) => {
       type: SET_TEMP_TYPE,
       data: {
         boardType,
-        viewType: "detail",
+        viewType: "write",
       },
     });
   }, [boardType]);
@@ -74,18 +77,21 @@ const OpBoard = ({ boardType }) => {
         <Wrapper width={width < 900 ? `19%` : `15%`}>Science</Wrapper>
       </Box>
 
-      <Wrapper al={`flex-end`} margin={`30px 0 20px`}>
-        <CommonButton
-          kindOf={`subTheme`}
-          width={width < 900 ? `140px` : `160px`}
-          height={width < 900 ? `45px` : `55px`}
-          fontSize={width < 900 ? `16px` : `18px`}
-          fontWeight={`bold`}
-          onClick={() => goWritePage()}
-        >
-          작성하기
-        </CommonButton>
-      </Wrapper>
+      {boardType === "커뮤니티" && (
+        <Wrapper al={`flex-end`} margin={`30px 0 20px`}>
+          <CommonButton
+            kindOf={`subTheme`}
+            width={width < 900 ? `140px` : `160px`}
+            height={width < 900 ? `45px` : `55px`}
+            fontSize={width < 900 ? `16px` : `18px`}
+            fontWeight={`bold`}
+            onClick={() => goWritePage()}
+          >
+            작성하기
+          </CommonButton>
+        </Wrapper>
+      )}
+
       <CustomPage />
     </>
   );
