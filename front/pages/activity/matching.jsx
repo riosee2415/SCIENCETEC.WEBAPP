@@ -208,7 +208,7 @@ const Project = () => {
                     이메일
                   </Text>
                   <TextInput
-                    type="number"
+                    type="text"
                     width={`100%`}
                     height={`55px`}
                     placeholder="이메일 주소를 입력해주세요."
