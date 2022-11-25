@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CommonButton,
@@ -9,12 +9,17 @@ import {
 } from "../commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../Theme";
-import { Checkbox } from "antd";
+import { Checkbox, Modal } from "antd";
 
 const Business = () => {
+  const width = useWidth();
   const dispatch = useDispatch();
 
-  const width = useWidth();
+  const [modalOpen, isModalOpen] = useState(false);
+
+  const modalToggle = useCallback(() => {
+    isModalOpen((prev) => !prev);
+  }, [modalOpen]);
 
   ///////////// - EVENT HANDLER- ////////////
 
@@ -119,6 +124,63 @@ const Business = () => {
           다음으로
         </CommonButton>
       </Wrapper> */}
+      {/* <Wrapper
+        dr={`row`}
+        ju={`space-between`}
+        margin={`0 0 100px`}
+        width={width < 900 ? `100%` : `470px`}
+      >
+        <CommonButton
+          width={width < 900 ? `100%` : `49%`}
+          height={`55px`}
+          kindOf={`grey`}
+          fontSize={`18px`}
+          fontWeight={`bold`}
+        >
+          이전으로
+        </CommonButton>
+        <CommonButton
+          width={width < 900 ? `100%` : `49%`}
+          height={`55px`}
+          kindOf={`subTheme`}
+          fontSize={`18px`}
+          fontWeight={`bold`}
+          onClick={modalToggle}
+        >
+          제출하기
+        </CommonButton>
+      </Wrapper> */}
+
+      <Modal
+        title={null}
+        footer={null}
+        onCancel={modalToggle}
+        visible={modalOpen}
+      >
+        <Wrapper padding={`50px 0`}>
+          <Text isNeo fontSize={`24px`} fontWeight={`800`} margin={`0 0 15px`}>
+            제출 완료
+          </Text>
+          <Text fontSize={`16px`}>조사에 응해 주셔서 감사합니다.</Text>
+          <Text fontSize={`16px`}>
+            여러분의 수요를 반영하여 협동조합을 통한
+          </Text>
+          <Text fontSize={`16px`}>
+            과학기술과 지역 및 사회혁신에 기여할 수 있도록 노력하겠습니다.
+          </Text>
+          <CommonButton
+            width={`130px`}
+            height={`50px`}
+            kindOf={`subTheme`}
+            fontSize={`18px`}
+            fontWeight={`bold`}
+            onClick={modalToggle}
+            margin={`26px 0 0`}
+          >
+            확인
+          </CommonButton>
+        </Wrapper>
+      </Modal>
     </Wrapper>
   );
 };
