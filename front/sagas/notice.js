@@ -5,6 +5,10 @@ import {
   NOTICE_LIST_SUCCESS,
   NOTICE_LIST_FAILURE,
   //
+  NOTICE_ADMIN_LIST_REQUEST,
+  NOTICE_ADMIN_LIST_SUCCESS,
+  NOTICE_ADMIN_LIST_FAILURE,
+  //
   NOTICE_CREATE_REQUEST,
   NOTICE_CREATE_SUCCESS,
   NOTICE_CREATE_FAILURE,
@@ -38,6 +42,7 @@ import {
   NOTICE_DETAIL_FAILURE,
 } from "../reducers/notice";
 
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function noticeListAPI(data) {
@@ -65,6 +70,35 @@ function* noticeList(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function noticeAdminListAPI(data) {
+  return await axios.post(`/api/notice/admin/list`, data);
+}
+
+function* noticeAdminList(action) {
+  try {
+    const result = yield call(noticeAdminListAPI, action.data);
+
+    yield put({
+      type: NOTICE_ADMIN_LIST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: NOTICE_ADMIN_LIST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function noticeCreateAPI(data) {
@@ -286,6 +320,10 @@ function* watchNoticeList() {
   yield takeLatest(NOTICE_LIST_REQUEST, noticeList);
 }
 
+function* watchNoticeAdminList() {
+  yield takeLatest(NOTICE_ADMIN_LIST_REQUEST, noticeAdminList);
+}
+
 function* watchNoticeCreate() {
   yield takeLatest(NOTICE_CREATE_REQUEST, noticeCreate);
 }
@@ -322,6 +360,7 @@ function* watchNoticeDetail() {
 export default function* noticeSaga() {
   yield all([
     fork(watchNoticeList),
+    fork(watchNoticeAdminList),
     fork(watchNoticeCreate),
     fork(watchNoticeUpdate),
     fork(watchNoticeUpdateTop),
