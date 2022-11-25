@@ -24,10 +24,6 @@ const OpDetail = () => {
   const dispatch = useDispatch();
   const width = useWidth();
 
-  console.log(noticeDetail);
-  console.log(noticePrev);
-  console.log(noticeNext);
-
   useEffect(() => {
     if (!tempType || tempType === "") {
       alert("잘못된 접근입니다.");
@@ -233,6 +229,7 @@ const OpDetail = () => {
             fontSize={`18px`}
             fontWeight={`bold`}
             margin={`0 0 100px`}
+            onClick={() => listHandler()}
           >
             목록으로
           </CommonButton>

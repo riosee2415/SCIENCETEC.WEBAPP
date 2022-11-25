@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NOTICE_DETAIL_REQUEST, SET_TEMP_TYPE } from "../reducers/notice";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { Empty } from "antd";
 
 const Box = styled(Wrapper)`
   height: 40px;
@@ -24,7 +25,7 @@ const Box = styled(Wrapper)`
   }
 `;
 
-const OpBoard = ({ boardType }) => {
+const OpBoard = ({ boardType, data }) => {
   const width = useWidth();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -79,18 +80,34 @@ const OpBoard = ({ boardType }) => {
       </Wrapper>
 
       {/* Loop */}
-      <Box onClick={() => detailClickHandler(1)}>
-        <Wrapper width={`8%`} display={width < 900 ? `none` : `flex`}>
-          10
+      {data && data.length === 0 ? (
+        <Wrapper padding={`100px 0`}>
+          <Empty description="조회된 게시글이 없습니다." />
         </Wrapper>
-        <Wrapper width={`62%`}>
-          <Text width={`90%`} isEllipsis>
-            설립 어떻게 해요?
-          </Text>
-        </Wrapper>
-        <Wrapper width={width < 900 ? `19%` : `15%`}>2022.10.13</Wrapper>
-        <Wrapper width={width < 900 ? `19%` : `15%`}>Science</Wrapper>
-      </Box>
+      ) : (
+        data &&
+        data.map((data) => {
+          return (
+            <Box onClick={() => detailClickHandler(data.id)} key={data.id}>
+              <Wrapper width={`8%`} display={width < 900 ? `none` : `flex`}>
+                {data.num}
+              </Wrapper>
+              <Wrapper width={`62%`}>
+                <Text width={`90%`} isEllipsis>
+                  {data.title}
+                </Text>
+              </Wrapper>
+              <Wrapper width={width < 900 ? `19%` : `15%`}>
+                {data.viewCreatedAt}
+              </Wrapper>
+              <Wrapper width={width < 900 ? `19%` : `15%`}>
+                {data.author}
+              </Wrapper>
+            </Box>
+          );
+        })
+      )}
+
       {/* Loop End */}
 
       <Wrapper al={`flex-end`} margin={`30px 0 20px`}>

@@ -27,6 +27,8 @@ const Association = ({}) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const logoImageRef = useRef();
+
   // 상위메뉴 변수
   const [level1, setLevel1] = useState("기초정보관리");
   const [level2, setLevel2] = useState("");
@@ -141,6 +143,7 @@ const Association = ({}) => {
             alt="image"
             src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/usercoop-page/img.png`}
           />
+
           <Wrapper
             dr={`row`}
             height={`55px`}

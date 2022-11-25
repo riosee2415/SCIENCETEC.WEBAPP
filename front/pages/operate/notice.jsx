@@ -23,10 +23,11 @@ import Theme from "../../components/Theme";
 import { Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
+import { NOTICE_LIST_REQUEST } from "../../reducers/notice";
 
 const Notice = () => {
   ////// GLOBAL STATE //////
-  const { viewType, tempType } = useSelector((state) => state.notice);
+  const { viewType, notices } = useSelector((state) => state.notice);
   ////// HOOKS //////
   const width = useWidth();
   ////// REDUX //////
@@ -87,7 +88,7 @@ const Notice = () => {
                       검색하기
                     </CommonButton>
                   </Wrapper>
-                  <OpBoard boardType="공지사항" />
+                  <OpBoard data={notices.notices} boardType="공지사항" />
                 </>
               )}
               {/* {viewType === "write" && <OpWrite />} */}
@@ -113,6 +114,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: NOTICE_LIST_REQUEST,
+      data: {
+        type: "공지사항",
+      },
     });
 
     // 구현부 종료

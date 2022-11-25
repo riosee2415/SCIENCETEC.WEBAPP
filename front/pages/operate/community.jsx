@@ -24,11 +24,15 @@ import { Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
 import OpDetail from "../../components/OpDetail";
+import {
+  NOTICE_DELETE_REQUEST,
+  NOTICE_LIST_REQUEST,
+} from "../../reducers/notice";
 
 const Community = () => {
   ////// GLOBAL STATE //////
+  const { viewType, notices } = useSelector((state) => state.notice);
 
-  const { viewType, tempType } = useSelector((state) => state.notice);
   ////// HOOKS //////
   const width = useWidth();
   ////// REDUX //////
@@ -89,7 +93,7 @@ const Community = () => {
                       검색하기
                     </CommonButton>
                   </Wrapper>
-                  <OpBoard boardType="커뮤니티" />
+                  <OpBoard data={notices.notices} boardType="커뮤니티" />
                 </>
               )}
               {viewType === "write" && <OpWrite />}
@@ -115,6 +119,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: NOTICE_LIST_REQUEST,
+      data: {
+        type: "커뮤니티",
+      },
     });
 
     // 구현부 종료
