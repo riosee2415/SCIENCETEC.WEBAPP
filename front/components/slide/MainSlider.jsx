@@ -120,25 +120,29 @@ const MainSlider = () => {
                 position={`relative`}
                 display={`flex !important`}
               >
-                {/* <RsWrapper height={`100%`}>
-                  <Wrapper al={`flex-start`}>
-                    <Wrapper
-                      al={`flex-start`}
-                      color={Theme.basicTheme_C}
-                      fontSize={width < 700 ? `22px` : `40px`}
-                      lineHeight={`1.3`}
-                    >
-                      <Text>{data.title}</Text>
-                    </Wrapper>
-                    <ColWrapper
-                      color={Theme.basicTheme_C}
-                      lineHeight={`1.5`}
-                      margin={`20px 0`}
-                    >
-                      <Text fontSize={`1.125rem`}>{data.content}</Text>
-                    </ColWrapper>
+                <Wrapper>
+                  <Wrapper
+                    color={Theme.white_C}
+                    fontSize={width < 700 ? `22px` : `30px`}
+                    lineHeight={`1.3`}
+                  >
+                    {data.titleUseYn === 1 && <Text>{data.title}</Text>}
                   </Wrapper>
-                </RsWrapper> */}
+
+                  <ColWrapper
+                    color={Theme.white_C}
+                    lineHeight={`1.5`}
+                    margin={`20px 0`}
+                  >
+                    {data.contentUseYn === 1 && <Text>{data.content}</Text>}
+                  </ColWrapper>
+
+                  {data.linkUseYn === 1 && (
+                    <CommonButton onClick={() => moveLinkHandler(data.link)}>
+                      링크이동
+                    </CommonButton>
+                  )}
+                </Wrapper>
               </ColWrapper>
             );
           })}
