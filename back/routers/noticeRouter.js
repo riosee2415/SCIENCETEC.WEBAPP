@@ -201,8 +201,8 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
       )
       VALUES
       (
-        "${title}",
-        "${content}",
+        ${type !== "커뮤니티" ? `"임시 ${type} 게시글"` : `"${title}"`},
+        ${type !== "커뮤니티" ? `"임시 내용"` : `"${content}"`},
         "${author}",
         "${type}",
         ${file ? `"${file}"` : null},
@@ -225,7 +225,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
   VALUES 
   (
     "데이터 생성",
-    "${title}",
+    "임시 ${type} 게시글",
     "${type}",
     ${req.user.id},
     now(),
