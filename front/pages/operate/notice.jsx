@@ -8,11 +8,9 @@ import { END } from "redux-saga";
 import { useSelector } from "react-redux";
 import {
   CommonButton,
-  CustomPage,
   CustomSelect,
   Image,
   RsWrapper,
-  Text,
   TextInput,
   WholeWrapper,
   Wrapper,
@@ -49,41 +47,49 @@ const Notice = () => {
             <LeftMenu />
             <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
               <BreadCrumb />
-              <Wrapper
-                wrap={`nowrap`}
-                dr={`row`}
-                ju={`flex-start`}
-                fontSize={width < 900 ? `17px` : `20px`}
-                fontWeight={`700`}
-              >
-                <Image
-                  alt="icon"
-                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
-                  width={`14px`}
-                  margin={`0 6px 0 0`}
-                />
-                기관형 과학기술인 협동조합 공지사항
-              </Wrapper>
-              <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 20px`}>
-                <CustomSelect width={`90px`}>
-                  <Select placeholder="전체">
-                    <Select.Option>전체</Select.Option>
-                    <Select.Option></Select.Option>
-                  </Select>
-                </CustomSelect>
-                <TextInput
-                  type="text"
-                  placeholder="검색어를 입력해주세요."
-                  width={width < 900 ? `150px` : `230px`}
-                  height={`40px`}
-                  margin={`0 10px`}
-                />
-                <CommonButton width={`90px`} height={`40px`} fontSize={`16px`}>
-                  검색하기
-                </CommonButton>
-              </Wrapper>
 
-              {viewType === "list" && <OpBoard boardType="공지사항" />}
+              {viewType === "list" && (
+                <>
+                  <Wrapper
+                    wrap={`nowrap`}
+                    dr={`row`}
+                    ju={`flex-start`}
+                    fontSize={width < 900 ? `17px` : `20px`}
+                    fontWeight={`700`}
+                  >
+                    <Image
+                      alt="icon"
+                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
+                      width={`14px`}
+                      margin={`0 6px 0 0`}
+                    />
+                    기관형 과학기술인 협동조합 공지사항
+                  </Wrapper>
+                  <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 20px`}>
+                    <CustomSelect width={`90px`}>
+                      <Select placeholder="전체">
+                        <Select.Option>전체</Select.Option>
+                        <Select.Option></Select.Option>
+                      </Select>
+                    </CustomSelect>
+                    <TextInput
+                      type="text"
+                      placeholder="검색어를 입력해주세요."
+                      width={width < 900 ? `150px` : `230px`}
+                      height={`40px`}
+                      margin={`0 10px`}
+                    />
+                    <CommonButton
+                      width={`90px`}
+                      height={`40px`}
+                      fontSize={`16px`}
+                    >
+                      검색하기
+                    </CommonButton>
+                  </Wrapper>
+                  <OpBoard boardType="공지사항" />
+                </>
+              )}
               {viewType === "write" && <OpWrite />}
               {viewType === "detail" && null}
             </Wrapper>
