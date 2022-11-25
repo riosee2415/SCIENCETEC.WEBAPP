@@ -200,6 +200,96 @@ router.post("/status/list", async (req, res, next) => {
   }
 });
 
+router.post("/detail", isAdminCheck, async (req, res, next) => {
+  const { id } = req.body;
+
+  const detailQuery = `
+    SELECT	id,
+            type,
+            CASE
+                WHEN	type = 1 THEN "개인"
+                WHEN	type = 2 THEN "조합장"
+            END									        		AS viewType,
+            userId,
+            combiName,
+            combiHomepage,
+            combiEstimateDate,
+            DATE_FORMAT(combiEstimateDate, "%Y년 %m월 %d일")		AS viewEstimateDate,
+            combiArea,
+            corporationCnt,
+            personalCnt,
+            repreName,
+            postCode,
+            address,
+            detailAddress,
+            mobile,
+            email,
+            username,
+            importantBusiness1,
+            importantBusiness2,
+            importantBusiness3,
+            importantBusinessCapital,
+            CONCAT(FORMAT(importantBusinessCapital, 0), "원")	AS viewBusinessCapital,
+            importantBusinessPrice,
+            CONCAT(FORMAT(importantBusinessPrice, 0), "원")		AS viewBusinessPrice,
+            kakaoId,
+            isKakao,
+            isPremium,
+            terms,
+            createdAt,
+            updatedAt,
+            DATE_FORMAT(createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
+            DATE_FORMAT(updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
+      FROM	users
+     WHERE	isExit = 0
+       AND  id = ${id}
+    `;
+
+  const combiTypeQuery = `
+    SELECT  value,
+            UserId
+      FROM  userCombiTypes
+     WHERE  UserId = ${id}
+    `;
+
+  const businessTypeQuery = `
+    SELECT  value,
+            UserId
+      FROM  userBusinessTypes
+     WHERE  UserId = ${id}
+    `;
+
+  const sectorQuery = `
+    SELECT  value,
+            UserId
+      FROM  userSectors
+     WHERE  UserId = ${id}
+    `;
+
+  try {
+    const detailData = await models.sequelize.query(detailQuery);
+
+    if (detailData[0].length === 0) {
+      return res.status(401).send("존재하지 않는 사용자입니다.");
+    }
+
+    const combiTypeList = await models.sequelize.query(combiTypeQuery);
+    const businessTypeList = await models.sequelize.query(businessTypeQuery);
+    const sectorList = await models.sequelize.query(sectorQuery);
+
+    return res.status(200).json({
+      detailData: detailData[0][0], // 사용자 정보
+      combiTypeList: combiTypeList[0].length !== 0 ? combiTypeList[0] : [], // 조합유형
+      businessTypeList:
+        businessTypeList[0].length !== 0 ? businessTypeList[0] : [], // 사업유형
+      sectorList: sectorList[0].length !== 0 ? sectorList[0] : [], // 사업분야
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("회원 정보를 조회할 수 없습니다.");
+  }
+});
+
 // 권한메뉴 관리자 리스트
 router.post("/adminList", async (req, res, next) => {
   const { username, type } = req.body;
