@@ -2,7 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import AdminLayout from "../../../components/AdminLayout";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Form, Input, Modal, Popconfirm, Popover, Table } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Popconfirm,
+  Popover,
+  Table,
+} from "antd";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
 import { END } from "redux-saga";
@@ -27,7 +36,12 @@ import {
   HomeOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { FORUM_CREATE_REQUEST } from "../../../reducers/forum";
+import {
+  FORUM_ADMIN_LIST_REQUEST,
+  FORUM_CREATE_REQUEST,
+  FORUM_DELETE_REQUEST,
+  FORUM_UPDATE_REQUEST,
+} from "../../../reducers/forum";
 
 const InfoTitle = styled.div`
   font-size: 19px;
@@ -51,6 +65,12 @@ const ViewStatusIcon = styled(EyeOutlined)`
 
 const Index = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
+  const {
+    forumAdminList,
+    st_forumCreateDone,
+    st_forumUpdateDone,
+    st_forumDeleteDone,
+  } = useSelector((state) => state.forum);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -88,6 +108,38 @@ const Index = ({}) => {
   ////// HOOKS //////
 
   ////// USEEFFECT //////
+  useEffect(() => {
+    if (st_forumDeleteDone) {
+      dispatch({
+        type: FORUM_ADMIN_LIST_REQUEST,
+      });
+      setCurrentData(null);
+
+      return message.success("포럼 정보가 삭제되었습니다.");
+    }
+  }, [st_forumDeleteDone]);
+
+  useEffect(() => {
+    if (st_forumUpdateDone) {
+      dispatch({
+        type: FORUM_ADMIN_LIST_REQUEST,
+      });
+
+      return message.success("포럼 정보가 수정되었습니다.");
+    }
+  }, [st_forumUpdateDone]);
+
+  useEffect(() => {
+    if (st_forumCreateDone) {
+      setCModal(false);
+      dispatch({
+        type: FORUM_ADMIN_LIST_REQUEST,
+      });
+      createForm.resetFields();
+
+      return message.success("포럼이 생성되었습니다.");
+    }
+  }, [st_forumCreateDone]);
 
   useEffect(() => {
     if (st_loadMyInfoDone) {
@@ -110,7 +162,53 @@ const Index = ({}) => {
   }, []);
 
   ////// HANDLER //////
-  const createHandler = useCallback(() => {}, []);
+
+  const cModalToggle = useCallback(() => {
+    setCModal(!cModal);
+    createForm.resetFields();
+  }, [cModal]);
+
+  const deleteHandler = useCallback((data) => {
+    dispatch({
+      type: FORUM_DELETE_REQUEST,
+      data: {
+        id: data.id,
+        title: data.title,
+      },
+    });
+  }, []);
+
+  const updateHandler = useCallback(
+    (data) => {
+      if (!currentData) {
+        setCurrentData(null);
+
+        return message.error(
+          "일시적인 오류가 발생되었습니다. 다시 시도해주세요."
+        );
+      }
+
+      dispatch({
+        type: FORUM_UPDATE_REQUEST,
+        data: {
+          id: currentData.id,
+          title: data.title,
+          youtubeLink: data.link,
+        },
+      });
+    },
+    [currentData]
+  );
+
+  const createHandler = useCallback((data) => {
+    dispatch({
+      type: FORUM_CREATE_REQUEST,
+      data: {
+        title: data.title,
+        youtubeLink: data.link,
+      },
+    });
+  }, []);
 
   const beforeSetDataHandler = useCallback(
     (record) => {
@@ -118,9 +216,7 @@ const Index = ({}) => {
 
       infoForm.setFieldsValue({
         title: record.title,
-        typeId: record.NoticeTypeId,
-        content: record.content,
-        hit: record.hit,
+        link: record.youtubeLink,
         createdAt: record.viewCreatedAt,
         updatedAt: record.viewUpdatedAt,
         updator: record.updator,
@@ -165,7 +261,9 @@ const Index = ({}) => {
       render: (data) => (
         <Popconfirm
           title="정말 삭제하시겠습니까?"
-          onConfirm={() => {}}
+          onConfirm={() => {
+            deleteHandler(data);
+          }}
           okText="삭제"
           cancelText="취소"
         >
@@ -220,11 +318,7 @@ const Index = ({}) => {
           shadow={`3px 3px 6px ${Theme.lightGrey_C}`}
         >
           <Wrapper al="flex-end">
-            <Button
-              size="small"
-              type="primary"
-              onClick={() => setCModal(!cModal)}
-            >
+            <Button size="small" type="primary" onClick={cModalToggle}>
               포럼 생성
             </Button>
           </Wrapper>
@@ -232,7 +326,7 @@ const Index = ({}) => {
             style={{ width: "100%" }}
             rowKey="id"
             columns={col}
-            dataSource={[]}
+            dataSource={forumAdminList}
             size="small"
             onRow={(record, index) => {
               return {
@@ -252,11 +346,15 @@ const Index = ({}) => {
               <Wrapper margin={`0px 0px 5px 0px`}>
                 <InfoTitle>
                   <CheckOutlined />
-                  공지사항 기본정보
+                  포럼 기본정보
                 </InfoTitle>
               </Wrapper>
 
-              <Form form={infoForm} style={{ width: `100%` }}>
+              <Form
+                form={infoForm}
+                style={{ width: `100%` }}
+                onFinish={updateHandler}
+              >
                 <Form.Item
                   label="제목"
                   name="title"
@@ -268,21 +366,16 @@ const Index = ({}) => {
                 </Form.Item>
 
                 <Form.Item
-                  label="내용"
-                  name="content"
+                  label="유튜브 링크"
+                  name="link"
                   rules={[
-                    { required: true, message: "내용은 필수 입력사항 입니다." },
+                    {
+                      required: true,
+                      message: "유튜브 링크는 필수 입력사항 입니다.",
+                    },
                   ]}
                 >
-                  <Input.TextArea rows={10} />
-                </Form.Item>
-
-                <Form.Item label="조회수" name="hit">
-                  <Input
-                    size="small"
-                    style={{ background: Theme.lightGrey_C, border: "none" }}
-                    readOnly
-                  />
+                  <Input size="small" />
                 </Form.Item>
 
                 <Form.Item label="작성일" name="createdAt">
@@ -308,13 +401,12 @@ const Index = ({}) => {
                     readOnly
                   />
                 </Form.Item>
+                <Wrapper al="flex-end">
+                  <Button type="primary" size="small" htmlType="submit">
+                    정보 업데이트
+                  </Button>
+                </Wrapper>
               </Form>
-
-              <Wrapper al="flex-end">
-                <Button type="primary" size="small" htmlType="submit">
-                  정보 업데이트
-                </Button>
-              </Wrapper>
 
               <Wrapper
                 width="100%"
@@ -340,9 +432,43 @@ const Index = ({}) => {
 
       <Modal
         visible={cModal}
-        onCancle={() => setCModal(!cModal)}
+        onCancel={cModalToggle}
         title="포럼 생성"
-      ></Modal>
+        footer={null}
+      >
+        <Form form={createForm} onFinish={createHandler} size="small">
+          <Form.Item
+            label="포럼 제목"
+            name="title"
+            rules={[
+              {
+                required: true,
+                message: "포럼 제목을 입력해주세요.",
+              },
+            ]}
+          >
+            <Input placeholder="포럼 제목을 입력해주세요." />
+          </Form.Item>
+          <Form.Item
+            label="유튜브 링크"
+            name="link"
+            rules={[
+              {
+                required: true,
+                message: "포럼 유튜브 링크를 입력해주세요.",
+              },
+            ]}
+          >
+            <Input placeholder="포럼 유튜브 링크를  입력해주세요." />
+          </Form.Item>
+
+          <Wrapper al={`flex-end`}>
+            <Button type="primary" size="small" htmlType="submit">
+              생성하기
+            </Button>
+          </Wrapper>
+        </Form>
+      </Modal>
     </AdminLayout>
   );
 };
