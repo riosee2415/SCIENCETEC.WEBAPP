@@ -23,6 +23,7 @@ import Theme from "../../components/Theme";
 import { Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
+import OpDetail from "../../components/OpDetail";
 
 const Community = () => {
   ////// GLOBAL STATE //////
@@ -92,7 +93,7 @@ const Community = () => {
                 </>
               )}
               {viewType === "write" && <OpWrite />}
-              {viewType === "detail" && null}
+              {viewType === "detail" && <OpDetail />}
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>

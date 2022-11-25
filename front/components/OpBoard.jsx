@@ -5,7 +5,7 @@ import styled from "styled-components";
 import useWidth from "../hooks/useWidth";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_TEMP_TYPE } from "../reducers/notice";
+import { NOTICE_DETAIL_REQUEST, SET_TEMP_TYPE } from "../reducers/notice";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -41,6 +41,22 @@ const OpBoard = ({ boardType }) => {
     });
   }, [boardType]);
 
+  const detailClickHandler = useCallback((id) => {
+    dispatch({
+      type: SET_TEMP_TYPE,
+      data: {
+        boardType,
+        viewType: "detail",
+      },
+    });
+
+    // 디테일 데이터 조회
+    dispatch({
+      type: NOTICE_DETAIL_REQUEST,
+      data: { id },
+    });
+  }, []);
+
   return (
     <>
       <Wrapper
@@ -64,7 +80,8 @@ const OpBoard = ({ boardType }) => {
         </Wrapper>
       </Wrapper>
 
-      <Box>
+      {/* Loop */}
+      <Box onClick={() => detailClickHandler(1)}>
         <Wrapper width={`8%`} display={width < 900 ? `none` : `flex`}>
           10
         </Wrapper>
@@ -76,6 +93,7 @@ const OpBoard = ({ boardType }) => {
         <Wrapper width={width < 900 ? `19%` : `15%`}>2022.10.13</Wrapper>
         <Wrapper width={width < 900 ? `19%` : `15%`}>Science</Wrapper>
       </Box>
+      {/* Loop End */}
 
       {boardType === "커뮤니티" && (
         <Wrapper al={`flex-end`} margin={`30px 0 20px`}>

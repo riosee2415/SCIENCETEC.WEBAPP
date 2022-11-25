@@ -9,6 +9,9 @@ export const initailState = {
   noticeHistory: [],
   viewType: "list",
   tempType: "",
+  noticeDetail: null,
+  noticePrev: null,
+  noticeNext: null,
   //
   st_noticeListLoading: false, // 공지사항 가져오기
   st_noticeListDone: false,
@@ -41,6 +44,10 @@ export const initailState = {
   st_noticeHistoryLoading: false, // 공지사항 이력
   st_noticeHistoryDone: false,
   st_noticeHistoryError: null,
+  //
+  st_noticeDetailLoading: false, // 공지사항 디테일
+  st_noticeDetailDone: false,
+  st_noticeDetailError: null,
   //
 };
 
@@ -75,6 +82,10 @@ export const NOTICE_FILE_INFO_FAILURE = "NOTICE_FILE_INFO_FAILURE";
 export const NOTICE_HISTORY_REQUEST = "NOTICE_HISTORY_REQUEST";
 export const NOTICE_HISTORY_SUCCESS = "NOTICE_HISTORY_SUCCESS";
 export const NOTICE_HISTORY_FAILURE = "NOTICE_HISTORY_FAILURE";
+//
+export const NOTICE_DETAIL_REQUEST = "NOTICE_DETAIL_REQUEST";
+export const NOTICE_DETAIL_SUCCESS = "NOTICE_DETAIL_SUCCESS";
+export const NOTICE_DETAIL_FAILURE = "NOTICE_DETAIL_FAILURE";
 //
 export const CREATE_MODAL_OPEN_REQUEST = "CREATE_MODAL_OPEN_REQUEST";
 export const CREATE_MODAL_CLOSE_REQUEST = "CREATE_MODAL_CLOSE_REQUEST";
@@ -251,6 +262,30 @@ const reducer = (state = initailState, action) =>
         draft.st_noticeHistoryLoading = false;
         draft.st_noticeHistoryDone = false;
         draft.st_noticeHistoryError = action.error;
+        break;
+      }
+      ///////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////
+      case NOTICE_DETAIL_REQUEST: {
+        draft.st_noticeDetailLoading = true;
+        draft.st_noticeDetailDone = false;
+        draft.st_noticeDetailError = null;
+        break;
+      }
+      case NOTICE_DETAIL_SUCCESS: {
+        draft.st_noticeDetailLoading = false;
+        draft.st_noticeDetailDone = true;
+        draft.st_noticeDetailError = null;
+        draft.noticeDetail = action.data.detailData;
+        draft.noticePrev = action.data.nextNotice;
+        draft.noticeNext = action.data.prevNotice;
+        break;
+      }
+      case NOTICE_DETAIL_FAILURE: {
+        draft.st_noticeDetailLoading = false;
+        draft.st_noticeDetailDone = false;
+        draft.st_noticeDetailError = action.error;
         break;
       }
       ///////////////////////////////////////////////////////
