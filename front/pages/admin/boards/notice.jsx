@@ -454,6 +454,7 @@ const Notice = ({}) => {
         id: currentData.id,
         filepath: uploadFilePath,
         title: currentData.title,
+        type: currentData.type,
       },
     });
   }, [uploadFilePath, currentData]);
@@ -724,91 +725,97 @@ const Notice = ({}) => {
                 margin={`30px 0px`}
               ></Wrapper>
 
-              <Wrapper margin={`0px 0px 5px 0px`}>
-                <InfoTitle>
-                  <CheckOutlined />
-                  공지사항 파일정보
-                </InfoTitle>
-              </Wrapper>
-
-              <Wrapper padding="0px 20px">
-                {currentData.file ? (
-                  <Wrapper al="flex-start">
-                    <Text>등록된 파일이 1개 있습니다.</Text>
-                    <Wrapper dr="row" ju="flex-start">
-                      <Button
-                        type="defalut"
-                        size="small"
-                        onClick={() => fileDownloadHandler(currentData.file)}
-                      >
-                        다운로드
-                      </Button>
-
-                      <input
-                        type="file"
-                        name="file"
-                        // accept=".png, .jpg"
-                        // multiple
-                        hidden
-                        ref={fileRef}
-                        onChange={onChangeFiles}
-                      />
-
-                      <Button
-                        type="danger"
-                        size="small"
-                        onClick={clickFileUpload}
-                        loading={st_noticeFileLoading}
-                      >
-                        수정하기
-                      </Button>
-
-                      {uploadFilePath && (
-                        <Button
-                          type="primary"
-                          size="small"
-                          style={{ marginLeft: "10px" }}
-                          onClick={applyFileHandler}
-                        >
-                          적용하기
-                        </Button>
-                      )}
-                    </Wrapper>
+              {currentData.type !== "커뮤니티" && (
+                <>
+                  <Wrapper margin={`0px 0px 5px 0px`}>
+                    <InfoTitle>
+                      <CheckOutlined />
+                      공지사항 파일정보
+                    </InfoTitle>
                   </Wrapper>
-                ) : (
-                  <Wrapper al="flex-start">
-                    <Text>등록된 파일이 없습니다.</Text>
 
-                    <Wrapper ju="flex-start" dr="row">
-                      <input
-                        type="file"
-                        name="file"
-                        // accept=".png, .jpg"
-                        // multiple
-                        hidden
-                        ref={fileRef}
-                        onChange={onChangeFiles}
-                      />
+                  <Wrapper padding="0px 20px">
+                    {currentData.file ? (
+                      <Wrapper al="flex-start">
+                        <Text>등록된 파일이 1개 있습니다.</Text>
+                        <Wrapper dr="row" ju="flex-start">
+                          <Button
+                            type="defalut"
+                            size="small"
+                            onClick={() =>
+                              fileDownloadHandler(currentData.file)
+                            }
+                          >
+                            다운로드
+                          </Button>
 
-                      <Button
-                        type="danger"
-                        size="small"
-                        onClick={clickFileUpload}
-                        loading={st_noticeFileLoading}
-                      >
-                        등록하기
-                      </Button>
-                    </Wrapper>
+                          <input
+                            type="file"
+                            name="file"
+                            // accept=".png, .jpg"
+                            // multiple
+                            hidden
+                            ref={fileRef}
+                            onChange={onChangeFiles}
+                          />
+
+                          <Button
+                            type="danger"
+                            size="small"
+                            onClick={clickFileUpload}
+                            loading={st_noticeFileLoading}
+                          >
+                            수정하기
+                          </Button>
+
+                          {uploadFilePath && (
+                            <Button
+                              type="primary"
+                              size="small"
+                              style={{ marginLeft: "10px" }}
+                              onClick={applyFileHandler}
+                            >
+                              적용하기
+                            </Button>
+                          )}
+                        </Wrapper>
+                      </Wrapper>
+                    ) : (
+                      <Wrapper al="flex-start">
+                        <Text>등록된 파일이 없습니다.</Text>
+
+                        <Wrapper ju="flex-start" dr="row">
+                          <input
+                            type="file"
+                            name="file"
+                            // accept=".png, .jpg"
+                            // multiple
+                            hidden
+                            ref={fileRef}
+                            onChange={onChangeFiles}
+                          />
+
+                          <Button
+                            type="danger"
+                            size="small"
+                            onClick={clickFileUpload}
+                            loading={st_noticeFileLoading}
+                          >
+                            등록하기
+                          </Button>
+                        </Wrapper>
+                      </Wrapper>
+                    )}
                   </Wrapper>
-                )}
-              </Wrapper>
 
-              <Wrapper
-                width="100%"
-                height="1px"
-                bgColor={Theme.lightGrey_C}
-                margin={`30px 0px`}
-              ></Wrapper>
+                  <Wrapper
+                    width="100%"
+                    height="1px"
+                    bgColor={Theme.lightGrey_C}
+                    margin={`30px 0px`}
+                  ></Wrapper>
+                </>
+              )}
             </>
           ) : (
             <Wrapper padding={`50px 0px`} dr="row">
