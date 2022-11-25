@@ -24,6 +24,63 @@ const Location = ({}) => {
   ////// HOOKS //////
   ////// REDUX //////
   ////// USEEFFECT //////
+  useEffect(() => {
+    const mapScript = document.createElement("script");
+    mapScript.async = true;
+    mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=70d63ec3619d957fa79599d33e03082c&autoload=false`;
+    document.head.appendChild(mapScript);
+
+    mapScript.onload = () => {
+      kakao.maps.load(() => {
+        const mapContainer = document.getElementById("map");
+        const mapOption = {
+          center: new kakao.maps.LatLng(36.42047910961381, 127.40579665909655), // 지도의 중심좌표
+          level: 3, // 지도의 확대 레벨
+        };
+        const map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 마우스 휠로 지도 확대,축소 가능여부를 설정합니다
+        map.setZoomable(false);
+
+        // 마커가 표시될 위치입니다
+        let markerPosition = new kakao.maps.LatLng(
+          36.42047910961381,
+          127.40579665909655
+        );
+
+        // 마커를 생성합니다
+        let marker = new kakao.maps.Marker({
+          position: markerPosition,
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+
+        // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+        let content =
+          '<div class="customoverlay">' +
+          '  <a href="http://kko.to/-UmaE3NpMx" target="_blank">' +
+          '    <span class="title">대전광역시 유성구 테크노9로 35 대전테크노파크 어울림플라자 204-1호</span>' +
+          "  </a>" +
+          "</div>";
+
+        // 커스텀 오버레이가 표시될 위치입니다
+        let position = new kakao.maps.LatLng(
+          36.42047910961381,
+          127.40579665909655
+        );
+
+        // 커스텀 오버레이를 생성합니다
+        let customOverlay = new kakao.maps.CustomOverlay({
+          map: map,
+          position: position,
+          content: content,
+          yAnchor: 1,
+        });
+      });
+    };
+  }, []);
+
   ////// TOGGLE //////
 
   ////// HANDLER //////
@@ -78,10 +135,8 @@ const Location = ({}) => {
                   </Wrapper>
                 </Wrapper>
 
-                <Wrapper
-                  height={`400px`}
-                  bgColor={Theme.basicTheme_C}
-                ></Wrapper>
+                <Wrapper height={`400px`} id={"map"}></Wrapper>
+
                 <Wrapper
                   bgColor={Theme.lightGrey_C}
                   padding={`30px 0`}
