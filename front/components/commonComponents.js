@@ -8,6 +8,7 @@ import {
   SettingOutlined,
   RestOutlined,
   UserSwitchOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 
 export const RowWrapper = styled(Row)`
@@ -834,5 +835,17 @@ export const DelBtn = styled(RestOutlined)`
   &:hover {
     transform: scale(1.3);
     color: ${(props) => props.theme.red_C};
+  }
+`;
+
+export const DetailBtn = styled(FileOutlined)`
+  font-size: 20px;
+  color: ${(props) => props.theme.adminTheme_1};
+  cursor: pointer;
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(1.3);
+    color: ${(props) => props.theme.adminTheme_4};
   }
 `;
