@@ -25,8 +25,6 @@ const Box = styled(Wrapper)`
 `;
 
 const OpBoard = ({ boardType }) => {
-  const { boardType: bt } = useSelector((state) => state.notice);
-
   const width = useWidth();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -95,8 +93,8 @@ const OpBoard = ({ boardType }) => {
       </Box>
       {/* Loop End */}
 
-      {boardType === "커뮤니티" && (
-        <Wrapper al={`flex-end`} margin={`30px 0 20px`}>
+      <Wrapper al={`flex-end`} margin={`30px 0 20px`}>
+        {boardType === "커뮤니티" && (
           <CommonButton
             kindOf={`subTheme`}
             width={width < 900 ? `140px` : `160px`}
@@ -107,8 +105,8 @@ const OpBoard = ({ boardType }) => {
           >
             작성하기
           </CommonButton>
-        </Wrapper>
-      )}
+        )}
+      </Wrapper>
 
       <CustomPage />
     </>
