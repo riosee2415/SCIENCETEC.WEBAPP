@@ -50,6 +50,11 @@ export const items = {
       link: "/admin/info/kakaoch",
       useYn: true,
     },
+    {
+      name: "회원조합관리",
+      link: "/admin/info/association",
+      useYn: true,
+    },
   ],
   배너관리: [
     {

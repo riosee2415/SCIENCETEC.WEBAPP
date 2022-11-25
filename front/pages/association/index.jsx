@@ -33,7 +33,7 @@ const Association = () => {
   return (
     <>
       <Head>
-        <title>iCAST | 포럼</title>
+        <title>iCAST | 회원조합소개</title>
       </Head>
 
       <ClientLayout>
