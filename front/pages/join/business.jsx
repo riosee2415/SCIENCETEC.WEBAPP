@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../../hooks/useWidth";
 import {
   CommonButton,
@@ -20,6 +20,8 @@ import {
 import styled from "styled-components";
 import Theme from "../../components/Theme";
 import { Checkbox } from "antd";
+import { useRouter } from "next/router";
+import useInput from "../../hooks/useInput";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -56,11 +58,89 @@ const Index = () => {
   ////// GLOBAL STATE //////
   ////// HOOKS //////
   const width = useWidth();
+
+  // 회원가입
+  const idInput = useInput(``);
+  const pwInput = useInput(``);
+  const pwCheckInput = useInput(``);
+  const combiNameInput = useInput(``);
+  const postCodeInput = useInput(``);
+  const addressInput = useInput(``);
+  const detailAddressInput = useInput(``);
+  const mobileInput = useInput(``);
+  const emailInput = useInput(``);
+  const [typeArr, setTypeArr] = useState([]); // 사업분야
+  const [combiTypeArr, setCombiTypeArr] = useState([]); // 조합사업유형
+  const [combiArr, setCombiArr] = useState([]); // 조합유형
+  const [isCheck, setIsCheck] = useState(false);
+
+  // modal
+  const [pModal, setPModal] = useState(false);
   ////// REDUX //////
+  const router = useRouter();
+  const dispatch = useDispatch();
   ////// USEEFFECT //////
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  // 사업분야
+  const checkArrHandler = useCallback(
+    (e) => {
+      let arr = typeArr ? typeArr.map((data) => data) : [];
+      const currentId = typeArr.findIndex((value) => value === e.target.value);
+
+      if (currentId === -1) {
+        arr.push(e.target.value);
+      } else {
+        arr.splice(currentId, 1);
+      }
+
+      setTypeArr(arr);
+    },
+    [typeArr]
+  );
+
+  // 주소검색
+  const completeHandler = useCallback((data) => {
+    addressInput.setValue(data.address);
+    postCodeInput.setValue(data.zonecode);
+    setPModal(false);
+  }, []);
   ////// DATAVIEW //////
+
+  const combiData = [
+    "다중이해",
+    "생산자",
+    "소비자",
+    "사업자",
+    "직원",
+    "개발자",
+    "기타",
+  ];
+
+  const combiTypeData = [
+    "R&D형",
+    "비즈니스형",
+    "교육훈련 및 문화활동형",
+    "지역사회문제해결형",
+    "경력연계형",
+    "기타",
+  ];
+
+  const arr = [
+    "ICT",
+    "화학",
+    "기계",
+    "로보틱스",
+    "환경",
+    "에너지",
+    "교육",
+    "국방",
+    "우주항공",
+    "기초과학",
+    "의약과",
+    "기타",
+  ];
 
   return (
     <>
@@ -332,27 +412,19 @@ const Index = () => {
                   <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
                 </Text>
                 <Wrapper dr={`row`} ju={`flex-start`}>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>다중이해</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>생산자</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>소비자</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>사업자</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>직원</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>개발자</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 0 0`}>
-                    <Checkbox>기타</Checkbox>
-                  </Wrapper>
+                  {combiData.map((data) => {
+                    return (
+                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                        <Checkbox
+                          onChange={checkArrHandler}
+                          checked={typeArr.find((value) => value === data)}
+                          value={data}
+                        >
+                          {data}
+                        </Checkbox>
+                      </Wrapper>
+                    );
+                  })}
                 </Wrapper>
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -365,24 +437,19 @@ const Index = () => {
                   <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
                 </Text>
                 <Wrapper dr={`row`} ju={`flex-start`}>
-                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-                    <Checkbox>R&D형</Checkbox>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-                    <Checkbox>비즈니스형</Checkbox>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-                    <Checkbox>교육훈련 및 문화활동형</Checkbox>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-                    <Checkbox>지역사회문제해결형</Checkbox>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-                    <Checkbox>경력연계형</Checkbox>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`}>
-                    <Checkbox>기타</Checkbox>
-                  </Wrapper>
+                  {combiTypeData.map((data) => {
+                    return (
+                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                        <Checkbox
+                          onChange={checkArrHandler}
+                          checked={typeArr.find((value) => value === data)}
+                          value={data}
+                        >
+                          {data}
+                        </Checkbox>
+                      </Wrapper>
+                    );
+                  })}
                 </Wrapper>
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -395,42 +462,19 @@ const Index = () => {
                   <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
                 </Text>
                 <Wrapper dr={`row`} ju={`flex-start`}>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>ICT</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>화학</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>기계</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>로보틱스</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>환경</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>에너지</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>교육</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>국방</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>우주항공</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>기초과학</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                    <Checkbox>의약과</Checkbox>
-                  </Wrapper>
-                  <Wrapper width={`auto`} margin={`0 20px 0 0`}>
-                    <Checkbox>기타</Checkbox>
-                  </Wrapper>
+                  {arr.map((data) => {
+                    return (
+                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                        <Checkbox
+                          onChange={checkArrHandler}
+                          checked={typeArr.find((value) => value === data)}
+                          value={data}
+                        >
+                          {data}
+                        </Checkbox>
+                      </Wrapper>
+                    );
+                  })}
                 </Wrapper>
               </Wrapper>
 
