@@ -453,9 +453,6 @@ router.post("/detail", async (req, res, next) => {
 
     const prevData = await models.sequelize.query(prevDataQuery);
 
-    console.log(!nextData[0]);
-    console.log(!prevData[0]);
-
     return res.status(200).json({
       detailData: detailData[0][0],
       commentList: commentList[0],

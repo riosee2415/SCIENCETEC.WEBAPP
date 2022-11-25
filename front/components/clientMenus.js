@@ -65,15 +65,15 @@ export const menus = [
       },
       {
         subMenuName: "커뮤니티",
-        subMenuLink: "/operate/operation",
+        subMenuLink: "/operate/community",
       },
       {
         subMenuName: "자료실",
-        subMenuLink: "/operate/organization",
+        subMenuLink: "/operate/reference",
       },
       {
         subMenuName: "공지사항",
-        subMenuLink: "/operate/intro",
+        subMenuLink: "/operate/notice",
       },
     ],
   },

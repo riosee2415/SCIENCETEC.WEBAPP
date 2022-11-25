@@ -361,16 +361,16 @@ const AppHeader = () => {
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/operate`}>
+                  <Link href={`/operate/community`}>
                     <a>커뮤니티</a>
                   </Link>
                 </Text>
-                <Link href={`/operate`}>
+                <Link href={`/operate/reference`}>
                   <a>
                     <Text margin={`0 0 14px`}>자료실</Text>
                   </a>
                 </Link>
-                <Link href={`/operate`}>
+                <Link href={`/operate/notice`}>
                   <a>
                     <Text>공지사항</Text>
                   </a>
@@ -679,7 +679,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/operate/admission`}>
+                    <Link href={`/operate/community`}>
                       <a>커뮤니티</a>
                     </Link>
                   </Wrapper>
@@ -689,12 +689,12 @@ const AppHeader = () => {
                     al={`flex-start`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/operate/list`}>
+                    <Link href={`/operate/reference`}>
                       <a>자료실</a>
                     </Link>
                   </Wrapper>
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/operate/wait`}>
+                    <Link href={`/operate/notice`}>
                       <a>공지사항</a>
                     </Link>
                   </Wrapper>

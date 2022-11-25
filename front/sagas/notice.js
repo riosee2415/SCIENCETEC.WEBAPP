@@ -32,6 +32,10 @@ import {
   NOTICE_HISTORY_REQUEST,
   NOTICE_HISTORY_SUCCESS,
   NOTICE_HISTORY_FAILURE,
+  //
+  NOTICE_DETAIL_REQUEST,
+  NOTICE_DETAIL_SUCCESS,
+  NOTICE_DETAIL_FAILURE,
 } from "../reducers/notice";
 
 // SAGA AREA ********************************************************************************************************
@@ -240,7 +244,34 @@ function* noticeHistory(action) {
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_HISTORY_SUCCESS,
+      type: NOTICE_HISTORY_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function noticeDetailAPI(data) {
+  return await axios.post(`/api/notice/detail`, data);
+}
+
+function* noticeDetail(action) {
+  try {
+    const result = yield call(noticeDetailAPI, action.data);
+
+    yield put({
+      type: NOTICE_DETAIL_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: NOTICE_DETAIL_FAILURE,
       error: err.response.data,
     });
   }
@@ -283,6 +314,10 @@ function* watchNoticeHistory() {
   yield takeLatest(NOTICE_HISTORY_REQUEST, noticeHistory);
 }
 
+function* watchNoticeDetail() {
+  yield takeLatest(NOTICE_DETAIL_REQUEST, noticeDetail);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* noticeSaga() {
   yield all([
@@ -294,6 +329,7 @@ export default function* noticeSaga() {
     fork(watchNoticeFile),
     fork(watchNoticeFileInfo),
     fork(watchNoticeHistory),
+    fork(watchNoticeDetail),
     //
   ]);
 }
