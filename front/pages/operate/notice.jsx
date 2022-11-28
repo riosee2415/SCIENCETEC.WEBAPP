@@ -52,7 +52,6 @@ const Notice = () => {
   ////// USEEFFECT //////
 
   useEffect(() => {
-    console.log("test");
     dispatch({
       type: NOTICE_LIST_REQUEST,
       data: {

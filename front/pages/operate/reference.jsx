@@ -23,6 +23,7 @@ import Theme from "../../components/Theme";
 import { Form, Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
+import OpDetail from "../../components/OpDetail";
 import { NOTICE_LIST_REQUEST } from "../../reducers/notice";
 
 const CustomForm = styled(Form)`
@@ -36,7 +37,7 @@ const CustomForm = styled(Form)`
 
 const Reference = () => {
   ////// GLOBAL STATE //////
-  const { viewType, notices } = useSelector((state) => state.notice);
+  const { viewType, notices, maxPage } = useSelector((state) => state.notice);
   ////// HOOKS //////
   const width = useWidth();
 
@@ -55,7 +56,8 @@ const Reference = () => {
       type: NOTICE_LIST_REQUEST,
       data: {
         type: "자료실",
-        title: searchTitle,
+        title: searchType === "제목" ? searchTitle : null,
+        content: searchType === "내용" ? searchTitle : null,
         page: currentPage,
       },
     });
@@ -79,7 +81,14 @@ const Reference = () => {
       setSearchTitle(data.searchTitle);
       setCurrentPage(1);
     },
-    [searchTitle, currentPage]
+    [searchType, searchTitle, currentPage]
+  );
+
+  const otherPageCall = useCallback(
+    (page) => {
+      setCurrentPage(page);
+    },
+    [currentPage]
   );
 
   ////// DATAVIEW //////
@@ -147,11 +156,17 @@ const Reference = () => {
                       </CommonButton>
                     </CustomForm>
                   </Wrapper>
-                  <OpBoard data={notices.notices} boardType="자료실" />
+                  <OpBoard
+                    data={notices.notices}
+                    maxPage={maxPage}
+                    currentPage={currentPage}
+                    otherPageCall={otherPageCall}
+                    boardType="자료실"
+                  />
                 </>
               )}
               {/* {viewType === "write" && <OpWrite />} */}
-              {viewType === "detail" && null}
+              {viewType === "detail" && <OpDetail />}
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
