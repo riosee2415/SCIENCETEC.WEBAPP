@@ -1,71 +1,66 @@
 import { all, call, delay, fork, put, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 import {
-  NOTICE_LIST_REQUEST,
-  NOTICE_LIST_SUCCESS,
-  NOTICE_LIST_FAILURE,
+  SURVEY_QUES_LIST_REQUEST,
+  SURVEY_QUES_LIST_SUCCESS,
+  SURVEY_QUES_LIST_FAILURE,
   //
-  NOTICE_ADMIN_LIST_REQUEST,
-  NOTICE_ADMIN_LIST_SUCCESS,
-  NOTICE_ADMIN_LIST_FAILURE,
+  SURVEY_QUES_CREATE_REQUEST,
+  SURVEY_QUES_CREATE_SUCCESS,
+  SURVEY_QUES_CREATE_FAILURE,
   //
-  NOTICE_CREATE_REQUEST,
-  NOTICE_CREATE_SUCCESS,
-  NOTICE_CREATE_FAILURE,
+  SURVEY_QUES_UPDATE_REQUEST,
+  SURVEY_QUES_UPDATE_SUCCESS,
+  SURVEY_QUES_UPDATE_FAILURE,
   //
-  NOTICE_UPDATE_REQUEST,
-  NOTICE_UPDATE_SUCCESS,
-  NOTICE_UPDATE_FAILURE,
+  SURVEY_QUES_DELETE_REQUEST,
+  SURVEY_QUES_DELETE_SUCCESS,
+  SURVEY_QUES_DELETE_FAILURE,
   //
-  NOTICE_DELETE_REQUEST,
-  NOTICE_DELETE_SUCCESS,
-  NOTICE_DELETE_FAILURE,
+  SURVEY_INNER_LIST_REQUEST,
+  SURVEY_INNER_LIST_SUCCESS,
+  SURVEY_INNER_LIST_FAILURE,
   //
-  NOTICE_UPDATE_TOP_REQUEST,
-  NOTICE_UPDATE_TOP_SUCCESS,
-  NOTICE_UPDATE_TOP_FAILURE,
+  SURVEY_INNER_CREATE_REQUEST,
+  SURVEY_INNER_CREATE_SUCCESS,
+  SURVEY_INNER_CREATE_FAILURE,
   //
-  NOTICE_FILE_REQUEST,
-  NOTICE_FILE_SUCCESS,
-  NOTICE_FILE_FAILURE,
+  SURVEY_INNER_UPDATE_REQUEST,
+  SURVEY_INNER_UPDATE_SUCCESS,
+  SURVEY_INNER_UPDATE_FAILURE,
   //
-  NOTICE_FILE_INFO_REQUEST,
-  NOTICE_FILE_INFO_SUCCESS,
-  NOTICE_FILE_INFO_FAILURE,
+  SURVEY_INNER_DELETE_REQUEST,
+  SURVEY_INNER_DELETE_SUCCESS,
+  SURVEY_INNER_DELETE_FAILURE,
   //
-  NOTICE_HISTORY_REQUEST,
-  NOTICE_HISTORY_SUCCESS,
-  NOTICE_HISTORY_FAILURE,
-  //
-  NOTICE_DETAIL_REQUEST,
-  NOTICE_DETAIL_SUCCESS,
-  NOTICE_DETAIL_FAILURE,
-} from "../reducers/notice";
+  SURVEY_HISTORY_LIST_REQUEST,
+  SURVEY_HISTORY_LIST_SUCCESS,
+  SURVEY_HISTORY_LIST_FAILURE,
+} from "../reducers/survey";
 
 // ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeListAPI(data) {
-  return await axios.post(`/api/notice/list`, data);
+async function surveyQuesListAPI(data) {
+  return await axios.post(`/api/survey/list`, data);
 }
 
-function* noticeList(action) {
+function* surveyQuesList(action) {
   try {
-    const result = yield call(noticeListAPI, action.data);
+    const result = yield call(surveyQuesListAPI, action.data);
 
     yield put({
-      type: NOTICE_LIST_SUCCESS,
+      type: SURVEY_QUES_LIST_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_LIST_FAILURE,
+      type: SURVEY_QUES_LIST_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
@@ -73,27 +68,26 @@ function* noticeList(action) {
 // ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeAdminListAPI(data) {
-  return await axios.post(`/api/notice/admin/list`, data);
+async function surveyQuesCreateAPI(data) {
+  return await axios.post(`/api/survey/create`, data);
 }
 
-function* noticeAdminList(action) {
+function* surveyQuesCreate(action) {
   try {
-    const result = yield call(noticeAdminListAPI, action.data);
+    const result = yield call(surveyQuesCreateAPI, action.data);
 
     yield put({
-      type: NOTICE_ADMIN_LIST_SUCCESS,
+      type: SURVEY_QUES_CREATE_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_ADMIN_LIST_FAILURE,
+      type: SURVEY_QUES_CREATE_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
@@ -101,274 +95,234 @@ function* noticeAdminList(action) {
 // ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeCreateAPI(data) {
-  return await axios.post(`/api/notice/create`, data);
+async function surveyQuesUpdateAPI(data) {
+  return await axios.post(`/api/survey/update`, data);
 }
 
-function* noticeCreate(action) {
+function* surveyQuesUpdate(action) {
   try {
-    const result = yield call(noticeCreateAPI, action.data);
+    const result = yield call(surveyQuesUpdateAPI, action.data);
 
     yield put({
-      type: NOTICE_CREATE_SUCCESS,
+      type: SURVEY_QUES_UPDATE_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_CREATE_FAILURE,
+      type: SURVEY_QUES_UPDATE_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeUpdateAPI(data) {
-  return await axios.post(`/api/notice/update`, data);
+async function surveyQuesDeleteAPI(data) {
+  return await axios.post(`/api/survey/delete`, data);
 }
 
-function* noticeUpdate(action) {
+function* surveyQuesDelete(action) {
   try {
-    const result = yield call(noticeUpdateAPI, action.data);
+    const result = yield call(surveyQuesDeleteAPI, action.data);
 
     yield put({
-      type: NOTICE_UPDATE_SUCCESS,
+      type: SURVEY_QUES_DELETE_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_UPDATE_FAILURE,
+      type: SURVEY_QUES_DELETE_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeDeleteAPI(data) {
-  return await axios.delete(`/api/notice/delete/${data.noticeId}`);
+async function surveyInnerListAPI(data) {
+  return await axios.post(`/api/survey/list`, data);
 }
 
-function* noticeDelete(action) {
+function* surveyInnerList(action) {
   try {
-    const result = yield call(noticeDeleteAPI, action.data);
+    const result = yield call(surveyInnerListAPI, action.data);
 
     yield put({
-      type: NOTICE_DELETE_SUCCESS,
+      type: SURVEY_INNER_LIST_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_DELETE_FAILURE,
+      type: SURVEY_INNER_LIST_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeUpdateTopAPI(data) {
-  return await axios.post(`/api/notice/update/top`, data);
+async function surveyInnerCreateAPI(data) {
+  return await axios.post(`/api/survey/create`, data);
 }
 
-function* noticeUpdateTop(action) {
+function* surveyInnerCreate(action) {
   try {
-    const result = yield call(noticeUpdateTopAPI, action.data);
+    const result = yield call(surveyInnerCreateAPI, action.data);
 
     yield put({
-      type: NOTICE_UPDATE_TOP_SUCCESS,
+      type: SURVEY_INNER_CREATE_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_UPDATE_TOP_FAILURE,
+      type: SURVEY_INNER_CREATE_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeFileAPI(data) {
-  return await axios.post(`/api/notice/file`, data);
+async function surveyInnerUpdateAPI(data) {
+  return await axios.post(`/api/survey/update`, data);
 }
 
-function* noticeFile(action) {
+function* surveyInnerUpdate(action) {
   try {
-    const result = yield call(noticeFileAPI, action.data);
+    const result = yield call(surveyInnerUpdateAPI, action.data);
 
     yield put({
-      type: NOTICE_FILE_SUCCESS,
+      type: SURVEY_INNER_UPDATE_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_FILE_FAILURE,
+      type: SURVEY_INNER_UPDATE_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeFileInfoAPI(data) {
-  return await axios.post(`/api/notice/update/file`, data);
+async function surveyInnerDeleteAPI(data) {
+  return await axios.post(`/api/survey/delete`, data);
 }
 
-function* noticeFileInfo(action) {
+function* surveyInnerDelete(action) {
   try {
-    const result = yield call(noticeFileInfoAPI, action.data);
+    const result = yield call(surveyInnerDeleteAPI, action.data);
 
     yield put({
-      type: NOTICE_FILE_INFO_SUCCESS,
+      type: SURVEY_INNER_DELETE_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_FILE_INFO_FAILURE,
+      type: SURVEY_INNER_DELETE_FAILURE,
       error: err.response.data,
     });
   }
 }
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function noticeHistoryAPI(data) {
-  return await axios.post(`/api/notice/history/list`, data);
+async function surveyHistoryListAPI(data) {
+  return await axios.post(`/api/survey/history/list`, data);
 }
 
-function* noticeHistory(action) {
+function* surveyHistoryList(action) {
   try {
-    const result = yield call(noticeHistoryAPI, action.data);
+    const result = yield call(surveyHistoryListAPI, action.data);
 
     yield put({
-      type: NOTICE_HISTORY_SUCCESS,
+      type: SURVEY_HISTORY_LIST_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: NOTICE_HISTORY_FAILURE,
+      type: SURVEY_HISTORY_LIST_FAILURE,
       error: err.response.data,
     });
   }
 }
-
-// ******************************************************************************************************************
-// ******************************************************************************************************************
-// ******************************************************************************************************************
-
-// SAGA AREA ********************************************************************************************************
-// ******************************************************************************************************************
-async function noticeDetailAPI(data) {
-  return await axios.post(`/api/notice/detail`, data);
-}
-
-function* noticeDetail(action) {
-  try {
-    const result = yield call(noticeDetailAPI, action.data);
-
-    yield put({
-      type: NOTICE_DETAIL_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: NOTICE_DETAIL_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
-
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
 //////////////////////////////////////////////////////////////
-function* watchNoticeList() {
-  yield takeLatest(NOTICE_LIST_REQUEST, noticeList);
+function* watchSurveyQuesList() {
+  yield takeLatest(SURVEY_QUES_LIST_REQUEST, surveyQuesList);
 }
-
-function* watchNoticeAdminList() {
-  yield takeLatest(NOTICE_ADMIN_LIST_REQUEST, noticeAdminList);
+function* watchSurveyQuesCreate() {
+  yield takeLatest(SURVEY_QUES_CREATE_REQUEST, surveyQuesCreate);
 }
-
-function* watchNoticeCreate() {
-  yield takeLatest(NOTICE_CREATE_REQUEST, noticeCreate);
+function* watchSurveyQuesUpdate() {
+  yield takeLatest(SURVEY_QUES_UPDATE_REQUEST, surveyQuesUpdate);
 }
-
-function* watchNoticeUpdate() {
-  yield takeLatest(NOTICE_UPDATE_REQUEST, noticeUpdate);
+function* watchSurveyQuesDelete() {
+  yield takeLatest(SURVEY_QUES_DELETE_REQUEST, surveyQuesDelete);
 }
-
-function* watchNoticeDelete() {
-  yield takeLatest(NOTICE_DELETE_REQUEST, noticeDelete);
+function* watchSurveyInnerList() {
+  yield takeLatest(SURVEY_INNER_LIST_REQUEST, surveyInnerList);
 }
-
-function* watchNoticeUpdateTop() {
-  yield takeLatest(NOTICE_UPDATE_TOP_REQUEST, noticeUpdateTop);
+function* watchSurveyInnerCreate() {
+  yield takeLatest(SURVEY_INNER_CREATE_REQUEST, surveyInnerCreate);
 }
-
-function* watchNoticeFile() {
-  yield takeLatest(NOTICE_FILE_REQUEST, noticeFile);
+function* watchSurveyInnerUpdate() {
+  yield takeLatest(SURVEY_INNER_UPDATE_REQUEST, surveyInnerUpdate);
 }
-
-function* watchNoticeFileInfo() {
-  yield takeLatest(NOTICE_FILE_INFO_REQUEST, noticeFileInfo);
+function* watchSurveyInnerDelete() {
+  yield takeLatest(SURVEY_INNER_DELETE_REQUEST, surveyInnerDelete);
 }
-
-function* watchNoticeHistory() {
-  yield takeLatest(NOTICE_HISTORY_REQUEST, noticeHistory);
-}
-
-function* watchNoticeDetail() {
-  yield takeLatest(NOTICE_DETAIL_REQUEST, noticeDetail);
+function* watchSurveyHistoryList() {
+  yield takeLatest(SURVEY_HISTORY_LIST_REQUEST, surveyHistoryList);
 }
 
 //////////////////////////////////////////////////////////////
-export default function* noticeSaga() {
+export default function* surveySaga() {
   yield all([
-    fork(watchNoticeList),
-    fork(watchNoticeAdminList),
-    fork(watchNoticeCreate),
-    fork(watchNoticeUpdate),
-    fork(watchNoticeUpdateTop),
-    fork(watchNoticeDelete),
-    fork(watchNoticeFile),
-    fork(watchNoticeFileInfo),
-    fork(watchNoticeHistory),
-    fork(watchNoticeDetail),
+    fork(watchSurveyQuesList),
+    fork(watchSurveyQuesCreate),
+    fork(watchSurveyQuesUpdate),
+    fork(watchSurveyQuesDelete),
+    fork(watchSurveyInnerList),
+    fork(watchSurveyInnerCreate),
+    fork(watchSurveyInnerUpdate),
+    fork(watchSurveyInnerDelete),
+    fork(watchSurveyHistoryList),
+
     //
   ]);
 }

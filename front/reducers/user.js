@@ -7,6 +7,11 @@ export const initailState = {
   updateModal: false,
   userHistory: [],
   adminUserRightHistory: [],
+
+  userDetail: null,
+  combiTypeList: [],
+  businessTypeList: [],
+  sectorList: [],
   //
   st_loginLoading: false,
   st_loginDone: false,
@@ -55,6 +60,10 @@ export const initailState = {
   st_adminUserExitFalseLoading: false, // 재가입
   st_adminUserExitFalseDone: false,
   st_adminUserExitFalseError: null,
+  //
+  st_userDetailLoading: false,
+  st_userDetailDone: false,
+  st_userDetailError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -108,6 +117,10 @@ export const ADMINUSER_EXITTRUE_FAILURE = "ADMINUSER_EXITTRUE_FAILURE";
 export const ADMINUSER_EXITFALSE_REQUEST = "ADMINUSER_EXITFALSE_REQUEST";
 export const ADMINUSER_EXITFALSE_SUCCESS = "ADMINUSER_EXITFALSE_SUCCESS";
 export const ADMINUSER_EXITFALSE_FAILURE = "ADMINUSER_EXITFALSE_FAILURE";
+//
+export const USER_DETAIL_REQUEST = "USER_DETAIL_REQUEST";
+export const USER_DETAIL_SUCCESS = "USER_DETAIL_SUCCESS";
+export const USER_DETAIL_FAILURE = "USER_DETAIL_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -387,6 +400,31 @@ const reducer = (state = initailState, action) =>
         draft.st_adminUserExitFalseError = action.error;
         break;
       }
+      //////////////////////////////////////////////
+
+      case USER_DETAIL_REQUEST: {
+        draft.st_userDetailLoading = true;
+        draft.st_userDetailDone = false;
+        draft.st_userDetailError = null;
+        break;
+      }
+      case USER_DETAIL_SUCCESS: {
+        draft.st_userDetailLoading = false;
+        draft.st_userDetailDone = true;
+        draft.st_userDetailError = null;
+        draft.userDetail = action.data.detailData;
+        draft.combiTypeList = action.data.combiTypeList;
+        draft.businessTypeList = action.data.businessTypeList;
+        draft.sectorList = action.data.sectorList;
+        break;
+      }
+      case USER_DETAIL_FAILURE: {
+        draft.st_userDetailLoading = false;
+        draft.st_userDetailDone = false;
+        draft.st_userDetailError = action.error;
+        break;
+      }
+
       //////////////////////////////////////////////
 
       case CURRENT_ADMINMENU_STATUS: {

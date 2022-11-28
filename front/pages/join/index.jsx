@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
-import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
+import { LOAD_MY_INFO_REQUEST, SIGNUP_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../../hooks/useWidth";
 import {
   CommonButton,
@@ -20,7 +20,12 @@ import {
 import styled from "styled-components";
 import Theme from "../../components/Theme";
 import Link from "next/link";
-import { Checkbox } from "antd";
+import { Checkbox, message, Modal } from "antd";
+import useInput from "../../hooks/useInput";
+import { useCallback } from "react";
+import DaumPostCode from "react-daum-postcode";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -55,14 +60,164 @@ const Circle = styled(Wrapper)`
 
 const Index = () => {
   ////// GLOBAL STATE //////
-  const [currentTab, setCurrentTab] = useState(0);
+  const { st_signUpDone } = useSelector((state) => state.user);
   ////// HOOKS //////
+
+  // 회원가입
+  const idInput = useInput(``);
+  const pwInput = useInput(``);
+  const pwCheckInput = useInput(``);
+  const combiNameInput = useInput(``);
+  const postCodeInput = useInput(``);
+  const addressInput = useInput(``);
+  const detailAddressInput = useInput(``);
+  const mobileInput = useInput(``);
+  const emailInput = useInput(``);
+  const [typeArr, setTypeArr] = useState([]);
+  const [isCheck, setIsCheck] = useState(false);
+
+  // current
+  const [currentTab, setCurrentTab] = useState(0);
+
+  // modal
+  const [pModal, setPModal] = useState(false);
+
   const width = useWidth();
   ////// REDUX //////
+  const router = useRouter();
+  const dispatch = useDispatch();
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    if (st_signUpDone) {
+      router.push(`/login`);
+
+      return message.success("회원가입이 되었습니다.");
+    }
+  }, [st_signUpDone]);
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  // 주소검색
+  const completeHandler = useCallback((data) => {
+    addressInput.setValue(data.address);
+    postCodeInput.setValue(data.zonecode);
+    setPModal(false);
+  }, []);
+
+  // 일반회원 create
+  const createHandler = useCallback(() => {
+    if (!idInput.value) {
+      return message.error("아이디를 입력해주세요.");
+    }
+
+    if (!pwInput.value) {
+      return message.error("비밀번호를 입력해주세요.");
+    }
+
+    if (!pwCheckInput.value) {
+      return message.error("비밀번호를 재입력해주세요.");
+    }
+
+    if (pwInput.value !== pwCheckInput.value) {
+      return message.error("비밀번호가 일치하지 않습니다.");
+    }
+
+    if (!combiNameInput.value) {
+      return message.error("비밀번호를 재입력해주세요.");
+    }
+
+    if (!postCodeInput.value) {
+      return message.error("주소를 검색해주세요.");
+    }
+
+    if (!detailAddressInput.value) {
+      return message.error("상세주소를 입력해주세요.");
+    }
+
+    if (!mobileInput.value) {
+      return message.error("전화번호를 입력해주세요.");
+    }
+
+    if (!emailInput.value) {
+      return message.error("이메일을 입력해주세요.");
+    }
+
+    if (typeArr.length === 0) {
+      return message.error("관심분야는 필수 선택사항입니다.");
+    }
+
+    if (!isCheck) {
+      return message.error("개인정보처리방침에 동의해주세요.");
+    }
+
+    // 개인회원
+    dispatch({
+      type: SIGNUP_REQUEST,
+      data: {
+        type: 1,
+        userId: idInput.value,
+        password: pwCheckInput.value,
+        combiName: combiNameInput.value,
+        postCode: postCodeInput.value,
+        address: addressInput.value,
+        detailAddress: detailAddressInput.value,
+        mobile: mobileInput.value,
+        email: emailInput.value,
+        terms: isCheck,
+        isKakao: false,
+        isPremium: false,
+        businessType: [],
+        combiType: [],
+        sector: typeArr,
+      },
+    });
+  }, [
+    idInput,
+    pwInput,
+    pwCheckInput,
+    combiNameInput,
+    postCodeInput,
+    detailAddressInput,
+    mobileInput,
+    emailInput,
+    typeArr,
+    isCheck,
+  ]);
+
+  // 사업분야
+  const checkArrHandler = useCallback(
+    (e) => {
+      let arr = typeArr ? typeArr.map((data) => data) : [];
+      const currentId = typeArr.findIndex((value) => value === e.target.value);
+
+      if (currentId === -1) {
+        arr.push(e.target.value);
+      } else {
+        arr.splice(currentId, 1);
+      }
+
+      setTypeArr(arr);
+    },
+    [typeArr]
+  );
+
   ////// DATAVIEW //////
+
+  const arr = [
+    "ICT",
+    "화학",
+    "기계",
+    "로보틱스",
+    "환경",
+    "에너지",
+    "교육",
+    "국방",
+    "우주항공",
+    "기초과학",
+    "의약과",
+    "기타",
+  ];
 
   return (
     <>
@@ -166,6 +321,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="아이디를 입력해주세요."
                       radius={`5px`}
+                      {...idInput}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -183,6 +339,7 @@ const Index = () => {
                       placeholder="비밀번호를 입력해주세요."
                       radius={`5px`}
                       margin={`0 0 8px`}
+                      {...pwInput}
                     />
                     <TextInput
                       type="password"
@@ -190,6 +347,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="비밀번호를 재입력해주세요."
                       radius={`5px`}
+                      {...pwCheckInput}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -206,6 +364,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="조합명을 입력해주세요."
                       radius={`5px`}
+                      {...combiNameInput}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -218,18 +377,20 @@ const Index = () => {
                     </Text>
                     <Wrapper dr={`row`} ju={`space-between`}>
                       <TextInput
-                        readOnly
+                        readOnly={true}
                         type="text"
                         width={`calc(100% - 150px)`}
                         height={`55px`}
                         placeholder="우편주소를 입력해주세요."
                         radius={`5px`}
+                        {...postCodeInput}
                       />
                       <CommonButton
                         width={`146px`}
                         height={`55px`}
                         kindOf={`subTheme`}
                         radius={`5px`}
+                        onClick={() => setPModal(!pModal)}
                       >
                         우편주소 검색
                       </CommonButton>
@@ -242,6 +403,7 @@ const Index = () => {
                       placeholder="주소를 입력해주세요."
                       radius={`5px`}
                       margin={`8px 0`}
+                      {...addressInput}
                     />
                     <TextInput
                       type="text"
@@ -249,6 +411,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="상세주소를 입력해주세요."
                       radius={`5px`}
+                      {...detailAddressInput}
                     />
                   </Wrapper>
 
@@ -266,6 +429,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="전화번호를 입력해주세요."
                       radius={`5px`}
+                      {...mobileInput}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -282,6 +446,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="이메일을 입력해주세요."
                       radius={`5px`}
+                      {...emailInput}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -294,47 +459,29 @@ const Index = () => {
                       <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
                     </Text>
                     <Wrapper dr={`row`} ju={`flex-start`}>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>ICT</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>화학</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>기계</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>로보틱스</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>환경</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>에너지</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>교육</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>국방</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>우주항공</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>기초과학</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>의약과</Checkbox>
-                      </Wrapper>
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox>기타</Checkbox>
-                      </Wrapper>
+                      {arr.map((data) => {
+                        return (
+                          <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                            <Checkbox
+                              onChange={checkArrHandler}
+                              checked={typeArr.find((value) => value === data)}
+                              value={data}
+                            >
+                              {data}
+                            </Checkbox>
+                          </Wrapper>
+                        );
+                      })}
                     </Wrapper>
                   </Wrapper>
 
                   <Wrapper margin={`35px 0 14px`} al={`flex-start`}>
-                    <Checkbox>(필수)개인정보처리방침에 동의합니다.</Checkbox>
+                    <Checkbox
+                      onChange={() => setIsCheck(!isCheck)}
+                      checked={isCheck}
+                    >
+                      (필수)개인정보처리방침에 동의합니다.
+                    </Checkbox>
                   </Wrapper>
                   <CommonButton
                     width={`100%`}
@@ -343,6 +490,7 @@ const Index = () => {
                     radius={`5px`}
                     fontSize={`18px`}
                     fontWeight={`bold`}
+                    onClick={createHandler}
                   >
                     회원가입
                   </CommonButton>
@@ -351,6 +499,21 @@ const Index = () => {
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
+
+        <Modal
+          visible={pModal}
+          onCancel={() => setPModal(!pModal)}
+          title="주소 검색"
+          footer={null}
+        >
+          <DaumPostCode
+            onComplete={completeHandler}
+            width={`100%`}
+            height={`450px`}
+            autoClose={false}
+            animation
+          />
+        </Modal>
       </ClientLayout>
     </>
   );
