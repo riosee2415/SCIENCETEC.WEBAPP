@@ -64,9 +64,10 @@ router.post("/file", upload.single("file"), async (req, res, next) => {
 });
 
 router.post("/list", async (req, res, next) => {
-  const { title, page, type } = req.body;
+  const { title, content, page, type } = req.body;
 
   const _title = title ? title : ``;
+  const _content = content ? content : ``;
   const _type = type ? type : ``;
 
   const LIMIT = 10;
@@ -96,6 +97,7 @@ router.post("/list", async (req, res, next) => {
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
      AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
   `;
 
@@ -119,6 +121,7 @@ router.post("/list", async (req, res, next) => {
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
      AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
    ORDER	BY num DESC
    LIMIT  ${LIMIT}
@@ -145,9 +148,10 @@ router.post("/list", async (req, res, next) => {
 });
 
 router.post("/admin/list", async (req, res, next) => {
-  const { title, type } = req.body;
+  const { title, content, type } = req.body;
 
   const _title = title ? title : "";
+  const _content = content ? content : ``;
   const _type = type ? type : "";
 
   const selectQuery = `
@@ -170,6 +174,7 @@ router.post("/admin/list", async (req, res, next) => {
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
      AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
    ORDER	BY num DESC
   `;
@@ -498,14 +503,9 @@ router.post("/detail", async (req, res, next) => {
     return res.status(200).json({
       detailData: detailData[0][0],
       commentList: commentList[0],
-      nextNotice:
-        nextData[0].length !== 0
-          ? nextData[0][0]
-          : "다음글이 존재하지 않습니다.", // 다음 게시글
+      nextNotice: nextData[0].length !== 0 ? nextData[0][0] : null, // 다음 게시글
       prevNotice:
-        prevData[0].length !== 0
-          ? prevData[0][prevData[0].length - 1]
-          : "이전글이 존재하지 않습니다.", // 이전 게시글
+        prevData[0].length !== 0 ? prevData[0][prevData[0].length - 1] : null, // 이전 게시글
     });
   } catch (error) {
     console.error(error);
