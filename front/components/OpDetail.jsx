@@ -60,9 +60,6 @@ const OpDetail = () => {
     [noticePrev, noticeNext]
   );
 
-  console.log(noticePrev);
-  console.log(noticeNext);
-
   return (
     <Wrapper borderTop={`2px solid ${Theme.basicTheme_C}`} margin={`-24px 0 0`}>
       {noticeDetail ? (
