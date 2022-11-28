@@ -185,7 +185,7 @@ router.post("/admin/list", async (req, res, next) => {
 });
 
 router.post("/create", isLoggedIn, async (req, res, next) => {
-  const { title, type, content, author, file } = req.body;
+  const { title, type, content, author } = req.body;
 
   const insertQuery1 = `
       INSERT INTO notices
@@ -201,11 +201,11 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
       )
       VALUES
       (
-        "${title}",
-        "${content}",
+        ${type !== "커뮤니티" ? `"임시 ${type} 게시글"` : `"${title}"`},
+        ${type !== "커뮤니티" ? `"임시 내용"` : `"${content}"`},
         "${author}",
         "${type}",
-        ${file ? `"${file}"` : null},
+        NULL,
         ${req.user.id},
         now(),
         now()
@@ -225,7 +225,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
   VALUES 
   (
     "데이터 생성",
-    "${title}",
+    "임시 ${type} 게시글",
     "${type}",
     ${req.user.id},
     now(),
@@ -250,7 +250,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
 });
 
 router.post("/update", isLoggedIn, async (req, res, next) => {
-  const { id, title, content, file } = req.body;
+  const { id, title, content } = req.body;
 
   const selectQuery = `
   SELECT  type
@@ -263,7 +263,6 @@ router.post("/update", isLoggedIn, async (req, res, next) => {
     UPDATE  notices
       SET   title = "${title}",
             content = "${content}",
-            file = ${file ? `"${file}"` : null},
             updatedAt = now(),
             updator = ${req.user.id}
      WHERE  id = ${id}
@@ -304,6 +303,49 @@ router.post("/update", isLoggedIn, async (req, res, next) => {
 
       return res.status(200).json({ result: true });
     }
+
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("공지사항을 수정할 수 없습니다. [CODE 087]");
+  }
+});
+
+router.post("/update/file", isAdminCheck, async (req, res, next) => {
+  const { id, filepath, title, type } = req.body;
+
+  const updateQ = `
+      UPDATE  notices
+        SET   file = "${filepath}",
+              updatedAt = now(),
+              updator = ${req.user.id}
+      WHERE  id = ${id}
+    `;
+
+  const insertQuery2 = `
+  INSERT INTO noticeHistory
+  (
+    content,
+    title,
+    type,
+    updator,
+    createdAt,
+    updatedAt
+  )
+  VALUES 
+  (
+    "파일정보 수정",
+    "${title}",
+    "${type}",
+    ${req.user.id},
+    now(),
+    now()
+  )
+    `;
+
+  try {
+    await models.sequelize.query(updateQ);
+    await models.sequelize.query(insertQuery2);
 
     return res.status(200).json({ result: true });
   } catch (error) {

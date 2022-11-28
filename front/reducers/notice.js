@@ -12,10 +12,15 @@ export const initailState = {
   noticeDetail: null,
   noticePrev: null,
   noticeNext: null,
+  adminNotices: [],
   //
   st_noticeListLoading: false, // 공지사항 가져오기
   st_noticeListDone: false,
   st_noticeListError: null,
+  //
+  st_noticeAdminListLoading: false, // 관리자 공지사항
+  st_noticeAdminListDone: false,
+  st_noticeAdminListError: null,
   //
   st_noticeCreateLoading: false, // 공지사항 생성하기
   st_noticeCreateDone: false,
@@ -48,12 +53,15 @@ export const initailState = {
   st_noticeDetailLoading: false, // 공지사항 디테일
   st_noticeDetailDone: false,
   st_noticeDetailError: null,
-  //
 };
 
 export const NOTICE_LIST_REQUEST = "NOTICE_LIST_REQUEST";
 export const NOTICE_LIST_SUCCESS = "NOTICE_LIST_SUCCESS";
 export const NOTICE_LIST_FAILURE = "NOTICE_LIST_FAILURE";
+//
+export const NOTICE_ADMIN_LIST_REQUEST = "NOTICE_ADMIN_LIST_REQUEST";
+export const NOTICE_ADMIN_LIST_SUCCESS = "NOTICE_ADMIN_LIST_SUCCESS";
+export const NOTICE_ADMIN_LIST_FAILURE = "NOTICE_ADMIN_LIST_FAILURE";
 //
 export const NOTICE_CREATE_REQUEST = "NOTICE_CREATE_REQUEST";
 export const NOTICE_CREATE_SUCCESS = "NOTICE_CREATE_SUCCESS";
@@ -115,6 +123,26 @@ const reducer = (state = initailState, action) =>
         draft.st_noticeListLoading = false;
         draft.st_noticeListDone = false;
         draft.st_noticeListError = action.error;
+        break;
+      }
+      ///////////////////////////////////////////////////////
+      case NOTICE_ADMIN_LIST_REQUEST: {
+        draft.st_noticeAdminListLoading = true;
+        draft.st_noticeAdminListDone = null;
+        draft.st_noticeAdminListError = false;
+        break;
+      }
+      case NOTICE_ADMIN_LIST_SUCCESS: {
+        draft.st_noticeAdminListLoading = false;
+        draft.st_noticeAdminListDone = true;
+        draft.st_noticeAdminListError = null;
+        draft.adminNotices = action.data;
+        break;
+      }
+      case NOTICE_ADMIN_LIST_FAILURE: {
+        draft.st_noticeAdminListLoading = false;
+        draft.st_noticeAdminListDone = false;
+        draft.st_noticeAdminListError = action.error;
         break;
       }
       ///////////////////////////////////////////////////////

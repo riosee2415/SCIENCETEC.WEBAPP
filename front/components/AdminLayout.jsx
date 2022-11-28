@@ -70,19 +70,19 @@ export const items = {
   ],
   게시판관리: [
     {
-      name: "공지사항관리",
+      name: "게시판관리",
       link: "/admin/boards/notice",
       useYn: true,
     },
     {
       name: "자료실관리",
       link: "/",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "겔러리관리",
       link: "/admin/boards/gallery",
-      useYn: true,
+      useYn: false,
     },
   ],
   회원관리: [

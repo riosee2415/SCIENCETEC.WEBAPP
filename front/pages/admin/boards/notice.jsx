@@ -28,7 +28,7 @@ import {
 } from "../../../components/commonComponents";
 import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
 import {
-  NOTICE_LIST_REQUEST,
+  NOTICE_ADMIN_LIST_REQUEST,
   NOTICE_UPDATE_REQUEST,
   NOTICE_UPDATE_TOP_REQUEST,
   NOTICE_FILE_REQUEST,
@@ -70,7 +70,8 @@ const ViewStatusIcon = styled(EyeOutlined)`
 const Notice = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
   const {
-    notices,
+    adminNotices,
+    st_noticeAdminListError,
     st_noticeUpdateDone,
     st_noticeUpdateError,
     st_noticeUpdateTopDone,
@@ -157,7 +158,15 @@ const Notice = ({}) => {
           break;
 
         case 2:
-          sendType = "새소식";
+          sendType = "자료실";
+          break;
+
+        case 3:
+          sendType = "커뮤니티";
+          break;
+
+        case 4:
+          sendType = "FAQ";
           break;
 
         default:
@@ -165,7 +174,7 @@ const Notice = ({}) => {
       }
 
       dispatch({
-        type: NOTICE_LIST_REQUEST,
+        type: NOTICE_ADMIN_LIST_REQUEST,
         data: {
           type: sendType,
         },
@@ -196,7 +205,15 @@ const Notice = ({}) => {
           break;
 
         case 2:
-          sendType = "새소식";
+          sendType = "자료실";
+          break;
+
+        case 3:
+          sendType = "커뮤니티";
+          break;
+
+        case 4:
+          sendType = "FAQ";
           break;
 
         default:
@@ -204,7 +221,7 @@ const Notice = ({}) => {
       }
 
       dispatch({
-        type: NOTICE_LIST_REQUEST,
+        type: NOTICE_ADMIN_LIST_REQUEST,
         data: {
           type: sendType,
         },
@@ -233,7 +250,15 @@ const Notice = ({}) => {
           break;
 
         case 2:
-          sendType = "새소식";
+          sendType = "자료실";
+          break;
+
+        case 3:
+          sendType = "커뮤니티";
+          break;
+
+        case 4:
+          sendType = "FAQ";
           break;
 
         default:
@@ -241,7 +266,7 @@ const Notice = ({}) => {
       }
 
       dispatch({
-        type: NOTICE_LIST_REQUEST,
+        type: NOTICE_ADMIN_LIST_REQUEST,
         data: {
           type: sendType,
         },
@@ -284,7 +309,15 @@ const Notice = ({}) => {
         break;
 
       case 2:
-        sendType = "새소식";
+        sendType = "자료실";
+        break;
+
+      case 3:
+        sendType = "커뮤니티";
+        break;
+
+      case 4:
+        sendType = "FAQ";
         break;
 
       default:
@@ -292,7 +325,7 @@ const Notice = ({}) => {
     }
 
     dispatch({
-      type: NOTICE_LIST_REQUEST,
+      type: NOTICE_ADMIN_LIST_REQUEST,
       data: {
         type: sendType,
       },
@@ -421,6 +454,7 @@ const Notice = ({}) => {
         id: currentData.id,
         filepath: uploadFilePath,
         title: currentData.title,
+        type: currentData.type,
       },
     });
   }, [uploadFilePath, currentData]);
@@ -541,7 +575,23 @@ const Notice = ({}) => {
           style={{ marginRight: "5px" }}
           onClick={() => setTab(2)}
         >
-          새소식
+          자료실
+        </Button>
+        <Button
+          type={tab === 3 ? "primary" : "default"}
+          size="small"
+          style={{ marginRight: "5px" }}
+          onClick={() => setTab(3)}
+        >
+          커뮤니티
+        </Button>
+        <Button
+          type={tab === 4 ? "primary" : "default"}
+          size="small"
+          style={{ marginRight: "5px" }}
+          onClick={() => setTab(4)}
+        >
+          FAQ
         </Button>
       </Wrapper>
 
@@ -560,7 +610,7 @@ const Notice = ({}) => {
           </Wrapper>
           <Table
             size="small"
-            dataSource={notices}
+            dataSource={adminNotices ? adminNotices : []}
             columns={noticeCol}
             rowKey="id"
             style={{ width: "100%" }}
@@ -578,17 +628,6 @@ const Notice = ({}) => {
         >
           {currentData ? (
             <>
-              <Wrapper margin={`0px 0px 5px 0px`}>
-                <InfoTitle>
-                  <CheckOutlined />
-                  상단고정 제어
-                </InfoTitle>
-              </Wrapper>
-
-              <Wrapper dr="row" ju="flex-start" al="flex-start" padding="20px">
-                <Switch onChange={isTopChangeHandler} checked={currentTop} />
-              </Wrapper>
-
               <Wrapper
                 width="100%"
                 height="1px"
@@ -627,10 +666,7 @@ const Notice = ({}) => {
                     { required: true, message: "유형은 필수 선택사항 입니다." },
                   ]}
                 >
-                  <Select onChange={onTypeChange} size="small">
-                    <Option value="새소식">새소식</Option>
-                    <Option value="공지사항">공지사항</Option>
-                  </Select>
+                  <Input size="small" readOnly />
                 </Form.Item>
 
                 <Form.Item
@@ -689,91 +725,97 @@ const Notice = ({}) => {
                 margin={`30px 0px`}
               ></Wrapper>
 
-              <Wrapper margin={`0px 0px 5px 0px`}>
-                <InfoTitle>
-                  <CheckOutlined />
-                  공지사항 파일정보
-                </InfoTitle>
-              </Wrapper>
-
-              <Wrapper padding="0px 20px">
-                {currentData.file ? (
-                  <Wrapper al="flex-start">
-                    <Text>등록된 파일이 1개 있습니다.</Text>
-                    <Wrapper dr="row" ju="flex-start">
-                      <Button
-                        type="defalut"
-                        size="small"
-                        onClick={() => fileDownloadHandler(currentData.file)}
-                      >
-                        다운로드
-                      </Button>
-
-                      <input
-                        type="file"
-                        name="file"
-                        // accept=".png, .jpg"
-                        // multiple
-                        hidden
-                        ref={fileRef}
-                        onChange={onChangeFiles}
-                      />
-
-                      <Button
-                        type="danger"
-                        size="small"
-                        onClick={clickFileUpload}
-                        loading={st_noticeFileLoading}
-                      >
-                        수정하기
-                      </Button>
-
-                      {uploadFilePath && (
-                        <Button
-                          type="primary"
-                          size="small"
-                          style={{ marginLeft: "10px" }}
-                          onClick={applyFileHandler}
-                        >
-                          적용하기
-                        </Button>
-                      )}
-                    </Wrapper>
+              {currentData.type !== "커뮤니티" && (
+                <>
+                  <Wrapper margin={`0px 0px 5px 0px`}>
+                    <InfoTitle>
+                      <CheckOutlined />
+                      공지사항 파일정보
+                    </InfoTitle>
                   </Wrapper>
-                ) : (
-                  <Wrapper al="flex-start">
-                    <Text>등록된 파일이 없습니다.</Text>
 
-                    <Wrapper ju="flex-start" dr="row">
-                      <input
-                        type="file"
-                        name="file"
-                        // accept=".png, .jpg"
-                        // multiple
-                        hidden
-                        ref={fileRef}
-                        onChange={onChangeFiles}
-                      />
+                  <Wrapper padding="0px 20px">
+                    {currentData.file ? (
+                      <Wrapper al="flex-start">
+                        <Text>등록된 파일이 1개 있습니다.</Text>
+                        <Wrapper dr="row" ju="flex-start">
+                          <Button
+                            type="defalut"
+                            size="small"
+                            onClick={() =>
+                              fileDownloadHandler(currentData.file)
+                            }
+                          >
+                            다운로드
+                          </Button>
 
-                      <Button
-                        type="danger"
-                        size="small"
-                        onClick={clickFileUpload}
-                        loading={st_noticeFileLoading}
-                      >
-                        등록하기
-                      </Button>
-                    </Wrapper>
+                          <input
+                            type="file"
+                            name="file"
+                            // accept=".png, .jpg"
+                            // multiple
+                            hidden
+                            ref={fileRef}
+                            onChange={onChangeFiles}
+                          />
+
+                          <Button
+                            type="danger"
+                            size="small"
+                            onClick={clickFileUpload}
+                            loading={st_noticeFileLoading}
+                          >
+                            수정하기
+                          </Button>
+
+                          {uploadFilePath && (
+                            <Button
+                              type="primary"
+                              size="small"
+                              style={{ marginLeft: "10px" }}
+                              onClick={applyFileHandler}
+                            >
+                              적용하기
+                            </Button>
+                          )}
+                        </Wrapper>
+                      </Wrapper>
+                    ) : (
+                      <Wrapper al="flex-start">
+                        <Text>등록된 파일이 없습니다.</Text>
+
+                        <Wrapper ju="flex-start" dr="row">
+                          <input
+                            type="file"
+                            name="file"
+                            // accept=".png, .jpg"
+                            // multiple
+                            hidden
+                            ref={fileRef}
+                            onChange={onChangeFiles}
+                          />
+
+                          <Button
+                            type="danger"
+                            size="small"
+                            onClick={clickFileUpload}
+                            loading={st_noticeFileLoading}
+                          >
+                            등록하기
+                          </Button>
+                        </Wrapper>
+                      </Wrapper>
+                    )}
                   </Wrapper>
-                )}
-              </Wrapper>
 
-              <Wrapper
-                width="100%"
-                height="1px"
-                bgColor={Theme.lightGrey_C}
-                margin={`30px 0px`}
-              ></Wrapper>
+                  <Wrapper
+                    width="100%"
+                    height="1px"
+                    bgColor={Theme.lightGrey_C}
+                    margin={`30px 0px`}
+                  ></Wrapper>
+                </>
+              )}
             </>
           ) : (
             <Wrapper padding={`50px 0px`} dr="row">
@@ -808,9 +850,23 @@ const Notice = ({}) => {
           <Button
             type="primary"
             style={{ margin: "5px" }}
-            onClick={() => createWithTypeHandler("새소식")}
+            onClick={() => createWithTypeHandler("자료실")}
           >
-            새소식
+            자료실
+          </Button>
+          {/* <Button
+            type="primary"
+            style={{ margin: "5px" }}
+            onClick={() => createWithTypeHandler("커뮤니티")}
+          >
+            커뮤니티
+          </Button> */}
+          <Button
+            type="primary"
+            style={{ margin: "5px" }}
+            onClick={() => createWithTypeHandler("FAQ")}
+          >
+            FAQ
           </Button>
         </Wrapper>
       </Modal>
@@ -834,7 +890,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     });
 
     context.store.dispatch({
-      type: NOTICE_LIST_REQUEST,
+      type: NOTICE_ADMIN_LIST_REQUEST,
       data: {
         title: "",
         type: "",

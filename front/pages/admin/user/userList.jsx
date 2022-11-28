@@ -8,6 +8,7 @@ import {
   UPDATE_MODAL_OPEN_REQUEST,
   USERLIST_REQUEST,
   USERLIST_UPDATE_REQUEST,
+  USER_DETAIL_REQUEST,
 } from "../../../reducers/user";
 import {
   Table,
@@ -19,6 +20,7 @@ import {
   notification,
   Input,
   Form,
+  Empty,
 } from "antd";
 import {
   HomeText,
@@ -53,8 +55,10 @@ const GuideDiv = styled.div`
   margin-left: 3px;
 `;
 
-const PointText = styled.div`
-  color: ${(props) => props.theme.adminTheme_4};
+const DetailWrapper = styled(Wrapper)`
+  width: calc(100% / 2);
+  flex-direction: row;
+  justify-content: flex-start;
 `;
 
 const LoadNotification = (msg, content) => {
@@ -90,7 +94,15 @@ const UserList = ({}) => {
   const {
     users,
     updateModal,
+    userDetail,
+    combiTypeList,
+    businessTypeList,
+    sectorList,
+    //
+    st_userDetailError,
+    //
     st_userListError,
+    //
     st_userListUpdateDone,
     st_userListUpdateError,
   } = useSelector((state) => state.user);
@@ -98,6 +110,8 @@ const UserList = ({}) => {
   const [sameDepth, setSameDepth] = useState([]);
 
   const [updateData, setUpdateData] = useState(null);
+
+  const [detailModal, setDetailModal] = useState(false);
 
   const [sData, setSData] = useState("");
 
@@ -162,6 +176,13 @@ const UserList = ({}) => {
     });
   }, [currentTab, sData]);
 
+  // 상세정보
+  useEffect(() => {
+    if (st_userDetailError) {
+      return message.error(st_userDetailError);
+    }
+  }, [st_userDetailError]);
+
   ////// TOGGLE //////
   const updateModalOpen = useCallback(
     (data) => {
@@ -180,6 +201,22 @@ const UserList = ({}) => {
       type: UPDATE_MODAL_CLOSE_REQUEST,
     });
   }, [updateModal]);
+
+  // 상세정보
+  const detailModalToggle = useCallback(
+    (data) => {
+      if (data) {
+        dispatch({
+          type: USER_DETAIL_REQUEST,
+          data: {
+            id: data.id,
+          },
+        });
+      }
+      setDetailModal((prev) => !prev);
+    },
+    [detailModal]
+  );
 
   ////// HANDLER //////
 
@@ -278,10 +315,6 @@ const UserList = ({}) => {
       title: "조합명",
       dataIndex: "combiName",
     },
-    {
-      title: "회원이름",
-      dataIndex: "username",
-    },
 
     {
       title: "이메일",
@@ -317,7 +350,7 @@ const UserList = ({}) => {
         <DetailBtn
           size="small"
           type="primary"
-          onClick={() => updateModalOpen(data)}
+          onClick={() => detailModalToggle(data)}
         >
           상세
         </DetailBtn>
@@ -410,7 +443,6 @@ const UserList = ({}) => {
 
         {levelArr.map((data) => (
           <TypeButton
-            key={data.id}
             type={currentTab === data.id ? "primary" : "default"}
             size="small"
             onClick={() => tabClickHandler(data.id)}
@@ -472,13 +504,491 @@ const UserList = ({}) => {
           </Form.Item>
         </Form>
       </Modal>
-
+      {/* DETAIL MODAL */}
       <Modal
-        visible={false}
-        onOk={() => {}}
-        onCancel={() => {}}
-        title="Ask"
-      ></Modal>
+        width="950px"
+        title="상세정보"
+        visible={detailModal}
+        footer={null}
+        onCancel={() => detailModalToggle(null)}
+      >
+        {userDetail && (
+          <Wrapper>
+            <Wrapper
+              dr={`row`}
+              ju={`space-between`}
+              borderTop={`1px solid ${Theme.subTheme2_C}`}
+            >
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  유형
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.viewType}
+                </Text>
+              </DetailWrapper>
+
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  조합명
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.combiName}
+                </Text>
+              </DetailWrapper>
+
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  아이디
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.combiName}
+                </Text>
+              </DetailWrapper>
+
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  이메일
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.email ? userDetail.email : "이메일이 없습니다."}
+                </Text>
+              </DetailWrapper>
+
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  전화번호
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.mobile
+                    ? userDetail.mobile
+                    : "전화번호가 없습니다."}
+                </Text>
+              </DetailWrapper>
+
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  우편번호
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.postCode
+                    ? userDetail.postCode
+                    : "우편번호가 없습니다."}
+                </Text>
+              </DetailWrapper>
+
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  주소
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.address ? userDetail.address : "주소가 없습니다."}
+                </Text>
+              </DetailWrapper>
+
+              <DetailWrapper>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  상세주소
+                </Text>
+                <Text
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                >
+                  {userDetail.detailAddress
+                    ? userDetail.detailAddress
+                    : "상세주소가 없습니다."}
+                </Text>
+              </DetailWrapper>
+
+              {userDetail.type === 2 && (
+                // 조합장
+                <>
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      이사장명
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.repreName}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      지역
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.combiArea}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      법인 조합원수
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.corporationCnt}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      개인 조합원수
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.personalCnt}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      홈페이지
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.combiHomepage}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      설립날짜
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.viewEstimateDate}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      조합원수 1
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.importantBusiness1}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      조합원수 2
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.importantBusiness2}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      조합원수 3
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.importantBusiness3}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      주요사업 자본금
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.viewBusinessCapital}
+                    </Text>
+                  </DetailWrapper>
+
+                  <DetailWrapper>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      주요사업 매출액
+                    </Text>
+                    <Text
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                    >
+                      {userDetail.viewBusinessPrice}
+                    </Text>
+                  </DetailWrapper>
+                </>
+              )}
+
+              <Wrapper dr={`row`}>
+                <Text
+                  width={`110px`}
+                  bgColor={Theme.subTheme2_C}
+                  textAlign="center"
+                  padding={`10px`}
+                >
+                  {userDetail && userDetail.type === 1
+                    ? "관심분야"
+                    : "사업분야"}
+                </Text>
+
+                <Wrapper
+                  width={`calc(100% - 110px)`}
+                  padding={`10px`}
+                  margin={`10px 0`}
+                  borderTop={`1px solid ${Theme.subTheme2_C}`}
+                  borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                  dr={`row`}
+                  ju={`flex-start`}
+                >
+                  {sectorList &&
+                    (sectorList.length === 0 ? (
+                      <Text>
+                        {userDetail.type === 1 ? "관심분야" : "사업분야"}가
+                        없습니다.
+                      </Text>
+                    ) : (
+                      sectorList.map((data, idx) => {
+                        return (
+                          <Text>
+                            {data.value}
+                            {sectorList.length !== idx + 1 && ", "}
+                          </Text>
+                        );
+                      })
+                    ))}
+                </Wrapper>
+              </Wrapper>
+
+              {userDetail && userDetail.type === 2 && (
+                <>
+                  <Wrapper dr={`row`}>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      조합유형
+                    </Text>
+
+                    <Wrapper
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      margin={`10px 0`}
+                      borderTop={`1px solid ${Theme.subTheme2_C}`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                      dr={`row`}
+                      ju={`flex-start`}
+                    >
+                      {combiTypeList &&
+                        (combiTypeList.length === 0 ? (
+                          <Text>조합유형이 없습니다.</Text>
+                        ) : (
+                          combiTypeList.map((data, idx) => {
+                            return (
+                              <Text>
+                                {data.value}
+                                {combiTypeList.length !== idx + 1 && ", "}
+                              </Text>
+                            );
+                          })
+                        ))}
+                    </Wrapper>
+                  </Wrapper>
+
+                  <Wrapper dr={`row`}>
+                    <Text
+                      width={`110px`}
+                      bgColor={Theme.subTheme2_C}
+                      textAlign="center"
+                      padding={`10px`}
+                    >
+                      사업유형
+                    </Text>
+
+                    <Wrapper
+                      width={`calc(100% - 110px)`}
+                      padding={`10px`}
+                      margin={`10px 0`}
+                      borderTop={`1px solid ${Theme.subTheme2_C}`}
+                      borderBottom={`1px solid ${Theme.subTheme2_C}`}
+                      dr={`row`}
+                      ju={`flex-start`}
+                    >
+                      {businessTypeList &&
+                        (businessTypeList.length === 0 ? (
+                          <Text>사업유형이 없습니다.</Text>
+                        ) : (
+                          businessTypeList.map((data, idx) => {
+                            return (
+                              <Text>
+                                {data.value}
+                                {businessTypeList.length !== idx + 1 && ", "}
+                              </Text>
+                            );
+                          })
+                        ))}
+                    </Wrapper>
+                  </Wrapper>
+                </>
+              )}
+            </Wrapper>
+          </Wrapper>
+        )}
+      </Modal>
     </AdminLayout>
   );
 };
