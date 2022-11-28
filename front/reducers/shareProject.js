@@ -2,47 +2,60 @@ import produce from "../util/produce";
 
 export const initailState = {
   shareProjects: [],
+
+  previewImagePath1: null,
+  previewImagePath2: null,
+
   //
   st_shareProjectLoading: false,
   st_shareProjectDone: false,
   st_shareProjectError: null,
-  //   //
-  //   st_techImageUpdateLoading: false, // 기술융합협동조합 이미지 수정하기
-  //   st_techImageUpdateDone: false,
-  //   st_techImageUpdateError: null,
-  //   //
-  //   st_corImageUpdateLoading: false, // 회원법인조합 이미지 수정하기
-  //   st_corImageUpdateDone: false,
-  //   st_corImageUpdateError: null,
-  //   //
-  //   st_techUpdateLoading: false, // 기술융합협동조합 수정하기
-  //   st_techUpdateDone: false,
-  //   st_techUpdateError: null,
-  //   //
-  //   st_corUpdateLoading: false, // 회원법인조합 수정하기
-  //   st_corUpdateDone: false,
-  //   st_corUpdateError: null,
+  //
+  st_techImageUpdateLoading: false, // 기술융합협동조합 이미지 수정하기
+  st_techImageUpdateDone: false,
+  st_techImageUpdateError: null,
+  //
+  st_corImageUpdateLoading: false, // 회원법인조합 이미지 수정하기
+  st_corImageUpdateDone: false,
+  st_corImageUpdateError: null,
+  //
+  st_shareProjecthUpdateLoading: false, // 회원조합관리 수정
+  st_shareProjecthUpdateDone: false,
+  st_shareProjecthUpdateError: null,
+
+  //
+  st_shareProjecthImage1Loading: false, // 이미지 업로드1
+  st_shareProjecthImage1Done: false,
+  st_shareProjecthImage1Error: null,
+  //
+  st_shareProjecthImage2Loading: false, // 이미지 업로드2
+  st_shareProjecthImage2Done: false,
+  st_shareProjecthImage2Error: null,
 };
 
 export const SHARE_PROJECT_REQUEST = "SHARE_PROJECT_REQUEST";
 export const SHARE_PROJECT_SUCCESS = "SHARE_PROJECT_SUCCESS";
 export const SHARE_PROJECT_FAILURE = "SHARE_PROJECT_FAILURE";
 
-// export const TECH_IMAGE_UPDATE_REQUEST = "TECH_IMAGE_UPDATE_REQUEST";
-// export const TECH_IMAGE_UPDATE_SUCCESS = "TECH_IMAGE_UPDATE_SUCCESS";
-// export const TECH_IMAGE_UPDATE_FAILURE = "TECH_IMAGE_UPDATE_FAILURE";
+export const TECH_IMAGE_UPDATE_REQUEST = "TECH_IMAGE_UPDATE_REQUEST";
+export const TECH_IMAGE_UPDATE_SUCCESS = "TECH_IMAGE_UPDATE_SUCCESS";
+export const TECH_IMAGE_UPDATE_FAILURE = "TECH_IMAGE_UPDATE_FAILURE";
 
-// export const COR_IMAGE_UPDATE_REQUEST = "COR_IMAGE_UPDATE_REQUEST";
-// export const COR_IMAGE_UPDATE_SUCCESS = "COR_IMAGE_UPDATE_SUCCESS";
-// export const COR_IMAGE_UPDATE_FAILURE = "COR_IMAGE_UPDATE_FAILURE";
+export const COR_IMAGE_UPDATE_REQUEST = "COR_IMAGE_UPDATE_REQUEST";
+export const COR_IMAGE_UPDATE_SUCCESS = "COR_IMAGE_UPDATE_SUCCESS";
+export const COR_IMAGE_UPDATE_FAILURE = "COR_IMAGE_UPDATE_FAILURE";
 
-// export const TECH_UPDATE_REQUEST = "TECH_UPDATE_REQUEST";
-// export const TECH_UPDATE_SUCCESS = "TECH_UPDATE_SUCCESS";
-// export const TECH_UPDATE_FAILURE = "TECH_UPDATE_FAILURE";
+export const SHAREPROJECT_UPDATE_REQUEST = "SHAREPROJECT_UPDATE_REQUEST";
+export const SHAREPROJECT_UPDATE_SUCCESS = "SHAREPROJECT_UPDATE_SUCCESS";
+export const SHAREPROJECT_UPDATE_FAILURE = "SHAREPROJECT_UPDATE_FAILURE";
 
-// export const COR_UPDATE_REQUEST = "COR_UPDATE_REQUEST";
-// export const COR_UPDATE_SUCCESS = "COR_UPDATE_SUCCESS";
-// export const COR_UPDATE_FAILURE = "COR_UPDATE_FAILURE";
+export const SHAREPROJECT_IMAGE1_REQUEST = "SHAREPROJECT_IMAGE1_REQUEST";
+export const SHAREPROJECT_IMAGE1_SUCCESS = "SHAREPROJECT_IMAGE1_SUCCESS";
+export const SHAREPROJECT_IMAGE1_FAILURE = "SHAREPROJECT_IMAGE1_FAILURE";
+
+export const SHAREPROJECT_IMAGE2_REQUEST = "SHAREPROJECT_IMAGE2_REQUEST";
+export const SHAREPROJECT_IMAGE2_SUCCESS = "SHAREPROJECT_IMAGE2_SUCCESS";
+export const SHAREPROJECT_IMAGE2_FAILURE = "SHAREPROJECT_IMAGE2_FAILURE";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -68,64 +81,106 @@ const reducer = (state = initailState, action) =>
       }
 
       //////////////////////////////////////////////////////
-      //   case TECH_IMAGE_UPDATE_REQUEST: {
-      //     draft.st_techImageUpdateLoading = true;
-      //     draft.st_techImageUpdateDone = false;
-      //     draft.st_techImageUpdateError = null;
-      //     break;
-      //   }
-      //   case TECH_IMAGE_UPDATE_SUCCESS: {
-      //     draft.st_techImageUpdateLoading = false;
-      //     draft.st_techImageUpdateDone = true;
-      //     draft.st_techImageUpdateError = null;
-      //     break;
-      //   }
-      //   case TECH_IMAGE_UPDATE_FAILURE: {
-      //     draft.st_techImageUpdateLoading = false;
-      //     draft.st_techImageUpdateDone = false;
-      //     draft.st_techImageUpdateError = action.data;
-      //     break;
-      //   }
+      case TECH_IMAGE_UPDATE_REQUEST: {
+        draft.st_techImageUpdateLoading = true;
+        draft.st_techImageUpdateDone = false;
+        draft.st_techImageUpdateError = null;
+        break;
+      }
+      case TECH_IMAGE_UPDATE_SUCCESS: {
+        draft.st_techImageUpdateLoading = false;
+        draft.st_techImageUpdateDone = true;
+        draft.st_techImageUpdateError = null;
+        break;
+      }
+      case TECH_IMAGE_UPDATE_FAILURE: {
+        draft.st_techImageUpdateLoading = false;
+        draft.st_techImageUpdateDone = false;
+        draft.st_techImageUpdateError = action.data;
+        break;
+      }
 
-      //   //////////////////////////////////////////////////////
-      //   case COR_IMAGE_UPDATE_REQUEST: {
-      //     draft.st_corImageUpdateLoading = true;
-      //     draft.st_corImageUpdateDone = false;
-      //     draft.st_corImageUpdateError = null;
-      //     break;
-      //   }
-      //   case COR_IMAGE_UPDATE_SUCCESS: {
-      //     draft.st_corImageUpdateLoading = false;
-      //     draft.st_corImageUpdateDone = true;
-      //     draft.st_corImageUpdateError = null;
-      //     break;
-      //   }
-      //   case COR_IMAGE_UPDATE_FAILURE: {
-      //     draft.st_corImageUpdateLoading = false;
-      //     draft.st_corImageUpdateDone = false;
-      //     draft.st_corImageUpdateError = action.data;
-      //     break;
-      //   }
+      //////////////////////////////////////////////////////
+      case COR_IMAGE_UPDATE_REQUEST: {
+        draft.st_corImageUpdateLoading = true;
+        draft.st_corImageUpdateDone = false;
+        draft.st_corImageUpdateError = null;
+        break;
+      }
+      case COR_IMAGE_UPDATE_SUCCESS: {
+        draft.st_corImageUpdateLoading = false;
+        draft.st_corImageUpdateDone = true;
+        draft.st_corImageUpdateError = null;
+        break;
+      }
+      case COR_IMAGE_UPDATE_FAILURE: {
+        draft.st_corImageUpdateLoading = false;
+        draft.st_corImageUpdateDone = false;
+        draft.st_corImageUpdateError = action.data;
+        break;
+      }
 
-      //   //////////////////////////////////////////////////////
-      //   case TECH_UPDATE_REQUEST: {
-      //     draft.st_techUpdateLoading = true;
-      //     draft.st_techUpdateDone = false;
-      //     draft.st_techUpdateError = null;
-      //     break;
-      //   }
-      //   case TECH_UPDATE_SUCCESS: {
-      //     draft.st_techUpdateLoading = false;
-      //     draft.st_techUpdateDone = true;
-      //     draft.st_techUpdateError = null;
-      //     break;
-      //   }
-      //   case TECH_UPDATE_FAILURE: {
-      //     draft.st_techUpdateLoading = false;
-      //     draft.st_techUpdateDone = false;
-      //     draft.st_techUpdateError = action.data;
-      //     break;
-      //   }
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_UPDATE_REQUEST: {
+        draft.st_shareProjecthUpdateLoading = true;
+        draft.st_shareProjecthUpdateDone = false;
+        draft.st_shareProjecthUpdateError = null;
+        break;
+      }
+      case SHAREPROJECT_UPDATE_SUCCESS: {
+        draft.st_shareProjecthUpdateLoading = false;
+        draft.st_shareProjecthUpdateDone = true;
+        draft.st_shareProjecthUpdateError = null;
+        break;
+      }
+      case SHAREPROJECT_UPDATE_FAILURE: {
+        draft.st_shareProjecthUpdateLoading = false;
+        draft.st_shareProjecthUpdateDone = false;
+        draft.st_shareProjecthUpdateError = action.data;
+        break;
+      }
+
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_IMAGE1_REQUEST: {
+        draft.st_shareProjecthImage1Loading = true;
+        draft.st_shareProjecthImage1Done = false;
+        draft.st_shareProjecthImage1Error = null;
+        break;
+      }
+      case SHAREPROJECT_IMAGE1_SUCCESS: {
+        draft.st_shareProjecthImage1Loading = false;
+        draft.st_shareProjecthImage1Done = true;
+        draft.st_shareProjecthImage1Error = null;
+        draft.previewImagePath1 = action.data.path;
+        break;
+      }
+      case SHAREPROJECT_IMAGE1_FAILURE: {
+        draft.st_shareProjecthImage1Loading = false;
+        draft.st_shareProjecthImage1Done = false;
+        draft.st_shareProjecthImage1Error = action.data;
+        break;
+      }
+
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_IMAGE2_REQUEST: {
+        draft.st_shareProjecthImage2Loading = true;
+        draft.st_shareProjecthImage2Done = false;
+        draft.st_shareProjecthImage2Error = null;
+        break;
+      }
+      case SHAREPROJECT_IMAGE2_SUCCESS: {
+        draft.st_shareProjecthImage2Loading = false;
+        draft.st_shareProjecthImage2Done = true;
+        draft.st_shareProjecthImage2Error = null;
+        draft.previewImagePath2 = action.data.path;
+        break;
+      }
+      case SHAREPROJECT_IMAGE2_FAILURE: {
+        draft.st_shareProjecthImage2Loading = false;
+        draft.st_shareProjecthImage2Done = false;
+        draft.st_shareProjecthImage2Error = action.data;
+        break;
+      }
 
       //   //////////////////////////////////////////////////////
       //   case COR_UPDATE_REQUEST: {

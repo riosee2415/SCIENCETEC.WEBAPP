@@ -52,6 +52,11 @@ import {
   ADMINUSER_EXITFALSE_REQUEST,
   ADMINUSER_EXITFALSE_SUCCESS,
   ADMINUSER_EXITFALSE_FAILURE,
+  /////////////////////////////
+  USER_DETAIL_REQUEST,
+  USER_DETAIL_SUCCESS,
+  USER_DETAIL_FAILURE,
+  /////////////////////////////
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -400,6 +405,33 @@ function* adminUserExitFalse(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function userDetailAPI(data) {
+  return await axios.post(`/api/user/detail`, data);
+}
+
+function* userDetail(action) {
+  try {
+    const result = yield call(userDetailAPI, action.data);
+
+    yield put({
+      type: USER_DETAIL_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: USER_DETAIL_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -454,6 +486,10 @@ function* watchAdminUserExitFalse() {
   yield takeLatest(ADMINUSER_EXITFALSE_REQUEST, adminUserExitFalse);
 }
 
+function* watchUserDetail() {
+  yield takeLatest(USER_DETAIL_REQUEST, userDetail);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
@@ -470,6 +506,7 @@ export default function* userSaga() {
     fork(watchAdminUserRightHistoryList),
     fork(watchAdminUserExitTrue),
     fork(watchAdminUserExitFalse),
+    fork(watchUserDetail),
     //
   ]);
 }

@@ -13,6 +13,7 @@ import logo from "./logo";
 import faq from "./faq";
 import forum from "./forum";
 import shareProject from "./shareProject";
+import survey from "./survey";
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -33,6 +34,7 @@ const rootReducer = (state, action) => {
         logo,
         faq,
         forum,
+        survey,
         shareProject,
       });
       return combinedReducer(state, action);
