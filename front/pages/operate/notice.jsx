@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CommonButton,
   CustomSelect,
@@ -20,20 +20,69 @@ import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import { Select } from "antd";
+import { Form, Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
+import OpDetail from "../../components/OpDetail";
 import { NOTICE_LIST_REQUEST } from "../../reducers/notice";
+
+const CustomForm = styled(Form)`
+  display: flex;
+  flex-direction: row;
+
+  & .ant-form-item {
+    margin: 0;
+  }
+`;
 
 const Notice = () => {
   ////// GLOBAL STATE //////
   const { viewType, notices } = useSelector((state) => state.notice);
   ////// HOOKS //////
   const width = useWidth();
+
+  const dispatch = useDispatch();
+
+  const [searchForm] = Form.useForm();
+
+  const [searchType, setSearchType] = useState("전체");
+  const [searchTitle, setSearchTitle] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   ////// REDUX //////
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    dispatch({
+      type: NOTICE_LIST_REQUEST,
+      data: {
+        type: "공지사항",
+        title: searchTitle,
+        page: currentPage,
+      },
+    });
+  }, [searchType, searchTitle, currentPage]);
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  const searchTypeHandler = useCallback(
+    (type) => {
+      setSearchType(type);
+      setCurrentPage(1);
+    },
+    [searchType, currentPage]
+  );
+
+  const searchTitleFinish = useCallback(
+    (data) => {
+      if (searchType === "전체") {
+        return;
+      }
+      setSearchTitle(data.searchTitle);
+      setCurrentPage(1);
+    },
+    [searchTitle, currentPage]
+  );
+
   ////// DATAVIEW //////
 
   return (
@@ -68,31 +117,42 @@ const Notice = () => {
                   </Wrapper>
                   <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 20px`}>
                     <CustomSelect width={`90px`}>
-                      <Select placeholder="전체">
-                        <Select.Option>전체</Select.Option>
-                        <Select.Option></Select.Option>
+                      <Select
+                        placeholder="전체"
+                        value={searchType}
+                        onChange={searchTypeHandler}
+                      >
+                        <Select.Option value="전체">전체</Select.Option>
+                        <Select.Option value="제목">제목</Select.Option>
+                        <Select.Option value="내용">내용</Select.Option>
                       </Select>
                     </CustomSelect>
-                    <TextInput
-                      type="text"
-                      placeholder="검색어를 입력해주세요."
-                      width={width < 900 ? `150px` : `230px`}
-                      height={`40px`}
-                      margin={`0 10px`}
-                    />
-                    <CommonButton
-                      width={`90px`}
-                      height={`40px`}
-                      fontSize={`16px`}
-                    >
-                      검색하기
-                    </CommonButton>
+                    <CustomForm form={searchForm} onFinish={searchTitleFinish}>
+                      <Form.Item name="searchTitle">
+                        <TextInput
+                          type="text"
+                          placeholder="검색어를 입력해주세요."
+                          width={width < 900 ? `150px` : `230px`}
+                          height={`40px`}
+                          margin={`0 10px`}
+                          readOnly={searchType === "전체"}
+                        />
+                      </Form.Item>
+                      <CommonButton
+                        width={`90px`}
+                        height={`40px`}
+                        fontSize={`16px`}
+                        htmlType="submit"
+                      >
+                        검색하기
+                      </CommonButton>
+                    </CustomForm>
                   </Wrapper>
                   <OpBoard data={notices.notices} boardType="공지사항" />
                 </>
               )}
               {/* {viewType === "write" && <OpWrite />} */}
-              {viewType === "detail" && null}
+              {viewType === "detail" && <OpDetail />}
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
