@@ -1181,6 +1181,14 @@ router.get(
   }
 );
 
+router.get("/logout", function (req, res) {
+  req.logout();
+  req.session.save(() => {
+    res.clearCookie("connect.sid");
+    res.redirect("/");
+  });
+});
+
 router.post("/exit", isLoggedIn, async (req, res, next) => {
   const { id, exitReason } = req.body;
 
