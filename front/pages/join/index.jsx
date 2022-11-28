@@ -26,7 +26,6 @@ import { useCallback } from "react";
 import DaumPostCode from "react-daum-postcode";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
 
@@ -383,17 +382,7 @@ const Index = () => {
 
               {currentTab === 0 ? (
                 <>
-                  {/* <GoogleOAuthProvider clientId="955366742386-pn71tpn5luibm9c0f6g59esbv7cpmsgs.apps.googleusercontent.com">
-                    <GoogleLogin
-                      onSuccess={(credentialResponse) => {
-                        콘솔.로그(credentialResponse);
-                      }}
-                      onError={() => {
-                        콘솔.log("로그인 실패");
-                      }}
-                    ></GoogleLogin>
-                  </GoogleOAuthProvider> */}
-                  <CommonButton
+                  {/* <CommonButton
                     width={`100%`}
                     height={`70px`}
                     kindOf={`grey`}
@@ -409,7 +398,7 @@ const Index = () => {
                       </Circle>
                       구글로 시작하기
                     </Wrapper>
-                  </CommonButton>
+                  </CommonButton> */}
                   <KakaoLogin
                     jsKey={process.env.KAKAO_LOGIN_KEY}
                     onSuccess={(data) => {
