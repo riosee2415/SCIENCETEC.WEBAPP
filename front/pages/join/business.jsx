@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
-import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
+import { LOAD_MY_INFO_REQUEST, SIGNUP_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,9 +19,11 @@ import {
 } from "../../components/commonComponents";
 import styled from "styled-components";
 import Theme from "../../components/Theme";
-import { Checkbox } from "antd";
+import { Checkbox, DatePicker, message, Modal } from "antd";
 import { useRouter } from "next/router";
 import useInput from "../../hooks/useInput";
+import DaumPostcode from "react-daum-postcode";
+import { useEffect } from "react";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -41,38 +43,37 @@ const Btn = styled(Wrapper)`
   }
 `;
 
-const Circle = styled(Wrapper)`
-  width: 44px;
-  height: 44px;
-  border-radius: 100%;
-  background: ${Theme.lightGrey_C};
-  position: absolute;
-  left: 20px;
-
-  & img {
-    width: 24px;
-  }
-`;
-
 const Index = () => {
   ////// GLOBAL STATE //////
+  const { st_signUpDone, st_signUpError } = useSelector((state) => state.user);
   ////// HOOKS //////
   const width = useWidth();
 
   // 회원가입
-  const idInput = useInput(``);
-  const pwInput = useInput(``);
-  const pwCheckInput = useInput(``);
-  const combiNameInput = useInput(``);
-  const postCodeInput = useInput(``);
-  const addressInput = useInput(``);
-  const detailAddressInput = useInput(``);
-  const mobileInput = useInput(``);
-  const emailInput = useInput(``);
+  const idInput = useInput(``); // 아이디
+  const pwInput = useInput(``); // 비밀번호
+  const pwCheckInput = useInput(``); // 비밀번호 체크
+  const combiNameInput = useInput(``); // 조합명
+  const postCodeInput = useInput(``); // 우편번호
+  const addressInput = useInput(``); // 주소
+  const detailAddressInput = useInput(``); // 상세주소
+  const mobileInput = useInput(``); // 전화번호
+  const emailInput = useInput(``); // 이메일
   const [typeArr, setTypeArr] = useState([]); // 사업분야
   const [combiTypeArr, setCombiTypeArr] = useState([]); // 조합사업유형
   const [combiArr, setCombiArr] = useState([]); // 조합유형
-  const [isCheck, setIsCheck] = useState(false);
+  const [isCheck, setIsCheck] = useState(false); // 개인정보
+  const combiHomepageInput = useInput(``); // 조합 홈페이지
+  const [combiEstimateDate, setCombiEstimateDate] = useState(null); // 설립년도
+  const combiAreaInput = useInput(``); // 지역
+  const corporationCntInput = useInput(``); // 법인조합원수
+  const personalCntInput = useInput(``); // 개인조홥원수
+  const repreNameInput = useInput(``); // 이사장명
+  const importantBusinessCapitalInput = useInput(``); // 자본금
+  const importantBusinessPriceInput = useInput(``); // 매출액
+  const importantBusiness1Input = useInput(``); // 주요사업1
+  const importantBusiness2Input = useInput(``); // 주요사업2
+  const importantBusiness3Input = useInput(``); // 주요사업3
 
   // modal
   const [pModal, setPModal] = useState(false);
@@ -80,8 +81,207 @@ const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    if (st_signUpError) {
+      return message.error(st_signUpError);
+    }
+  }, [st_signUpError]);
+
+  useEffect(() => {
+    if (st_signUpDone) {
+      router.push(`/login`);
+
+      return message.success("회원가입이 되었습니다.");
+    }
+  }, [st_signUpDone]);
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  // 조합회원 create
+  const createHandler = useCallback(() => {
+    if (!idInput.value) {
+      return message.error("아이디를 입력해주세요.");
+    }
+
+    if (!pwInput.value) {
+      return message.error("비밀번호를 입력해주세요.");
+    }
+
+    if (!pwCheckInput.value) {
+      return message.error("비밀번호를 재입력해주세요.");
+    }
+
+    if (pwInput.value !== pwCheckInput.value) {
+      return message.error("비밀번호가 일치하지 않습니다.");
+    }
+
+    if (!combiHomepageInput.value) {
+      return message.error("조합 홈페이지를 입력해주세요.");
+    }
+
+    if (!combiEstimateDate) {
+      return message.error("설립년도를 선택해주세요.");
+    }
+
+    if (!combiAreaInput.value) {
+      return message.error("조합 활동지역을 검색해주세요.");
+    }
+
+    if (!corporationCntInput.value) {
+      return message.error("법인조합원수를 입력해주세요.");
+    }
+
+    if (!personalCntInput.value) {
+      return message.error("개인조합원수를 입력해주세요.");
+    }
+
+    if (!repreNameInput.value) {
+      return message.error("이사장명을 입력해주세요.");
+    }
+
+    if (!addressInput.value) {
+      return message.error("주소를 검색해주세요.");
+    }
+
+    if (!detailAddressInput.value) {
+      return message.error("상세주소를 입력해주세요.");
+    }
+
+    if (!mobileInput.value) {
+      return message.error("전화번호를 입력해주세요.");
+    }
+
+    if (!emailInput.value) {
+      return message.error("이메일을 입력해주세요.");
+    }
+
+    if (combiTypeArr.length === 0) {
+      return message.error("조합유형은 필수 선택사항입니다.");
+    }
+
+    if (combiArr.length === 0) {
+      return message.error("조합사업유형은 필수 선택사항입니다.");
+    }
+
+    if (typeArr.length === 0) {
+      return message.error("사업분야는 필수 선택사항입니다.");
+    }
+
+    if (!importantBusiness1Input.value) {
+      return message.error("주요사항을 입력해주세요.");
+    }
+
+    if (!importantBusinessCapitalInput.value) {
+      return message.error("자본금을 입력해주세요.");
+    }
+
+    if (!importantBusinessPriceInput.value) {
+      return message.error("매출액을 입력해주세요.");
+    }
+
+    if (!isCheck) {
+      return message.error("개인정보처리방침에 동의해주세요.");
+    }
+
+    // 조합회원
+    dispatch({
+      type: SIGNUP_REQUEST,
+      data: {
+        type: 2,
+        userId: idInput.value,
+        password: pwCheckInput.value,
+        combiName: combiNameInput.value,
+        combiHomepage: combiHomepageInput.value,
+        combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
+        combiArea: combiAreaInput.value,
+        corporationCnt: corporationCntInput.value,
+        personalCnt: personalCntInput.value,
+        repreName: repreNameInput.value,
+        postCode: postCodeInput.value,
+        address: addressInput.value,
+        detailAddress: detailAddressInput.value,
+        mobile: mobileInput.value,
+        email: emailInput.value,
+        importantBusiness1: importantBusiness1Input.value,
+        importantBusiness2: importantBusiness2Input.value,
+        importantBusiness3: importantBusiness3Input.value,
+        importantBusinessCapital: importantBusinessCapitalInput.value,
+        importantBusinessPrice: importantBusinessPriceInput.value,
+        terms: isCheck,
+        isKakao: false,
+        isPremium: false,
+        businessType: combiTypeArr,
+        combiType: combiArr,
+        sector: typeArr,
+      },
+    });
+  }, [
+    idInput,
+    pwCheckInput,
+    combiNameInput,
+    combiHomepageInput,
+    combiEstimateDate,
+    combiAreaInput,
+    corporationCntInput,
+    personalCntInput,
+    repreNameInput,
+    postCodeInput,
+    addressInput,
+    detailAddressInput,
+    mobileInput,
+    emailInput,
+    importantBusiness1Input,
+    importantBusiness2Input,
+    importantBusiness3Input,
+    importantBusinessCapitalInput,
+    importantBusinessPriceInput,
+    isCheck,
+    combiTypeArr,
+    combiArr,
+    typeArr,
+  ]);
+
+  // 설립년도
+  const combiEstimateDateHandler = useCallback((data) => {
+    setCombiEstimateDate(data);
+  }, []);
+
+  // 조합유형
+  const combiArrHandler = useCallback(
+    (e) => {
+      let arr = combiArr ? combiArr.map((data) => data) : [];
+      const currentId = combiArr.findIndex((value) => value === e.target.value);
+
+      if (currentId === -1) {
+        arr.push(e.target.value);
+      } else {
+        arr.splice(currentId, 1);
+      }
+
+      setCombiArr(arr);
+    },
+    [combiArr]
+  );
+
+  // 조합사업
+  const combiTypeHandler = useCallback(
+    (e) => {
+      let arr = combiTypeArr ? combiTypeArr.map((data) => data) : [];
+      const currentId = combiTypeArr.findIndex(
+        (value) => value === e.target.value
+      );
+
+      if (currentId === -1) {
+        arr.push(e.target.value);
+      } else {
+        arr.splice(currentId, 1);
+      }
+
+      setCombiTypeArr(arr);
+    },
+    [combiTypeArr]
+  );
 
   // 사업분야
   const checkArrHandler = useCallback(
@@ -161,7 +361,9 @@ const Index = () => {
                 회원가입
               </Text>
               <Wrapper dr={`row`} margin={`26px 0 35px`}>
-                <Btn margin={`0 6px 0 0`}>개인회원</Btn>
+                <Btn margin={`0 6px 0 0`} onClick={() => router.push(`/join`)}>
+                  개인회원
+                </Btn>
                 <Btn isActive>조합회원</Btn>
               </Wrapper>
 
@@ -179,6 +381,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="아이디를 입력해주세요."
                   radius={`5px`}
+                  {...idInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -196,6 +399,7 @@ const Index = () => {
                   placeholder="비밀번호를 입력해주세요."
                   radius={`5px`}
                   margin={`0 0 8px`}
+                  {...pwInput}
                 />
                 <TextInput
                   type="password"
@@ -203,6 +407,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="비밀번호를 재입력해주세요."
                   radius={`5px`}
+                  {...pwCheckInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -219,6 +424,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="조합명을 입력해주세요."
                   radius={`5px`}
+                  {...combiNameInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -235,6 +441,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="조합 홈페이지 주소를 입력해주세요."
                   radius={`5px`}
+                  {...combiHomepageInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -245,12 +452,12 @@ const Index = () => {
                 >
                   설립년도
                 </Text>
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="조합 설립년도를 입력해주세요."
-                  radius={`5px`}
+
+                <DatePicker
+                  style={{ width: `100%`, height: `55px`, borderRadius: `5px` }}
+                  placeholder="조합 설립년도를 선택해주세요."
+                  onChange={combiEstimateDateHandler}
+                  value={combiEstimateDate}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -267,6 +474,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="조합 활동 지역을 입력해주세요."
                   radius={`5px`}
+                  {...combiAreaInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -279,17 +487,15 @@ const Index = () => {
                 </Text>
                 <Wrapper dr={`row`} ju={`space-between`}>
                   <TextInput
-                    type="text"
                     width={`96%`}
                     height={`55px`}
                     placeholder="법인조합원수를 입력해주세요."
                     radius={`5px`}
+                    type="number"
+                    {...corporationCntInput}
                   />
                   인
                 </Wrapper>
-                <Text fontWeight={`bold`} color={Theme.basicTheme_C} isHover>
-                  + 추가
-                </Text>
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
                 <Text
@@ -301,11 +507,12 @@ const Index = () => {
                 </Text>
                 <Wrapper dr={`row`} ju={`space-between`}>
                   <TextInput
-                    type="text"
                     width={`96%`}
                     height={`55px`}
                     placeholder="개인조합원수를 입력해주세요."
                     radius={`5px`}
+                    type="number"
+                    {...personalCntInput}
                   />
                   인
                 </Wrapper>
@@ -324,6 +531,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="이사장명을 입력해주세요."
                   radius={`5px`}
+                  {...repreNameInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -342,12 +550,14 @@ const Index = () => {
                     height={`55px`}
                     placeholder="우편주소를 입력해주세요."
                     radius={`5px`}
+                    {...postCodeInput}
                   />
                   <CommonButton
                     width={`146px`}
                     height={`55px`}
                     kindOf={`subTheme`}
                     radius={`5px`}
+                    onClick={() => setPModal(!pModal)}
                   >
                     우편주소 검색
                   </CommonButton>
@@ -360,6 +570,7 @@ const Index = () => {
                   placeholder="주소를 입력해주세요."
                   radius={`5px`}
                   margin={`8px 0`}
+                  {...addressInput}
                 />
                 <TextInput
                   type="text"
@@ -367,6 +578,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="상세주소를 입력해주세요."
                   radius={`5px`}
+                  {...detailAddressInput}
                 />
               </Wrapper>
 
@@ -384,6 +596,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="전화번호를 입력해주세요."
                   radius={`5px`}
+                  {...mobileInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -400,6 +613,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="이메일을 입력해주세요."
                   radius={`5px`}
+                  {...emailInput}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -416,8 +630,8 @@ const Index = () => {
                     return (
                       <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
                         <Checkbox
-                          onChange={checkArrHandler}
-                          checked={typeArr.find((value) => value === data)}
+                          onChange={combiArrHandler}
+                          checked={combiArr.find((value) => value === data)}
                           value={data}
                         >
                           {data}
@@ -441,8 +655,8 @@ const Index = () => {
                     return (
                       <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
                         <Checkbox
-                          onChange={checkArrHandler}
-                          checked={typeArr.find((value) => value === data)}
+                          onChange={combiTypeHandler}
+                          checked={combiTypeArr.find((value) => value === data)}
                           value={data}
                         >
                           {data}
@@ -493,6 +707,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="1. 주요사업을 입력해주세요."
                   radius={`5px`}
+                  {...importantBusiness1Input}
                 />
                 <TextInput
                   type="text"
@@ -501,6 +716,7 @@ const Index = () => {
                   placeholder="2. 주요사업을 입력해주세요."
                   radius={`5px`}
                   margin={`8px 0`}
+                  {...importantBusiness2Input}
                 />
                 <TextInput
                   type="text"
@@ -508,6 +724,7 @@ const Index = () => {
                   height={`55px`}
                   placeholder="3. 주요사업을 입력해주세요."
                   radius={`5px`}
+                  {...importantBusiness3Input}
                 />
               </Wrapper>
               <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -520,11 +737,12 @@ const Index = () => {
                 </Text>
 
                 <TextInput
-                  type="text"
+                  type="number"
                   width={`100%`}
                   height={`55px`}
                   placeholder="자본금을 입력해주세요."
                   radius={`5px`}
+                  {...importantBusinessCapitalInput}
                 />
               </Wrapper>
 
@@ -538,16 +756,22 @@ const Index = () => {
                 </Text>
 
                 <TextInput
-                  type="text"
+                  type="number"
                   width={`100%`}
                   height={`55px`}
                   placeholder="매출액을 입력해주세요."
                   radius={`5px`}
+                  {...importantBusinessPriceInput}
                 />
               </Wrapper>
 
               <Wrapper margin={`30px 0 14px`} al={`flex-start`}>
-                <Checkbox>(필수)개인정보처리방침에 동의합니다.</Checkbox>
+                <Checkbox
+                  onChange={() => setIsCheck(!isCheck)}
+                  checked={isCheck}
+                >
+                  (필수)개인정보처리방침에 동의합니다.
+                </Checkbox>
               </Wrapper>
               <CommonButton
                 width={`100%`}
@@ -556,12 +780,28 @@ const Index = () => {
                 radius={`5px`}
                 fontSize={`18px`}
                 fontWeight={`bold`}
+                onClick={createHandler}
               >
                 회원가입
               </CommonButton>
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
+
+        <Modal
+          visible={pModal}
+          onCancel={() => setPModal(!pModal)}
+          title="주소 검색"
+          footer={null}
+        >
+          <DaumPostcode
+            onComplete={completeHandler}
+            width={`100%`}
+            height={`450px`}
+            autoClose={false}
+            animation
+          />
+        </Modal>
       </ClientLayout>
     </>
   );

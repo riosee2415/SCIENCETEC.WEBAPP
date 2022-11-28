@@ -75,6 +75,27 @@ const Fourleaf = ({ Component }) => {
           href="https://fonts.cdnfonts.com/css/nanumsquare-neo"
           rel="stylesheet"
         />
+
+        {/* 구글 로그인 */}
+        <meta
+          name="google-signin-client_id"
+          content="955366742386-pn71tpn5luibm9c0f6g59esbv7cpmsgs.apps.googleusercontent.com"
+        ></meta>
+
+        <script
+          src="https://apis.google.com/js/platform.js?onload=init"
+          async
+          defer
+        ></script>
+
+        {/* 카카오 */}
+        <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `Kakao.init('1681af47f9121c2e20b64480bbc3e631');`,
+          }}
+        />
       </Head>
       <Component />
     </ThemeProvider>

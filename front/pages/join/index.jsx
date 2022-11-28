@@ -26,6 +26,9 @@ import { useCallback } from "react";
 import DaumPostCode from "react-daum-postcode";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import KakaoLogin from "react-kakao-login";
+import naver from "naver-id-login";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -60,7 +63,7 @@ const Circle = styled(Wrapper)`
 
 const Index = () => {
   ////// GLOBAL STATE //////
-  const { st_signUpDone } = useSelector((state) => state.user);
+  const { st_signUpDone, st_signUpError } = useSelector((state) => state.user);
   ////// HOOKS //////
 
   // 회원가입
@@ -76,6 +79,9 @@ const Index = () => {
   const [typeArr, setTypeArr] = useState([]);
   const [isCheck, setIsCheck] = useState(false);
 
+  // SNS 회원가입 정보
+  const [snsData, setSnsData] = useState(null);
+
   // current
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -89,14 +95,111 @@ const Index = () => {
   ////// USEEFFECT //////
 
   useEffect(() => {
+    if (snsData) {
+      setCurrentTab(1);
+
+      idInput.setValue(snsData.email);
+      emailInput.setValue(snsData.email);
+
+      mobileInput.setValue(snsData.mobile_e164 ? snsData.mobile_e164 : ``);
+      return;
+    }
+  }, [snsData]);
+
+  useEffect(() => {
+    if (st_signUpError) {
+      return message.error(st_signUpError);
+    }
+  }, [st_signUpError]);
+
+  useEffect(() => {
     if (st_signUpDone) {
       router.push(`/login`);
+      setSnsData(null);
 
       return message.success("회원가입이 되었습니다.");
     }
   }, [st_signUpDone]);
+
+  useEffect(() => {
+    const query = router.query;
+    console.log(query);
+
+    if (query.naver) {
+      naver.handleTokenResponse();
+    }
+  }, [router.query]);
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  // 네이버
+  const naverLoginHandler = useCallback(async () => {
+    const clientId = "kuOuSirjF7Z6X0ioR48B";
+    const callbackUrl = "http://localhost:3000/join?naver=true";
+    const auth = await naver.login(clientId, callbackUrl);
+    const accessToken = auth.access_token;
+
+    const profile = await naver.getProfile(accessToken);
+    const userId = "Naver_" + profile.response.id;
+
+    setSnsData(profile.response);
+  }, []);
+
+  // 구글
+  //처음 실행하는 함수
+  const initHandler = useCallback(() => {
+    function init() {
+      gapi.load("auth2", function () {
+        gapi.auth2.init();
+        const options = new gapi.auth2.SigninOptionsBuilder();
+        options.setPrompt("select_account");
+        // 추가는 Oauth 승인 권한 추가 후 띄어쓰기 기준으로 추가
+        options.setScope(
+          "email profile openid https://www.googleapis.com/auth/user.birthday.read"
+        );
+        // 인스턴스의 함수 호출 - element에 로그인 기능 추가
+        // GgCustomLogin은 li태그안에 있는 ID, 위에 설정한 options와 아래 성공,실패시 실행하는 함수들
+        gapi.auth2
+          .getAuthInstance()
+          .attachClickHandler(
+            "GgCustomLogin",
+            options,
+            onSignIn,
+            onSignInFailure
+          );
+      });
+    }
+
+    init();
+
+    function onSignIn(googleUser) {
+      var access_token = googleUser.getAuthResponse().access_token;
+      $.ajax({
+        // people api를 이용하여 프로필 및 생년월일에 대한 선택동의후 가져온다.
+        url: "https://people.googleapis.com/v1/people/me",
+        // key에 자신의 API 키를 넣습니다.
+        data: {
+          personFields: "birthdays",
+          key: "AIzaSyDTDcWAv6tbhQEM8QWVbaWIQDOOabiCOBA",
+          access_token: access_token,
+        },
+        method: "GET",
+      })
+        .done(function (e) {
+          //프로필을 가져온다.
+          var profile = googleUser.getBasicProfile();
+          console.log(profile);
+          console.log(e);
+        })
+        .fail(function (e) {
+          console.log(e);
+        });
+    }
+
+    function onSignInFailure(t) {
+      console.log(t);
+    }
+  }, []);
 
   // 주소검색
   const completeHandler = useCallback((data) => {
@@ -151,28 +254,54 @@ const Index = () => {
       return message.error("개인정보처리방침에 동의해주세요.");
     }
 
-    // 개인회원
-    dispatch({
-      type: SIGNUP_REQUEST,
-      data: {
-        type: 1,
-        userId: idInput.value,
-        password: pwCheckInput.value,
-        combiName: combiNameInput.value,
-        postCode: postCodeInput.value,
-        address: addressInput.value,
-        detailAddress: detailAddressInput.value,
-        mobile: mobileInput.value,
-        email: emailInput.value,
-        terms: isCheck,
-        isKakao: false,
-        isPremium: false,
-        businessType: [],
-        combiType: [],
-        sector: typeArr,
-      },
-    });
+    if (snsData) {
+      // 개인회원
+      dispatch({
+        type: SIGNUP_REQUEST,
+        data: {
+          type: 1,
+          userId: idInput.value,
+          password: pwCheckInput.value,
+          combiName: combiNameInput.value,
+          postCode: postCodeInput.value,
+          address: addressInput.value,
+          detailAddress: detailAddressInput.value,
+          mobile: mobileInput.value,
+          email: emailInput.value,
+          terms: isCheck,
+          kakaoId: snsData.email,
+          isKakao: true,
+          isPremium: false,
+          businessType: [],
+          combiType: [],
+          sector: typeArr,
+        },
+      });
+    } else {
+      // 개인회원
+      dispatch({
+        type: SIGNUP_REQUEST,
+        data: {
+          type: 1,
+          userId: idInput.value,
+          password: pwCheckInput.value,
+          combiName: combiNameInput.value,
+          postCode: postCodeInput.value,
+          address: addressInput.value,
+          detailAddress: detailAddressInput.value,
+          mobile: mobileInput.value,
+          email: emailInput.value,
+          terms: isCheck,
+          isKakao: false,
+          isPremium: false,
+          businessType: [],
+          combiType: [],
+          sector: typeArr,
+        },
+      });
+    }
   }, [
+    snsData,
     idInput,
     pwInput,
     pwCheckInput,
@@ -219,6 +348,10 @@ const Index = () => {
     "기타",
   ];
 
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   return (
     <>
       <Head>
@@ -250,7 +383,23 @@ const Index = () => {
 
               {currentTab === 0 ? (
                 <>
-                  <CommonButton width={`100%`} height={`70px`} kindOf={`grey`}>
+                  {/* <GoogleOAuthProvider clientId="955366742386-pn71tpn5luibm9c0f6g59esbv7cpmsgs.apps.googleusercontent.com">
+                    <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        콘솔.로그(credentialResponse);
+                      }}
+                      onError={() => {
+                        콘솔.log("로그인 실패");
+                      }}
+                    ></GoogleLogin>
+                  </GoogleOAuthProvider> */}
+                  <CommonButton
+                    width={`100%`}
+                    height={`70px`}
+                    kindOf={`grey`}
+                    onClick={initHandler}
+                    id="GgCustomLogin"
+                  >
                     <Wrapper position={`relative`} fontSize={`18px`}>
                       <Circle>
                         <Image
@@ -261,23 +410,47 @@ const Index = () => {
                       구글로 시작하기
                     </Wrapper>
                   </CommonButton>
+                  <KakaoLogin
+                    jsKey={process.env.KAKAO_LOGIN_KEY}
+                    onSuccess={(data) => {
+                      setSnsData(data.profile.kakao_account);
+                    }}
+                    onFailure={(data) => {
+                      console.log(data);
+                    }}
+                    className="KakaoLogin"
+                    getProfile="true"
+                    render={({ onClick }) => {
+                      return (
+                        <CommonButton
+                          width={`100%`}
+                          height={`70px`}
+                          kindOf={`grey`}
+                          margin={`10px 0`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            onClick();
+                          }}
+                        >
+                          <Wrapper position={`relative`} fontSize={`18px`}>
+                            <Circle>
+                              <Image
+                                alt="kakao"
+                                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_kakao.png`}
+                              />
+                            </Circle>
+                            카카오로 시작하기
+                          </Wrapper>
+                        </CommonButton>
+                      );
+                    }}
+                  ></KakaoLogin>
                   <CommonButton
                     width={`100%`}
                     height={`70px`}
                     kindOf={`grey`}
-                    margin={`10px 0`}
+                    onClick={naverLoginHandler}
                   >
-                    <Wrapper position={`relative`} fontSize={`18px`}>
-                      <Circle>
-                        <Image
-                          alt="kakao"
-                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_kakao.png`}
-                        />
-                      </Circle>
-                      카카오로 시작하기
-                    </Wrapper>
-                  </CommonButton>
-                  <CommonButton width={`100%`} height={`70px`} kindOf={`grey`}>
                     <Wrapper position={`relative`} fontSize={`18px`}>
                       <Circle>
                         <Image
@@ -293,7 +466,7 @@ const Index = () => {
                     fontSize={`16px`}
                     margin={`40px 0 16px`}
                   >
-                    일발 회원가입
+                    일반 회원가입
                   </Text>
                   <CommonButton
                     width={`100%`}
@@ -321,6 +494,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="아이디를 입력해주세요."
                       radius={`5px`}
+                      readOnly={snsData ? true : false}
                       {...idInput}
                     />
                   </Wrapper>
