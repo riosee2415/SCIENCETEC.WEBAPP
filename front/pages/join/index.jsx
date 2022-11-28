@@ -100,6 +100,9 @@ const Index = () => {
       idInput.setValue(snsData.email);
       emailInput.setValue(snsData.email);
 
+      pwInput.setValue(snsData.email);
+      pwCheckInput.setValue(snsData.email);
+
       mobileInput.setValue(snsData.mobile_e164 ? snsData.mobile_e164 : ``);
       return;
     }
@@ -503,6 +506,7 @@ const Index = () => {
                       radius={`5px`}
                       margin={`0 0 8px`}
                       {...pwInput}
+                      readOnly={snsData}
                     />
                     <TextInput
                       type="password"
@@ -511,6 +515,7 @@ const Index = () => {
                       placeholder="비밀번호를 재입력해주세요."
                       radius={`5px`}
                       {...pwCheckInput}
+                      readOnly={snsData}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>

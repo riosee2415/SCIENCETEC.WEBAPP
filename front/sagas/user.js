@@ -5,6 +5,10 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   /////////////////////////////
+  SNS_LOGIN_REQUEST,
+  SNS_LOGIN_SUCCESS,
+  SNS_LOGIN_FAILURE,
+  /////////////////////////////
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -87,17 +91,17 @@ function* loadMyInfo(action) {
 
 // ******************************************************************************************************************
 // ******************************************************************************************************************
-// *****
+// ******************************************************************************************************************
 
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function signinPI(data) {
+async function signinAPI(data) {
   return await axios.post(`/api/user/signin`, data);
 }
 
 function* signin(action) {
   try {
-    const result = yield call(signinPI, action.data);
+    const result = yield call(signinAPI, action.data);
     yield put({
       type: LOGIN_SUCCESS,
       data: result.data,
@@ -106,6 +110,32 @@ function* signin(action) {
     console.error(err);
     yield put({
       type: LOGIN_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function snsLoginAPI(data) {
+  return await axios.post(`/api/user/snsLogin`, data);
+}
+
+function* snsLogin(action) {
+  try {
+    const result = yield call(snsLoginAPI, action.data);
+    yield put({
+      type: SNS_LOGIN_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SNS_LOGIN_FAILURE,
       error: err.response.data,
     });
   }
@@ -472,6 +502,10 @@ function* watchSignin() {
   yield takeLatest(LOGIN_REQUEST, signin);
 }
 
+function* watchSnsLogin() {
+  yield takeLatest(SNS_LOGIN_REQUEST, snsLogin);
+}
+
 function* watchLogout() {
   yield takeLatest(LOGOUT_REQUEST, logout);
 }
@@ -529,6 +563,7 @@ export default function* userSaga() {
   yield all([
     fork(watchLoadMyInfo),
     fork(watchSignin),
+    fork(watchSnsLogin),
     fork(watchLogout),
     fork(watchSigninAdmin),
     fork(watchSignUp),

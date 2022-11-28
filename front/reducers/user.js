@@ -17,6 +17,10 @@ export const initailState = {
   st_loginDone: false,
   st_loginError: null,
   //
+  st_snsLoginLoading: false,
+  st_snsLoginDone: false,
+  st_snsLoginError: null,
+  //
   st_logoutLoading: false,
   st_logoutDone: false,
   st_logoutError: null,
@@ -73,6 +77,10 @@ export const initailState = {
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
+
+export const SNS_LOGIN_REQUEST = "SNS_LOGIN_REQUEST";
+export const SNS_LOGIN_SUCCESS = "SNS_LOGIN_SUCCESS";
+export const SNS_LOGIN_FAILURE = "SNS_LOGIN_FAILURE";
 
 export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
@@ -177,6 +185,27 @@ const reducer = (state = initailState, action) =>
         draft.st_loginLoading = false;
         draft.st_loginDone = false;
         draft.st_loginError = action.error;
+        break;
+      }
+      //////////////////////////////////////////////
+
+      case SNS_LOGIN_REQUEST: {
+        draft.st_snsLoginLoading = true;
+        draft.st_snsLoginDone = null;
+        draft.st_snsLoginError = false;
+        break;
+      }
+      case SNS_LOGIN_SUCCESS: {
+        draft.st_snsLoginLoading = false;
+        draft.st_snsLoginDone = true;
+        draft.st_snsLoginError = null;
+        draft.me = action.data;
+        break;
+      }
+      case SNS_LOGIN_FAILURE: {
+        draft.st_snsLoginLoading = false;
+        draft.st_snsLoginDone = false;
+        draft.st_snsLoginError = action.error;
         break;
       }
       //////////////////////////////////////////////
