@@ -11,14 +11,6 @@ export const initailState = {
   st_shareProjectDone: false,
   st_shareProjectError: null,
   //
-  st_techImageUpdateLoading: false, // 기술융합협동조합 이미지 수정하기
-  st_techImageUpdateDone: false,
-  st_techImageUpdateError: null,
-  //
-  st_corImageUpdateLoading: false, // 회원법인조합 이미지 수정하기
-  st_corImageUpdateDone: false,
-  st_corImageUpdateError: null,
-  //
   st_shareProjecthUpdateLoading: false, // 회원조합관리 수정
   st_shareProjecthUpdateDone: false,
   st_shareProjecthUpdateError: null,
@@ -36,14 +28,6 @@ export const initailState = {
 export const SHARE_PROJECT_REQUEST = "SHARE_PROJECT_REQUEST";
 export const SHARE_PROJECT_SUCCESS = "SHARE_PROJECT_SUCCESS";
 export const SHARE_PROJECT_FAILURE = "SHARE_PROJECT_FAILURE";
-
-export const TECH_IMAGE_UPDATE_REQUEST = "TECH_IMAGE_UPDATE_REQUEST";
-export const TECH_IMAGE_UPDATE_SUCCESS = "TECH_IMAGE_UPDATE_SUCCESS";
-export const TECH_IMAGE_UPDATE_FAILURE = "TECH_IMAGE_UPDATE_FAILURE";
-
-export const COR_IMAGE_UPDATE_REQUEST = "COR_IMAGE_UPDATE_REQUEST";
-export const COR_IMAGE_UPDATE_SUCCESS = "COR_IMAGE_UPDATE_SUCCESS";
-export const COR_IMAGE_UPDATE_FAILURE = "COR_IMAGE_UPDATE_FAILURE";
 
 export const SHAREPROJECT_UPDATE_REQUEST = "SHAREPROJECT_UPDATE_REQUEST";
 export const SHAREPROJECT_UPDATE_SUCCESS = "SHAREPROJECT_UPDATE_SUCCESS";
@@ -77,46 +61,6 @@ const reducer = (state = initailState, action) =>
         draft.st_shareProjectLoading = false;
         draft.st_shareProjectDone = false;
         draft.st_shareProjectError = action.data;
-        break;
-      }
-
-      //////////////////////////////////////////////////////
-      case TECH_IMAGE_UPDATE_REQUEST: {
-        draft.st_techImageUpdateLoading = true;
-        draft.st_techImageUpdateDone = false;
-        draft.st_techImageUpdateError = null;
-        break;
-      }
-      case TECH_IMAGE_UPDATE_SUCCESS: {
-        draft.st_techImageUpdateLoading = false;
-        draft.st_techImageUpdateDone = true;
-        draft.st_techImageUpdateError = null;
-        break;
-      }
-      case TECH_IMAGE_UPDATE_FAILURE: {
-        draft.st_techImageUpdateLoading = false;
-        draft.st_techImageUpdateDone = false;
-        draft.st_techImageUpdateError = action.data;
-        break;
-      }
-
-      //////////////////////////////////////////////////////
-      case COR_IMAGE_UPDATE_REQUEST: {
-        draft.st_corImageUpdateLoading = true;
-        draft.st_corImageUpdateDone = false;
-        draft.st_corImageUpdateError = null;
-        break;
-      }
-      case COR_IMAGE_UPDATE_SUCCESS: {
-        draft.st_corImageUpdateLoading = false;
-        draft.st_corImageUpdateDone = true;
-        draft.st_corImageUpdateError = null;
-        break;
-      }
-      case COR_IMAGE_UPDATE_FAILURE: {
-        draft.st_corImageUpdateLoading = false;
-        draft.st_corImageUpdateDone = false;
-        draft.st_corImageUpdateError = action.data;
         break;
       }
 
@@ -181,28 +125,6 @@ const reducer = (state = initailState, action) =>
         draft.st_shareProjecthImage2Error = action.data;
         break;
       }
-
-      //   //////////////////////////////////////////////////////
-      //   case COR_UPDATE_REQUEST: {
-      //     draft.st_corUpdateLoading = true;
-      //     draft.st_corUpdateDone = false;
-      //     draft.st_corUpdateError = null;
-      //     break;
-      //   }
-      //   case COR_UPDATE_SUCCESS: {
-      //     draft.st_corUpdateLoading = false;
-      //     draft.st_corUpdateDone = true;
-      //     draft.st_corUpdateError = null;
-      //     break;
-      //   }
-      //   case COR_UPDATE_FAILURE: {
-      //     draft.st_corUpdateLoading = false;
-      //     draft.st_corUpdateDone = false;
-      //     draft.st_corUpdateError = action.data;
-      //     break;
-      //   }
-
-      //////////////////////////////////////////////////////
 
       default:
         break;

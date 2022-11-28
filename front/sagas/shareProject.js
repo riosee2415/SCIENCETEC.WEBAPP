@@ -12,21 +12,10 @@ import {
   SHAREPROJECT_IMAGE2_REQUEST,
   SHAREPROJECT_IMAGE2_SUCCESS,
   SHAREPROJECT_IMAGE2_FAILURE,
-  // TECH_IMAGE_UPDATE_REQUEST,
-  // TECH_IMAGE_UPDATE_SUCCESS,
-  // TECH_IMAGE_UPDATE_FAILURE,
-  // //
-  // COR_IMAGE_UPDATE_REQUEST,
-  // COR_IMAGE_UPDATE_SUCCESS,
-  // COR_IMAGE_UPDATE_FAILURE,
-  // //
-  // TECH_UPDATE_REQUEST,
-  // TECH_UPDATE_SUCCESS,
-  // TECH_UPDATE_FAILURE,
-  // //
-  // COR_UPDATE_REQUEST,
-  // COR_UPDATE_SUCCESS,
-  // COR_UPDATE_FAILURE,
+  //
+  SHAREPROJECT_UPDATE_REQUEST,
+  SHAREPROJECT_UPDATE_SUCCESS,
+  SHAREPROJECT_UPDATE_FAILURE,
 } from "../reducers/shareProject";
 
 // ******************************************************************************************************************
@@ -113,6 +102,34 @@ function* image2(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function shareUpdateAPI(data) {
+  return await axios.post(`/api/share/update`, data);
+}
+
+function* shareUpdate(action) {
+  try {
+    const result = yield call(shareUpdateAPI, action.data);
+
+    yield put({
+      type: SHAREPROJECT_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SHAREPROJECT_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 function* watchShareProject() {
   yield takeLatest(SHARE_PROJECT_REQUEST, shareProject);
@@ -126,17 +143,9 @@ function* watchImage2() {
   yield takeLatest(SHAREPROJECT_IMAGE2_REQUEST, image2);
 }
 
-// function* watchCorImage() {
-//   yield takeLatest(COR_IMAGE_UPDATE_REQUEST, corImage);
-// }
-
-// function* watchTechUpdate() {
-//   yield takeLatest(TECH_UPDATE_REQUEST, techUpdate);
-// }
-
-// function* watchCorUpdate() {
-//   yield takeLatest(COR_UPDATE_REQUEST, corUpdate);
-// }
+function* watchShareUpdate() {
+  yield takeLatest(SHAREPROJECT_UPDATE_REQUEST, shareUpdate);
+}
 
 //////////////////////////////////////////////////////////////
 export default function* shareSaga() {
@@ -144,9 +153,7 @@ export default function* shareSaga() {
     fork(watchShareProject),
     fork(watchImage1),
     fork(watchImage2),
-    // fork(watchCorImage),
-    // fork(watchTechUpdate),
-    // fork(watchCorUpdate),
+    fork(watchShareUpdate),
     //
   ]);
 }

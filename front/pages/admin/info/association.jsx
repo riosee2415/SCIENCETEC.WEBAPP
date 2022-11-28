@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import AdminLayout from "../../../components/AdminLayout";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Form, Image, Input, Popover } from "antd";
+import { Button, DatePicker, Form, Image, Input, message, Popover } from "antd";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
 import { END } from "redux-saga";
@@ -21,10 +21,12 @@ import {
   SHARE_PROJECT_REQUEST,
   SHAREPROJECT_IMAGE1_REQUEST,
   SHAREPROJECT_IMAGE2_REQUEST,
+  SHAREPROJECT_UPDATE_REQUEST,
 } from "../../../reducers/shareProject";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
 import { HomeOutlined, RightOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 const Association = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
@@ -35,11 +37,10 @@ const Association = ({}) => {
     st_shareProjectDone,
     st_shareProjecthImage1Loading,
     st_shareProjecthImage2Loading,
+    st_shareProjecthUpdateDone,
+    st_shareProjecthUpdateError,
   } = useSelector((state) => state.shareProject);
 
-  console.log(shareProjects);
-  console.log(previewImagePath1);
-  console.log(previewImagePath2);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -54,7 +55,7 @@ const Association = ({}) => {
       infoForm1.setFieldsValue({
         id: shareProjects[0].id,
         repreName: shareProjects[0].repreName,
-        viewEstimateDate: shareProjects[0].viewEstimateDate,
+        estimateDate: moment(shareProjects[0].estimateDate),
         empCnt: shareProjects[0].empCnt,
         jobType: shareProjects[0].jobType,
         importantWork: shareProjects[0].importantWork,
@@ -64,7 +65,7 @@ const Association = ({}) => {
       infoForm2.setFieldsValue({
         id: shareProjects[1].id,
         repreName: shareProjects[1].repreName,
-        viewEstimateDate: shareProjects[1].viewEstimateDate,
+        estimateDate: moment(shareProjects[1].estimateDate),
         empCnt: shareProjects[1].empCnt,
         jobType: shareProjects[1].jobType,
         importantWork: shareProjects[1].importantWork,
@@ -72,6 +73,23 @@ const Association = ({}) => {
       });
     }
   }, [st_shareProjectDone]);
+
+  useEffect(() => {
+    if (st_shareProjecthUpdateDone) {
+      message.success(
+        "기술융합협동조합 정보가 수정되었습니다. 데이터를 재조회 합니다."
+      );
+    }
+    dispatch({
+      type: SHARE_PROJECT_REQUEST,
+    });
+  }, [st_shareProjecthUpdateDone]);
+
+  useEffect(() => {
+    if (st_shareProjecthUpdateError) {
+      return message.error(st_shareProjecthUpdateError);
+    }
+  }, [st_shareProjecthUpdateError]);
 
   const clickImageUpload1 = useCallback(() => {
     logoImageRef1.current.click();
@@ -158,16 +176,42 @@ const Association = ({}) => {
 
   ////// HANDLER //////
 
-  // 설립연도를 데이트피커로 교체!
-
-  const update1Handler = useCallback(
+  const updateHandler = useCallback(
     (data) => {
-      console.log(data);
-      console.log(
-        previewImagePath1 ? previewImagePath1 : shareProjects[0].imagePath
-      );
+      dispatch({
+        type: SHAREPROJECT_UPDATE_REQUEST,
+        data: {
+          id: data.id,
+          repreName: data.repreName,
+          estimateDate: data.estimateDate.format("YYYY-MM-DD"),
+          empCnt: data.empCnt,
+          jobType: data.jobType,
+          importantWork: data.importantWork,
+          link: data.link,
+          imagePath: previewImagePath1 ? previewImagePath1 : data.imagePath,
+        },
+      });
     },
     [previewImagePath1]
+  );
+
+  const update2Handler = useCallback(
+    (data) => {
+      dispatch({
+        type: SHAREPROJECT_UPDATE_REQUEST,
+        data: {
+          id: data.id,
+          repreName: data.repreName,
+          estimateDate: data.estimateDate.format("YYYY-MM-DD"),
+          empCnt: data.empCnt,
+          jobType: data.jobType,
+          importantWork: data.importantWork,
+          link: data.link,
+          imagePath: previewImagePath2 ? previewImagePath2 : data.imagePath,
+        },
+      });
+    },
+    [previewImagePath2]
   );
 
   ////// DATAVIEW //////
@@ -206,9 +250,12 @@ const Association = ({}) => {
       {/* GUIDE */}
       <Wrapper margin={`10px 0px 0px 0px`}>
         <GuideUl>
-          <GuideLi>화면 가이드안내 문구를 입력하세요.</GuideLi>
+          <GuideLi>
+            회원조합메뉴에 보여지는 기술융합협동조합과 회원법인조합의 내용을
+            수정할 수 있습니다.
+          </GuideLi>
           <GuideLi isImpo={true}>
-            화면 가이드안내 문구를 입력하세요. (RED COLOR)
+            수정하는 즉시 화면에 반영되니 신중한 처리바랍니다.
           </GuideLi>
         </GuideUl>
       </Wrapper>
@@ -232,7 +279,9 @@ const Association = ({}) => {
           <Image
             alt="image"
             src={
-              previewImagePath1 ? previewImagePath1 : shareProjects[0].imagePath
+              previewImagePath1
+                ? previewImagePath1
+                : shareProjects[0] && shareProjects[0].imagePath
             }
           />
 
@@ -270,7 +319,7 @@ const Association = ({}) => {
               style={{ width: "100%" }}
               labelCol={{ span: 4 }}
               wrapperCol={{ span: 20 }}
-              onFinish={update1Handler}
+              onFinish={updateHandler}
             >
               <Form.Item name="id" hidden>
                 <Input size="small" allowClear />
@@ -280,8 +329,8 @@ const Association = ({}) => {
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="설립연도" name="viewEstimateDate">
-                <Input size="small" allowClear />
+              <Form.Item label="설립연도" name="estimateDate">
+                <DatePicker style={{ width: `100%` }} />
               </Form.Item>
 
               <Form.Item label="직원수" name="empCnt">
@@ -289,15 +338,15 @@ const Association = ({}) => {
               </Form.Item>
 
               <Form.Item label="업종" name="jobType">
-                <Input size="small" allowClear readOnly />
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Form.Item label="주업무" name="importantWork">
-                <Input size="small" allowClear readOnly />
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Form.Item label="링크" name="link">
-                <Input size="small" allowClear readOnly />
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Wrapper al="flex-end" margin="0px 0px 20px 0px">
@@ -321,7 +370,9 @@ const Association = ({}) => {
           <Image
             alt="image"
             src={
-              previewImagePath2 ? previewImagePath2 : shareProjects[1].imagePath
+              previewImagePath2
+                ? previewImagePath2
+                : shareProjects[1] && shareProjects[1].imagePath
             }
           />
 
@@ -359,13 +410,18 @@ const Association = ({}) => {
               style={{ width: "100%" }}
               labelCol={{ span: 4 }}
               wrapperCol={{ span: 20 }}
+              onFinish={update2Handler}
             >
+              <Form.Item name="id" hidden>
+                <Input size="small" allowClear />
+              </Form.Item>
+
               <Form.Item label="대표자명" name="repreName">
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="설립연도" name="viewEstimateDate">
-                <Input size="small" allowClear />
+              <Form.Item label="설립연도" name="estimateDate">
+                <DatePicker style={{ width: `100%` }} />
               </Form.Item>
 
               <Form.Item label="직원수" name="empCnt">
@@ -373,15 +429,15 @@ const Association = ({}) => {
               </Form.Item>
 
               <Form.Item label="업종" name="jobType">
-                <Input size="small" allowClear readOnly />
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Form.Item label="주업무" name="importantWork">
-                <Input size="small" allowClear readOnly />
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Form.Item label="링크" name="link">
-                <Input size="small" allowClear readOnly />
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Wrapper al="flex-end" margin="0px 0px 20px 0px">
