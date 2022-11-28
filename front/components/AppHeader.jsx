@@ -148,6 +148,12 @@ const AppHeader = () => {
     setPageY(pageYOffset);
   });
 
+  // const logoutHandler = useCallback(() => {
+  //   dispatch({
+  //     type: LOG_OUT
+  //   })
+  // }, [])
+
   ////////////// - USE EFFECT- //////////////
   useEffect(() => {
     document.addEventListener("scroll", handleScroll);

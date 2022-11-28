@@ -24,6 +24,21 @@ import { useRouter } from "next/router";
 import useInput from "../../hooks/useInput";
 import DaumPostcode from "react-daum-postcode";
 import { useEffect } from "react";
+import KakaoLogin from "react-kakao-login";
+import naver from "naver-id-login";
+
+const Circle = styled(Wrapper)`
+  width: 44px;
+  height: 44px;
+  border-radius: 100%;
+  background: ${Theme.lightGrey_C};
+  position: absolute;
+  left: 20px;
+
+  & img {
+    width: 24px;
+  }
+`;
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -75,12 +90,39 @@ const Index = () => {
   const importantBusiness2Input = useInput(``); // 주요사업2
   const importantBusiness3Input = useInput(``); // 주요사업3
 
+  // SNS 회원가입 정보
+  const [snsData, setSnsData] = useState(null);
+
+  // current
+  const [currentTab, setCurrentTab] = useState(0);
+
   // modal
   const [pModal, setPModal] = useState(false);
   ////// REDUX //////
   const router = useRouter();
   const dispatch = useDispatch();
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    if (snsData) {
+      setCurrentTab(1);
+
+      idInput.setValue(snsData.email);
+      emailInput.setValue(snsData.email);
+
+      mobileInput.setValue(snsData.mobile_e164 ? snsData.mobile_e164 : ``);
+      return;
+    }
+  }, [snsData]);
+
+  useEffect(() => {
+    const query = router.query;
+    console.log(query);
+
+    if (query.naver) {
+      naver.handleTokenResponse();
+    }
+  }, [router.query]);
 
   useEffect(() => {
     if (st_signUpError) {
@@ -97,6 +139,19 @@ const Index = () => {
   }, [st_signUpDone]);
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  // 네이버
+  const naverLoginHandler = useCallback(async () => {
+    const clientId = "kuOuSirjF7Z6X0ioR48B";
+    const callbackUrl = "http://localhost:3000/join?naver=true";
+    const auth = await naver.login(clientId, callbackUrl);
+    const accessToken = auth.access_token;
+
+    const profile = await naver.getProfile(accessToken);
+    const userId = "Naver_" + profile.response.id;
+
+    setSnsData(profile.response);
+  }, []);
 
   // 조합회원 create
   const createHandler = useCallback(() => {
@@ -184,38 +239,73 @@ const Index = () => {
       return message.error("개인정보처리방침에 동의해주세요.");
     }
 
-    // 조합회원
-    dispatch({
-      type: SIGNUP_REQUEST,
-      data: {
-        type: 2,
-        userId: idInput.value,
-        password: pwCheckInput.value,
-        combiName: combiNameInput.value,
-        combiHomepage: combiHomepageInput.value,
-        combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
-        combiArea: combiAreaInput.value,
-        corporationCnt: corporationCntInput.value,
-        personalCnt: personalCntInput.value,
-        repreName: repreNameInput.value,
-        postCode: postCodeInput.value,
-        address: addressInput.value,
-        detailAddress: detailAddressInput.value,
-        mobile: mobileInput.value,
-        email: emailInput.value,
-        importantBusiness1: importantBusiness1Input.value,
-        importantBusiness2: importantBusiness2Input.value,
-        importantBusiness3: importantBusiness3Input.value,
-        importantBusinessCapital: importantBusinessCapitalInput.value,
-        importantBusinessPrice: importantBusinessPriceInput.value,
-        terms: isCheck,
-        isKakao: false,
-        isPremium: false,
-        businessType: combiTypeArr,
-        combiType: combiArr,
-        sector: typeArr,
-      },
-    });
+    if (snsData) {
+      dispatch({
+        type: SIGNUP_REQUEST,
+        data: {
+          type: 2,
+          userId: idInput.value,
+          password: pwCheckInput.value,
+          combiName: combiNameInput.value,
+          combiHomepage: combiHomepageInput.value,
+          combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
+          combiArea: combiAreaInput.value,
+          corporationCnt: corporationCntInput.value,
+          personalCnt: personalCntInput.value,
+          repreName: repreNameInput.value,
+          postCode: postCodeInput.value,
+          address: addressInput.value,
+          detailAddress: detailAddressInput.value,
+          mobile: mobileInput.value,
+          email: emailInput.value,
+          importantBusiness1: importantBusiness1Input.value,
+          importantBusiness2: importantBusiness2Input.value,
+          importantBusiness3: importantBusiness3Input.value,
+          importantBusinessCapital: importantBusinessCapitalInput.value,
+          importantBusinessPrice: importantBusinessPriceInput.value,
+          terms: isCheck,
+          kakaoId: idInput.value,
+          isKakao: true,
+          isPremium: false,
+          businessType: combiTypeArr,
+          combiType: combiArr,
+          sector: typeArr,
+        },
+      });
+    } else {
+      // 조합회원
+      dispatch({
+        type: SIGNUP_REQUEST,
+        data: {
+          type: 2,
+          userId: idInput.value,
+          password: pwCheckInput.value,
+          combiName: combiNameInput.value,
+          combiHomepage: combiHomepageInput.value,
+          combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
+          combiArea: combiAreaInput.value,
+          corporationCnt: corporationCntInput.value,
+          personalCnt: personalCntInput.value,
+          repreName: repreNameInput.value,
+          postCode: postCodeInput.value,
+          address: addressInput.value,
+          detailAddress: detailAddressInput.value,
+          mobile: mobileInput.value,
+          email: emailInput.value,
+          importantBusiness1: importantBusiness1Input.value,
+          importantBusiness2: importantBusiness2Input.value,
+          importantBusiness3: importantBusiness3Input.value,
+          importantBusinessCapital: importantBusinessCapitalInput.value,
+          importantBusinessPrice: importantBusinessPriceInput.value,
+          terms: isCheck,
+          isKakao: false,
+          isPremium: false,
+          businessType: combiTypeArr,
+          combiType: combiArr,
+          sector: typeArr,
+        },
+      });
+    }
   }, [
     idInput,
     pwCheckInput,
@@ -240,6 +330,7 @@ const Index = () => {
     combiTypeArr,
     combiArr,
     typeArr,
+    snsData,
   ]);
 
   // 설립년도
@@ -367,423 +458,504 @@ const Index = () => {
                 <Btn isActive>조합회원</Btn>
               </Wrapper>
 
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  아이디
-                </Text>
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="아이디를 입력해주세요."
-                  radius={`5px`}
-                  {...idInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  비밀번호
-                </Text>
-                <TextInput
-                  type="password"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="비밀번호를 입력해주세요."
-                  radius={`5px`}
-                  margin={`0 0 8px`}
-                  {...pwInput}
-                />
-                <TextInput
-                  type="password"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="비밀번호를 재입력해주세요."
-                  radius={`5px`}
-                  {...pwCheckInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  조합명
-                </Text>
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="조합명을 입력해주세요."
-                  radius={`5px`}
-                  {...combiNameInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  조합 홈페이지
-                </Text>
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="조합 홈페이지 주소를 입력해주세요."
-                  radius={`5px`}
-                  {...combiHomepageInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  설립년도
-                </Text>
-
-                <DatePicker
-                  style={{ width: `100%`, height: `55px`, borderRadius: `5px` }}
-                  placeholder="조합 설립년도를 선택해주세요."
-                  onChange={combiEstimateDateHandler}
-                  value={combiEstimateDate}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  지역
-                </Text>
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="조합 활동 지역을 입력해주세요."
-                  radius={`5px`}
-                  {...combiAreaInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  법인조합원수
-                </Text>
-                <Wrapper dr={`row`} ju={`space-between`}>
-                  <TextInput
-                    width={`96%`}
-                    height={`55px`}
-                    placeholder="법인조합원수를 입력해주세요."
-                    radius={`5px`}
-                    type="number"
-                    {...corporationCntInput}
-                  />
-                  인
-                </Wrapper>
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  개인조합원수
-                </Text>
-                <Wrapper dr={`row`} ju={`space-between`}>
-                  <TextInput
-                    width={`96%`}
-                    height={`55px`}
-                    placeholder="개인조합원수를 입력해주세요."
-                    radius={`5px`}
-                    type="number"
-                    {...personalCntInput}
-                  />
-                  인
-                </Wrapper>
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  이사장명
-                </Text>
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="이사장명을 입력해주세요."
-                  radius={`5px`}
-                  {...repreNameInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  주소
-                </Text>
-                <Wrapper dr={`row`} ju={`space-between`}>
-                  <TextInput
-                    readOnly
-                    type="text"
-                    width={`calc(100% - 150px)`}
-                    height={`55px`}
-                    placeholder="우편주소를 입력해주세요."
-                    radius={`5px`}
-                    {...postCodeInput}
-                  />
+              {currentTab === 0 ? (
+                <>
+                  <KakaoLogin
+                    jsKey={process.env.KAKAO_LOGIN_KEY}
+                    onSuccess={(data) => {
+                      setSnsData(data.profile.kakao_account);
+                    }}
+                    onFailure={(data) => {
+                      console.log(data);
+                    }}
+                    className="KakaoLogin"
+                    getProfile="true"
+                    render={({ onClick }) => {
+                      return (
+                        <CommonButton
+                          width={`100%`}
+                          height={`70px`}
+                          kindOf={`grey`}
+                          margin={`10px 0`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            onClick();
+                          }}
+                        >
+                          <Wrapper position={`relative`} fontSize={`18px`}>
+                            <Circle>
+                              <Image
+                                alt="kakao"
+                                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_kakao.png`}
+                              />
+                            </Circle>
+                            카카오로 시작하기
+                          </Wrapper>
+                        </CommonButton>
+                      );
+                    }}
+                  ></KakaoLogin>
                   <CommonButton
-                    width={`146px`}
+                    width={`100%`}
+                    height={`70px`}
+                    kindOf={`grey`}
+                    onClick={naverLoginHandler}
+                  >
+                    <Wrapper position={`relative`} fontSize={`18px`}>
+                      <Circle>
+                        <Image
+                          alt="naver"
+                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_naver.png`}
+                        />
+                      </Circle>
+                      네이버로 시작하기
+                    </Wrapper>
+                  </CommonButton>
+
+                  <Text
+                    color={Theme.grey_C}
+                    fontSize={`16px`}
+                    margin={`40px 0 16px`}
+                  >
+                    일반 회원가입
+                  </Text>
+                  <CommonButton
+                    width={`100%`}
+                    height={`70px`}
+                    fontSize={`18px`}
+                    kindOf={`grey2`}
+                    onClick={() => setCurrentTab(1)}
+                  >
+                    ID / PW로 회원가입
+                  </CommonButton>
+                </>
+              ) : (
+                <>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      아이디
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="아이디를 입력해주세요."
+                      radius={`5px`}
+                      {...idInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      비밀번호
+                    </Text>
+                    <TextInput
+                      type="password"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="비밀번호를 입력해주세요."
+                      radius={`5px`}
+                      margin={`0 0 8px`}
+                      {...pwInput}
+                    />
+                    <TextInput
+                      type="password"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="비밀번호를 재입력해주세요."
+                      radius={`5px`}
+                      {...pwCheckInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      조합명
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="조합명을 입력해주세요."
+                      radius={`5px`}
+                      {...combiNameInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      조합 홈페이지
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="조합 홈페이지 주소를 입력해주세요."
+                      radius={`5px`}
+                      {...combiHomepageInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      설립년도
+                    </Text>
+
+                    <DatePicker
+                      style={{
+                        width: `100%`,
+                        height: `55px`,
+                        borderRadius: `5px`,
+                      }}
+                      placeholder="조합 설립년도를 선택해주세요."
+                      onChange={combiEstimateDateHandler}
+                      value={combiEstimateDate}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      지역
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="조합 활동 지역을 입력해주세요."
+                      radius={`5px`}
+                      {...combiAreaInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      법인조합원수
+                    </Text>
+                    <Wrapper dr={`row`} ju={`space-between`}>
+                      <TextInput
+                        width={`96%`}
+                        height={`55px`}
+                        placeholder="법인조합원수를 입력해주세요."
+                        radius={`5px`}
+                        type="number"
+                        {...corporationCntInput}
+                      />
+                      인
+                    </Wrapper>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      개인조합원수
+                    </Text>
+                    <Wrapper dr={`row`} ju={`space-between`}>
+                      <TextInput
+                        width={`96%`}
+                        height={`55px`}
+                        placeholder="개인조합원수를 입력해주세요."
+                        radius={`5px`}
+                        type="number"
+                        {...personalCntInput}
+                      />
+                      인
+                    </Wrapper>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      이사장명
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="이사장명을 입력해주세요."
+                      radius={`5px`}
+                      {...repreNameInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      주소
+                    </Text>
+                    <Wrapper dr={`row`} ju={`space-between`}>
+                      <TextInput
+                        readOnly
+                        type="text"
+                        width={`calc(100% - 150px)`}
+                        height={`55px`}
+                        placeholder="우편주소를 입력해주세요."
+                        radius={`5px`}
+                        {...postCodeInput}
+                      />
+                      <CommonButton
+                        width={`146px`}
+                        height={`55px`}
+                        kindOf={`subTheme`}
+                        radius={`5px`}
+                        onClick={() => setPModal(!pModal)}
+                      >
+                        우편주소 검색
+                      </CommonButton>
+                    </Wrapper>
+                    <TextInput
+                      type="text"
+                      readOnly
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="주소를 입력해주세요."
+                      radius={`5px`}
+                      margin={`8px 0`}
+                      {...addressInput}
+                    />
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="상세주소를 입력해주세요."
+                      radius={`5px`}
+                      {...detailAddressInput}
+                    />
+                  </Wrapper>
+
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      전화
+                    </Text>
+                    <TextInput
+                      type="number"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="전화번호를 입력해주세요."
+                      radius={`5px`}
+                      {...mobileInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      이메일
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="이메일을 입력해주세요."
+                      radius={`5px`}
+                      {...emailInput}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      조합유형
+                      <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
+                    </Text>
+                    <Wrapper dr={`row`} ju={`flex-start`}>
+                      {combiData.map((data) => {
+                        return (
+                          <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                            <Checkbox
+                              onChange={combiArrHandler}
+                              checked={combiArr.find((value) => value === data)}
+                              value={data}
+                            >
+                              {data}
+                            </Checkbox>
+                          </Wrapper>
+                        );
+                      })}
+                    </Wrapper>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      조합사업유형
+                      <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
+                    </Text>
+                    <Wrapper dr={`row`} ju={`flex-start`}>
+                      {combiTypeData.map((data) => {
+                        return (
+                          <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                            <Checkbox
+                              onChange={combiTypeHandler}
+                              checked={combiTypeArr.find(
+                                (value) => value === data
+                              )}
+                              value={data}
+                            >
+                              {data}
+                            </Checkbox>
+                          </Wrapper>
+                        );
+                      })}
+                    </Wrapper>
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      사업분야
+                      <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
+                    </Text>
+                    <Wrapper dr={`row`} ju={`flex-start`}>
+                      {arr.map((data) => {
+                        return (
+                          <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
+                            <Checkbox
+                              onChange={checkArrHandler}
+                              checked={typeArr.find((value) => value === data)}
+                              value={data}
+                            >
+                              {data}
+                            </Checkbox>
+                          </Wrapper>
+                        );
+                      })}
+                    </Wrapper>
+                  </Wrapper>
+
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      주요사업
+                    </Text>
+
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="1. 주요사업을 입력해주세요."
+                      radius={`5px`}
+                      {...importantBusiness1Input}
+                    />
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="2. 주요사업을 입력해주세요."
+                      radius={`5px`}
+                      margin={`8px 0`}
+                      {...importantBusiness2Input}
+                    />
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="3. 주요사업을 입력해주세요."
+                      radius={`5px`}
+                      {...importantBusiness3Input}
+                    />
+                  </Wrapper>
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      자본금
+                    </Text>
+
+                    <TextInput
+                      type="number"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="자본금을 입력해주세요."
+                      radius={`5px`}
+                      {...importantBusinessCapitalInput}
+                    />
+                  </Wrapper>
+
+                  <Wrapper al={`flex-start`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      매출액
+                    </Text>
+
+                    <TextInput
+                      type="number"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="매출액을 입력해주세요."
+                      radius={`5px`}
+                      {...importantBusinessPriceInput}
+                    />
+                  </Wrapper>
+
+                  <Wrapper margin={`30px 0 14px`} al={`flex-start`}>
+                    <Checkbox
+                      onChange={() => setIsCheck(!isCheck)}
+                      checked={isCheck}
+                    >
+                      (필수)개인정보처리방침에 동의합니다.
+                    </Checkbox>
+                  </Wrapper>
+                  <CommonButton
+                    width={`100%`}
                     height={`55px`}
                     kindOf={`subTheme`}
                     radius={`5px`}
-                    onClick={() => setPModal(!pModal)}
+                    fontSize={`18px`}
+                    fontWeight={`bold`}
+                    onClick={createHandler}
                   >
-                    우편주소 검색
+                    회원가입
                   </CommonButton>
-                </Wrapper>
-                <TextInput
-                  type="text"
-                  readOnly
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="주소를 입력해주세요."
-                  radius={`5px`}
-                  margin={`8px 0`}
-                  {...addressInput}
-                />
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="상세주소를 입력해주세요."
-                  radius={`5px`}
-                  {...detailAddressInput}
-                />
-              </Wrapper>
-
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  전화
-                </Text>
-                <TextInput
-                  type="number"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="전화번호를 입력해주세요."
-                  radius={`5px`}
-                  {...mobileInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  이메일
-                </Text>
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="이메일을 입력해주세요."
-                  radius={`5px`}
-                  {...emailInput}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  조합유형
-                  <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
-                </Text>
-                <Wrapper dr={`row`} ju={`flex-start`}>
-                  {combiData.map((data) => {
-                    return (
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox
-                          onChange={combiArrHandler}
-                          checked={combiArr.find((value) => value === data)}
-                          value={data}
-                        >
-                          {data}
-                        </Checkbox>
-                      </Wrapper>
-                    );
-                  })}
-                </Wrapper>
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  조합사업유형
-                  <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
-                </Text>
-                <Wrapper dr={`row`} ju={`flex-start`}>
-                  {combiTypeData.map((data) => {
-                    return (
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox
-                          onChange={combiTypeHandler}
-                          checked={combiTypeArr.find((value) => value === data)}
-                          value={data}
-                        >
-                          {data}
-                        </Checkbox>
-                      </Wrapper>
-                    );
-                  })}
-                </Wrapper>
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  사업분야
-                  <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
-                </Text>
-                <Wrapper dr={`row`} ju={`flex-start`}>
-                  {arr.map((data) => {
-                    return (
-                      <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                        <Checkbox
-                          onChange={checkArrHandler}
-                          checked={typeArr.find((value) => value === data)}
-                          value={data}
-                        >
-                          {data}
-                        </Checkbox>
-                      </Wrapper>
-                    );
-                  })}
-                </Wrapper>
-              </Wrapper>
-
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  주요사업
-                </Text>
-
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="1. 주요사업을 입력해주세요."
-                  radius={`5px`}
-                  {...importantBusiness1Input}
-                />
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="2. 주요사업을 입력해주세요."
-                  radius={`5px`}
-                  margin={`8px 0`}
-                  {...importantBusiness2Input}
-                />
-                <TextInput
-                  type="text"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="3. 주요사업을 입력해주세요."
-                  radius={`5px`}
-                  {...importantBusiness3Input}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  자본금
-                </Text>
-
-                <TextInput
-                  type="number"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="자본금을 입력해주세요."
-                  radius={`5px`}
-                  {...importantBusinessCapitalInput}
-                />
-              </Wrapper>
-
-              <Wrapper al={`flex-start`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  매출액
-                </Text>
-
-                <TextInput
-                  type="number"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="매출액을 입력해주세요."
-                  radius={`5px`}
-                  {...importantBusinessPriceInput}
-                />
-              </Wrapper>
-
-              <Wrapper margin={`30px 0 14px`} al={`flex-start`}>
-                <Checkbox
-                  onChange={() => setIsCheck(!isCheck)}
-                  checked={isCheck}
-                >
-                  (필수)개인정보처리방침에 동의합니다.
-                </Checkbox>
-              </Wrapper>
-              <CommonButton
-                width={`100%`}
-                height={`55px`}
-                kindOf={`subTheme`}
-                radius={`5px`}
-                fontSize={`18px`}
-                fontWeight={`bold`}
-                onClick={createHandler}
-              >
-                회원가입
-              </CommonButton>
+                </>
+              )}
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
