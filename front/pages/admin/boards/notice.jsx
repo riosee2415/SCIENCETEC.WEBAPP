@@ -141,6 +141,14 @@ const Notice = ({}) => {
     }
   }, [st_noticeFileDone]);
 
+  // ********************** 공지사항 리스트 후처리 *************************
+
+  useEffect(() => {
+    if (st_noticeAdminListError) {
+      return message.error(st_noticeAdminListError);
+    }
+  }, [st_noticeAdminListError]);
+
   // ********************** 공지사항 생성 후처리 *************************
   useEffect(() => {
     if (st_noticeCreateDone) {
@@ -359,6 +367,7 @@ const Notice = ({}) => {
       type: NOTICE_CREATE_REQUEST,
       data: {
         type: typeValue,
+        author: "관리자",
       },
     });
 
@@ -427,6 +436,7 @@ const Notice = ({}) => {
         createdAt: record.viewCreatedAt,
         updatedAt: record.viewUpdatedAt,
         updator: record.updator,
+        author: record.author,
       });
     },
     [currentData, infoForm, currentTop]
@@ -704,6 +714,14 @@ const Notice = ({}) => {
                 </Form.Item>
 
                 <Form.Item label="최근작업자" name="updator">
+                  <Input
+                    size="small"
+                    style={{ background: Theme.lightGrey_C, border: "none" }}
+                    readOnly
+                  />
+                </Form.Item>
+
+                <Form.Item label="작성자" name="author">
                   <Input
                     size="small"
                     style={{ background: Theme.lightGrey_C, border: "none" }}
