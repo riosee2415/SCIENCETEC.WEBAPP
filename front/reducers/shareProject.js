@@ -2,6 +2,10 @@ import produce from "../util/produce";
 
 export const initailState = {
   shareProjects: [],
+
+  previewImagePath1: null,
+  previewImagePath2: null,
+
   //
   st_shareProjectLoading: false,
   st_shareProjectDone: false,
@@ -18,6 +22,15 @@ export const initailState = {
   st_shareProjecthUpdateLoading: false, // 회원조합관리 수정
   st_shareProjecthUpdateDone: false,
   st_shareProjecthUpdateError: null,
+
+  //
+  st_shareProjecthImage1Loading: false, // 이미지 업로드1
+  st_shareProjecthImage1Done: false,
+  st_shareProjecthImage1Error: null,
+  //
+  st_shareProjecthImage2Loading: false, // 이미지 업로드2
+  st_shareProjecthImage2Done: false,
+  st_shareProjecthImage2Error: null,
 };
 
 export const SHARE_PROJECT_REQUEST = "SHARE_PROJECT_REQUEST";
@@ -35,6 +48,14 @@ export const COR_IMAGE_UPDATE_FAILURE = "COR_IMAGE_UPDATE_FAILURE";
 export const SHAREPROJECT_UPDATE_REQUEST = "SHAREPROJECT_UPDATE_REQUEST";
 export const SHAREPROJECT_UPDATE_SUCCESS = "SHAREPROJECT_UPDATE_SUCCESS";
 export const SHAREPROJECT_UPDATE_FAILURE = "SHAREPROJECT_UPDATE_FAILURE";
+
+export const SHAREPROJECT_IMAGE1_REQUEST = "SHAREPROJECT_IMAGE1_REQUEST";
+export const SHAREPROJECT_IMAGE1_SUCCESS = "SHAREPROJECT_IMAGE1_SUCCESS";
+export const SHAREPROJECT_IMAGE1_FAILURE = "SHAREPROJECT_IMAGE1_FAILURE";
+
+export const SHAREPROJECT_IMAGE2_REQUEST = "SHAREPROJECT_IMAGE2_REQUEST";
+export const SHAREPROJECT_IMAGE2_SUCCESS = "SHAREPROJECT_IMAGE2_SUCCESS";
+export const SHAREPROJECT_IMAGE2_FAILURE = "SHAREPROJECT_IMAGE2_FAILURE";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -116,6 +137,48 @@ const reducer = (state = initailState, action) =>
         draft.st_shareProjecthUpdateLoading = false;
         draft.st_shareProjecthUpdateDone = false;
         draft.st_shareProjecthUpdateError = action.data;
+        break;
+      }
+
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_IMAGE1_REQUEST: {
+        draft.st_shareProjecthImage1Loading = true;
+        draft.st_shareProjecthImage1Done = false;
+        draft.st_shareProjecthImage1Error = null;
+        break;
+      }
+      case SHAREPROJECT_IMAGE1_SUCCESS: {
+        draft.st_shareProjecthImage1Loading = false;
+        draft.st_shareProjecthImage1Done = true;
+        draft.st_shareProjecthImage1Error = null;
+        draft.previewImagePath1 = action.data.path;
+        break;
+      }
+      case SHAREPROJECT_IMAGE1_FAILURE: {
+        draft.st_shareProjecthImage1Loading = false;
+        draft.st_shareProjecthImage1Done = false;
+        draft.st_shareProjecthImage1Error = action.data;
+        break;
+      }
+
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_IMAGE2_REQUEST: {
+        draft.st_shareProjecthImage2Loading = true;
+        draft.st_shareProjecthImage2Done = false;
+        draft.st_shareProjecthImage2Error = null;
+        break;
+      }
+      case SHAREPROJECT_IMAGE2_SUCCESS: {
+        draft.st_shareProjecthImage2Loading = false;
+        draft.st_shareProjecthImage2Done = true;
+        draft.st_shareProjecthImage2Error = null;
+        draft.previewImagePath2 = action.data.path;
+        break;
+      }
+      case SHAREPROJECT_IMAGE2_FAILURE: {
+        draft.st_shareProjecthImage2Loading = false;
+        draft.st_shareProjecthImage2Done = false;
+        draft.st_shareProjecthImage2Error = action.data;
         break;
       }
 

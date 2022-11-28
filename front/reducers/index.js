@@ -35,6 +35,7 @@ const rootReducer = (state, action) => {
         faq,
         forum,
         survey,
+        shareProject,
       });
       return combinedReducer(state, action);
     }
