@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
-import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
+import { LOAD_MY_INFO_REQUEST, LOGIN_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../../hooks/useWidth";
 import {
   RsWrapper,
@@ -20,6 +20,8 @@ import Theme from "../../components/Theme";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { Form, message } from "antd";
+import { useRouter } from "next/router";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -55,15 +57,55 @@ const Circle = styled(Wrapper)`
   }
 `;
 
+const CustomForm = styled(Form)`
+  width: 100%;
+
+  & .ant-form-item {
+    width: 100%;
+  }
+`;
+
 const Index = () => {
   ////// GLOBAL STATE //////
-  const [currentTab, setCurrentTab] = useState(0);
+
+  const { st_loginLoading, st_loginDone, st_loginError } = useSelector(
+    (state) => state.user
+  );
+
   ////// HOOKS //////
   const width = useWidth();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [currentTab, setCurrentTab] = useState(0);
   ////// REDUX //////
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    if (st_loginDone) {
+      router.push("/");
+      return message.success("로그인 되었습니다.");
+    }
+  }, [st_loginDone]);
+
+  useEffect(() => {
+    if (st_loginError) {
+      return message.error(st_loginError);
+    }
+  }, [st_loginError]);
+
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  const loginFinish = useCallback((data) => {
+    dispatch({
+      type: LOGIN_REQUEST,
+      data: {
+        userId: data.userId,
+        password: data.password,
+      },
+    });
+  }, []);
   ////// DATAVIEW //////
 
   return (
@@ -105,49 +147,67 @@ const Index = () => {
                 </Btn>
               </Wrapper>
 
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  아이디
-                </Text>
-                <TextInput
-                  type="text"
+              <CustomForm onFinish={loginFinish}>
+                <Wrapper al={`flex-start`}>
+                  <Text
+                    fontWeight={`bold`}
+                    margin={`0 0 14px`}
+                    color={Theme.grey2_C}
+                  >
+                    아이디
+                  </Text>
+                  <Form.Item
+                    name="userId"
+                    rules={[
+                      { required: true, message: "아이디를 입력해주세요." },
+                    ]}
+                  >
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="아이디를 입력해주세요."
+                      radius={`5px`}
+                    />
+                  </Form.Item>
+                </Wrapper>
+                <Wrapper al={`flex-start`}>
+                  <Text
+                    fontWeight={`bold`}
+                    margin={`0 0 14px`}
+                    color={Theme.grey2_C}
+                  >
+                    비밀번호
+                  </Text>
+                  <Form.Item
+                    name="password"
+                    rules={[
+                      { required: true, message: "비밀번호를 입력해주세요." },
+                    ]}
+                  >
+                    <TextInput
+                      type="password"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="비밀번호를 입력해주세요."
+                      radius={`5px`}
+                    />
+                  </Form.Item>
+                </Wrapper>
+                <CommonButton
+                  kindOf={`subTheme`}
                   width={`100%`}
                   height={`55px`}
-                  placeholder="아이디를 입력해주세요."
                   radius={`5px`}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`}>
-                <Text
+                  fontSize={`18px`}
                   fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
+                  margin={`2px 0 12px`}
+                  loading={st_loginLoading}
+                  htmlType="submit"
                 >
-                  비밀번호
-                </Text>
-                <TextInput
-                  type="password"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="비밀번호를 입력해주세요."
-                  radius={`5px`}
-                />
-              </Wrapper>
-              <CommonButton
-                kindOf={`subTheme`}
-                width={`100%`}
-                height={`55px`}
-                radius={`5px`}
-                fontSize={`18px`}
-                fontWeight={`bold`}
-                margin={`22px 0 12px`}
-              >
-                로그인
-              </CommonButton>
+                  로그인
+                </CommonButton>
+              </CustomForm>
               <Wrapper dr={`row`} ju={`space-between`}>
                 <Wrapper
                   width={`auto`}

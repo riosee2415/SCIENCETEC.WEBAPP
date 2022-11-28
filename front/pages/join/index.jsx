@@ -393,7 +393,9 @@ const Index = () => {
                       }}
                     ></GoogleLogin>
                   </GoogleOAuthProvider> */}
-                  <CommonButton
+
+                  {/* 구글로 시작하기 */}
+                  {/* <CommonButton
                     width={`100%`}
                     height={`70px`}
                     kindOf={`grey`}
@@ -409,7 +411,7 @@ const Index = () => {
                       </Circle>
                       구글로 시작하기
                     </Wrapper>
-                  </CommonButton>
+                  </CommonButton> */}
                   <KakaoLogin
                     jsKey={process.env.KAKAO_LOGIN_KEY}
                     onSuccess={(data) => {

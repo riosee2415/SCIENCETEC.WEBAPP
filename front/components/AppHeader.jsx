@@ -126,6 +126,7 @@ const AppHeader = () => {
 
   ////////////// - USE STATE- ///////////////
   const { logos } = useSelector((state) => state.logo);
+  const { me } = useSelector((state) => state.user);
   const [headerScroll, setHeaderScroll] = useState(false);
   const [pageY, setPageY] = useState(0);
   // const documentRef = useRef(document);
@@ -199,18 +200,28 @@ const AppHeader = () => {
               color={Theme.darkGrey_C}
               fontSize={`15px`}
             >
-              <Link href={`/login`}>
-                <a>
+              {me ? (
+                <>
                   <Text isHover margin={`0 22px 0 0`}>
-                    로그인
+                    로그아웃
                   </Text>
-                </a>
-              </Link>
-              <Link href={`/join`}>
-                <a>
-                  <Text isHover>회원가입</Text>
-                </a>
-              </Link>
+                </>
+              ) : (
+                <>
+                  <Link href={`/login`}>
+                    <a>
+                      <Text isHover margin={`0 22px 0 0`}>
+                        로그인
+                      </Text>
+                    </a>
+                  </Link>
+                  <Link href={`/join`}>
+                    <a>
+                      <Text isHover>회원가입</Text>
+                    </a>
+                  </Link>
+                </>
+              )}
             </Wrapper>
           </RsWrapper>
         </Wrapper>
