@@ -5,6 +5,10 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   /////////////////////////////
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+  /////////////////////////////
   LOGIN_ADMIN_REQUEST,
   LOGIN_ADMIN_SUCCESS,
   LOGIN_ADMIN_FAILURE,
@@ -102,6 +106,32 @@ function* signin(action) {
     console.error(err);
     yield put({
       type: LOGIN_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function logoutAPI(data) {
+  return await axios.get(`/api/user/logout`, data);
+}
+
+function* logout(action) {
+  try {
+    const result = yield call(logoutAPI, action.data);
+    yield put({
+      type: LOGOUT_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOGOUT_FAILURE,
       error: err.response.data,
     });
   }
@@ -442,6 +472,10 @@ function* watchSignin() {
   yield takeLatest(LOGIN_REQUEST, signin);
 }
 
+function* watchLogout() {
+  yield takeLatest(LOGOUT_REQUEST, logout);
+}
+
 function* watchSigninAdmin() {
   yield takeLatest(LOGIN_ADMIN_REQUEST, signinAdmin);
 }
@@ -495,6 +529,7 @@ export default function* userSaga() {
   yield all([
     fork(watchLoadMyInfo),
     fork(watchSignin),
+    fork(watchLogout),
     fork(watchSigninAdmin),
     fork(watchSignUp),
     fork(watchUserList),

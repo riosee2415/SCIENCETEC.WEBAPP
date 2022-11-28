@@ -11,13 +11,13 @@ import {
 import styled from "styled-components";
 import Theme from "./Theme";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
-import { Drawer } from "antd";
+import { Drawer, message } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import wrapper from "../store/configureStore";
 import axios from "axios";
 import { END } from "@redux-saga/core";
-import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
+import { LOAD_MY_INFO_REQUEST, LOGOUT_REQUEST } from "../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../hooks/useWidth";
 import { LOGO_GET_REQUEST } from "../reducers/logo";
@@ -126,7 +126,9 @@ const AppHeader = () => {
 
   ////////////// - USE STATE- ///////////////
   const { logos } = useSelector((state) => state.logo);
-  const { me } = useSelector((state) => state.user);
+  const { me, st_logoutDone, st_logoutError } = useSelector(
+    (state) => state.user
+  );
   const [headerScroll, setHeaderScroll] = useState(false);
   const [pageY, setPageY] = useState(0);
   // const documentRef = useRef(document);
@@ -148,11 +150,11 @@ const AppHeader = () => {
     setPageY(pageYOffset);
   });
 
-  // const logoutHandler = useCallback(() => {
-  //   dispatch({
-  //     type: LOG_OUT
-  //   })
-  // }, [])
+  const logoutHandler = useCallback(() => {
+    dispatch({
+      type: LOGOUT_REQUEST,
+    });
+  }, []);
 
   ////////////// - USE EFFECT- //////////////
   useEffect(() => {
@@ -165,6 +167,17 @@ const AppHeader = () => {
       type: LOGO_GET_REQUEST,
     });
   }, []);
+
+  useEffect(() => {
+    if (st_logoutDone) {
+      router.push("/login");
+      return message.success("로그아웃 되었습니다.");
+    }
+
+    if (st_logoutError) {
+      return message.error(st_logoutError);
+    }
+  }, [st_logoutDone, st_logoutError]);
 
   return (
     <>
@@ -208,7 +221,7 @@ const AppHeader = () => {
             >
               {me ? (
                 <>
-                  <Text isHover margin={`0 22px 0 0`}>
+                  <Text isHover margin={`0 22px 0 0`} onClick={logoutHandler}>
                     로그아웃
                   </Text>
                 </>
