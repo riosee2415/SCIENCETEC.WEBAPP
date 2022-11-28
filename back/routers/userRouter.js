@@ -831,91 +831,39 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-// router.post("/snsLogin", (req, res, next) => {
-//   passport.authenticate("local", async (err, user, info) => {
-//     const { userId, email, kakaoId, password, username, isPremium, isKakao } =
-//       req.body;
-//     if (user) {
-//       if (err) {
-//         console.error(err);
-//         return next(err);
-//       }
+router.post("/snsLogin", (req, res, next) => {
+  passport.authenticate("local", async (err, user, info) => {
+    if (user) {
+      if (err) {
+        console.error(err);
+        return next(err);
+      }
 
-//       if (info) {
-//         console.log(`❌ LOGIN FAILED : ${info.reason}`);
-//         return res.status(401).send(info.reason);
-//       }
+      if (info) {
+        console.log(`❌ LOGIN FAILED : ${info.reason}`);
+        return res.status(401).send(info.reason);
+      }
 
-//       return req.login(user, async (loginErr) => {
-//         if (loginErr) {
-//           console.error(loginErr);
-//           return next(loginErr);
-//         }
+      return req.login(user, async (loginErr) => {
+        if (loginErr) {
+          console.error(loginErr);
+          return next(loginErr);
+        }
 
-//         const fullUserWithoutPassword = await User.findOne({
-//           where: { id: user.id },
-//           attributes: {
-//             exclude: ["password", "secret"],
-//           },
-//         });
+        const fullUserWithoutPassword = await User.findOne({
+          where: { id: user.id },
+          attributes: {
+            exclude: ["password", "secret"],
+          },
+        });
 
-//         return res.status(200).json(fullUserWithoutPassword);
-//       });
-//     } else {
-//       const hashedPassword = await bcrypt.hash(password, 12);
-
-//       const insertQuery = `
-//     INSERT INTO users
-//     (
-//       userId,
-//       email,
-//       username,
-//       password,
-//       mobile,
-//       kakaoId,
-//       isKakao,
-//       isPremium,
-//       terms,
-//       createdAt,
-//       updatedAt
-//     )
-//     VALUES
-//     (
-//       ${userId},
-//       ${email},
-//       ${username},
-//       "${hashedPassword}",
-//       NULL,
-//       ${kakaoId ? `"${kakaoId}"` : null},,
-//       ${isKakao},
-//       ${isPremium},
-//       1,
-//       ${NOW},
-//       ${NOW}
-//       )
-//     `;
-
-//       const insertResult = await models.sequelize.query(insertQuery);
-
-//       const findUserQuery = `
-//       SELECT  *
-//         FROM  users
-//        WHERE  id = ${insertResult[0].insertId}
-//       `;
-
-//       const findUser = await models.sequelize.query(findUserQuery);
-
-//       return req.login(findUser[0][0], async (loginErr) => {
-//         if (loginErr) {
-//           console.error(loginErr);
-//           return next(loginErr);
-//         }
-
-//         return res.status(200).json(findUser[0][0]);
-//       });
-//     }
-//   })(req, res, next);
-// });
+        return res.status(200).json(fullUserWithoutPassword);
+      });
+    } else {
+      return res.status(401).send("일치하는 정보가 없습니다.");
+    }
+  })(req, res, next);
+});
 
 router.get("/me", isLoggedIn, async (req, res, next) => {
   try {
