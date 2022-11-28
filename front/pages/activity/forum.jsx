@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CustomPage,
   Image,
@@ -18,6 +18,8 @@ import LeftMenu from "../../components/LeftMenu";
 import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
+import { FORUM_LIST_REQUEST } from "../../reducers/forum";
+import { Empty, message } from "antd";
 
 const Box = styled(Wrapper)`
   width: calc(100% / 4 - 14px);
@@ -56,16 +58,52 @@ const Box = styled(Wrapper)`
       margin: 0 0 60px 0;
     }
   }
+
+  & iframe,
+  & object,
+  & embed {
+    width: 100%;
+  }
 `;
 
 const Forum = () => {
   ////// GLOBAL STATE //////
+
+  const { forumList, maxPage, st_forumListError } = useSelector(
+    (state) => state.forum
+  );
+
   ////// HOOKS //////
   const width = useWidth();
+  const dispatch = useDispatch();
+
+  const [currentPage, setCurrentPage] = useState(1);
   ////// REDUX //////
   ////// USEEFFECT //////
+
+  // 리스트
+  useEffect(() => {
+    if (st_forumListError) {
+      return message.error(st_forumListError);
+    }
+  }, [st_forumListError]);
+
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  const otherPageCall = useCallback(
+    (page) => {
+      dispatch({
+        type: FORUM_LIST_REQUEST,
+        data: {
+          page: currentPage,
+        },
+      });
+
+      setCurrentPage(page);
+    },
+    [currentPage]
+  );
   ////// DATAVIEW //////
 
   return (
@@ -105,20 +143,35 @@ const Forum = () => {
               </Wrapper>
 
               <Wrapper dr={`row`} ju={`flex-start`} al={`flex-start`}>
-                <Box>
-                  <Image
-                    alt="thumnail"
-                    margin={`0 0 10px`}
-                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/activity-img/project1.png`}
-                  />
-                  <Text fontSize={width < 900 ? `14px` : `16px`}>
-                    탄소중립으로 가는 길 : 원자력으로 할 수 있는 것들,
-                    탄소중립으로 가는 길 : 원자력으...
-                  </Text>
-                </Box>
+                {forumList &&
+                  (forumList.length === 0 ? (
+                    <Wrapper margin={`20px 0`}>
+                      <Empty description="포럼이 없습니다." />
+                    </Wrapper>
+                  ) : (
+                    forumList.map((data) => {
+                      return (
+                        <Box key={data.id}>
+                          <iframe
+                            src={data.youtubeLink}
+                            style={{ margin: `0 0 10px`, border: 0 }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                          />
+                          <Text fontSize={width < 900 ? `14px` : `16px`}>
+                            {data.title}
+                          </Text>
+                        </Box>
+                      );
+                    })
+                  ))}
               </Wrapper>
 
-              <CustomPage />
+              <CustomPage
+                defaultCurrent={1}
+                current={currentPage}
+                total={maxPage * 10}
+                onChange={otherPageCall}
+              />
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
@@ -140,6 +193,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: FORUM_LIST_REQUEST,
+      data: {
+        page: 1,
+      },
     });
 
     // 구현부 종료
