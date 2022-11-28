@@ -25,10 +25,10 @@ const Box = styled(Wrapper)`
   }
 `;
 
-const OpBoard = ({ boardType, data }) => {
+const OpBoard = ({ boardType, data, maxPage, currentPage, otherPageCall }) => {
   const width = useWidth();
-  const dispatch = useDispatch();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const goWritePage = useCallback(() => {
     dispatch({
@@ -125,7 +125,12 @@ const OpBoard = ({ boardType, data }) => {
         )}
       </Wrapper>
 
-      <CustomPage />
+      <CustomPage
+        defaultCurrent={1}
+        current={currentPage}
+        total={maxPage * 10}
+        onChange={otherPageCall}
+      />
     </>
   );
 };

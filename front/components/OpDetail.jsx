@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useCallback } from "react";
 import { NOTICE_DETAIL_REQUEST, SET_TEMP_TYPE } from "../reducers/notice";
 import {
@@ -213,7 +213,11 @@ const OpDetail = () => {
                 al={`flex-start`}
                 bgColor={Theme.white_C}
                 cursor={`pointer`}
-                onClick={() => nextPrevHandler(noticePrev && noticePrev.id)}
+                onClick={() =>
+                  noticePrev
+                    ? nextPrevHandler(noticePrev.id)
+                    : message.info("이전글이 존재하지 않습니다.")
+                }
               >
                 {noticePrev ? noticePrev.title : "이전글이 존재하지 않습니다."}
               </NextPrevWrapper>
@@ -237,7 +241,11 @@ const OpDetail = () => {
                 al={`flex-start`}
                 bgColor={Theme.white_C}
                 cursor={`pointer`}
-                onClick={() => nextPrevHandler(noticeNext && noticeNext.id)}
+                onClick={() =>
+                  noticeNext
+                    ? nextPrevHandler(noticeNext.id)
+                    : message.info("다음글이 존재하지 않습니다.")
+                }
               >
                 {noticeNext ? noticeNext.title : "다음글이 존재하지 않습니다."}
               </NextPrevWrapper>
