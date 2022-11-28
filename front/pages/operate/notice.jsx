@@ -37,7 +37,7 @@ const CustomForm = styled(Form)`
 
 const Notice = () => {
   ////// GLOBAL STATE //////
-  const { viewType, notices } = useSelector((state) => state.notice);
+  const { viewType, notices, maxPage } = useSelector((state) => state.notice);
   ////// HOOKS //////
   const width = useWidth();
 
@@ -56,7 +56,8 @@ const Notice = () => {
       type: NOTICE_LIST_REQUEST,
       data: {
         type: "공지사항",
-        title: searchTitle,
+        title: searchType === "제목" ? searchTitle : null,
+        content: searchType === "내용" ? searchTitle : null,
         page: currentPage,
       },
     });
@@ -77,10 +78,18 @@ const Notice = () => {
       if (searchType === "전체") {
         return;
       }
+
       setSearchTitle(data.searchTitle);
       setCurrentPage(1);
     },
-    [searchTitle, currentPage]
+    [searchType, searchTitle, currentPage]
+  );
+
+  const otherPageCall = useCallback(
+    (page) => {
+      setCurrentPage(page);
+    },
+    [currentPage]
   );
 
   ////// DATAVIEW //////
@@ -148,7 +157,13 @@ const Notice = () => {
                       </CommonButton>
                     </CustomForm>
                   </Wrapper>
-                  <OpBoard data={notices.notices} boardType="공지사항" />
+                  <OpBoard
+                    data={notices.notices}
+                    maxPage={maxPage}
+                    currentPage={currentPage}
+                    otherPageCall={otherPageCall}
+                    boardType="공지사항"
+                  />
                 </>
               )}
               {/* {viewType === "write" && <OpWrite />} */}
