@@ -162,6 +162,11 @@ export const items = {
       link: "/admin/forum",
       useYn: true,
     },
+    {
+      name: "수요조사설문관리",
+      link: "/admin/survey",
+      useYn: true,
+    },
   ],
 };
 
