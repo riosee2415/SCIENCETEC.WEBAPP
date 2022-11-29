@@ -6,6 +6,10 @@ const models = require("../models");
 const router = express.Router();
 
 router.post("/list", async (req, res, next) => {
+  const { type } = req.body;
+
+  const _type = parseInt(type) || false;
+
   const surveyQuery = `
     SELECT  id,
             type,
@@ -15,6 +19,8 @@ router.post("/list", async (req, res, next) => {
                 WHEN    type = 3 THEN "기술매칭서비스 신청"
             END                       AS viewType
       FROM  survey
+     WHERE  1 = 1
+            ${_type ? `AND type = ${_type}` : ``}
      ORDER  BY id ASC
     `;
 
@@ -28,12 +34,17 @@ router.post("/list", async (req, res, next) => {
               A.createdAt,
               A.updatedAt,
               DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")  AS viewCreatedAt,
-              DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")  AS viewUpdatedAt
+              DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")  AS viewUpdatedAt,
+              C.type
       FROM    surveyQuestion      A
      INNER
       JOIN    users               B
         ON    A.updator = B.id
+     INNER
+      JOIN    survey              C
+        ON    A.SurveyId = C.id
      WHERE    A.isDelete = 0
+              ${_type ? `AND C.type = ${_type}` : ``}
      ORDER    BY num ASC
     `;
 
@@ -49,12 +60,21 @@ router.post("/list", async (req, res, next) => {
             A.createdAt,
             A.updatedAt,
             DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")  AS viewCreatedAt,
-            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")  AS viewUpdatedAt
+            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")  AS viewUpdatedAt,
+            C.SurveyId,
+            D.type
       FROM  surveyInnerQuestion     A
      INNER
       JOIN  users                   B
         ON  A.updator = B.id
+     INNER
+      JOIN  surveyQuestion          C
+        ON  A.SurveyQuestionId = C.id
+     INNER
+      JOIN  survey        D
+        ON  C.SurveyId = D.id
      WHERE  A.isDelete = 0
+            ${_type ? `AND D.type = ${_type}` : ``}
      ORDER  BY num ASC
     `;
 
