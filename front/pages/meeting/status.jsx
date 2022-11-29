@@ -248,7 +248,7 @@ const Status = ({}) => {
                               borderLeft={`none`}
                               width={`21%`}
                             >
-                              <Text fontSize={`16px`}></Text>
+                              <Text fontSize={`16px`}>{data.combiName}</Text>
                             </Wrapper>
 
                             <Wrapper
@@ -300,7 +300,16 @@ const Status = ({}) => {
                               borderLeft={`none`}
                               width={`12%`}
                             >
-                              <Text fontSize={`16px`}>조합유형</Text>
+                              <Text fontSize={`16px`}>
+                                {statusList &&
+                                  statusList.combiTypeList.map((v, idx) => {
+                                    if (v.UserId === data.id) {
+                                      return v.value + " ";
+                                    } else {
+                                      return null;
+                                    }
+                                  })}
+                              </Text>
                             </Wrapper>
                             <Wrapper
                               height={`100%`}
