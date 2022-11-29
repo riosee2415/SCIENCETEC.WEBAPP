@@ -352,21 +352,21 @@ const AppHeader = () => {
               <Text className="menu">설립안내</Text>
               <Wrapper fontSize={`17px`}>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/guide`}>
                     <a>설립절차</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/guide/document`}>
                     <a>서류</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/guide/statute`}>
                     <a>관련법령</a>
                   </Link>
                 </Text>
-                <Link href={`/`}>
+                <Link href={`/guide/reference`}>
                   <a>
                     <Text>자료실</Text>
                   </a>
