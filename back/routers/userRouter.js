@@ -115,6 +115,7 @@ router.post("/status/list", async (req, res, next) => {
             combiHomepage,
             combiEstimateDate,
             DATE_FORMAT(combiEstimateDate, "%Y년 %m월 %d일")		AS viewEstimateDate,
+            DATE_FORMAT(combiEstimateDate, "%Y년")		AS viewEstimateYear,
             combiArea,
             corporationCnt,
             personalCnt,
