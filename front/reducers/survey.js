@@ -2,7 +2,7 @@ import produce from "../util/produce";
 
 export const initailState = {
   surveyQuesList: [],
-  surveyInnerList: [],
+  surveyInnerList: null,
   surveyHistoryList: [],
 
   //
@@ -78,6 +78,8 @@ export const SURVEY_INNER_DELETE_FAILURE = "SURVEY_INNER_DELETE_FAILURE";
 export const SURVEY_HISTORY_LIST_REQUEST = "SURVEY_HISTORY_LIST_REQUEST";
 export const SURVEY_HISTORY_LIST_SUCCESS = "SURVEY_HISTORY_LIST_SUCCESS";
 export const SURVEY_HISTORY_LIST_FAILURE = "SURVEY_HISTORY_LIST_FAILURE";
+
+export const INNER_RESET = "INNER_RESET";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -269,6 +271,13 @@ const reducer = (state = initailState, action) =>
         draft.st_surveyHistoryListLoading = false;
         draft.st_surveyHistoryListDone = false;
         draft.st_surveyHistoryListError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case INNER_RESET: {
+        draft.surveyInnerList = null;
         break;
       }
 

@@ -42,7 +42,7 @@ import {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyQuesListAPI(data) {
-  return await axios.post(`/api/survey/list`, data);
+  return await axios.post(`/api/survey/question/list`, data);
 }
 
 function* surveyQuesList(action) {
@@ -69,7 +69,7 @@ function* surveyQuesList(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyQuesCreateAPI(data) {
-  return await axios.post(`/api/survey/create`, data);
+  return await axios.post(`/api/survey/question/create`, data);
 }
 
 function* surveyQuesCreate(action) {
@@ -96,7 +96,7 @@ function* surveyQuesCreate(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyQuesUpdateAPI(data) {
-  return await axios.post(`/api/survey/update`, data);
+  return await axios.post(`/api/survey/question/update`, data);
 }
 
 function* surveyQuesUpdate(action) {
@@ -123,7 +123,7 @@ function* surveyQuesUpdate(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyQuesDeleteAPI(data) {
-  return await axios.post(`/api/survey/delete`, data);
+  return await axios.post(`/api/survey/question/delete`, data);
 }
 
 function* surveyQuesDelete(action) {
@@ -150,7 +150,7 @@ function* surveyQuesDelete(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyInnerListAPI(data) {
-  return await axios.post(`/api/survey/list`, data);
+  return await axios.post(`/api/survey/inner/list`, data);
 }
 
 function* surveyInnerList(action) {
@@ -177,7 +177,7 @@ function* surveyInnerList(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyInnerCreateAPI(data) {
-  return await axios.post(`/api/survey/create`, data);
+  return await axios.post(`/api/survey/inner/create`, data);
 }
 
 function* surveyInnerCreate(action) {
@@ -204,7 +204,7 @@ function* surveyInnerCreate(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyInnerUpdateAPI(data) {
-  return await axios.post(`/api/survey/update`, data);
+  return await axios.post(`/api/survey/inner/update`, data);
 }
 
 function* surveyInnerUpdate(action) {
@@ -231,7 +231,7 @@ function* surveyInnerUpdate(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function surveyInnerDeleteAPI(data) {
-  return await axios.post(`/api/survey/delete`, data);
+  return await axios.post(`/api/survey/inner/delete`, data);
 }
 
 function* surveyInnerDelete(action) {
