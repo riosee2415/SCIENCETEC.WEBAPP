@@ -27,23 +27,23 @@ export const menus = [
   },
   {
     menuName: "설립안내",
-    menuLink: "/intro/greeting",
+    menuLink: "/guide",
     subMenus: [
       {
         subMenuName: "설립절차",
-        subMenuLink: "/intro/greeting",
+        subMenuLink: "/guide",
       },
       {
         subMenuName: "서류",
-        subMenuLink: "/intro/operation",
+        subMenuLink: "/guide/document",
       },
       {
         subMenuName: "관련법령",
-        subMenuLink: "/intro/organization",
+        subMenuLink: "/guide/statute",
       },
       {
         subMenuName: "자료실",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/guide/reference",
       },
     ],
   },
