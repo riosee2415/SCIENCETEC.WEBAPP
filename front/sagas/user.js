@@ -65,6 +65,10 @@ import {
   USER_DETAIL_SUCCESS,
   USER_DETAIL_FAILURE,
   /////////////////////////////
+  STATUS_LIST_REQUEST,
+  STATUS_LIST_SUCCESS,
+  STATUS_LIST_FAILURE,
+  /////////////////////////////
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -492,6 +496,34 @@ function* userDetail(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function statusListAPI(data) {
+  return await axios.post(`/api/user/status/list`, data);
+}
+
+function* statusList(action) {
+  try {
+    const result = yield call(statusListAPI, action.data);
+
+    yield put({
+      type: STATUS_LIST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: STATUS_LIST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -558,6 +590,10 @@ function* watchUserDetail() {
   yield takeLatest(USER_DETAIL_REQUEST, userDetail);
 }
 
+function* watchStatusList() {
+  yield takeLatest(STATUS_LIST_REQUEST, statusList);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
@@ -577,6 +613,7 @@ export default function* userSaga() {
     fork(watchAdminUserExitTrue),
     fork(watchAdminUserExitFalse),
     fork(watchUserDetail),
+    fork(watchStatusList),
     //
   ]);
 }

@@ -7,6 +7,7 @@ export const initailState = {
   updateModal: false,
   userHistory: [],
   adminUserRightHistory: [],
+  statusList: [],
 
   userDetail: null,
   combiTypeList: [],
@@ -72,6 +73,10 @@ export const initailState = {
   st_userDetailLoading: false,
   st_userDetailDone: false,
   st_userDetailError: null,
+  //
+  st_statusListLoading: false, // 조합장 리스트
+  st_statusListDone: false,
+  st_statusListError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -137,6 +142,10 @@ export const ADMINUSER_EXITFALSE_FAILURE = "ADMINUSER_EXITFALSE_FAILURE";
 export const USER_DETAIL_REQUEST = "USER_DETAIL_REQUEST";
 export const USER_DETAIL_SUCCESS = "USER_DETAIL_SUCCESS";
 export const USER_DETAIL_FAILURE = "USER_DETAIL_FAILURE";
+//
+export const STATUS_LIST_REQUEST = "STATUS_LIST_REQUEST";
+export const STATUS_LIST_SUCCESS = "STATUS_LIST_SUCCESS";
+export const STATUS_LIST_FAILURE = "STATUS_LIST_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -481,6 +490,31 @@ const reducer = (state = initailState, action) =>
         draft.st_userDetailLoading = false;
         draft.st_userDetailDone = false;
         draft.st_userDetailError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case STATUS_LIST_REQUEST: {
+        draft.st_statusListLoading = true;
+        draft.st_statusListDone = false;
+        draft.st_statusListError = null;
+        break;
+      }
+      case STATUS_LIST_SUCCESS: {
+        draft.st_statusListLoading = false;
+        draft.st_statusListDone = true;
+        draft.st_statusListError = null;
+        draft.statusList = action.data;
+        draft.combiTypeList = action.data.combiTypeList;
+        draft.businessTypeList = action.data.businessTypeList;
+        draft.sectorList = action.data.sectorList;
+        break;
+      }
+      case STATUS_LIST_FAILURE: {
+        draft.st_statusListLoading = false;
+        draft.st_statusListDone = false;
+        draft.st_statusListError = action.error;
         break;
       }
 

@@ -321,25 +321,26 @@ const AppHeader = () => {
               <Text className="menu">교류회</Text>
               <Wrapper fontSize={`17px`}>
                 <Text margin={`0 0 14px`}>
-                  <Text margin={`0 0 14px`}>
-                    <Link href={`/meeting`}>
-                      <a>교류회란</a>
-                    </Link>
-                  </Text>
-                  <Text margin={`0 0 14px`}>
-                    <Link href={`/meeting/status`}>
-                      <a>현황</a>
-                    </Link>
-                  </Text>
-                  <Link href={`/meeting/group`}>
-                    <a>
-                      <Text margin={`0 0 14px`}>조직</Text>
-                    </a>
+                  <Link href={`/meeting`}>
+                    <a>교류회란</a>
                   </Link>
+                </Text>
+                <Text margin={`0 0 14px`}>
+                  <Link href={`/meeting/status`}>
+                    <a>현황</a>
+                  </Link>
+                </Text>
+                <Link href={`/meeting/group`}>
+                  <a>
+                    <Text margin={`0 0 14px`}>조직</Text>
+                  </a>
+                </Link>
+                <Text margin={`0 0 14px`}>
                   <Link href={`/meeting/greetings`}>
                     <a>인사말</a>
                   </Link>
                 </Text>
+
                 <Text>
                   <Link href={`/meeting/location`}>
                     <a>오시는 길</a>
