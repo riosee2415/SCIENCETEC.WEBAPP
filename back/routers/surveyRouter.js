@@ -61,16 +61,20 @@ router.post("/list", async (req, res, next) => {
             A.updatedAt,
             DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")  AS viewCreatedAt,
             DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")  AS viewUpdatedAt,
-            C.type
+            C.SurveyId,
+            D.type
       FROM  surveyInnerQuestion     A
      INNER
       JOIN  users                   B
         ON  A.updator = B.id
      INNER
-      JOIN  survey                  C
-        ON  A.SurveyId = C.id
+      JOIN  surveyQuestion          C
+        ON  A.SurveyQuestionId = C.id
+     INNER
+      JOIN  survey        D
+        ON  C.SurveyId = D.id
      WHERE  A.isDelete = 0
-            ${_type ? `AND C.type = ${_type}` : ``}
+            ${_type ? `AND D.type = ${_type}` : ``}
      ORDER  BY num ASC
     `;
 
