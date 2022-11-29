@@ -13,10 +13,16 @@ export const initailState = {
   noticePrev: null,
   noticeNext: null,
   adminNotices: [],
+
+  mainBoard: [],
   //
   st_noticeListLoading: false, // 공지사항 가져오기
   st_noticeListDone: false,
   st_noticeListError: null,
+  //
+  st_mainBoardLoading: false, // 메인 게시판 가져오기
+  st_mainBoardDone: false,
+  st_mainBoardError: null,
   //
   st_noticeAdminListLoading: false, // 관리자 공지사항
   st_noticeAdminListDone: false,
@@ -58,6 +64,10 @@ export const initailState = {
 export const NOTICE_LIST_REQUEST = "NOTICE_LIST_REQUEST";
 export const NOTICE_LIST_SUCCESS = "NOTICE_LIST_SUCCESS";
 export const NOTICE_LIST_FAILURE = "NOTICE_LIST_FAILURE";
+//
+export const MAIN_BOARD_REQUEST = "MAIN_BOARD_REQUEST";
+export const MAIN_BOARD_SUCCESS = "MAIN_BOARD_SUCCESS";
+export const MAIN_BOARD_FAILURE = "MAIN_BOARD_FAILURE";
 //
 export const NOTICE_ADMIN_LIST_REQUEST = "NOTICE_ADMIN_LIST_REQUEST";
 export const NOTICE_ADMIN_LIST_SUCCESS = "NOTICE_ADMIN_LIST_SUCCESS";
@@ -109,13 +119,14 @@ const reducer = (state = initailState, action) =>
     switch (action.type) {
       case NOTICE_LIST_REQUEST: {
         draft.st_noticeListLoading = true;
-        draft.st_noticeListDone = null;
-        draft.st_noticeListError = false;
+        draft.st_noticeListDone = false;
+        draft.st_noticeListError = null;
         break;
       }
       case NOTICE_LIST_SUCCESS: {
         draft.st_noticeListLoading = false;
         draft.st_noticeListDone = true;
+        draft.st_noticeListError = null;
         draft.notices = action.data;
         break;
       }
@@ -123,6 +134,26 @@ const reducer = (state = initailState, action) =>
         draft.st_noticeListLoading = false;
         draft.st_noticeListDone = false;
         draft.st_noticeListError = action.error;
+        break;
+      }
+      ///////////////////////////////////////////////////////
+      case MAIN_BOARD_REQUEST: {
+        draft.st_mainBoardLoading = true;
+        draft.st_mainBoardDone = false;
+        draft.st_mainBoardError = null;
+        break;
+      }
+      case MAIN_BOARD_SUCCESS: {
+        draft.st_mainBoardLoading = false;
+        draft.st_mainBoardDone = true;
+        draft.st_mainBoardError = null;
+        draft.mainBoard = action.data.notices;
+        break;
+      }
+      case MAIN_BOARD_FAILURE: {
+        draft.st_mainBoardLoading = false;
+        draft.st_mainBoardDone = false;
+        draft.st_mainBoardError = action.error;
         break;
       }
       ///////////////////////////////////////////////////////

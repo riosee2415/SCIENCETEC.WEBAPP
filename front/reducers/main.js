@@ -4,7 +4,6 @@ export const initailState = {
   banner: [],
   business: [],
   city: [],
-  board: [],
 
   //
   st_mainLoading: false,
@@ -34,7 +33,6 @@ const reducer = (state = initailState, action) =>
         draft.banner = action.data.bannerData;
         draft.business = action.data.businessData;
         draft.city = action.data.cityData;
-        draft.board = action.data.boardData;
         break;
       }
       case MAIN_FAILURE: {
