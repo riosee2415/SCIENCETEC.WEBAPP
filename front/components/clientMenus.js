@@ -1,12 +1,8 @@
 export const menus = [
   {
     menuName: "교류회",
-    menuLink: "/meeting/greetings",
+    menuLink: "/meeting",
     subMenus: [
-      {
-        subMenuName: "인사말",
-        subMenuLink: "/meeting/greetings",
-      },
       {
         subMenuName: "교류회란",
         subMenuLink: "/meeting",
@@ -18,6 +14,10 @@ export const menus = [
       {
         subMenuName: "조직",
         subMenuLink: "/meeting/group",
+      },
+      {
+        subMenuName: "인사말",
+        subMenuLink: "/meeting/greetings",
       },
       {
         subMenuName: "오시는 길",
