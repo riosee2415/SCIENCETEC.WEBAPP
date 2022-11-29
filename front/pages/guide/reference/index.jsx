@@ -34,9 +34,13 @@ import CC01 from "../../../components/common/CC01";
 import { DownloadOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCallback } from "react";
-import { Modal, Select } from "antd";
+import { Empty, Modal, Select } from "antd";
 import LeftMenu from "../../../components/LeftMenu";
 import BreadCrumb from "../../../components/BreadCrumb";
+import { NOTICE_LIST_REQUEST } from "../../../reducers/notice";
+import { useRouter } from "next/router";
+import OpBoard from "../../../components/OpBoard";
+import OpDetail from "../../../components/OpDetail";
 
 const Box = styled(Wrapper)`
   flex-direction: row;
@@ -50,19 +54,27 @@ const Box = styled(Wrapper)`
 `;
 
 const Index = ({}) => {
-  const width = useWidth();
   ////// GLOBAL STATE //////
+  const { viewType, notices, maxPage } = useSelector((state) => state.notice);
 
   ////// HOOKS //////
+  const width = useWidth();
+  const router = useRouter();
+
   const [isDown, setIsDown] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   ////// REDUX //////
   ////// USEEFFECT //////
   ////// TOGGLE //////
 
-  const downToggle = useCallback(() => {
-    setIsDown(!isDown);
-  }, [isDown]);
   ////// HANDLER //////
+
+  const otherPageCall = useCallback(
+    (page) => {
+      setCurrentPage(page);
+    },
+    [currentPage]
+  );
   ////// DATAVIEW //////
 
   return (
@@ -72,7 +84,7 @@ const Index = ({}) => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
 
@@ -83,38 +95,32 @@ const Index = ({}) => {
               margin={`0 0 100px`}
             >
               <BreadCrumb />
+              {viewType === "list" && (
+                <>
+                  <Wrapper>
+                    <Wrapper
+                      dr={`row`}
+                      ju={`flex-start`}
+                      margin={`0 0 30px`}
+                      al={width < 700 ? `flex-start` : `center`}
+                    >
+                      <Image
+                        src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
+                        alt="icon"
+                        width={`14px`}
+                        margin={width < 700 ? `6px 10px 0 0` : `0 10px 0 0`}
+                      />
+                      <Wrapper
+                        width={`calc(100% - 14px - 10px)`}
+                        al={`flex-start`}
+                        fontSize={width < 700 ? `18px` : `20px`}
+                        fontWeight={`600`}
+                      >
+                        기관형 과학기술인 협동조합 자료실
+                      </Wrapper>
+                    </Wrapper>
 
-              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                자료실
-              </Text>
-
-              <Wrapper
-                borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                padding={`25px 0 0`}
-              >
-                <Wrapper
-                  dr={`row`}
-                  ju={`flex-start`}
-                  margin={`0 0 30px`}
-                  al={width < 700 ? `flex-start` : `center`}
-                >
-                  <Image
-                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
-                    alt="icon"
-                    width={`14px`}
-                    margin={width < 700 ? `6px 10px 0 0` : `0 10px 0 0`}
-                  />
-                  <Wrapper
-                    width={`calc(100% - 14px - 10px)`}
-                    al={`flex-start`}
-                    fontSize={width < 700 ? `18px` : `20px`}
-                    fontWeight={`600`}
-                  >
-                    기관형 과학기술인 협동조합 자료실
-                  </Wrapper>
-                </Wrapper>
-
-                <Wrapper overflow={`auto`} wrap={`nowrap`} al={`flex-start`}>
+                    {/* <Wrapper overflow={`auto`} wrap={`nowrap`} al={`flex-start`}>
                   <Wrapper al={`flex-start`}>
                     <Wrapper
                       borderTop={`2px solid ${Theme.basicTheme_C}`}
@@ -159,50 +165,90 @@ const Index = ({}) => {
                         </Text>
                       </Wrapper>
                     </Wrapper>
-                    <Box
-                      dr={`row`}
-                      height={`48px`}
-                      borderBottom={`1px solid ${Theme.lightGrey2_C}`}
-                    >
-                      <Wrapper
-                        height={`100%`}
-                        width={width < 700 ? `10%` : `5%`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          1
-                        </Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        width={width < 700 ? `90%` : `65%`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          제목젬고
-                        </Text>
-                      </Wrapper>
 
-                      <Wrapper
-                        height={`100%`}
-                        width={`15%`}
-                        display={width < 700 ? `none` : `flex`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          2022
-                        </Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        width={`15%`}
-                        display={width < 700 ? `none` : `flex`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          비고
-                        </Text>
-                      </Wrapper>
-                    </Box>
+                    {notices.notices &&
+                      (notices.notices.length === 0 ? (
+                        <Wrapper margin={`100px 0`}>
+                          <Empty description="자료가 없습니다." />
+                        </Wrapper>
+                      ) : (
+                        notices.notices.map((data) => {
+                          return (
+                            <Box
+                              dr={`row`}
+                              height={`48px`}
+                              borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                              onClick={() =>
+                                moveLinkHandler(`/guide/reference/${data.id}`)
+                              }
+                            >
+                              <Wrapper
+                                height={`100%`}
+                                width={width < 700 ? `10%` : `5%`}
+                              >
+                                <Text
+                                  fontSize={`14px`}
+                                  isNeo={true}
+                                  fontWeight={`700`}
+                                >
+                                  {data.num}
+                                </Text>
+                              </Wrapper>
+                              <Wrapper
+                                height={`100%`}
+                                width={width < 700 ? `90%` : `65%`}
+                              >
+                                <Text
+                                  fontSize={`14px`}
+                                  isNeo={true}
+                                  fontWeight={`700`}
+                                >
+                                  {data.title}
+                                </Text>
+                              </Wrapper>
+
+                              <Wrapper
+                                height={`100%`}
+                                width={`15%`}
+                                display={width < 700 ? `none` : `flex`}
+                              >
+                                <Text
+                                  fontSize={`14px`}
+                                  isNeo={true}
+                                  fontWeight={`700`}
+                                >
+                                  {data.viewCreatedAt}
+                                </Text>
+                              </Wrapper>
+                              <Wrapper
+                                height={`100%`}
+                                width={`15%`}
+                                display={width < 700 ? `none` : `flex`}
+                              >
+                                <Text
+                                  fontSize={`14px`}
+                                  isNeo={true}
+                                  fontWeight={`700`}
+                                ></Text>
+                              </Wrapper>
+                            </Box>
+                          );
+                        })
+                      ))}
                   </Wrapper>
-                </Wrapper>
-              </Wrapper>
+                </Wrapper> */}
+
+                    <OpBoard
+                      data={notices.notices}
+                      maxPage={maxPage}
+                      currentPage={currentPage}
+                      otherPageCall={otherPageCall}
+                      boardType="자료실"
+                    />
+                  </Wrapper>
+                </>
+              )}
+              {viewType === "detail" && <OpDetail />}
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>
@@ -224,6 +270,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: NOTICE_LIST_REQUEST,
+      data: {
+        type: "자료실",
+      },
     });
 
     // 구현부 종료

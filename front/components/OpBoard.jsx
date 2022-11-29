@@ -75,7 +75,9 @@ const OpBoard = ({ boardType, data, maxPage, currentPage, otherPageCall }) => {
           <Text isNeo>일시</Text>
         </Wrapper>
         <Wrapper width={width < 900 ? `19%` : `15%`}>
-          <Text isNeo>게시자</Text>
+          <Text isNeo>
+            {router.pathname === "/guide/reference" ? "비고" : "게시자"}
+          </Text>
         </Wrapper>
       </Wrapper>
 
@@ -98,10 +100,10 @@ const OpBoard = ({ boardType, data, maxPage, currentPage, otherPageCall }) => {
                 </Text>
               </Wrapper>
               <Wrapper width={width < 900 ? `19%` : `15%`}>
-                {data.viewCreatedAt}
+                {data.viewFrontCreatedAt}
               </Wrapper>
               <Wrapper width={width < 900 ? `19%` : `15%`}>
-                {data.author}
+                {router.pathname === "/guide/reference" ? "" : data.author}
               </Wrapper>
             </Box>
           );

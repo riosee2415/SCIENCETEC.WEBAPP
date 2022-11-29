@@ -70,14 +70,8 @@ const Statute = ({}) => {
               margin={`0 0 100px`}
             >
               <BreadCrumb />
-              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                관련법령
-              </Text>
 
-              <Wrapper
-                borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                padding={`25px 0 0`}
-              >
+              <Wrapper>
                 <Wrapper
                   dr={`row`}
                   ju={`flex-start`}

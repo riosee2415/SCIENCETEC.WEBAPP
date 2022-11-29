@@ -630,7 +630,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/service/nursing?type=1`}>
+                    <Link href={`/guide`}>
                       <a>설립절차</a>
                     </Link>
                   </Wrapper>
@@ -639,7 +639,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/service/protection?type=1`}>
+                    <Link href={`/guide/document`}>
                       <a>서류</a>
                     </Link>
                   </Wrapper>
@@ -648,12 +648,12 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/service/visit`}>
+                    <Link href={`/guide/statute`}>
                       <a>관련법령</a>
                     </Link>
                   </Wrapper>
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/service/visit`}>
+                    <Link href={`/guide/reference`}>
                       <a>자료실</a>
                     </Link>
                   </Wrapper>
