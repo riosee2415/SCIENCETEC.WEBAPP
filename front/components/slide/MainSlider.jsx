@@ -65,23 +65,16 @@ const MainSliderWrapper = styled(RowWrapper)`
   }
 `;
 
-const MainSlider = () => {
+const MainSlider = ({ banner }) => {
   const width = useWidth();
 
   const dispatch = useDispatch();
-  const { banners } = useSelector((state) => state.banner);
   const { me } = useSelector((state) => state.user);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isStop, setIsStop] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    dispatch({
-      type: MAIN_BANNER_REQUEST,
-    });
-  }, [me]);
 
   const moveLinkHandler = useCallback((link) => {
     window.open(link);
@@ -109,8 +102,8 @@ const MainSlider = () => {
         initialSlide={0}
         dots={false}
       >
-        {banners &&
-          banners.map((data, idx) => {
+        {banner &&
+          banner.map((data, idx) => {
             return (
               <ColWrapper
                 key={idx}
@@ -157,8 +150,8 @@ const MainSlider = () => {
         ju={`flex-start`}
         width={`auto`}
       >
-        {banners &&
-          banners.map((data, idx) => {
+        {banner &&
+          banner.map((data, idx) => {
             return (
               <>
                 <Text

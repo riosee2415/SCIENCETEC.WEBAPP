@@ -1,49 +1,49 @@
 export const menus = [
   {
     menuName: "교류회",
-    menuLink: "/intro/greeting",
+    menuLink: "/meeting",
     subMenus: [
       {
-        subMenuName: "인사말",
-        subMenuLink: "/intro/greeting",
-      },
-      {
         subMenuName: "교류회란",
-        subMenuLink: "/intro/operation",
+        subMenuLink: "/meeting",
       },
       {
         subMenuName: "현황",
-        subMenuLink: "/intro/organization",
+        subMenuLink: "/meeting/status",
       },
       {
         subMenuName: "조직",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/meeting/group",
+      },
+      {
+        subMenuName: "인사말",
+        subMenuLink: "/meeting/greetings",
       },
       {
         subMenuName: "오시는 길",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/meeting/location",
       },
     ],
   },
   {
     menuName: "설립안내",
-    menuLink: "/intro/greeting",
+    menuLink: "/guide",
     subMenus: [
       {
         subMenuName: "설립절차",
-        subMenuLink: "/intro/greeting",
+        subMenuLink: "/guide",
       },
       {
         subMenuName: "서류",
-        subMenuLink: "/intro/operation",
+        subMenuLink: "/guide/document",
       },
       {
         subMenuName: "관련법령",
-        subMenuLink: "/intro/organization",
+        subMenuLink: "/guide/statute",
       },
       {
         subMenuName: "자료실",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/guide/reference",
       },
     ],
   },

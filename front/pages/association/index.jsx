@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
@@ -7,10 +7,8 @@ import axios from "axios";
 import { END } from "redux-saga";
 import { useSelector } from "react-redux";
 import {
-  CustomPage,
   Image,
   RsWrapper,
-  Text,
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
@@ -19,15 +17,21 @@ import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
+import { SHARE_PROJECT_REQUEST } from "../../reducers/shareProject";
 
 const Association = () => {
   ////// GLOBAL STATE //////
+  const { shareProjects } = useSelector((state) => state.shareProject);
   ////// HOOKS //////
   const width = useWidth();
   ////// REDUX //////
   ////// USEEFFECT //////
   ////// TOGGLE //////
   ////// HANDLER //////
+  const moveLinkHandler = useCallback((link) => {
+    window.open(link);
+  }, []);
+
   ////// DATAVIEW //////
 
   return (
@@ -78,7 +82,19 @@ const Association = () => {
                   </Wrapper>
                   <Image
                     alt="image"
-                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/usercoop-page/img.png`}
+                    src={
+                      shareProjects &&
+                      shareProjects[0] &&
+                      shareProjects[0].imagePath
+                    }
+                    onClick={() =>
+                      moveLinkHandler(
+                        shareProjects &&
+                          shareProjects[0] &&
+                          shareProjects[0].link
+                      )
+                    }
+                    cursor={`pointer`}
                   />
                   <Wrapper
                     dr={`row`}
@@ -101,7 +117,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      김도형
+                      {shareProjects &&
+                        shareProjects[0] &&
+                        shareProjects[0].repreName}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
@@ -120,7 +138,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      2012년 8월
+                      {shareProjects &&
+                        shareProjects[0] &&
+                        shareProjects[0].viewEstimateDate}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
@@ -139,7 +159,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      3명
+                      {shareProjects &&
+                        shareProjects[0] &&
+                        shareProjects[0].viewEmpCnt}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
@@ -158,7 +180,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      LED 감성조명 제조 및 연구개발 서비스
+                      {shareProjects &&
+                        shareProjects[0] &&
+                        shareProjects[0].jobType}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper
@@ -183,9 +207,9 @@ const Association = () => {
                       al={`flex-start`}
                       fontSize={`14px`}
                     >
-                      LED 감성조명 개발 및 기술충전을 통한 R&BO, 친환경
-                      감성조명을 통해 세상을 밝고 아름답게 만드는 스마트
-                      조명회사를 지향한다.
+                      {shareProjects &&
+                        shareProjects[0] &&
+                        shareProjects[0].importantWork}
                     </Wrapper>
                   </Wrapper>
                 </Wrapper>
@@ -212,7 +236,19 @@ const Association = () => {
                   </Wrapper>
                   <Image
                     alt="image"
-                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/usercoop-page/img.png`}
+                    onClick={() =>
+                      moveLinkHandler(
+                        shareProjects &&
+                          shareProjects[1] &&
+                          shareProjects[1].link
+                      )
+                    }
+                    src={
+                      shareProjects &&
+                      shareProjects[1] &&
+                      shareProjects[1].imagePath
+                    }
+                    cursor={`pointer`}
                   />
                   <Wrapper
                     dr={`row`}
@@ -235,7 +271,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      김도형
+                      {shareProjects &&
+                        shareProjects[1] &&
+                        shareProjects[1].repreName}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
@@ -254,7 +292,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      2012년 8월
+                      {shareProjects &&
+                        shareProjects[1] &&
+                        shareProjects[1].viewEstimateDate}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
@@ -273,7 +313,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      3명
+                      {shareProjects &&
+                        shareProjects[1] &&
+                        shareProjects[1].viewEmpCnt}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
@@ -292,7 +334,9 @@ const Association = () => {
                       }
                       al={`flex-start`}
                     >
-                      LED 감성조명 제조 및 연구개발 서비스
+                      {shareProjects &&
+                        shareProjects[1] &&
+                        shareProjects[1].jobType}
                     </Wrapper>
                   </Wrapper>
                   <Wrapper
@@ -317,9 +361,9 @@ const Association = () => {
                       al={`flex-start`}
                       fontSize={`14px`}
                     >
-                      LED 감성조명 개발 및 기술충전을 통한 R&BO, 친환경
-                      감성조명을 통해 세상을 밝고 아름답게 만드는 스마트
-                      조명회사를 지향한다.
+                      {shareProjects &&
+                        shareProjects[1] &&
+                        shareProjects[1].importantWork}
                     </Wrapper>
                   </Wrapper>
                 </Wrapper>
@@ -345,6 +389,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: SHARE_PROJECT_REQUEST,
     });
 
     // 구현부 종료

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import AdminLayout from "../../../components/AdminLayout";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Form, Image, Input, Popover } from "antd";
+import { Button, DatePicker, Form, Image, Input, message, Popover } from "antd";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
 import { END } from "redux-saga";
@@ -17,17 +17,113 @@ import {
   GuideLi,
 } from "../../../components/commonComponents";
 import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  SHARE_PROJECT_REQUEST,
+  SHAREPROJECT_IMAGE1_REQUEST,
+  SHAREPROJECT_IMAGE2_REQUEST,
+  SHAREPROJECT_UPDATE_REQUEST,
+} from "../../../reducers/shareProject";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
 import { HomeOutlined, RightOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 const Association = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
+  const {
+    shareProjects,
+    previewImagePath1,
+    previewImagePath2,
+    st_shareProjectDone,
+    st_shareProjecthImage1Loading,
+    st_shareProjecthImage2Loading,
+    st_shareProjecthUpdateDone,
+    st_shareProjecthUpdateError,
+  } = useSelector((state) => state.shareProject);
 
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const logoImageRef = useRef();
+  const logoImageRef1 = useRef();
+  const logoImageRef2 = useRef();
+
+  const [infoForm1] = Form.useForm();
+  const [infoForm2] = Form.useForm();
+
+  useEffect(() => {
+    if (st_shareProjectDone) {
+      infoForm1.setFieldsValue({
+        id: shareProjects[0].id,
+        repreName: shareProjects[0].repreName,
+        estimateDate: moment(shareProjects[0].estimateDate),
+        empCnt: shareProjects[0].empCnt,
+        jobType: shareProjects[0].jobType,
+        importantWork: shareProjects[0].importantWork,
+        link: shareProjects[0].link,
+      });
+
+      infoForm2.setFieldsValue({
+        id: shareProjects[1].id,
+        repreName: shareProjects[1].repreName,
+        estimateDate: moment(shareProjects[1].estimateDate),
+        empCnt: shareProjects[1].empCnt,
+        jobType: shareProjects[1].jobType,
+        importantWork: shareProjects[1].importantWork,
+        link: shareProjects[1].link,
+      });
+    }
+  }, [st_shareProjectDone]);
+
+  useEffect(() => {
+    if (st_shareProjecthUpdateDone) {
+      message.success(
+        "기술융합협동조합 정보가 수정되었습니다. 데이터를 재조회 합니다."
+      );
+    }
+    dispatch({
+      type: SHARE_PROJECT_REQUEST,
+    });
+  }, [st_shareProjecthUpdateDone]);
+
+  useEffect(() => {
+    if (st_shareProjecthUpdateError) {
+      return message.error(st_shareProjecthUpdateError);
+    }
+  }, [st_shareProjecthUpdateError]);
+
+  const clickImageUpload1 = useCallback(() => {
+    logoImageRef1.current.click();
+  }, [logoImageRef1.current]);
+
+  const onChangeImages1 = useCallback((e) => {
+    const formData = new FormData();
+
+    [].forEach.call(e.target.files, (file) => {
+      formData.append("image", file);
+    });
+
+    dispatch({
+      type: SHAREPROJECT_IMAGE1_REQUEST,
+      data: formData,
+    });
+  });
+
+  const clickImageUpload2 = useCallback(() => {
+    logoImageRef2.current.click();
+  }, [logoImageRef2.current]);
+
+  const onChangeImages2 = useCallback((e) => {
+    const formData = new FormData();
+
+    [].forEach.call(e.target.files, (file) => {
+      formData.append("image", file);
+    });
+
+    dispatch({
+      type: SHAREPROJECT_IMAGE2_REQUEST,
+      data: formData,
+    });
+  });
 
   // 상위메뉴 변수
   const [level1, setLevel1] = useState("기초정보관리");
@@ -80,6 +176,44 @@ const Association = ({}) => {
 
   ////// HANDLER //////
 
+  const updateHandler = useCallback(
+    (data) => {
+      dispatch({
+        type: SHAREPROJECT_UPDATE_REQUEST,
+        data: {
+          id: data.id,
+          repreName: data.repreName,
+          estimateDate: data.estimateDate.format("YYYY-MM-DD"),
+          empCnt: data.empCnt,
+          jobType: data.jobType,
+          importantWork: data.importantWork,
+          link: data.link,
+          imagePath: previewImagePath1 ? previewImagePath1 : data.imagePath,
+        },
+      });
+    },
+    [previewImagePath1]
+  );
+
+  const update2Handler = useCallback(
+    (data) => {
+      dispatch({
+        type: SHAREPROJECT_UPDATE_REQUEST,
+        data: {
+          id: data.id,
+          repreName: data.repreName,
+          estimateDate: data.estimateDate.format("YYYY-MM-DD"),
+          empCnt: data.empCnt,
+          jobType: data.jobType,
+          importantWork: data.importantWork,
+          link: data.link,
+          imagePath: previewImagePath2 ? previewImagePath2 : data.imagePath,
+        },
+      });
+    },
+    [previewImagePath2]
+  );
+
   ////// DATAVIEW //////
 
   ////// DATA COLUMNS //////
@@ -116,9 +250,12 @@ const Association = ({}) => {
       {/* GUIDE */}
       <Wrapper margin={`10px 0px 0px 0px`}>
         <GuideUl>
-          <GuideLi>화면 가이드안내 문구를 입력하세요.</GuideLi>
+          <GuideLi>
+            회원조합메뉴에 보여지는 기술융합협동조합과 회원법인조합의 내용을
+            수정할 수 있습니다.
+          </GuideLi>
           <GuideLi isImpo={true}>
-            화면 가이드안내 문구를 입력하세요. (RED COLOR)
+            수정하는 즉시 화면에 반영되니 신중한 처리바랍니다.
           </GuideLi>
         </GuideUl>
       </Wrapper>
@@ -141,8 +278,34 @@ const Association = ({}) => {
           </Wrapper>
           <Image
             alt="image"
-            src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/usercoop-page/img.png`}
+            src={
+              previewImagePath1
+                ? previewImagePath1
+                : shareProjects[0] && shareProjects[0].imagePath
+            }
           />
+
+          {/* IMAGE AREA */}
+          <input
+            type="file"
+            name="image"
+            accept=".png, .jpg"
+            // multiple
+            hidden
+            ref={logoImageRef1}
+            onChange={onChangeImages1}
+          />
+          <Button
+            type="primary"
+            size="small"
+            onClick={clickImageUpload1}
+            loading={
+              st_shareProjecthImage1Loading || st_shareProjecthImage2Loading
+            }
+          >
+            이미지 업로드
+          </Button>
+          {/* IMAGE AREA */}
 
           <Wrapper
             dr={`row`}
@@ -152,32 +315,38 @@ const Association = ({}) => {
             borderTop={`1px solid ${Theme.lightGrey2_C}`}
           >
             <Form
+              form={infoForm1}
               style={{ width: "100%" }}
               labelCol={{ span: 4 }}
               wrapperCol={{ span: 20 }}
+              onFinish={updateHandler}
             >
-              <Form.Item label="대표자명" name="title">
+              <Form.Item name="id" hidden>
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="설립연도" name="content">
+              <Form.Item label="대표자명" name="repreName">
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="직원수" name="link">
+              <Form.Item label="설립연도" name="estimateDate">
+                <DatePicker style={{ width: `100%` }} />
+              </Form.Item>
+
+              <Form.Item label="직원수" name="empCnt">
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="업종" name="updator">
-                <Input size="small" allowClear readOnly />
+              <Form.Item label="업종" name="jobType">
+                <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="주업무" name="updatedAt">
-                <Input size="small" allowClear readOnly />
+              <Form.Item label="주업무" name="importantWork">
+                <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="링크" name="createdAt">
-                <Input size="small" allowClear readOnly />
+              <Form.Item label="링크" name="link">
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Wrapper al="flex-end" margin="0px 0px 20px 0px">
@@ -200,8 +369,35 @@ const Association = ({}) => {
           </Wrapper>
           <Image
             alt="image"
-            src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/usercoop-page/img.png`}
+            src={
+              previewImagePath2
+                ? previewImagePath2
+                : shareProjects[1] && shareProjects[1].imagePath
+            }
           />
+
+          {/* IMAGE AREA */}
+          <input
+            type="file"
+            name="image"
+            accept=".png, .jpg"
+            // multiple
+            hidden
+            ref={logoImageRef2}
+            onChange={onChangeImages2}
+          />
+          <Button
+            type="primary"
+            size="small"
+            onClick={clickImageUpload2}
+            loading={
+              st_shareProjecthImage1Loading || st_shareProjecthImage2Loading
+            }
+          >
+            이미지 업로드
+          </Button>
+          {/* IMAGE AREA */}
+
           <Wrapper
             dr={`row`}
             height={`55px`}
@@ -210,32 +406,38 @@ const Association = ({}) => {
             borderTop={`1px solid ${Theme.lightGrey2_C}`}
           >
             <Form
+              form={infoForm2}
               style={{ width: "100%" }}
               labelCol={{ span: 4 }}
               wrapperCol={{ span: 20 }}
+              onFinish={update2Handler}
             >
-              <Form.Item label="대표자명" name="title">
+              <Form.Item name="id" hidden>
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="설립연도" name="content">
+              <Form.Item label="대표자명" name="repreName">
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="직원수" name="link">
+              <Form.Item label="설립연도" name="estimateDate">
+                <DatePicker style={{ width: `100%` }} />
+              </Form.Item>
+
+              <Form.Item label="직원수" name="empCnt">
                 <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="업종" name="updator">
-                <Input size="small" allowClear readOnly />
+              <Form.Item label="업종" name="jobType">
+                <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="주업무" name="updatedAt">
-                <Input size="small" allowClear readOnly />
+              <Form.Item label="주업무" name="importantWork">
+                <Input size="small" allowClear />
               </Form.Item>
 
-              <Form.Item label="링크" name="createdAt">
-                <Input size="small" allowClear readOnly />
+              <Form.Item label="링크" name="link">
+                <Input size="small" allowClear />
               </Form.Item>
 
               <Wrapper al="flex-end" margin="0px 0px 20px 0px">
@@ -264,6 +466,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: SHARE_PROJECT_REQUEST,
+      data: {
+        type: 3,
+      },
     });
 
     // 구현부 종료

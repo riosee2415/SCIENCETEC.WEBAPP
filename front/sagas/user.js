@@ -5,6 +5,14 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   /////////////////////////////
+  SNS_LOGIN_REQUEST,
+  SNS_LOGIN_SUCCESS,
+  SNS_LOGIN_FAILURE,
+  /////////////////////////////
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+  /////////////////////////////
   LOGIN_ADMIN_REQUEST,
   LOGIN_ADMIN_SUCCESS,
   LOGIN_ADMIN_FAILURE,
@@ -57,6 +65,10 @@ import {
   USER_DETAIL_SUCCESS,
   USER_DETAIL_FAILURE,
   /////////////////////////////
+  STATUS_LIST_REQUEST,
+  STATUS_LIST_SUCCESS,
+  STATUS_LIST_FAILURE,
+  /////////////////////////////
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -83,17 +95,17 @@ function* loadMyInfo(action) {
 
 // ******************************************************************************************************************
 // ******************************************************************************************************************
-// *****
+// ******************************************************************************************************************
 
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
-async function signinPI(data) {
+async function signinAPI(data) {
   return await axios.post(`/api/user/signin`, data);
 }
 
 function* signin(action) {
   try {
-    const result = yield call(signinPI, action.data);
+    const result = yield call(signinAPI, action.data);
     yield put({
       type: LOGIN_SUCCESS,
       data: result.data,
@@ -102,6 +114,58 @@ function* signin(action) {
     console.error(err);
     yield put({
       type: LOGIN_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function snsLoginAPI(data) {
+  return await axios.post(`/api/user/snsLogin`, data);
+}
+
+function* snsLogin(action) {
+  try {
+    const result = yield call(snsLoginAPI, action.data);
+    yield put({
+      type: SNS_LOGIN_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SNS_LOGIN_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function logoutAPI(data) {
+  return await axios.get(`/api/user/logout`, data);
+}
+
+function* logout(action) {
+  try {
+    const result = yield call(logoutAPI, action.data);
+    yield put({
+      type: LOGOUT_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOGOUT_FAILURE,
       error: err.response.data,
     });
   }
@@ -432,6 +496,34 @@ function* userDetail(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function statusListAPI(data) {
+  return await axios.post(`/api/user/status/list`, data);
+}
+
+function* statusList(action) {
+  try {
+    const result = yield call(statusListAPI, action.data);
+
+    yield put({
+      type: STATUS_LIST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: STATUS_LIST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -440,6 +532,14 @@ function* watchLoadMyInfo() {
 
 function* watchSignin() {
   yield takeLatest(LOGIN_REQUEST, signin);
+}
+
+function* watchSnsLogin() {
+  yield takeLatest(SNS_LOGIN_REQUEST, snsLogin);
+}
+
+function* watchLogout() {
+  yield takeLatest(LOGOUT_REQUEST, logout);
 }
 
 function* watchSigninAdmin() {
@@ -490,11 +590,17 @@ function* watchUserDetail() {
   yield takeLatest(USER_DETAIL_REQUEST, userDetail);
 }
 
+function* watchStatusList() {
+  yield takeLatest(STATUS_LIST_REQUEST, statusList);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
     fork(watchLoadMyInfo),
     fork(watchSignin),
+    fork(watchSnsLogin),
+    fork(watchLogout),
     fork(watchSigninAdmin),
     fork(watchSignUp),
     fork(watchUserList),
@@ -507,6 +613,7 @@ export default function* userSaga() {
     fork(watchAdminUserExitTrue),
     fork(watchAdminUserExitFalse),
     fork(watchUserDetail),
+    fork(watchStatusList),
     //
   ]);
 }

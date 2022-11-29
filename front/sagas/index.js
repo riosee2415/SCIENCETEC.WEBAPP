@@ -13,6 +13,7 @@ import faqSaga from "./faq";
 import forumSaga from "./forum";
 import shareSaga from "./shareProject";
 import surveySaga from "./survey";
+import mainSaga from "./main";
 //
 import axios from "axios";
 import backURL from "../config/config";
@@ -36,6 +37,7 @@ export default function* rootSaga() {
     fork(forumSaga),
     fork(shareSaga),
     fork(surveySaga),
+    fork(mainSaga),
     //
   ]);
 }

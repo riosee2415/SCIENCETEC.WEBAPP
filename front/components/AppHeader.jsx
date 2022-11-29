@@ -11,13 +11,13 @@ import {
 import styled from "styled-components";
 import Theme from "./Theme";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
-import { Drawer } from "antd";
+import { Drawer, message } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import wrapper from "../store/configureStore";
 import axios from "axios";
 import { END } from "@redux-saga/core";
-import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
+import { LOAD_MY_INFO_REQUEST, LOGOUT_REQUEST } from "../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../hooks/useWidth";
 import { LOGO_GET_REQUEST } from "../reducers/logo";
@@ -126,6 +126,9 @@ const AppHeader = () => {
 
   ////////////// - USE STATE- ///////////////
   const { logos } = useSelector((state) => state.logo);
+  const { me, st_logoutDone, st_logoutError } = useSelector(
+    (state) => state.user
+  );
   const [headerScroll, setHeaderScroll] = useState(false);
   const [pageY, setPageY] = useState(0);
   // const documentRef = useRef(document);
@@ -147,6 +150,12 @@ const AppHeader = () => {
     setPageY(pageYOffset);
   });
 
+  const logoutHandler = useCallback(() => {
+    dispatch({
+      type: LOGOUT_REQUEST,
+    });
+  }, []);
+
   ////////////// - USE EFFECT- //////////////
   useEffect(() => {
     document.addEventListener("scroll", handleScroll);
@@ -158,6 +167,17 @@ const AppHeader = () => {
       type: LOGO_GET_REQUEST,
     });
   }, []);
+
+  useEffect(() => {
+    if (st_logoutDone) {
+      router.push("/login");
+      return message.success("로그아웃 되었습니다.");
+    }
+
+    if (st_logoutError) {
+      return message.error(st_logoutError);
+    }
+  }, [st_logoutDone, st_logoutError]);
 
   return (
     <>
@@ -199,18 +219,28 @@ const AppHeader = () => {
               color={Theme.darkGrey_C}
               fontSize={`15px`}
             >
-              <Link href={`/login`}>
-                <a>
-                  <Text isHover margin={`0 22px 0 0`}>
-                    로그인
+              {me ? (
+                <>
+                  <Text isHover margin={`0 22px 0 0`} onClick={logoutHandler}>
+                    로그아웃
                   </Text>
-                </a>
-              </Link>
-              <Link href={`/join`}>
-                <a>
-                  <Text isHover>회원가입</Text>
-                </a>
-              </Link>
+                </>
+              ) : (
+                <>
+                  <Link href={`/login`}>
+                    <a>
+                      <Text isHover margin={`0 22px 0 0`}>
+                        로그인
+                      </Text>
+                    </a>
+                  </Link>
+                  <Link href={`/join`}>
+                    <a>
+                      <Text isHover>회원가입</Text>
+                    </a>
+                  </Link>
+                </>
+              )}
             </Wrapper>
           </RsWrapper>
         </Wrapper>
@@ -225,11 +255,11 @@ const AppHeader = () => {
             )}
           </ATag>
           <Wrapper dr={`row`} width={`auto`}>
-            <Link href={``}>
+            <Link href={`/meeting`}>
               <a>
                 <Menu
                   color={
-                    router.pathname.includes(`/company`) && Theme.subTheme_C
+                    router.pathname.includes(`/meeting`) && Theme.subTheme_C
                   }
                 >
                   교류회
@@ -291,27 +321,28 @@ const AppHeader = () => {
               <Text className="menu">교류회</Text>
               <Wrapper fontSize={`17px`}>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
-                    <a>인사말</a>
-                  </Link>
-                </Text>
-                <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/meeting`}>
                     <a>교류회란</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/meeting/status`}>
                     <a>현황</a>
                   </Link>
                 </Text>
-                <Link href={`/`}>
+                <Link href={`/meeting/group`}>
                   <a>
                     <Text margin={`0 0 14px`}>조직</Text>
                   </a>
                 </Link>
+                <Text margin={`0 0 14px`}>
+                  <Link href={`/meeting/greetings`}>
+                    <a>인사말</a>
+                  </Link>
+                </Text>
+
                 <Text>
-                  <Link href={`/`}>
+                  <Link href={`/meeting/location`}>
                     <a>오시는 길</a>
                   </Link>
                 </Text>
@@ -321,21 +352,21 @@ const AppHeader = () => {
               <Text className="menu">설립안내</Text>
               <Wrapper fontSize={`17px`}>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/guide`}>
                     <a>설립절차</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/guide/document`}>
                     <a>서류</a>
                   </Link>
                 </Text>
                 <Text margin={`0 0 14px`}>
-                  <Link href={`/`}>
+                  <Link href={`/guide/statute`}>
                     <a>관련법령</a>
                   </Link>
                 </Text>
-                <Link href={`/`}>
+                <Link href={`/guide/reference`}>
                   <a>
                     <Text>자료실</Text>
                   </a>
@@ -599,7 +630,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/service/nursing?type=1`}>
+                    <Link href={`/guide`}>
                       <a>설립절차</a>
                     </Link>
                   </Wrapper>
@@ -608,7 +639,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/service/protection?type=1`}>
+                    <Link href={`/guide/document`}>
                       <a>서류</a>
                     </Link>
                   </Wrapper>
@@ -617,12 +648,12 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/service/visit`}>
+                    <Link href={`/guide/statute`}>
                       <a>관련법령</a>
                     </Link>
                   </Wrapper>
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/service/visit`}>
+                    <Link href={`/guide/reference`}>
                       <a>자료실</a>
                     </Link>
                   </Wrapper>

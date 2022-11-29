@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
-import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  LOGIN_REQUEST,
+  SNS_LOGIN_REQUEST,
+} from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../../hooks/useWidth";
 import {
   RsWrapper,
@@ -20,6 +24,10 @@ import Theme from "../../components/Theme";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { Form, message } from "antd";
+import { useRouter } from "next/router";
+import KakaoLogin from "react-kakao-login";
+import naver from "naver-id-login";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -55,15 +63,94 @@ const Circle = styled(Wrapper)`
   }
 `;
 
+const CustomForm = styled(Form)`
+  width: 100%;
+
+  & .ant-form-item {
+    width: 100%;
+  }
+`;
+
 const Index = () => {
   ////// GLOBAL STATE //////
-  const [currentTab, setCurrentTab] = useState(0);
+
+  const {
+    //
+    st_loginLoading,
+    st_loginDone,
+    st_loginError,
+    //
+    st_snsLoginDone,
+    st_snsLoginError,
+  } = useSelector((state) => state.user);
+
   ////// HOOKS //////
   const width = useWidth();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const [currentTab, setCurrentTab] = useState(0);
   ////// REDUX //////
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    if (st_loginDone) {
+      router.push("/");
+      return message.success("로그인 되었습니다.");
+    }
+  }, [st_loginDone]);
+
+  useEffect(() => {
+    if (st_loginError) {
+      return message.error(st_loginError);
+    }
+  }, [st_loginError]);
+
+  useEffect(() => {
+    if (st_snsLoginDone) {
+      router.push("/");
+      return message.success("로그인 되었습니다.");
+    }
+  }, [st_snsLoginDone]);
+
+  useEffect(() => {
+    if (st_snsLoginError) {
+      message.error(st_snsLoginError);
+      router.push("/join");
+    }
+  }, [st_snsLoginError]);
+
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  // 네이버
+  const naverLoginHandler = useCallback(async () => {
+    const clientId = "kuOuSirjF7Z6X0ioR48B";
+    const callbackUrl = "http://localhost:3000/join?naver=true";
+    const auth = await naver.login(clientId, callbackUrl);
+    const accessToken = auth.access_token;
+
+    const profile = await naver.getProfile(accessToken);
+    const userId = "Naver_" + profile.response.id;
+
+    dispatch({
+      type: SNS_LOGIN_REQUEST,
+      data: {
+        userId: profile.response.email,
+        password: profile.response.email,
+      },
+    });
+  }, []);
+
+  const loginFinish = useCallback((data) => {
+    dispatch({
+      type: LOGIN_REQUEST,
+      data: {
+        userId: data.userId,
+        password: data.password,
+      },
+    });
+  }, []);
   ////// DATAVIEW //////
 
   return (
@@ -105,49 +192,67 @@ const Index = () => {
                 </Btn>
               </Wrapper>
 
-              <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                <Text
-                  fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
-                >
-                  아이디
-                </Text>
-                <TextInput
-                  type="text"
+              <CustomForm onFinish={loginFinish}>
+                <Wrapper al={`flex-start`}>
+                  <Text
+                    fontWeight={`bold`}
+                    margin={`0 0 14px`}
+                    color={Theme.grey2_C}
+                  >
+                    아이디
+                  </Text>
+                  <Form.Item
+                    name="userId"
+                    rules={[
+                      { required: true, message: "아이디를 입력해주세요." },
+                    ]}
+                  >
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="아이디를 입력해주세요."
+                      radius={`5px`}
+                    />
+                  </Form.Item>
+                </Wrapper>
+                <Wrapper al={`flex-start`}>
+                  <Text
+                    fontWeight={`bold`}
+                    margin={`0 0 14px`}
+                    color={Theme.grey2_C}
+                  >
+                    비밀번호
+                  </Text>
+                  <Form.Item
+                    name="password"
+                    rules={[
+                      { required: true, message: "비밀번호를 입력해주세요." },
+                    ]}
+                  >
+                    <TextInput
+                      type="password"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="비밀번호를 입력해주세요."
+                      radius={`5px`}
+                    />
+                  </Form.Item>
+                </Wrapper>
+                <CommonButton
+                  kindOf={`subTheme`}
                   width={`100%`}
                   height={`55px`}
-                  placeholder="아이디를 입력해주세요."
                   radius={`5px`}
-                />
-              </Wrapper>
-              <Wrapper al={`flex-start`}>
-                <Text
+                  fontSize={`18px`}
                   fontWeight={`bold`}
-                  margin={`0 0 14px`}
-                  color={Theme.grey2_C}
+                  margin={`2px 0 12px`}
+                  loading={st_loginLoading}
+                  htmlType="submit"
                 >
-                  비밀번호
-                </Text>
-                <TextInput
-                  type="password"
-                  width={`100%`}
-                  height={`55px`}
-                  placeholder="비밀번호를 입력해주세요."
-                  radius={`5px`}
-                />
-              </Wrapper>
-              <CommonButton
-                kindOf={`subTheme`}
-                width={`100%`}
-                height={`55px`}
-                radius={`5px`}
-                fontSize={`18px`}
-                fontWeight={`bold`}
-                margin={`22px 0 12px`}
-              >
-                로그인
-              </CommonButton>
+                  로그인
+                </CommonButton>
+              </CustomForm>
               <Wrapper dr={`row`} ju={`space-between`}>
                 <Wrapper
                   width={`auto`}
@@ -193,13 +298,42 @@ const Index = () => {
                         src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
                       />
                     </Circle>
-                    <Circle margin={`0 20px`}>
-                      <Image
-                        alt="kakao"
-                        src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_kakao.png`}
-                      />
-                    </Circle>
-                    <Circle>
+                    <KakaoLogin
+                      jsKey={process.env.KAKAO_LOGIN_KEY}
+                      onSuccess={(data) => {
+                        // setSnsData(data.profile.kakao_account);
+                        dispatch({
+                          type: SNS_LOGIN_REQUEST,
+                          data: {
+                            userId: data.profile.kakao_account.email,
+                            password: data.profile.kakao_account.email,
+                          },
+                        });
+                      }}
+                      onFailure={(data) => {
+                        console.log(data);
+                      }}
+                      className="KakaoLogin"
+                      getProfile="true"
+                      render={({ onClick }) => {
+                        return (
+                          <Circle
+                            margin={`0 20px`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              onClick();
+                            }}
+                          >
+                            <Image
+                              alt="kakao"
+                              src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_kakao.png`}
+                            />
+                          </Circle>
+                        );
+                      }}
+                    ></KakaoLogin>
+
+                    <Circle onClick={naverLoginHandler}>
                       <Image
                         alt="naver"
                         src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_naver.png`}

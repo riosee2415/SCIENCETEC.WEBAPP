@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   KAKAO_LOGIN_REQUEST,
@@ -29,17 +29,81 @@ import Popup from "../components/popup/popup";
 import Mainslider from "../components/slide/MainSlider";
 import ToastEditorComponent from "../components/editor/ToastEditorComponent";
 import CC01 from "../components/common/CC01";
+import { MAIN_REQUEST } from "../reducers/main";
+import { Empty } from "antd";
+import { MAIN_BOARD_REQUEST } from "../reducers/notice";
+
+const BoardTypeButton = styled(CommonButton)`
+  background-color: ${(props) => props.isCheck && props.theme.basicTheme_C};
+  color: ${(props) => props.isCheck && props.theme.white_C};
+  border: ${(props) => props.isCheck && `1px solid ${props.theme.white_C}`};
+`;
+
+const BoardWrapper = styled(Wrapper)`
+  flex-direction: row;
+  height: 60px;
+  border-bottom: 1px dashed ${(props) => props.theme.lightGrey2_C};
+
+  &:hover {
+    background-color: ${(props) => props.theme.subTheme4_C};
+  }
+`;
 
 const Home = ({}) => {
-  const width = useWidth();
   ////// GLOBAL STATE //////
+  const { banner, business, city } = useSelector((state) => state.main);
+  const { mainBoard } = useSelector((state) => state.notice);
 
   ////// HOOKS //////
+  const width = useWidth();
+  const dispatch = useDispatch();
+
+  const [boardType, setBoardType] = useState("전체");
   ////// REDUX //////
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    dispatch({
+      type: MAIN_BOARD_REQUEST,
+      data: {
+        type: boardType === "전체" ? null : boardType,
+      },
+    });
+  }, [boardType]);
   ////// TOGGLE //////
+
+  const boardTypeToggle = useCallback(
+    (type) => {
+      setBoardType(type);
+    },
+    [boardType]
+  );
+
   ////// HANDLER //////
   ////// DATAVIEW //////
+
+  const boardImage = [
+    {
+      type: "전체",
+      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board1.png",
+    },
+    {
+      type: "공지사항",
+      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board2.png",
+    },
+    {
+      type: "커뮤니티",
+      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board3.png",
+    },
+    {
+      type: "자료실",
+      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board4.png",
+    },
+    {
+      type: "FAQ",
+      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board5.png",
+    },
+  ];
 
   return (
     <>
@@ -57,7 +121,7 @@ const Home = ({}) => {
                   radius={`20px`}
                   overflow={`hidden`}
                 >
-                  <Mainslider />
+                  <Mainslider banner={banner} />
                 </Wrapper>
 
                 <Wrapper
@@ -89,6 +153,7 @@ const Home = ({}) => {
               radius={`10px`}
               dr={`row`}
               margin={`0 0 100px`}
+              al={`flex-start`}
             >
               <Wrapper
                 width={width < 1280 ? `100%` : `calc(100% - 450px)`}
@@ -99,230 +164,119 @@ const Home = ({}) => {
                   ju={width < 700 ? `space-around` : `flex-start`}
                   margin={`0 0 30px`}
                 >
-                  <CommonButton
+                  <BoardTypeButton
                     kindOf={`white`}
                     width={`auto`}
                     height={width < 700 ? `30px` : `50px`}
                     padding={width < 700 ? `0 10px` : `0 30px`}
                     radius={`50px`}
                     margin={width < 700 ? `0 0 5px` : `0`}
+                    onClick={() => boardTypeToggle("전체")}
+                    isCheck={boardType === "전체"}
                   >
                     <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
                       전체
                     </Text>
-                  </CommonButton>
-                  <CommonButton
+                  </BoardTypeButton>
+
+                  <BoardTypeButton
                     kindOf={`white`}
                     width={`auto`}
                     height={width < 700 ? `30px` : `50px`}
                     padding={width < 700 ? `0 10px` : `0 30px`}
                     radius={`50px`}
                     margin={width < 700 ? `0 0 5px` : `0`}
+                    onClick={() => boardTypeToggle("공지사항")}
+                    isCheck={boardType === "공지사항"}
                   >
                     <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
                       공지사항
                     </Text>
-                  </CommonButton>
-                  <CommonButton
+                  </BoardTypeButton>
+                  <BoardTypeButton
                     kindOf={`white`}
                     width={`auto`}
                     height={width < 700 ? `30px` : `50px`}
                     padding={width < 700 ? `0 10px` : `0 30px`}
                     radius={`50px`}
                     margin={width < 700 ? `0 0 5px` : `0`}
+                    onClick={() => boardTypeToggle("커뮤니티")}
+                    isCheck={boardType === "커뮤니티"}
                   >
                     <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
-                      열린알림방
+                      커뮤니티
                     </Text>
-                  </CommonButton>
-                  <CommonButton
+                  </BoardTypeButton>
+                  <BoardTypeButton
                     kindOf={`white`}
                     width={`auto`}
                     height={width < 700 ? `30px` : `50px`}
                     padding={width < 700 ? `0 10px` : `0 30px`}
                     radius={`50px`}
                     margin={width < 700 ? `0 0 5px` : `0`}
+                    onClick={() => boardTypeToggle("자료실")}
+                    isCheck={boardType === "자료실"}
                   >
                     <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
                       자료실
                     </Text>
-                  </CommonButton>
-                  <CommonButton
+                  </BoardTypeButton>
+                  <BoardTypeButton
                     kindOf={`white`}
                     width={`auto`}
                     height={width < 700 ? `30px` : `50px`}
                     padding={width < 700 ? `0 10px` : `0 30px`}
                     radius={`50px`}
                     margin={width < 700 ? `0 0 5px` : `0`}
+                    onClick={() => boardTypeToggle("FAQ")}
+                    isCheck={boardType === "FAQ"}
                   >
                     <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
                       FAQ
                     </Text>
-                  </CommonButton>
+                  </BoardTypeButton>
                 </Wrapper>
-
-                <Wrapper
-                  dr={`row`}
-                  height={`60px`}
-                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    width={width < 700 ? `25%` : `10%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                    fontWeight={`700`}
-                    color={Theme.subTheme_C}
-                  >
-                    공지사항
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    width={`75%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                  >
-                    지
-                  </Wrapper>
-                  <Wrapper
-                    display={width < 700 ? `none` : `flex`}
-                    al={`flex-end`}
-                    width={`15%`}
-                    fontSize={`16px`}
-                    color={Theme.grey_C}
-                  >
-                    2022.12.12
-                  </Wrapper>
-                </Wrapper>
-
-                <Wrapper
-                  dr={`row`}
-                  height={`60px`}
-                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    width={width < 700 ? `25%` : `10%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                    fontWeight={`700`}
-                    color={Theme.subTheme_C}
-                  >
-                    공지사항
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    width={`75%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                  >
-                    지
-                  </Wrapper>
-                  <Wrapper
-                    display={width < 700 ? `none` : `flex`}
-                    al={`flex-end`}
-                    width={`15%`}
-                    fontSize={`16px`}
-                    color={Theme.grey_C}
-                  >
-                    2022.12.12
-                  </Wrapper>
-                </Wrapper>
-
-                <Wrapper
-                  dr={`row`}
-                  height={`60px`}
-                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    width={width < 700 ? `25%` : `10%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                    fontWeight={`700`}
-                    color={Theme.subTheme_C}
-                  >
-                    공지사항
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    width={`75%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                  >
-                    지
-                  </Wrapper>
-                  <Wrapper
-                    display={width < 700 ? `none` : `flex`}
-                    al={`flex-end`}
-                    width={`15%`}
-                    fontSize={`16px`}
-                    color={Theme.grey_C}
-                  >
-                    2022.12.12
-                  </Wrapper>
-                </Wrapper>
-
-                <Wrapper
-                  dr={`row`}
-                  height={`60px`}
-                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    width={width < 700 ? `25%` : `10%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                    fontWeight={`700`}
-                    color={Theme.subTheme_C}
-                  >
-                    공지사항
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    width={`75%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                  >
-                    지
-                  </Wrapper>
-                  <Wrapper
-                    display={width < 700 ? `none` : `flex`}
-                    al={`flex-end`}
-                    width={`15%`}
-                    fontSize={`16px`}
-                    color={Theme.grey_C}
-                  >
-                    2022.12.12
-                  </Wrapper>
-                </Wrapper>
-
-                <Wrapper
-                  dr={`row`}
-                  height={`60px`}
-                  borderBottom={`1px dashed ${Theme.lightGrey2_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    width={width < 700 ? `25%` : `10%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                    fontWeight={`700`}
-                    color={Theme.subTheme_C}
-                  >
-                    공지사항
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    width={`75%`}
-                    fontSize={width < 700 ? `13px` : `16px`}
-                  >
-                    지
-                  </Wrapper>
-                  <Wrapper
-                    display={width < 700 ? `none` : `flex`}
-                    al={`flex-end`}
-                    width={`15%`}
-                    fontSize={`16px`}
-                    color={Theme.grey_C}
-                  >
-                    2022.12.12
-                  </Wrapper>
-                </Wrapper>
+                {mainBoard &&
+                  (mainBoard.length === 0 ? (
+                    <Wrapper margin={`100px 0`}>
+                      <Empty description="게시글이 없습니다." />
+                    </Wrapper>
+                  ) : (
+                    mainBoard.map((data) => {
+                      return (
+                        <BoardWrapper>
+                          <Wrapper
+                            al={`flex-start`}
+                            width={width < 700 ? `25%` : `10%`}
+                            fontSize={width < 700 ? `13px` : `16px`}
+                            fontWeight={`700`}
+                            color={Theme.subTheme_C}
+                          >
+                            {data.type}
+                          </Wrapper>
+                          <Wrapper
+                            al={`flex-start`}
+                            width={`75%`}
+                            fontSize={width < 700 ? `13px` : `16px`}
+                          >
+                            <Text>{data.title}</Text>
+                          </Wrapper>
+                          <Wrapper
+                            display={width < 700 ? `none` : `flex`}
+                            al={`flex-end`}
+                            width={`15%`}
+                            fontSize={`16px`}
+                            color={Theme.grey_C}
+                          >
+                            {data.viewFrontCreatedAt}
+                          </Wrapper>
+                        </BoardWrapper>
+                      );
+                    })
+                  ))}
               </Wrapper>
               <Image
-                src=""
+                src={boardImage.find((data) => data.type === boardType).url}
                 alt="img"
                 height={`380px`}
                 width={width < 1280 ? `100%` : `450px`}
@@ -390,6 +344,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: MAIN_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: MAIN_BOARD_REQUEST,
     });
 
     // 구현부 종료

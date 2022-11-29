@@ -1,23 +1,14 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  KAKAO_LOGIN_REQUEST,
-  LOAD_MY_INFO_REQUEST,
-  LOGIN_REQUEST,
-} from "../../reducers/user";
-import useInput from "../../hooks/useInput";
+import React, { useCallback, useEffect } from "react";
+import { LOAD_MY_INFO_REQUEST, STATUS_LIST_REQUEST } from "../../reducers/user";
 import ClientLayout from "../../components/ClientLayout";
 import axios from "axios";
 import wrapper from "../../store/configureStore";
 import { END } from "redux-saga";
 import {
-  ColWrapper,
-  RowWrapper,
   Image,
   WholeWrapper,
   Wrapper,
   RsWrapper,
-  SpanText,
   Text,
   CommonButton,
   CustomSelect,
@@ -25,43 +16,50 @@ import {
 } from "../../components/commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import styled, { ThemeContext } from "styled-components";
 import Head from "next/head";
-import Popup from "../../components/popup/popup";
-import Mainslider from "../../components/slide/MainSlider";
-import ToastEditorComponent from "../../components/editor/ToastEditorComponent";
-import CC01 from "../../components/common/CC01";
-import { DownloadOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { useCallback } from "react";
-import { Modal, Select } from "antd";
+import { Empty, Popover, Select } from "antd";
 import LeftMenu from "../../components/LeftMenu";
 import BreadCrumb from "../../components/BreadCrumb";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import useInput from "../../hooks/useInput";
 
-const Status = ({}) => {
-  const width = useWidth();
+const Find = styled(Text)`
+  &:nth-child(n + 2):nth-child(-n + 14) {
+    display: none;
+  }
+`;
+
+const Status = () => {
   ////// GLOBAL STATE //////
-
+  const { statusList } = useSelector((state) => state.user);
   ////// HOOKS //////
-  const [isDown, setIsDown] = useState(false);
+  const width = useWidth();
+  const dispatch = useDispatch();
+  const searchInput = useInput(``);
   ////// REDUX //////
   ////// USEEFFECT //////
   ////// TOGGLE //////
-
-  const downToggle = useCallback(() => {
-    setIsDown(!isDown);
-  }, [isDown]);
   ////// HANDLER //////
+  // 검색기능
+  const searchHandler = useCallback(() => {
+    dispatch({
+      type: STATUS_LIST_REQUEST,
+      data: {
+        searchCombiName: searchInput.value,
+      },
+    });
+  }, [searchInput]);
   ////// DATAVIEW //////
 
   return (
     <>
       <Head>
-        <title>ICAST | 교류회</title>
+        <title>ICAST | 현황</title>
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
 
@@ -73,14 +71,7 @@ const Status = ({}) => {
             >
               <BreadCrumb />
 
-              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                현황
-              </Text>
-
-              <Wrapper
-                borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                padding={`25px 0 0`}
-              >
+              <Wrapper>
                 <Wrapper
                   dr={`row`}
                   ju={`flex-start`}
@@ -108,22 +99,28 @@ const Status = ({}) => {
                   ju={width < 700 ? `space-between` : `flex-start`}
                   margin={`0 0 20px`}
                 >
-                  <CustomSelect>
+                  {/* <CustomSelect>
                     <Select defaultValue={"전체"}>
                       <Select.Option>1</Select.Option>
                       <Select.Option>1</Select.Option>
                       <Select.Option>1</Select.Option>
                     </Select>
-                  </CustomSelect>
+                  </CustomSelect> */}
 
                   <TextInput
-                    width={width < 700 ? `160px` : `230px`}
+                    width={`230px`}
                     height={`40px`}
-                    margin={`0 10px`}
-                    placeholder="검색어를 입력해주세요."
+                    margin={`0 10px 0 0`}
+                    {...searchInput}
+                    onKeyDown={(e) => e.keyCode === 13 && searchHandler()}
+                    placeholder="조합명을 입력해주세요."
                   />
 
-                  <CommonButton height={`40px`} fontSize={`16px`}>
+                  <CommonButton
+                    height={`40px`}
+                    fontSize={`16px`}
+                    onClick={searchHandler}
+                  >
                     검색하기
                   </CommonButton>
                 </Wrapper>
@@ -189,7 +186,7 @@ const Status = ({}) => {
                         border={`1px solid ${Theme.lightGrey2_C}`}
                         borderTop={`none`}
                         borderLeft={`none`}
-                        width={`12%`}
+                        width={`10%`}
                       >
                         <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
                           법인 조합원
@@ -201,7 +198,7 @@ const Status = ({}) => {
                         border={`1px solid ${Theme.lightGrey2_C}`}
                         borderTop={`none`}
                         borderLeft={`none`}
-                        width={`12%`}
+                        width={`10%`}
                       >
                         <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
                           개인 조합원
@@ -238,97 +235,204 @@ const Status = ({}) => {
                         borderTop={`none`}
                         borderLeft={`none`}
                         borderRight={`none`}
-                        width={`12%`}
+                        width={`16%`}
                       >
                         <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
                           주요사업
                         </Text>
                       </Wrapper>
                     </Wrapper>
-                    <Wrapper dr={`row`} height={`48px`}>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`5%`}
-                      >
-                        <Text fontSize={`16px`}>번호</Text>
+
+                    {statusList && statusList.length === 0 ? (
+                      <Wrapper padding={`150px 0`}>
+                        <Empty description="조회된 내역이 없습니다." />
                       </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`21%`}
-                      >
-                        <Text fontSize={`16px`}>조합명</Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`7%`}
-                      >
-                        <Text fontSize={`16px`}>지역</Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`7%`}
-                      >
-                        <Text fontSize={`16px`}>설립 년도</Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`12%`}
-                      >
-                        <Text fontSize={`16px`}>법인 조합원</Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`12%`}
-                      >
-                        <Text fontSize={`16px`}>개인 조합원</Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`12%`}
-                      >
-                        <Text fontSize={`16px`}>조합유형</Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        width={`12%`}
-                      >
-                        <Text fontSize={`16px`}>사업유형</Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        border={`1px solid ${Theme.lightGrey2_C}`}
-                        borderTop={`none`}
-                        borderLeft={`none`}
-                        borderRight={`none`}
-                        width={`12%`}
-                      >
-                        <Text fontSize={`16px`}>주요사업</Text>
-                      </Wrapper>
-                    </Wrapper>
+                    ) : (
+                      statusList.userList &&
+                      statusList.userList.map((data) => {
+                        return (
+                          <Wrapper dr={`row`} height={`48px`} key={data.id}>
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`5%`}
+                            >
+                              <Text fontSize={`16px`}>{data.num}</Text>
+                            </Wrapper>
+
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`21%`}
+                            >
+                              <Text fontSize={`16px`}>{data.combiName}</Text>
+                            </Wrapper>
+
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`7%`}
+                            >
+                              <Text fontSize={`16px`}>{data.combiArea}</Text>
+                            </Wrapper>
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`7%`}
+                            >
+                              <Text fontSize={`16px`}>
+                                {data.viewEstimateYear}
+                              </Text>
+                            </Wrapper>
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`10%`}
+                            >
+                              <Text fontSize={`16px`}>
+                                {data.corporationCnt}인
+                              </Text>
+                            </Wrapper>
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`10%`}
+                            >
+                              <Text fontSize={`16px`}>
+                                {data.personalCnt}인
+                              </Text>
+                            </Wrapper>
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`12%`}
+                              dr={`row`}
+                            >
+                              {statusList &&
+                                statusList.combiTypeList.map((v) => {
+                                  if (v.UserId === data.id) {
+                                    return <Find>{v.value + " "}</Find>;
+                                  } else {
+                                    return null;
+                                  }
+                                })}
+                              <Popover
+                                placement="bottom"
+                                content={
+                                  statusList &&
+                                  statusList.combiTypeList.map((v, idx) => {
+                                    if (v.UserId === data.id) {
+                                      return v.value + " ";
+                                    } else {
+                                      return null;
+                                    }
+                                  })
+                                }
+                              >
+                                <Image
+                                  width={`16px`}
+                                  margin={`0 0 0 4px`}
+                                  alt="icon"
+                                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/icon_more.png`}
+                                />
+                              </Popover>
+                            </Wrapper>
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              width={`12%`}
+                              dr={`row`}
+                            >
+                              {statusList &&
+                                statusList.businessTypeList.map((v) => {
+                                  if (v.UserId === data.id) {
+                                    return <Find>{v.value + " "}</Find>;
+                                  } else {
+                                    return null;
+                                  }
+                                })}
+                              <Popover
+                                placement="bottom"
+                                content={
+                                  statusList &&
+                                  statusList.businessTypeList.map((v, idx) => {
+                                    if (v.UserId === data.id) {
+                                      return v.value + " ";
+                                    } else {
+                                      return null;
+                                    }
+                                  })
+                                }
+                              >
+                                <Image
+                                  width={`16px`}
+                                  margin={`0 0 0 4px`}
+                                  alt="icon"
+                                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/icon_more.png`}
+                                />
+                              </Popover>
+                            </Wrapper>
+                            <Wrapper
+                              height={`100%`}
+                              border={`1px solid ${Theme.lightGrey2_C}`}
+                              borderTop={`none`}
+                              borderLeft={`none`}
+                              borderRight={`none`}
+                              width={`16%`}
+                              dr={`row`}
+                            >
+                              {data.importantBusiness1 ? (
+                                <>
+                                  <Text
+                                    fontSize={`16px`}
+                                    width={`50%`}
+                                    isEllipsis
+                                    textAlign={`center`}
+                                  >
+                                    {data.importantBusiness1}
+                                  </Text>
+                                  <Popover
+                                    placement="bottom"
+                                    content={
+                                      <Wrapper>
+                                        <Text>{data.importantBusiness1}</Text>
+                                        <Text>{data.importantBusiness2}</Text>
+                                        <Text>{data.importantBusiness3}</Text>
+                                      </Wrapper>
+                                    }
+                                  >
+                                    <Image
+                                      width={`16px`}
+                                      margin={`0 0 0 4px`}
+                                      alt="icon"
+                                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/icon_more.png`}
+                                    />
+                                  </Popover>
+                                </>
+                              ) : (
+                                "주요사업이 없습니다."
+                              )}
+                            </Wrapper>
+                          </Wrapper>
+                        );
+                      })
+                    )}
                   </Wrapper>
                 </Wrapper>
               </Wrapper>
@@ -353,6 +457,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: STATUS_LIST_REQUEST,
     });
 
     // 구현부 종료

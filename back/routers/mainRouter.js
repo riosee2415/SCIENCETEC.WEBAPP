@@ -43,41 +43,15 @@ router.post("/list", async (req, res, next) => {
      GROUP  BY combiArea
     `;
 
-  // 공지사항 리스트
-  const boardQuery = `
-  SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		  AS num, 
-            A.id,
-            A.title,
-            A.type,
-            A.content,
-            A.author,
-            A.hit,
-            A.file,
-            A.createdAt,
-            A.updatedAt,
-            DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
-            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
-            B.username 									   AS updator 
-    FROM	notices		A
-   INNER
-    JOIN	users		  B
-      ON	A.updator = B.id
-   WHERE	A.isDelete = 0
-   ORDER	BY num DESC
-   LIMIT    5
-  `;
-
   try {
     const bannerData = await models.sequelize.query(bannerQuery);
     const businessData = await models.sequelize.query(businessQuery);
     const cityData = await models.sequelize.query(cityQuery);
-    const boardData = await models.sequelize.query(boardQuery);
 
     return res.status(200).json({
       bannerData: bannerData[0].length !== 0 ? bannerData[0] : [],
       businessData: businessData[0].length !== 0 ? businessData[0] : [],
       cityData: cityData[0].length !== 0 ? cityData[0] : [],
-      boardData: boardData[0].length !== 0 ? boardData[0] : [],
     });
   } catch (error) {
     console.error(error);

@@ -105,14 +105,7 @@ const Location = ({}) => {
             >
               <BreadCrumb />
 
-              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                오시는 길
-              </Text>
-
-              <Wrapper
-                borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                padding={`25px 0 0`}
-              >
+              <Wrapper>
                 <Wrapper
                   dr={`row`}
                   ju={`flex-start`}

@@ -25,10 +25,10 @@ const Box = styled(Wrapper)`
   }
 `;
 
-const OpBoard = ({ boardType, data }) => {
+const OpBoard = ({ boardType, data, maxPage, currentPage, otherPageCall }) => {
   const width = useWidth();
-  const dispatch = useDispatch();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const goWritePage = useCallback(() => {
     dispatch({
@@ -75,7 +75,9 @@ const OpBoard = ({ boardType, data }) => {
           <Text isNeo>일시</Text>
         </Wrapper>
         <Wrapper width={width < 900 ? `19%` : `15%`}>
-          <Text isNeo>게시자</Text>
+          <Text isNeo>
+            {router.pathname === "/guide/reference" ? "비고" : "게시자"}
+          </Text>
         </Wrapper>
       </Wrapper>
 
@@ -98,10 +100,10 @@ const OpBoard = ({ boardType, data }) => {
                 </Text>
               </Wrapper>
               <Wrapper width={width < 900 ? `19%` : `15%`}>
-                {data.viewCreatedAt}
+                {data.viewFrontCreatedAt}
               </Wrapper>
               <Wrapper width={width < 900 ? `19%` : `15%`}>
-                {data.author}
+                {router.pathname === "/guide/reference" ? "" : data.author}
               </Wrapper>
             </Box>
           );
@@ -125,7 +127,12 @@ const OpBoard = ({ boardType, data }) => {
         )}
       </Wrapper>
 
-      <CustomPage />
+      <CustomPage
+        defaultCurrent={1}
+        current={currentPage}
+        total={maxPage * 10}
+        onChange={otherPageCall}
+      />
     </>
   );
 };

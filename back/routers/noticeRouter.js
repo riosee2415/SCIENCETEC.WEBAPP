@@ -63,10 +63,96 @@ router.post("/file", upload.single("file"), async (req, res, next) => {
   return res.json({ path: req.file.location });
 });
 
-router.post("/list", async (req, res, next) => {
-  const { title, page, type } = req.body;
+router.post("/main/list", async (req, res, next) => {
+  const { title, content, page, type } = req.body;
 
   const _title = title ? title : ``;
+  const _content = content ? content : ``;
+  const _type = type ? type : ``;
+
+  const LIMIT = 5;
+
+  const _page = page ? page : 1;
+
+  const __page = _page - 1;
+  const OFFSET = __page * 5;
+
+  const lengthQuery = `
+  SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		AS num, 
+          A.id,
+          A.title,
+          A.type,
+          A.content,
+          A.author,
+          A.hit,
+          A.file,
+          A.createdAt,
+          A.updatedAt,
+          DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
+          DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
+          B.username 										              AS updator 
+    FROM	notices		A
+   INNER
+    JOIN	users		  B
+      ON	A.updator = B.id
+   WHERE	A.isDelete = 0
+     AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
+          ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
+  `;
+
+  const selectQuery = `
+  SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		AS num, 
+          A.id,
+          A.title,
+          A.type,
+          A.content,
+          A.author,
+          A.hit,
+          A.file,
+          A.createdAt,
+          A.updatedAt,
+          DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
+          DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
+          B.username 										              AS updator 
+    FROM	notices		A
+   INNER
+    JOIN	users		  B
+      ON	A.updator = B.id
+   WHERE	A.isDelete = 0
+     AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
+          ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
+   ORDER	BY num DESC
+   LIMIT  ${LIMIT}
+  OFFSET  ${OFFSET}
+  `;
+
+  try {
+    const lengths = await models.sequelize.query(lengthQuery);
+    const notice = await models.sequelize.query(selectQuery);
+
+    const noticeLen = lengths[0].length;
+
+    const lastPage =
+      noticeLen % LIMIT > 0 ? noticeLen / LIMIT + 1 : noticeLen / LIMIT;
+
+    return res.status(200).json({
+      notices: notice[0],
+      lastPage: parseInt(lastPage),
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).send("공지사항 데이터를 불러올 수 없습니다.");
+  }
+});
+router.post("/list", async (req, res, next) => {
+  const { title, content, page, type } = req.body;
+
+  const _title = title ? title : ``;
+  const _content = content ? content : ``;
   const _type = type ? type : ``;
 
   const LIMIT = 10;
@@ -88,6 +174,7 @@ router.post("/list", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
           B.username 										              AS updator 
     FROM	notices		A
@@ -96,6 +183,7 @@ router.post("/list", async (req, res, next) => {
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
      AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
   `;
 
@@ -111,6 +199,7 @@ router.post("/list", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
           B.username 										              AS updator 
     FROM	notices		A
@@ -119,6 +208,7 @@ router.post("/list", async (req, res, next) => {
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
      AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
    ORDER	BY num DESC
    LIMIT  ${LIMIT}
@@ -145,9 +235,10 @@ router.post("/list", async (req, res, next) => {
 });
 
 router.post("/admin/list", async (req, res, next) => {
-  const { title, type } = req.body;
+  const { title, content, type } = req.body;
 
   const _title = title ? title : "";
+  const _content = content ? content : ``;
   const _type = type ? type : "";
 
   const selectQuery = `
@@ -162,6 +253,7 @@ router.post("/admin/list", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
           B.username 										              AS updator 
     FROM	notices		A
@@ -170,6 +262,7 @@ router.post("/admin/list", async (req, res, next) => {
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
      AND	A.title LIKE "%${_title}%"
+     AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
    ORDER	BY num DESC
   `;
@@ -427,6 +520,7 @@ router.post("/detail", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		  AS viewUpdatedAt,
           B.username 										                AS updator 
     FROM	notices		A
@@ -445,6 +539,7 @@ router.post("/detail", async (req, res, next) => {
            A.createdAt,
            A.updatedAt,
            DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
+           DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		  AS viewUpdatedAt
     FROM   noticeComments   A
    INNER
@@ -498,14 +593,9 @@ router.post("/detail", async (req, res, next) => {
     return res.status(200).json({
       detailData: detailData[0][0],
       commentList: commentList[0],
-      nextNotice:
-        nextData[0].length !== 0
-          ? nextData[0][0]
-          : "다음글이 존재하지 않습니다.", // 다음 게시글
+      nextNotice: nextData[0].length !== 0 ? nextData[0][0] : null, // 다음 게시글
       prevNotice:
-        prevData[0].length !== 0
-          ? prevData[0][prevData[0].length - 1]
-          : "이전글이 존재하지 않습니다.", // 이전 게시글
+        prevData[0].length !== 0 ? prevData[0][prevData[0].length - 1] : null, // 이전 게시글
     });
   } catch (error) {
     console.error(error);
@@ -564,6 +654,7 @@ router.post("/comment/list", isAdminCheck, async (req, res, next) => {
            A.createdAt,
            A.updatedAt,
            DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
+           DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		  AS viewUpdatedAt
     FROM   noticeComments   A
    INNER

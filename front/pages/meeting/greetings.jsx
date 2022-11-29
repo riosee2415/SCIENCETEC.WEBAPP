@@ -55,7 +55,7 @@ const Greetings = ({}) => {
   return (
     <>
       <Head>
-        <title>ICAST</title>
+        <title>ICAST | 인사말</title>
       </Head>
 
       <ClientLayout>
@@ -70,14 +70,8 @@ const Greetings = ({}) => {
               margin={`0 0 100px`}
             >
               <BreadCrumb />
-              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                인사말
-              </Text>
 
-              <Wrapper
-                borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                padding={`25px 0 0`}
-              >
+              <Wrapper>
                 <Wrapper
                   dr={`row`}
                   ju={`flex-start`}

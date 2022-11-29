@@ -7,6 +7,7 @@ export const initailState = {
   updateModal: false,
   userHistory: [],
   adminUserRightHistory: [],
+  statusList: [],
 
   userDetail: null,
   combiTypeList: [],
@@ -16,6 +17,14 @@ export const initailState = {
   st_loginLoading: false,
   st_loginDone: false,
   st_loginError: null,
+  //
+  st_snsLoginLoading: false,
+  st_snsLoginDone: false,
+  st_snsLoginError: null,
+  //
+  st_logoutLoading: false,
+  st_logoutDone: false,
+  st_logoutError: null,
   //
   st_loginAdminLoading: false,
   st_loginAdminDone: false,
@@ -64,11 +73,23 @@ export const initailState = {
   st_userDetailLoading: false,
   st_userDetailDone: false,
   st_userDetailError: null,
+  //
+  st_statusListLoading: false, // 조합장 리스트
+  st_statusListDone: false,
+  st_statusListError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
+
+export const SNS_LOGIN_REQUEST = "SNS_LOGIN_REQUEST";
+export const SNS_LOGIN_SUCCESS = "SNS_LOGIN_SUCCESS";
+export const SNS_LOGIN_FAILURE = "SNS_LOGIN_FAILURE";
+
+export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+export const LOGOUT_FAILURE = "LOGOUT_FAILURE";
 
 export const LOGIN_ADMIN_REQUEST = "LOGIN_ADMIN_REQUEST";
 export const LOGIN_ADMIN_SUCCESS = "LOGIN_ADMIN_SUCCESS";
@@ -121,6 +142,10 @@ export const ADMINUSER_EXITFALSE_FAILURE = "ADMINUSER_EXITFALSE_FAILURE";
 export const USER_DETAIL_REQUEST = "USER_DETAIL_REQUEST";
 export const USER_DETAIL_SUCCESS = "USER_DETAIL_SUCCESS";
 export const USER_DETAIL_FAILURE = "USER_DETAIL_FAILURE";
+//
+export const STATUS_LIST_REQUEST = "STATUS_LIST_REQUEST";
+export const STATUS_LIST_SUCCESS = "STATUS_LIST_SUCCESS";
+export const STATUS_LIST_FAILURE = "STATUS_LIST_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -161,6 +186,7 @@ const reducer = (state = initailState, action) =>
       case LOGIN_SUCCESS: {
         draft.st_loginLoading = false;
         draft.st_loginDone = true;
+        draft.st_loginError = null;
         draft.me = action.data;
         break;
       }
@@ -168,6 +194,48 @@ const reducer = (state = initailState, action) =>
         draft.st_loginLoading = false;
         draft.st_loginDone = false;
         draft.st_loginError = action.error;
+        break;
+      }
+      //////////////////////////////////////////////
+
+      case SNS_LOGIN_REQUEST: {
+        draft.st_snsLoginLoading = true;
+        draft.st_snsLoginDone = null;
+        draft.st_snsLoginError = false;
+        break;
+      }
+      case SNS_LOGIN_SUCCESS: {
+        draft.st_snsLoginLoading = false;
+        draft.st_snsLoginDone = true;
+        draft.st_snsLoginError = null;
+        draft.me = action.data;
+        break;
+      }
+      case SNS_LOGIN_FAILURE: {
+        draft.st_snsLoginLoading = false;
+        draft.st_snsLoginDone = false;
+        draft.st_snsLoginError = action.error;
+        break;
+      }
+      //////////////////////////////////////////////
+
+      case LOGOUT_REQUEST: {
+        draft.st_logoutLoading = true;
+        draft.st_logoutDone = null;
+        draft.st_logoutError = false;
+        break;
+      }
+      case LOGOUT_SUCCESS: {
+        draft.st_logoutLoading = false;
+        draft.st_logoutDone = true;
+        draft.st_logoutError = null;
+        draft.me = null;
+        break;
+      }
+      case LOGOUT_FAILURE: {
+        draft.st_logoutLoading = false;
+        draft.st_logoutDone = false;
+        draft.st_logoutError = action.error;
         break;
       }
       //////////////////////////////////////////////
@@ -422,6 +490,31 @@ const reducer = (state = initailState, action) =>
         draft.st_userDetailLoading = false;
         draft.st_userDetailDone = false;
         draft.st_userDetailError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case STATUS_LIST_REQUEST: {
+        draft.st_statusListLoading = true;
+        draft.st_statusListDone = false;
+        draft.st_statusListError = null;
+        break;
+      }
+      case STATUS_LIST_SUCCESS: {
+        draft.st_statusListLoading = false;
+        draft.st_statusListDone = true;
+        draft.st_statusListError = null;
+        draft.statusList = action.data;
+        draft.combiTypeList = action.data.combiTypeList;
+        draft.businessTypeList = action.data.businessTypeList;
+        draft.sectorList = action.data.sectorList;
+        break;
+      }
+      case STATUS_LIST_FAILURE: {
+        draft.st_statusListLoading = false;
+        draft.st_statusListDone = false;
+        draft.st_statusListError = action.error;
         break;
       }
 
