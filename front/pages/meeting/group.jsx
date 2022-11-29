@@ -32,7 +32,7 @@ const Group = ({}) => {
   return (
     <>
       <Head>
-        <title>ICAST | 교류회</title>
+        <title>ICAST | 조직</title>
       </Head>
 
       <ClientLayout>
@@ -48,14 +48,7 @@ const Group = ({}) => {
             >
               <BreadCrumb />
 
-              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                조직
-              </Text>
-
-              <Wrapper
-                borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                padding={`25px 0 0`}
-              >
+              <Wrapper>
                 <Wrapper
                   dr={`row`}
                   ju={`flex-start`}

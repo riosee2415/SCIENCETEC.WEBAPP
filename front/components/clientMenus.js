@@ -1,27 +1,27 @@
 export const menus = [
   {
     menuName: "교류회",
-    menuLink: "/intro/greeting",
+    menuLink: "/meeting/greetings",
     subMenus: [
       {
         subMenuName: "인사말",
-        subMenuLink: "/intro/greeting",
+        subMenuLink: "/meeting/greetings",
       },
       {
         subMenuName: "교류회란",
-        subMenuLink: "/intro/operation",
+        subMenuLink: "/meeting",
       },
       {
         subMenuName: "현황",
-        subMenuLink: "/intro/organization",
+        subMenuLink: "/meeting/status",
       },
       {
         subMenuName: "조직",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/meeting/group",
       },
       {
         subMenuName: "오시는 길",
-        subMenuLink: "/intro/intro",
+        subMenuLink: "/meeting/location",
       },
     ],
   },

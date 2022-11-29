@@ -57,7 +57,7 @@ const Status = ({}) => {
   return (
     <>
       <Head>
-        <title>ICAST | 교류회</title>
+        <title>ICAST | 현황</title>
       </Head>
 
       <ClientLayout>
@@ -73,14 +73,7 @@ const Status = ({}) => {
             >
               <BreadCrumb />
 
-              <Text fontSize={`24px`} isNeo={true} margin={`25px 0`}>
-                현황
-              </Text>
-
-              <Wrapper
-                borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                padding={`25px 0 0`}
-              >
+              <Wrapper>
                 <Wrapper
                   dr={`row`}
                   ju={`flex-start`}
