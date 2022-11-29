@@ -89,6 +89,7 @@ router.post("/list", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
           B.username 										              AS updator 
     FROM	notices		A
@@ -113,6 +114,7 @@ router.post("/list", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
           B.username 										              AS updator 
     FROM	notices		A
@@ -166,6 +168,7 @@ router.post("/admin/list", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		AS viewUpdatedAt,
           B.username 										              AS updator 
     FROM	notices		A
@@ -432,6 +435,7 @@ router.post("/detail", async (req, res, next) => {
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
+          DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
           DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		  AS viewUpdatedAt,
           B.username 										                AS updator 
     FROM	notices		A
@@ -450,6 +454,7 @@ router.post("/detail", async (req, res, next) => {
            A.createdAt,
            A.updatedAt,
            DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
+           DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		  AS viewUpdatedAt
     FROM   noticeComments   A
    INNER
@@ -564,6 +569,7 @@ router.post("/comment/list", isAdminCheck, async (req, res, next) => {
            A.createdAt,
            A.updatedAt,
            DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
+           DATE_FORMAT(A.createdAt, "%Y.%m.%d") 		    AS viewFrontCreatedAt,
            DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일") 		  AS viewUpdatedAt
     FROM   noticeComments   A
    INNER
