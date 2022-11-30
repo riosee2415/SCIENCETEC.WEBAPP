@@ -24,6 +24,8 @@ const CustomForm = styled(Form)`
 `;
 
 const Status = ({ surveyList }) => {
+  const { me } = useSelector((state) => state.user);
+
   const {
     st_surveyUserCreateLoading,
     st_surveyUserCreateDone,
@@ -41,6 +43,14 @@ const Status = ({ surveyList }) => {
   const modalToggle = useCallback(() => {
     isModalOpen((prev) => !prev);
   }, [modalOpen]);
+
+  useEffect(() => {
+    if (!me) {
+      router.push("/login");
+
+      return message.error("로그인이 필요한 페이지입니다.");
+    }
+  }, [me]);
 
   useEffect(() => {
     if (surveyList) {
@@ -82,7 +92,8 @@ const Status = ({ surveyList }) => {
 
   useEffect(() => {
     if (st_surveyUserCreateDone) {
-      router.push("/");
+      modalToggle();
+
       return message.success("제출되었습니다.");
     }
 
@@ -401,7 +412,7 @@ const Status = ({ surveyList }) => {
             kindOf={`subTheme`}
             fontSize={`18px`}
             fontWeight={`bold`}
-            onClick={modalToggle}
+            onClick={() => router.push("/")}
             margin={`26px 0 0`}
           >
             확인

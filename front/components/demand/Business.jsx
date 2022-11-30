@@ -9,9 +9,9 @@ import {
 } from "../commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../Theme";
-import { Checkbox, Modal } from "antd";
+import { Checkbox, Empty, Modal } from "antd";
 
-const Business = () => {
+const Business = ({ surveyList }) => {
   const width = useWidth();
   const dispatch = useDispatch();
 

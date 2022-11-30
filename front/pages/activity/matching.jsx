@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CommonButton,
   CustomPage,
@@ -22,17 +22,173 @@ import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import { Checkbox } from "antd";
+import { Checkbox, Form, message } from "antd";
 import { CloseOutlined, FileOutlined } from "@ant-design/icons";
+import { SURVEY_LIST_REQUEST } from "../../reducers/survey";
+import { useRouter } from "next/router";
+
+const CustomForm = styled(Form)`
+  width: 100%;
+
+  & .ant-form-item {
+    width: 100%;
+    margin: 0;
+  }
+`;
 
 const Project = () => {
   ////// GLOBAL STATE //////
+
+  const { me } = useSelector((state) => state.user);
+
+  const {
+    quesList,
+    innerList,
+
+    st_surveyUserCreateLoading,
+    st_surveyUserCreateDone,
+    st_surveyUserCreateError,
+  } = useSelector((state) => state.survey);
+
   ////// HOOKS //////
   const width = useWidth();
+
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+
+  const [form] = Form.useForm();
+
+  const [modalOpen, isModalOpen] = useState(false);
+
+  const [surveyList, setSurveyList] = useState([]);
   ////// REDUX //////
   ////// USEEFFECT //////
+  useEffect(() => {
+    if (!me) {
+      router.push("/login");
+
+      return message.error("로그인이 필요한 페이지입니다.");
+    }
+  }, [me]);
+
+  useEffect(() => {
+    if (quesList && innerList) {
+      const quesArr = [];
+
+      quesList.map((d) => {
+        quesArr.push({
+          id: d.id,
+          ques: d.value,
+          sort: d.sort,
+          inner: innerList.filter((value) => value.SurveyQuestionId === d.id),
+          isOverlap: d.isOverlap,
+        });
+
+        setSurveyList(quesArr);
+      });
+    }
+  }, [quesList, innerList]);
+
+  useEffect(() => {
+    if (surveyList) {
+      let strJson = "{";
+      const surveyList2 = surveyList.map((data) => data.ques);
+      surveyList.map((data, idx) => {
+        strJson += `"${data.ques.split("(")[0]}": null${
+          surveyList2.length !== idx + 1 ? "," : ""
+        }`;
+      });
+      strJson += "}";
+
+      let objJson = JSON.parse(strJson);
+
+      surveyList.map((data) => {
+        let strJson2 = "{";
+        data.inner.map((value, idx) => {
+          strJson2 += `"${
+            value.innerType === 1
+              ? `textInput${idx}`
+              : value.innerType === 2
+              ? `textArea${idx}`
+              : `checkBox${idx}`
+          }":${
+            value.innerType === 1 ? '""' : value.innerType === 2 ? '""' : `[]`
+          }${data.inner.length !== idx + 1 ? "," : ""}`;
+        });
+
+        strJson2 += "}";
+
+        objJson[data.ques.split("(")[0]] = JSON.parse(strJson2);
+      });
+
+      form.setFieldsValue({
+        ...objJson,
+      });
+    }
+  }, [surveyList]);
+
+  useEffect(() => {
+    if (st_surveyUserCreateDone) {
+      modalToggle();
+
+      return message.success("제출되었습니다.");
+    }
+
+    if (st_surveyUserCreateError) {
+      return message.error(st_surveyUserCreateError);
+    }
+  }, [st_surveyUserCreateDone, st_surveyUserCreateError]);
+
+  console.log(surveyList);
+
   ////// TOGGLE //////
+
+  const modalToggle = useCallback(() => {
+    isModalOpen((prev) => !prev);
+  }, [modalOpen]);
   ////// HANDLER //////
+
+  const submitHandler = useCallback(
+    (data) => {
+      let questionArr = [];
+
+      const dataKey = Object.keys(data);
+      const dataValue = Object.values(data);
+
+      dataKey.map((value, idx) => {
+        const a = surveyList.find((item) => item.ques.split("(")[0] === value);
+
+        const b = Object.values(dataValue[idx]).map((ele) =>
+          Array.isArray(ele) ? ele[0] : ele
+        );
+
+        let innerContent = "";
+
+        b.filter((ele) => ele).map((ele, idx) => {
+          innerContent += ele
+            ? `${ele}${b.filter((ele) => ele).length !== idx + 1 ? " | " : ""}`
+            : "";
+        });
+
+        questionArr.push({
+          questionName: value,
+          content: innerContent,
+          sort: a.sort,
+        });
+      });
+
+      // dispatch({
+      //   type: SURVEY_USER_CREATE_REQUEST,
+      //   data: {
+      //     surveyId: 1,
+      //     questionValues: questionArr,
+      //   },
+      // });
+    },
+    [surveyList]
+  );
+
   ////// DATAVIEW //////
 
   return (
@@ -474,6 +630,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: SURVEY_LIST_REQUEST,
+      data: {
+        type: 3,
+      },
     });
 
     // 구현부 종료
