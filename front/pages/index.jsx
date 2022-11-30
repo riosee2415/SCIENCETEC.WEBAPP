@@ -300,8 +300,6 @@ const Home = ({}) => {
     },
   ];
 
-  console.log(city);
-
   return (
     <>
       <Head>
