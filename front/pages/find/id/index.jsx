@@ -8,7 +8,7 @@ import useInput from "../../../hooks/useInput";
 import Theme from "../../../components/Theme";
 import styled from "styled-components";
 import axios from "axios";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import { FIND_ID_REQUEST, LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
 
 import Head from "next/head";
 import {
@@ -21,21 +21,43 @@ import {
 } from "../../../components/commonComponents";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { message } from "antd";
 
 const Index = () => {
   const width = useWidth();
   ////// GLOBAL STATE //////
+  const { findUserId } = useSelector((state) => state.user);
 
   ////// HOOKS //////
   const [currentTab, setCurrentTab] = useState(0);
   const nameInput = useInput(``);
-  const mobileInput = useInput(``);
+  const emailInput = useInput(``);
   ////// REDUX //////
   const router = useRouter();
+  const dispatch = useDispatch();
 
   ////// USEEFFECT //////
   ////// TOGGLE //////
   ////// HANDLER //////
+
+  const findIdHandler = useCallback(() => {
+    if (!nameInput.value) {
+      return message.error("이름을 입력해주세요.");
+    }
+    if (!emailInput.value) {
+      return message.error("이름을 입력해주세요.");
+    }
+
+    dispatch({
+      type: FIND_ID_REQUEST,
+      data: {
+        username: nameInput.value,
+        email: emailInput.value,
+      },
+    });
+  }, [nameInput, emailInput]);
+
   const moveLinkHandler = useCallback(
     (link) => {
       router.push(link);
@@ -93,16 +115,16 @@ const Index = () => {
                       margin={`0 0 14px`}
                       color={Theme.grey2_C}
                     >
-                      연락처
+                      이메일
                     </Text>
                     <TextInput
                       type="number"
                       width={`100%`}
                       height={`55px`}
-                      placeholder="연락처를 입력해주세요."
+                      placeholder="이메일을 입력해주세요."
                       radius={`5px`}
                       margin={`0 0 8px`}
-                      {...mobileInput}
+                      {...emailInput}
                     />
                   </Wrapper>
 
@@ -142,7 +164,7 @@ const Index = () => {
                   <TextInput
                     width={`100%`}
                     height={`55px`}
-                    value="아이디"
+                    value={findUserId}
                     margin={`0 0 20px`}
                     readOnly={true}
                   />
