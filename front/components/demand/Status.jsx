@@ -9,7 +9,7 @@ import {
 } from "../commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../Theme";
-import { Checkbox, Empty, Form, Modal } from "antd";
+import { Checkbox, Empty, Form, Modal, Radio } from "antd";
 import styled from "styled-components";
 
 const CustomForm = styled(Form)`
@@ -56,11 +56,7 @@ const Status = ({ surveyList }) => {
               ? `textArea${idx}`
               : `checkBox${idx}`
           }":${
-            value.innerType === 1
-              ? '""'
-              : value.innerType === 2
-              ? '""'
-              : "false"
+            value.innerType === 1 ? '""' : value.innerType === 2 ? '""' : `[]`
           }${data.inner.length !== idx + 1 ? "," : ""}`;
         });
 
@@ -81,9 +77,52 @@ const Status = ({ surveyList }) => {
   // 3 체크박스
   ///////////// - EVENT HANDLER- ////////////
 
+  const submitHandler = useCallback(
+    (data) => {
+      console.log(data);
+      console.log(surveyList);
+
+      const test = [];
+
+      const dataKey = Object.keys(data);
+      const dataValue = Object.values(data);
+
+      dataKey.map((value, idx) => {
+        const a = surveyList.find((item) => (item.ques = value));
+
+        const b = Object.values(dataValue[idx]).map((ele) =>
+          Array.isArray(ele) ? ele[0] : ele
+        );
+
+        const content = "";
+
+        a.inner.map((ele) => {
+          // test.push({
+          //   questionName:value,
+          //   content: data.value
+          //   sort: a.sort
+          // })
+        });
+      });
+
+      console.log(dataValue);
+
+      // dispatch({
+      //   type: a,
+      //   data: {
+      //     surveyId: 1,
+      //     questionValues: [
+
+      //     ]
+      //   }
+      // })
+    },
+    [surveyList]
+  );
+
   return (
     <Wrapper al={`flex-start`}>
-      <CustomForm onFinish={console.log} form={form}>
+      <CustomForm onFinish={submitHandler} form={form}>
         {surveyList && surveyList.length === 0 ? (
           <Wrapper margin={`50px 0`}>
             <Empty description={"등록된 수요조사 설문이 없습니다."} />
@@ -135,9 +174,11 @@ const Status = ({ surveyList }) => {
                               margin={`0 0 10px`}
                             >
                               <Form.Item name={`checkBox${idx}`}>
-                                <Checkbox value={v.questionValue}>
-                                  {v.questionValue}
-                                </Checkbox>
+                                <Checkbox.Group>
+                                  <Checkbox value={v.questionValue}>
+                                    {v.questionValue}
+                                  </Checkbox>
+                                </Checkbox.Group>
                               </Form.Item>
                             </Wrapper>
                           ) : (
