@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NOTICE_DETAIL_REQUEST, SET_TEMP_TYPE } from "../reducers/notice";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Empty } from "antd";
+import { Empty, message } from "antd";
 
 const Box = styled(Wrapper)`
   height: 40px;
@@ -26,11 +26,33 @@ const Box = styled(Wrapper)`
 `;
 
 const OpBoard = ({ boardType, data, maxPage, currentPage, otherPageCall }) => {
+  const { me } = useSelector((state) => state.user);
+  const { st_noticeCreateDone } = useSelector((state) => state.notice);
+
   const width = useWidth();
   const router = useRouter();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (st_noticeCreateDone) {
+      dispatch({
+        type: SET_TEMP_TYPE,
+        data: {
+          viewType: "list",
+        },
+      });
+
+      return message.success("커뮤니티 글을 작성했습니다.");
+    }
+  }, [st_noticeCreateDone]);
+
   const goWritePage = useCallback(() => {
+    if (!me) {
+      router.push(`/login`);
+
+      return message.error("로그인 후 이용가능합니다.");
+    }
+
     dispatch({
       type: SET_TEMP_TYPE,
       data: {
@@ -127,12 +149,12 @@ const OpBoard = ({ boardType, data, maxPage, currentPage, otherPageCall }) => {
         )}
       </Wrapper>
 
-      <CustomPage
+      {/* <CustomPage
         defaultCurrent={1}
         current={currentPage}
         total={maxPage * 10}
         onChange={otherPageCall}
-      />
+      /> */}
     </>
   );
 };

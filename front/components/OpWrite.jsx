@@ -1,9 +1,9 @@
 import React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useCallback } from "react";
-import { SET_TEMP_TYPE } from "../reducers/notice";
+import { NOTICE_CREATE_REQUEST, SET_TEMP_TYPE } from "../reducers/notice";
 import {
   Image,
   Wrapper,
@@ -14,11 +14,21 @@ import {
 } from "./commonComponents";
 import useWidth from "../hooks/useWidth";
 import Theme from "./Theme";
+import useInput from "../hooks/useInput";
+import { useRouter } from "next/router";
 
 const OpWrite = () => {
-  const { tempType, boardType } = useSelector((state) => state.notice);
+  const { tempType, boardType, st_noticeCreateDone } = useSelector(
+    (state) => state.notice
+  );
+  console.log(tempType);
+  const { me } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const router = useRouter();
   const width = useWidth();
+
+  const titleInput = useInput(``);
+  const contentInput = useInput(``);
 
   useEffect(() => {
     if (!tempType || tempType === "") {
@@ -26,11 +36,31 @@ const OpWrite = () => {
       dispatch({
         type: SET_TEMP_TYPE,
         data: {
-          boardType: "list",
+          viewType: "list",
         },
       });
     }
   }, []);
+
+  const createHandler = useCallback(() => {
+    if (!titleInput.value) {
+      return message.error("제목을 입력해주세요.");
+    }
+
+    if (!contentInput.value) {
+      return message.error("내용을 입력해주세요.");
+    }
+
+    dispatch({
+      type: NOTICE_CREATE_REQUEST,
+      data: {
+        title: titleInput.value,
+        type: "커뮤니티",
+        content: contentInput.value,
+        author: me.userId,
+      },
+    });
+  }, [titleInput, contentInput, me]);
 
   const listHandler = useCallback(() => {
     dispatch({
@@ -69,6 +99,7 @@ const OpWrite = () => {
         placeholder="제목을 입력해주세요."
         radius={`5px`}
         margin={`14px 0 0`}
+        {...titleInput}
       />
       <Text fontWeight={`bold`} color={Theme.grey2_C} margin={`30px 0 0`}>
         내용
@@ -80,6 +111,7 @@ const OpWrite = () => {
         placeholder="내용을 입력해주세요."
         radius={`5px`}
         margin={`14px 0 0`}
+        {...contentInput}
       />
 
       <Wrapper dr={`row`} margin={`50px 0 100px`}>
@@ -100,6 +132,7 @@ const OpWrite = () => {
           kindOf={`subTheme`}
           fontSize={`18px`}
           fontWeight={`bold`}
+          onClick={createHandler}
         >
           작성하기
         </CommonButton>
