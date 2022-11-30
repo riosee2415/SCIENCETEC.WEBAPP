@@ -29,6 +29,7 @@ router.post("/list", async (req, res, next) => {
               A.id,
               A.value,
               A.sort,
+              A.isTitle,
               A.isOverlap,
               A.SurveyId,
               B.username                                AS updator,
@@ -103,6 +104,7 @@ router.post("/question/list", async (req, res, next) => {
             A.id,
             A.value,
             A.sort,
+            A.isTitle,
             A.isOverlap,
             A.SurveyId,
             B.username                                AS updator,
@@ -133,7 +135,7 @@ router.post("/question/list", async (req, res, next) => {
 });
 
 router.post("/question/create", isAdminCheck, async (req, res, next) => {
-  const { value, sort, surveyId, isOverlap } = req.body;
+  const { value, sort, surveyId, isOverlap, isTitle } = req.body;
 
   const insertQuery = `
   INSERT    INTO    surveyQuestion
@@ -141,6 +143,7 @@ router.post("/question/create", isAdminCheck, async (req, res, next) => {
     value,
     sort,
     SurveyId,
+    isTitle,
     isOverlap,
     createdAt,
     updatedAt,
@@ -151,6 +154,7 @@ router.post("/question/create", isAdminCheck, async (req, res, next) => {
     "${value}",
     ${sort},
     ${surveyId},
+    ${isTitle},
     ${isOverlap},
     NOW(),
     NOW(),
@@ -189,13 +193,14 @@ router.post("/question/create", isAdminCheck, async (req, res, next) => {
 });
 
 router.post("/question/update", isAdminCheck, async (req, res, next) => {
-  const { id, value, sort, isOverlap } = req.body;
+  const { id, value, sort, isOverlap, isTitle } = req.body;
 
   const updateQuery = `
   UPDATE    surveyQuestion
      SET    value = "${value}",
             sort = ${sort},
             isOverlap = ${isOverlap},
+            isTitle = ${isTitle},
             updatedAt = NOW()
    WHERE    id = ${id}
   `;

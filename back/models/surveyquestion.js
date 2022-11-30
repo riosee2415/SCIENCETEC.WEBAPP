@@ -18,6 +18,11 @@ module.exports = class SurveyQuestion extends Model {
           allowNull: false,
           defaultValue: false,
         },
+        isTitle: {
+          type: DataTypes.BOOLEAN, // 제목 여부
+          allowNull: false,
+          defaultValue: false,
+        },
         isDelete: {
           type: DataTypes.BOOLEAN,
           allowNull: false,
