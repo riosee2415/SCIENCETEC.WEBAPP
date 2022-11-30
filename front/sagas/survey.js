@@ -37,6 +37,10 @@ import {
   SURVEY_INNER_DELETE_SUCCESS,
   SURVEY_INNER_DELETE_FAILURE,
   //
+  SURVEY_USER_CREATE_REQUEST,
+  SURVEY_USER_CREATE_SUCCESS,
+  SURVEY_USER_CREATE_FAILURE,
+  //
   SURVEY_HISTORY_LIST_REQUEST,
   SURVEY_HISTORY_LIST_SUCCESS,
   SURVEY_HISTORY_LIST_FAILURE,
@@ -288,6 +292,33 @@ function* surveyInnerDelete(action) {
 // ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
+async function surveyUserCreateAPI(data) {
+  return await axios.post(`/api/survey/user/create`, data);
+}
+
+function* surveyUserCreate(action) {
+  try {
+    const result = yield call(surveyUserCreateAPI, action.data);
+
+    yield put({
+      type: SURVEY_USER_CREATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SURVEY_USER_CREATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
 async function surveyHistoryListAPI(data) {
   return await axios.post(`/api/survey/history/list`, data);
 }
@@ -340,6 +371,9 @@ function* watchSurveyInnerUpdate() {
 function* watchSurveyInnerDelete() {
   yield takeLatest(SURVEY_INNER_DELETE_REQUEST, surveyInnerDelete);
 }
+function* watchSurveyUserCreate() {
+  yield takeLatest(SURVEY_USER_CREATE_REQUEST, surveyUserCreate);
+}
 function* watchSurveyHistoryList() {
   yield takeLatest(SURVEY_HISTORY_LIST_REQUEST, surveyHistoryList);
 }
@@ -356,6 +390,7 @@ export default function* surveySaga() {
     fork(watchSurveyInnerCreate),
     fork(watchSurveyInnerUpdate),
     fork(watchSurveyInnerDelete),
+    fork(watchSurveyUserCreate),
     fork(watchSurveyHistoryList),
 
     //

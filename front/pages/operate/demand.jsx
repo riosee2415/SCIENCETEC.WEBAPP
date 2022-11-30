@@ -75,6 +75,7 @@ const Demand = () => {
           ques: d.value,
           sort: d.sort,
           inner: innerList.filter((value) => value.SurveyQuestionId === d.id),
+          isOverlap: d.isOverlap,
         });
 
         setSurveyList(quesArr);

@@ -12,6 +12,7 @@ import {
   Popover,
   Radio,
   Select,
+  Switch,
   Table,
 } from "antd";
 import { useRouter, withRouter } from "next/router";
@@ -346,6 +347,7 @@ const Question = ({}) => {
         value: data.ques,
         sort: data.sort,
         surveyId: data.surveyId,
+        isOverlap: data.isOverlap ? true : false,
       },
     });
   }, []);
@@ -358,6 +360,7 @@ const Question = ({}) => {
           id: currentData.id,
           value: data.ques,
           sort: data.sort,
+          isOverlap: data.isOverlap ? true : false,
         },
       });
     },
@@ -696,8 +699,8 @@ const Question = ({}) => {
 
               <Form
                 form={quesUpdateForm}
-                labelCol={{ span: 2 }}
-                wrapperCol={{ span: 22 }}
+                labelCol={{ span: 3 }}
+                wrapperCol={{ span: 21 }}
                 style={{ width: `100%` }}
                 onFinish={quesUpdateHandler}
               >
@@ -748,6 +751,10 @@ const Question = ({}) => {
                     allowClear
                     placeholder="순서를 입력해주세요."
                   />
+                </Form.Item>
+
+                <Form.Item label="중복선택여부" name="isOverlap">
+                  <Switch size="small" />
                 </Form.Item>
 
                 <Form.Item label="작성일" name="createdAt">
@@ -812,8 +819,8 @@ const Question = ({}) => {
 
               <Form
                 form={innerUpdateForm}
-                labelCol={{ span: 2 }}
-                wrapperCol={{ span: 22 }}
+                labelCol={{ span: 3 }}
+                wrapperCol={{ span: 21 }}
                 style={{ width: `100%` }}
                 onFinish={innerUpdateHandler}
               >
@@ -953,8 +960,8 @@ const Question = ({}) => {
       >
         <Form
           form={quesCreateForm}
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 20 }}
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18 }}
           onFinish={quesCreateHandler}
         >
           <Form.Item
@@ -994,6 +1001,10 @@ const Question = ({}) => {
               allowClear
               placeholder="순서를 입력해주세요."
             />
+          </Form.Item>
+
+          <Form.Item label="중복선택여부" name="isOverlap">
+            <Switch size="small" />
           </Form.Item>
 
           <Wrapper al="flex-end">

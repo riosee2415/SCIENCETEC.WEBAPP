@@ -45,6 +45,10 @@ export const initailState = {
   st_surveyInnerDeleteDone: false,
   st_surveyInnerDeleteError: null,
   //
+  st_surveyUserCreateLoading: false, // 회원에게 넘기기
+  st_surveyUserCreateDone: false,
+  st_surveyUserCreateError: null,
+  //
   st_surveyHistoryListLoading: false, // survey 이력
   st_surveyHistoryListDone: false,
   st_surveyHistoryListError: null,
@@ -85,6 +89,10 @@ export const SURVEY_INNER_UPDATE_FAILURE = "SURVEY_INNER_UPDATE_FAILURE";
 export const SURVEY_INNER_DELETE_REQUEST = "SURVEY_INNER_DELETE_REQUEST";
 export const SURVEY_INNER_DELETE_SUCCESS = "SURVEY_INNER_DELETE_SUCCESS";
 export const SURVEY_INNER_DELETE_FAILURE = "SURVEY_INNER_DELETE_FAILURE";
+
+export const SURVEY_USER_CREATE_REQUEST = "SURVEY_USER_CREATE_REQUEST";
+export const SURVEY_USER_CREATE_SUCCESS = "SURVEY_USER_CREATE_SUCCESS";
+export const SURVEY_USER_CREATE_FAILURE = "SURVEY_USER_CREATE_FAILURE";
 
 export const SURVEY_HISTORY_LIST_REQUEST = "SURVEY_HISTORY_LIST_REQUEST";
 export const SURVEY_HISTORY_LIST_SUCCESS = "SURVEY_HISTORY_LIST_SUCCESS";
@@ -283,6 +291,27 @@ const reducer = (state = initailState, action) =>
         draft.st_surveyInnerDeleteLoading = false;
         draft.st_surveyInnerDeleteDone = false;
         draft.st_surveyInnerDeleteError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case SURVEY_USER_CREATE_REQUEST: {
+        draft.st_surveyUserCreateLoading = true;
+        draft.st_surveyUserCreateDone = false;
+        draft.st_surveyUserCreateError = null;
+        break;
+      }
+      case SURVEY_USER_CREATE_SUCCESS: {
+        draft.st_surveyUserCreateLoading = false;
+        draft.st_surveyUserCreateDone = true;
+        draft.st_surveyUserCreateError = null;
+        break;
+      }
+      case SURVEY_USER_CREATE_FAILURE: {
+        draft.st_surveyUserCreateLoading = false;
+        draft.st_surveyUserCreateDone = false;
+        draft.st_surveyUserCreateError = action.error;
         break;
       }
 

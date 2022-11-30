@@ -9,8 +9,10 @@ import {
 } from "../commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../Theme";
-import { Checkbox, Empty, Form, Modal, Radio } from "antd";
+import { Checkbox, Empty, Form, message, Modal, Radio } from "antd";
 import styled from "styled-components";
+import { SURVEY_USER_CREATE_REQUEST } from "../../reducers/survey";
+import { useRouter } from "next/router";
 
 const CustomForm = styled(Form)`
   width: 100%;
@@ -22,8 +24,15 @@ const CustomForm = styled(Form)`
 `;
 
 const Status = ({ surveyList }) => {
+  const {
+    st_surveyUserCreateLoading,
+    st_surveyUserCreateDone,
+    st_surveyUserCreateError,
+  } = useSelector((state) => state.survey);
+
   const width = useWidth();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [form] = Form.useForm();
 
@@ -71,51 +80,55 @@ const Status = ({ surveyList }) => {
     }
   }, [surveyList]);
 
-  // innerType
-  // 1 인풋
-  // 2 인풋 어레이
-  // 3 체크박스
+  useEffect(() => {
+    if (st_surveyUserCreateDone) {
+      router.push("/");
+      return message.success("제출되었습니다.");
+    }
+
+    if (st_surveyUserCreateError) {
+      return message.error(st_surveyUserCreateError);
+    }
+  }, [st_surveyUserCreateDone, st_surveyUserCreateError]);
+
   ///////////// - EVENT HANDLER- ////////////
 
   const submitHandler = useCallback(
     (data) => {
-      console.log(data);
-      console.log(surveyList);
-
-      const test = [];
+      let questionArr = [];
 
       const dataKey = Object.keys(data);
       const dataValue = Object.values(data);
 
       dataKey.map((value, idx) => {
-        const a = surveyList.find((item) => (item.ques = value));
+        const a = surveyList.find((item) => item.ques.split("(")[0] === value);
 
         const b = Object.values(dataValue[idx]).map((ele) =>
           Array.isArray(ele) ? ele[0] : ele
         );
 
-        const content = "";
+        let innerContent = "";
 
-        a.inner.map((ele) => {
-          // test.push({
-          //   questionName:value,
-          //   content: data.value
-          //   sort: a.sort
-          // })
+        b.filter((ele) => ele).map((ele, idx) => {
+          innerContent += ele
+            ? `${ele}${b.filter((ele) => ele).length !== idx + 1 ? " | " : ""}`
+            : "";
+        });
+
+        questionArr.push({
+          questionName: value,
+          content: innerContent,
+          sort: a.sort,
         });
       });
 
-      console.log(dataValue);
-
       // dispatch({
-      //   type: a,
+      //   type: SURVEY_USER_CREATE_REQUEST,
       //   data: {
       //     surveyId: 1,
-      //     questionValues: [
-
-      //     ]
-      //   }
-      // })
+      //     questionValues: questionArr,
+      //   },
+      // });
     },
     [surveyList]
   );
@@ -131,7 +144,62 @@ const Status = ({ surveyList }) => {
           surveyList &&
           surveyList.map((data) => {
             return (
-              <Form.List key={data.id} name={data.ques.split("(")[0]}>
+              <Form.List
+                key={data.id}
+                name={data.ques.split("(")[0]}
+                rules={[
+                  {
+                    validator: async (_, values) => {
+                      let isError = false;
+                      let errorType = 0;
+
+                      data.inner.map((value) => {
+                        // input, area
+                        value.innerType === 1 || value.innerType === 2
+                          ? Object.values(values)
+                              .filter((item) => typeof item === "string")
+                              .map(
+                                (item) =>
+                                  item.trim().length === 0 &&
+                                  ((isError = true), (errorType = 0))
+                              )
+                          : // checkbox
+                          data.isOverlap
+                          ? // 선택 안했을때 않넣음
+                            Object.values(values)
+                              .filter((item) => typeof item === "object")
+                              .filter((item) => item.length !== 0).length ===
+                              0 && ((isError = true), (errorType = 1))
+                          : Object.values(values)
+                              .filter((item) => typeof item === "object")
+                              .filter((item) => item.length !== 0).length > 1
+                          ? ((isError = true), (errorType = 2))
+                          : Object.values(values)
+                              .filter((item) => typeof item === "object")
+                              .filter((item) => item.length !== 0).length === 0
+                          ? ((isError = true), (errorType = 1))
+                          : ((isError = false), (errorType = 1));
+                      });
+
+                      if (isError) {
+                        if (errorType === 0) {
+                          return Promise.reject(
+                            new Error(`${data.ques}를 입력해주세요.`)
+                          );
+                        } else if (errorType === 2) {
+                          return Promise.reject(
+                            new Error(`${data.ques}는 중복선택 불가능 입니다.`)
+                          );
+                        } else {
+                          return Promise.reject(
+                            new Error(`${data.ques}를 선택해주세요.`)
+                          );
+                        }
+                      }
+                    },
+                  },
+                ]}
+              >
                 {(fields, { add, remove }, { errors }) => {
                   return (
                     <Wrapper
@@ -203,7 +271,7 @@ const Status = ({ surveyList }) => {
                             )
                           );
                         })}
-
+                      <Form.ErrorList errors={errors} />
                       {/* {data.inner &&
                 data.inner.map((v) => {
                   return (
@@ -253,6 +321,7 @@ const Status = ({ surveyList }) => {
           fontSize={`18px`}
           fontWeight={`bold`}
           htmlType="submit"
+          loading={st_surveyUserCreateLoading}
         >
           제출하기
         </CommonButton>
