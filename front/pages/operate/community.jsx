@@ -5,7 +5,7 @@ import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CommonButton,
   CustomSelect,
@@ -20,7 +20,7 @@ import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import { Select } from "antd";
+import { message, Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
 import OpDetail from "../../components/OpDetail";
@@ -28,15 +28,33 @@ import {
   NOTICE_DELETE_REQUEST,
   NOTICE_LIST_REQUEST,
 } from "../../reducers/notice";
+import { useEffect } from "react";
 
 const Community = () => {
   ////// GLOBAL STATE //////
-  const { viewType, notices } = useSelector((state) => state.notice);
+  const { viewType, notices, st_noticeCreateDone, st_noticeCreateError } =
+    useSelector((state) => state.notice);
 
   ////// HOOKS //////
   const width = useWidth();
+  const dispatch = useDispatch();
   ////// REDUX //////
   ////// USEEFFECT //////
+  useEffect(() => {
+    if (st_noticeCreateDone) {
+      message.info("게시글이 작성되었습니다.");
+      dispatch({
+        type: NOTICE_LIST_REQUEST,
+        data: {
+          type: "커뮤니티",
+        },
+      });
+    }
+    if (st_noticeCreateError) {
+      return message.error(st_noticeCreateError);
+    }
+  }, [st_noticeCreateDone, st_noticeCreateError]);
+
   ////// TOGGLE //////
   ////// HANDLER //////
   ////// DATAVIEW //////
