@@ -33,11 +33,57 @@ const Status = ({ surveyList }) => {
     isModalOpen((prev) => !prev);
   }, [modalOpen]);
 
+  useEffect(() => {
+    if (surveyList) {
+      let strJson = "{";
+      const surveyList2 = surveyList.map((data) => data.ques);
+      surveyList.map((data, idx) => {
+        strJson += `"${data.ques.split("(")[0]}": null${
+          surveyList2.length !== idx + 1 ? "," : ""
+        }`;
+      });
+      strJson += "}";
+
+      let objJson = JSON.parse(strJson);
+
+      surveyList.map((data) => {
+        let strJson2 = "{";
+        data.inner.map((value, idx) => {
+          strJson2 += `"${
+            value.innerType === 1
+              ? `textInput${idx}`
+              : value.innerType === 2
+              ? `textArea${idx}`
+              : `checkBox${idx}`
+          }":${
+            value.innerType === 1
+              ? '""'
+              : value.innerType === 2
+              ? '""'
+              : "false"
+          }${data.inner.length !== idx + 1 ? "," : ""}`;
+        });
+
+        strJson2 += "}";
+
+        objJson[data.ques.split("(")[0]] = JSON.parse(strJson2);
+      });
+
+      form.setFieldsValue({
+        ...objJson,
+      });
+    }
+  }, [surveyList]);
+
+  // innerType
+  // 1 인풋
+  // 2 인풋 어레이
+  // 3 체크박스
   ///////////// - EVENT HANDLER- ////////////
 
   return (
     <Wrapper al={`flex-start`}>
-      <CustomForm onFinish={console.log}>
+      <CustomForm onFinish={console.log} form={form}>
         {surveyList && surveyList.length === 0 ? (
           <Wrapper margin={`50px 0`}>
             <Empty description={"등록된 수요조사 설문이 없습니다."} />
@@ -46,7 +92,7 @@ const Status = ({ surveyList }) => {
           surveyList &&
           surveyList.map((data) => {
             return (
-              <Form.List key={data.id} name={data.ques}>
+              <Form.List key={data.id} name={data.ques.split("(")[0]}>
                 {(fields, { add, remove }, { errors }) => {
                   return (
                     <Wrapper
