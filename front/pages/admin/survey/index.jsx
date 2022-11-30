@@ -141,6 +141,7 @@ const Question = ({}) => {
   const [icModal, setICModal] = useState(false); // 답변 등록 모달
 
   const [typeValue, setTypeValue] = useState(0);
+  const [isOverlapCheck, setIsOverlapCheck] = useState(false);
 
   ////// USEEFFECT //////
 
@@ -301,6 +302,10 @@ const Question = ({}) => {
     setICModal((prev) => !prev);
   }, [icModal]);
 
+  const isOverlapCheckToggle = useCallback(() => {
+    setIsOverlapCheck((prev) => !prev);
+  }, [isOverlapCheck]);
+
   ////// HANDLER //////
 
   const typeValueHandler = useCallback(
@@ -321,6 +326,8 @@ const Question = ({}) => {
       setCurrentData(record);
       setInnerData(null);
 
+      console.log(record.isOverlap === 1 ? true : false);
+
       quesUpdateForm.setFieldsValue({
         surveyId: record.SurveyId,
         sort: record.sort,
@@ -330,6 +337,8 @@ const Question = ({}) => {
         updator: record.updator,
       });
 
+      setIsOverlapCheck(record.isOverlap === 1 ? true : false);
+
       dispatch({
         type: SURVEY_INNER_LIST_REQUEST,
         data: {
@@ -337,17 +346,18 @@ const Question = ({}) => {
         },
       });
     },
-    [currentData, quesUpdateForm]
+    [currentData, quesUpdateForm, isOverlapCheck]
   );
 
   const quesCreateHandler = useCallback((data) => {
+    console.log(data);
     dispatch({
       type: SURVEY_QUES_CREATE_REQUEST,
       data: {
         value: data.ques,
         sort: data.sort,
         surveyId: data.surveyId,
-        isOverlap: data.isOverlap ? true : false,
+        isOverlap: data.isOverlap ? 1 : 0,
       },
     });
   }, []);
@@ -360,11 +370,11 @@ const Question = ({}) => {
           id: currentData.id,
           value: data.ques,
           sort: data.sort,
-          isOverlap: data.isOverlap ? true : false,
+          isOverlap: isOverlapCheck,
         },
       });
     },
-    [currentData]
+    [currentData, isOverlapCheck]
   );
 
   const quesDeleteHandler = useCallback((data) => {
@@ -754,7 +764,11 @@ const Question = ({}) => {
                 </Form.Item>
 
                 <Form.Item label="중복선택여부" name="isOverlap">
-                  <Switch size="small" />
+                  <Switch
+                    size="small"
+                    checked={isOverlapCheck}
+                    onChange={isOverlapCheckToggle}
+                  />
                 </Form.Item>
 
                 <Form.Item label="작성일" name="createdAt">
