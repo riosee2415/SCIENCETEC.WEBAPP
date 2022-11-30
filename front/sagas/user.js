@@ -628,7 +628,7 @@ function* checkCode(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function pwUpdateAPI(data) {
-  return await axios.post(`/api/user/modifypass/update`, data);
+  return await axios.patch(`/api/user/modifypass/update`, data);
 }
 
 function* pwUpdate(action) {

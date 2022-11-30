@@ -1022,7 +1022,7 @@ router.patch("/modifypass/update", async (req, res, next) => {
        SET  password = "${hashPassord}",
             updatedAt = now(),
             secret = NULL
-     WHERE  email = "${email}"
+     WHERE  userId = "${userId}"
     `;
 
     const updateResult = await models.sequelize.query(userUpdateQuery);

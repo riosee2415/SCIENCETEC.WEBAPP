@@ -7,7 +7,12 @@ import useWidth from "../../../hooks/useWidth";
 import Theme from "../../../components/Theme";
 import styled from "styled-components";
 import axios from "axios";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  CHECK_CODE_REQUEST,
+  FIND_PW_REQUEST,
+  LOAD_MY_INFO_REQUEST,
+  PW_UPDATE_REQUEST,
+} from "../../../reducers/user";
 import Head from "next/head";
 import {
   CommonButton,
@@ -18,18 +23,110 @@ import {
   Wrapper,
 } from "../../../components/commonComponents";
 import { useRouter } from "next/router";
+import useInput from "../../../hooks/useInput";
+import { message } from "antd";
+import { useEffect } from "react";
 
 const Index = () => {
   ////// GLOBAL STATE //////
+  const { st_findPwDone, st_checkCodeDone, st_pwUpdateDone } = useSelector(
+    (state) => state.user
+  );
+
   const [currentTab, setCurrentTab] = useState(0);
 
   ////// HOOKS //////
+  const dispatch = useDispatch();
   const router = useRouter();
   const width = useWidth();
+
+  const nameInput = useInput(``);
+  const idInput = useInput(``);
+  const codeInput = useInput(``);
+  const pwInput = useInput(``);
+  const pwCheckInput = useInput(``);
   ////// REDUX //////
   ////// USEEFFECT //////
+  useEffect(() => {
+    if (st_pwUpdateDone) {
+      router.push(`/login`);
+
+      return message.success("비밀번호가 변경되었습니다.");
+    }
+  }, [st_pwUpdateDone]);
+
+  useEffect(() => {
+    if (st_checkCodeDone) {
+      setCurrentTab(2);
+
+      return message.success("인증이 완료되었습니다.");
+    }
+  }, [st_checkCodeDone]);
+
+  useEffect(() => {
+    if (st_findPwDone) {
+      setCurrentTab(1);
+
+      return message.success("인증코드가 발송되었습니다.");
+    }
+  }, [st_findPwDone]);
   ////// TOGGLE //////
   ////// HANDLER //////
+  const pwCheckHdnaler = useCallback(() => {
+    if (!pwInput.value) {
+      return message.error("비밀번호를 재 입력해주세요.");
+    }
+    if (!pwCheckInput.value) {
+      return message.error("비밀번호를 재 입력해주세요.");
+    }
+    if (pwCheckInput.value !== pwInput.value) {
+      return message.error("비밀번호가 일치하지 않습니다.");
+    }
+
+    if (!idInput.value) {
+      location.reload();
+      return message.error("일시적인 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+
+    dispatch({
+      type: PW_UPDATE_REQUEST,
+      data: {
+        userId: idInput.value,
+        password: pwInput.value,
+      },
+    });
+  }, [pwCheckInput, pwInput, idInput]);
+
+  const checkCodeHandler = useCallback(() => {
+    if (!codeInput.value) {
+      return message.error("인증코드를 입력해주세요.");
+    }
+
+    dispatch({
+      type: CHECK_CODE_REQUEST,
+      data: {
+        secret: codeInput.value,
+      },
+    });
+  }, [codeInput]);
+
+  const findPwHandler = useCallback(() => {
+    if (!nameInput.value) {
+      return message.error("이름을 입력해주세요.");
+    }
+    if (!idInput.value) {
+      return message.error("아아디를 입력해주세요.");
+    }
+
+    dispatch({
+      type: FIND_PW_REQUEST,
+      data: {
+        userId: idInput.value,
+        username: nameInput.value,
+      },
+    });
+  }, [idInput, nameInput]);
+
   const moveLinkHandler = useCallback(
     (link) => {
       router.push(link);
@@ -41,7 +138,7 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>ALAL</title>
+        <title>ICAST | 비밀번호찾기</title>
       </Head>
 
       <ClientLayout>
@@ -68,12 +165,16 @@ const Index = () => {
                     width={`100%`}
                     height={`55px`}
                     placeholder="이름을 입력해주세요."
+                    {...nameInput}
+                    onKeyDown={(e) => e.keyCode === 13 && findPwHandler()}
                   />
                   <TextInput
                     width={`100%`}
                     height={`55px`}
                     margin={`10px 0`}
-                    placeholder="연락처를 입력해주세요."
+                    placeholder="아이디를 입력해주세요."
+                    {...idInput}
+                    onKeyDown={(e) => e.keyCode === 13 && findPwHandler()}
                   />
 
                   <CommonButton
@@ -82,7 +183,7 @@ const Index = () => {
                     kindOf={`subTheme`}
                     fontSize={`18px`}
                     fontWeight={`bold`}
-                    onClick={() => setCurrentTab(1)}
+                    onClick={findPwHandler}
                   >
                     코드 전송하기
                   </CommonButton>
@@ -111,13 +212,14 @@ const Index = () => {
                     width={`100%`}
                     height={`55px`}
                     placeholder="이메일로 전송된 코드를 입력해주세요."
+                    {...codeInput}
                   />
 
                   <CommonButton
                     width={`100%`}
                     height={`55px`}
                     margin={`10px 0 0`}
-                    onClick={() => setCurrentTab(2)}
+                    onClick={checkCodeHandler}
                   >
                     코드 입력하기
                   </CommonButton>
@@ -130,6 +232,8 @@ const Index = () => {
                     width={`100%`}
                     height={`55px`}
                     placeholder="비밀번호를 입력해주세요."
+                    type="password"
+                    {...pwInput}
                   />
 
                   <TextInput
@@ -137,6 +241,8 @@ const Index = () => {
                     height={`55px`}
                     margin={`10px 0`}
                     placeholder="비밀번호를 재 입력해주세요."
+                    type="password"
+                    {...pwCheckInput}
                   />
 
                   <CommonButton
@@ -144,7 +250,7 @@ const Index = () => {
                     height={`55px`}
                     fontSize={`18px`}
                     fontWeight={`bold`}
-                    onClick={() => moveLinkHandler(`/login`)}
+                    onClick={pwCheckHdnaler}
                   >
                     비밀번호 변경하기
                   </CommonButton>
