@@ -73,6 +73,18 @@ import {
   FIND_ID_SUCCESS,
   FIND_ID_FAILURE,
   /////////////////////////////
+  FIND_PW_REQUEST,
+  FIND_PW_SUCCESS,
+  FIND_PW_FAILURE,
+  /////////////////////////////
+  CHECK_CODE_REQUEST,
+  CHECK_CODE_SUCCESS,
+  CHECK_CODE_FAILURE,
+  /////////////////////////////
+  PW_UPDATE_REQUEST,
+  PW_UPDATE_SUCCESS,
+  PW_UPDATE_FAILURE,
+  /////////////////////////////
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -556,6 +568,90 @@ function* findId(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function findPwAPI(data) {
+  return await axios.post(`/api/user/modifypass`, data);
+}
+
+function* findPw(action) {
+  try {
+    const result = yield call(findPwAPI, action.data);
+
+    yield put({
+      type: FIND_PW_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: FIND_PW_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function checkCodeAPI(data) {
+  return await axios.post(`/api/user/checkSecret`, data);
+}
+
+function* checkCode(action) {
+  try {
+    const result = yield call(checkCodeAPI, action.data);
+
+    yield put({
+      type: CHECK_CODE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: CHECK_CODE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function pwUpdateAPI(data) {
+  return await axios.post(`/api/user/modifypass/update`, data);
+}
+
+function* pwUpdate(action) {
+  try {
+    const result = yield call(pwUpdateAPI, action.data);
+
+    yield put({
+      type: PW_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: PW_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -630,6 +726,18 @@ function* watchFindId() {
   yield takeLatest(FIND_ID_REQUEST, findId);
 }
 
+function* watchFindPw() {
+  yield takeLatest(FIND_PW_REQUEST, findPw);
+}
+
+function* watchCheckCode() {
+  yield takeLatest(CHECK_CODE_REQUEST, checkCode);
+}
+
+function* watchPwUpdate() {
+  yield takeLatest(PW_UPDATE_REQUEST, pwUpdate);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
@@ -651,6 +759,9 @@ export default function* userSaga() {
     fork(watchUserDetail),
     fork(watchStatusList),
     fork(watchFindId),
+    fork(watchFindPw),
+    fork(watchCheckCode),
+    fork(watchPwUpdate),
     //
   ]);
 }

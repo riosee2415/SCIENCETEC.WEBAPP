@@ -38,6 +38,11 @@ const Index = () => {
   const dispatch = useDispatch();
 
   ////// USEEFFECT //////
+  useEffect(() => {
+    if (findUserId) {
+      setCurrentTab(1);
+    }
+  }, [findUserId]);
   ////// TOGGLE //////
   ////// HANDLER //////
 
@@ -46,7 +51,7 @@ const Index = () => {
       return message.error("이름을 입력해주세요.");
     }
     if (!emailInput.value) {
-      return message.error("이름을 입력해주세요.");
+      return message.error("이메일을 입력해주세요.");
     }
 
     dispatch({
@@ -118,7 +123,7 @@ const Index = () => {
                       이메일
                     </Text>
                     <TextInput
-                      type="number"
+                      type="text"
                       width={`100%`}
                       height={`55px`}
                       placeholder="이메일을 입력해주세요."
@@ -134,7 +139,7 @@ const Index = () => {
                     kindOf={`subTheme`}
                     fontSize={`18px`}
                     fontWeight={`bold`}
-                    onClick={() => setCurrentTab(1)}
+                    onClick={findIdHandler}
                   >
                     이메일 찾기
                   </CommonButton>

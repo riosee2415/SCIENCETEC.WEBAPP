@@ -8,6 +8,7 @@ export const initailState = {
   userHistory: [],
   adminUserRightHistory: [],
   statusList: [],
+  findUserId: null,
 
   userDetail: null,
   combiTypeList: [],
@@ -81,6 +82,18 @@ export const initailState = {
   st_findIdLoading: false, // 아이디찾기
   st_findIdDone: false,
   st_findIdError: null,
+  //
+  st_findPwLoading: false, // 비밀번호 이메일 전송
+  st_findPwDone: false,
+  st_findPwError: null,
+  //
+  st_checkCodeLoading: false, // 인증코드
+  st_checkCodeDone: false,
+  st_checkCodeError: null,
+  //
+  st_pwUpdateLoading: false, // 비밀번호 재설정
+  st_pwUpdateDone: false,
+  st_pwUpdateError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -154,6 +167,18 @@ export const STATUS_LIST_FAILURE = "STATUS_LIST_FAILURE";
 export const FIND_ID_REQUEST = "FIND_ID_REQUEST";
 export const FIND_ID_SUCCESS = "FIND_ID_SUCCESS";
 export const FIND_ID_FAILURE = "FIND_ID_FAILURE";
+//
+export const FIND_PW_REQUEST = "FIND_PW_REQUEST";
+export const FIND_PW_SUCCESS = "FIND_PW_SUCCESS";
+export const FIND_PW_FAILURE = "FIND_PW_FAILURE";
+//
+export const CHECK_CODE_REQUEST = "CHECK_CODE_REQUEST";
+export const CHECK_CODE_SUCCESS = "CHECK_CODE_SUCCESS";
+export const CHECK_CODE_FAILURE = "CHECK_CODE_FAILURE";
+//
+export const PW_UPDATE_REQUEST = "PW_UPDATE_REQUEST";
+export const PW_UPDATE_SUCCESS = "PW_UPDATE_SUCCESS";
+export const PW_UPDATE_FAILURE = "PW_UPDATE_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -538,13 +563,78 @@ const reducer = (state = initailState, action) =>
         draft.st_findIdLoading = false;
         draft.st_findIdDone = true;
         draft.st_findIdError = null;
-
+        draft.findUserId = action.data.userId;
         break;
       }
       case FIND_ID_FAILURE: {
         draft.st_findIdLoading = false;
         draft.st_findIdDone = false;
         draft.st_findIdError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case FIND_PW_REQUEST: {
+        draft.st_findPwLoading = true;
+        draft.st_findPwDone = false;
+        draft.st_findPwError = null;
+        break;
+      }
+      case FIND_PW_SUCCESS: {
+        draft.st_findPwLoading = false;
+        draft.st_findPwDone = true;
+        draft.st_findPwError = null;
+        break;
+      }
+      case FIND_PW_FAILURE: {
+        draft.st_findPwLoading = false;
+        draft.st_findPwDone = false;
+        draft.st_findPwError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case CHECK_CODE_REQUEST: {
+        draft.st_checkCodeLoading = true;
+        draft.st_checkCodeDone = false;
+        draft.st_checkCodeError = null;
+        break;
+      }
+      case CHECK_CODE_SUCCESS: {
+        draft.st_checkCodeLoading = false;
+        draft.st_checkCodeDone = true;
+        draft.st_checkCodeError = null;
+
+        break;
+      }
+      case CHECK_CODE_FAILURE: {
+        draft.st_checkCodeLoading = false;
+        draft.st_checkCodeDone = false;
+        draft.st_checkCodeError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case PW_UPDATE_REQUEST: {
+        draft.st_pwUpdateLoading = true;
+        draft.st_pwUpdateDone = false;
+        draft.st_pwUpdateError = null;
+        break;
+      }
+      case PW_UPDATE_SUCCESS: {
+        draft.st_pwUpdateLoading = false;
+        draft.st_pwUpdateDone = true;
+        draft.st_pwUpdateError = null;
+
+        break;
+      }
+      case PW_UPDATE_FAILURE: {
+        draft.st_pwUpdateLoading = false;
+        draft.st_pwUpdateDone = false;
+        draft.st_pwUpdateError = action.error;
         break;
       }
 
