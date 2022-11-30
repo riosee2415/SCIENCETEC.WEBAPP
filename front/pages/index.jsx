@@ -30,9 +30,13 @@ import Mainslider from "../components/slide/MainSlider";
 import ToastEditorComponent from "../components/editor/ToastEditorComponent";
 import CC01 from "../components/common/CC01";
 import { MAIN_REQUEST } from "../reducers/main";
-import { Empty } from "antd";
+import { Empty, Popover } from "antd";
 import { MAIN_BOARD_REQUEST } from "../reducers/notice";
-import { LoadingOutlined } from "@ant-design/icons";
+import {
+  LeftOutlined,
+  LoadingOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -54,6 +58,13 @@ const BoardWrapper = styled(Wrapper)`
   }
 `;
 
+const MainBtn = styled(CommonButton)`
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
+  margin-right: 8px;
+  color: ${Theme.basicTheme_C};
+  padding: 0px;
+`;
+
 const Home = ({}) => {
   ////// GLOBAL STATE //////
   const { banner, business, city } = useSelector((state) => state.main);
@@ -65,6 +76,8 @@ const Home = ({}) => {
 
   const [boardType, setBoardType] = useState("전체");
   const [chartConfig, setChartConfig] = useState(null);
+
+  const [type, setType] = useState(0);
   ////// REDUX //////
   ////// USEEFFECT //////
 
@@ -76,8 +89,6 @@ const Home = ({}) => {
       },
     });
   }, [boardType]);
-
-  console.log(business);
 
   useEffect(() => {
     if (business) {
@@ -158,6 +169,7 @@ const Home = ({}) => {
   );
 
   ////// HANDLER //////
+
   ////// DATAVIEW //////
 
   const boardImage = [
@@ -182,6 +194,113 @@ const Home = ({}) => {
       url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board5.png",
     },
   ];
+
+  const point = [
+    {
+      name: "서울특별시",
+      top: "19%",
+      right: "59%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "대전광역시",
+      top: "47%",
+      right: "55.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "인천광역시",
+      top: "19%",
+      right: "62.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "대구광역시",
+      top: "60%",
+      right: "43%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "울산광역시",
+      top: "67%",
+      right: "36%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "부산광역시",
+      top: "75%",
+      right: "38%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "광주광역시",
+      top: "73%",
+      right: "63.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "세종특별자치시",
+      top: "42%",
+      right: "56.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "제주특별자치도",
+      top: "76%",
+      right: "23%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "경기도",
+      top: "25%",
+      right: "56%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "강원도",
+      top: "18%",
+      right: "45%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "충청남도",
+      top: "40%",
+      right: "62%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "충청북도",
+      top: "37%",
+      right: "52%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "전라북도",
+      top: "60%",
+      right: "59%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "전라남도",
+      top: "79%",
+      right: "61%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "경상남도",
+      top: "70%",
+      right: "47%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+    {
+      name: "경상북도",
+      top: "47%",
+      right: "41%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+    },
+  ];
+
+  console.log(city);
 
   return (
     <>
@@ -222,27 +341,102 @@ const Home = ({}) => {
                       <SpanText color={Theme.subTheme_C}>&nbsp;현황</SpanText>
                     </Text>
                   </Wrapper>
-                  <Wrapper overflow="hidden" overflowX={`auto`}>
-                    {chartConfig ? (
-                      <Chart
-                        options={{
-                          ...chartConfig.options,
-                          plotOptions: {
-                            width: "20px",
-                            bar: {
-                              borderRadius: 4,
-                              horizontal: width < 700 ? false : true,
+
+                  {type === 0 && (
+                    <Wrapper overflow="hidden" overflowX={`auto`}>
+                      {chartConfig ? (
+                        <Chart
+                          options={{
+                            ...chartConfig.options,
+                            plotOptions: {
+                              width: "20px",
+                              bar: {
+                                borderRadius: 4,
+                                horizontal: width < 700 ? false : true,
+                              },
                             },
-                          },
-                        }}
-                        series={chartConfig.series}
-                        type="bar"
-                        width={width < 700 ? "350px" : "650px"}
-                        height={width < 700 ? "450px" : "400px"}
+                          }}
+                          series={chartConfig.series}
+                          type="bar"
+                          width={width < 700 ? "350px" : "650px"}
+                          height={width < 700 ? "450px" : "400px"}
+                        />
+                      ) : (
+                        <LoadingOutlined spin />
+                      )}
+                    </Wrapper>
+                  )}
+
+                  {type === 1 && (
+                    <Wrapper>
+                      <Image
+                        src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_map.png`}
                       />
-                    ) : (
-                      <LoadingOutlined spin />
-                    )}
+
+                      {point.map((data) => {
+                        return (
+                          <Wrapper>
+                            {city &&
+                              city.map((v) => {
+                                if (data.name === v.combiArea) {
+                                  return (
+                                    <Popover
+                                      key={v.id}
+                                      placement="top"
+                                      content={
+                                        <Wrapper>
+                                          <Text>
+                                            {v.combiArea} {v.cnt}명
+                                          </Text>
+                                        </Wrapper>
+                                      }
+                                    >
+                                      <Image
+                                        position={`absolute`}
+                                        src={data.src}
+                                        width={`20px`}
+                                        height={`20px`}
+                                        top={data.top}
+                                        right={data.right}
+                                      />
+                                    </Popover>
+                                  );
+                                } else {
+                                  return null;
+                                }
+                              })}
+                          </Wrapper>
+                        );
+                      })}
+                    </Wrapper>
+                  )}
+
+                  <Wrapper
+                    position={`absolute`}
+                    width={`auto`}
+                    bottom={`0`}
+                    right={`0`}
+                    padding={`10px`}
+                    dr={`row`}
+                  >
+                    <MainBtn
+                      kindOf={`white`}
+                      radius={`100%`}
+                      width={`30px`}
+                      height={`30px`}
+                      onClick={() => setType(0)}
+                    >
+                      <LeftOutlined />
+                    </MainBtn>
+                    <MainBtn
+                      kindOf={`white`}
+                      radius={`100%`}
+                      width={`30px`}
+                      height={`30px`}
+                      onClick={() => setType(1)}
+                    >
+                      <RightOutlined />
+                    </MainBtn>
                   </Wrapper>
                 </Wrapper>
               </Wrapper>
