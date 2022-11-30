@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../../hooks/useWidth";
 import {
   CommonButton,
+  CustomSelect,
   Image,
   RsWrapper,
   SpanText,
@@ -19,7 +20,7 @@ import {
 } from "../../components/commonComponents";
 import styled from "styled-components";
 import Theme from "../../components/Theme";
-import { Checkbox, DatePicker, message, Modal } from "antd";
+import { Checkbox, DatePicker, message, Modal, Select } from "antd";
 import { useRouter } from "next/router";
 import useInput from "../../hooks/useInput";
 import DaumPostcode from "react-daum-postcode";
@@ -80,7 +81,7 @@ const Index = () => {
   const [isCheck, setIsCheck] = useState(false); // 개인정보
   const combiHomepageInput = useInput(``); // 조합 홈페이지
   const [combiEstimateDate, setCombiEstimateDate] = useState(null); // 설립년도
-  const combiAreaInput = useInput(``); // 지역
+  const [combiArea, setCombiArea] = useState(null); // 지역
   const corporationCntInput = useInput(``); // 법인조합원수
   const personalCntInput = useInput(``); // 개인조홥원수
   const repreNameInput = useInput(``); // 이사장명
@@ -117,7 +118,6 @@ const Index = () => {
 
   useEffect(() => {
     const query = router.query;
-    console.log(query);
 
     if (query.naver) {
       naver.handleTokenResponse();
@@ -179,7 +179,7 @@ const Index = () => {
       return message.error("설립년도를 선택해주세요.");
     }
 
-    if (!combiAreaInput.value) {
+    if (!combiArea) {
       return message.error("조합 활동지역을 검색해주세요.");
     }
 
@@ -249,7 +249,7 @@ const Index = () => {
           combiName: combiNameInput.value,
           combiHomepage: combiHomepageInput.value,
           combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
-          combiArea: combiAreaInput.value,
+          combiArea: combiArea,
           corporationCnt: corporationCntInput.value,
           personalCnt: personalCntInput.value,
           repreName: repreNameInput.value,
@@ -283,7 +283,7 @@ const Index = () => {
           combiName: combiNameInput.value,
           combiHomepage: combiHomepageInput.value,
           combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
-          combiArea: combiAreaInput.value,
+          combiArea: combiArea,
           corporationCnt: corporationCntInput.value,
           personalCnt: personalCntInput.value,
           repreName: repreNameInput.value,
@@ -312,7 +312,7 @@ const Index = () => {
     combiNameInput,
     combiHomepageInput,
     combiEstimateDate,
-    combiAreaInput,
+    combiArea,
     corporationCntInput,
     personalCntInput,
     repreNameInput,
@@ -336,6 +336,11 @@ const Index = () => {
   // 설립년도
   const combiEstimateDateHandler = useCallback((data) => {
     setCombiEstimateDate(data);
+  }, []);
+
+  // 지역
+  const combiAreaHandler = useCallback((data) => {
+    setCombiArea(data);
   }, []);
 
   // 조합유형
@@ -636,14 +641,61 @@ const Index = () => {
                     >
                       지역
                     </Text>
-                    <TextInput
-                      type="text"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="조합 활동 지역을 입력해주세요."
-                      radius={`5px`}
-                      {...combiAreaInput}
-                    />
+                    <CustomSelect radius={`5px`} width={`100%`} height={`55px`}>
+                      <Select
+                        placeholder="조합 활동 지역을 입력해주세요."
+                        onChange={combiAreaHandler}
+                        value={combiArea}
+                      >
+                        <Select.Option value={"서울특별시"}>
+                          서울특별시
+                        </Select.Option>
+                        <Select.Option value={"대전광역시"}>
+                          대전광역시
+                        </Select.Option>
+                        <Select.Option value={"인천광역시"}>
+                          인천광역시
+                        </Select.Option>
+                        <Select.Option value={"대구광역시"}>
+                          대구광역시
+                        </Select.Option>
+                        <Select.Option value={"울산광역시"}>
+                          울산광역시
+                        </Select.Option>
+                        <Select.Option value={"부산광역시"}>
+                          부산광역시
+                        </Select.Option>
+                        <Select.Option value={"광주광역시"}>
+                          광주광역시
+                        </Select.Option>
+                        <Select.Option value={"세종특별자치시"}>
+                          세종특별자치시
+                        </Select.Option>
+                        <Select.Option value={"제주특별자치도"}>
+                          제주특별자치도
+                        </Select.Option>
+                        <Select.Option value={"경기도"}>경기도</Select.Option>
+                        <Select.Option value={"강원도"}>강원도</Select.Option>
+                        <Select.Option value={"충청남도"}>
+                          충청남도
+                        </Select.Option>
+                        <Select.Option value={"충청북도"}>
+                          충청북도
+                        </Select.Option>
+                        <Select.Option value={"전라북도"}>
+                          전라북도
+                        </Select.Option>
+                        <Select.Option value={"전라남도"}>
+                          전라남도
+                        </Select.Option>
+                        <Select.Option value={"경상남도"}>
+                          경상남도
+                        </Select.Option>
+                        <Select.Option value={"경상북도"}>
+                          경상북도
+                        </Select.Option>
+                      </Select>
+                    </CustomSelect>
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
                     <Text
