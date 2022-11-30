@@ -32,6 +32,11 @@ import CC01 from "../components/common/CC01";
 import { MAIN_REQUEST } from "../reducers/main";
 import { Empty } from "antd";
 import { MAIN_BOARD_REQUEST } from "../reducers/notice";
+import { LoadingOutlined } from "@ant-design/icons";
+import dynamic from "next/dynamic";
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 const BoardTypeButton = styled(CommonButton)`
   background-color: ${(props) => props.isCheck && props.theme.basicTheme_C};
@@ -59,6 +64,7 @@ const Home = ({}) => {
   const dispatch = useDispatch();
 
   const [boardType, setBoardType] = useState("전체");
+  const [chartConfig, setChartConfig] = useState(null);
   ////// REDUX //////
   ////// USEEFFECT //////
 
@@ -70,6 +76,78 @@ const Home = ({}) => {
       },
     });
   }, [boardType]);
+
+  console.log(business);
+
+  useEffect(() => {
+    if (business) {
+      setChartConfig({
+        series: [
+          {
+            name: "",
+            data: business.map((data) => data.cnt),
+          },
+        ],
+        options: {
+          chart: {
+            type: "bar",
+          },
+
+          dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+              return;
+            },
+            offsetY: -20,
+            style: {
+              fontSize: "12px",
+              colors: ["#304758"],
+            },
+          },
+
+          xaxis: {
+            categories: business.map((data) => data.value),
+            position: "bottom",
+            // axisBorder: {
+            //   show: false,
+            // },
+            // axisTicks: {
+            //   show: false,
+            // },
+            crosshairs: {
+              fill: {
+                type: "gradient",
+                gradient: {
+                  colorFrom: "#D8E3F0",
+                  colorTo: "#BED1E6",
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5,
+                },
+              },
+            },
+            tooltip: {
+              enabled: true,
+            },
+          },
+          yaxis: {
+            // axisBorder: {
+            //   show: false,
+            // },
+            // axisTicks: {
+            //   show: false,
+            // },
+            labels: {
+              // show: false,
+              formatter: function (val) {
+                return val;
+              },
+            },
+          },
+        },
+      });
+    }
+  }, [business]);
   ////// TOGGLE //////
 
   const boardTypeToggle = useCallback(
@@ -127,10 +205,46 @@ const Home = ({}) => {
                 <Wrapper
                   width={width < 700 ? `100%` : `49%`}
                   margin={width < 700 ? `20px 0 0` : `0`}
-                  height={width < 700 ? `350px` : `440px`}
+                  height={width < 700 ? `520px` : `440px`}
                   bgColor={Theme.white_C}
                   radius={`20px`}
-                ></Wrapper>
+                  position={`relative`}
+                >
+                  <Wrapper
+                    position={`absolute`}
+                    width={`auto`}
+                    top={`0`}
+                    left={`0`}
+                    padding={`10px`}
+                  >
+                    <Text fontSize={`24px`}>
+                      <SpanText color={Theme.basicTheme_C}>기과협</SpanText>
+                      <SpanText color={Theme.subTheme_C}>&nbsp;현황</SpanText>
+                    </Text>
+                  </Wrapper>
+                  <Wrapper overflow="hidden" overflowX={`auto`}>
+                    {chartConfig ? (
+                      <Chart
+                        options={{
+                          ...chartConfig.options,
+                          plotOptions: {
+                            width: "20px",
+                            bar: {
+                              borderRadius: 4,
+                              horizontal: width < 700 ? false : true,
+                            },
+                          },
+                        }}
+                        series={chartConfig.series}
+                        type="bar"
+                        width={width < 700 ? "350px" : "650px"}
+                        height={width < 700 ? "450px" : "400px"}
+                      />
+                    ) : (
+                      <LoadingOutlined spin />
+                    )}
+                  </Wrapper>
+                </Wrapper>
               </Wrapper>
 
               <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 25px`}>
