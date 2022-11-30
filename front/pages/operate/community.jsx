@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
@@ -29,15 +29,27 @@ import {
   NOTICE_LIST_REQUEST,
 } from "../../reducers/notice";
 import { useEffect } from "react";
+import { useState } from "react";
+import useInput from "../../hooks/useInput";
 
 const Community = () => {
   ////// GLOBAL STATE //////
-  const { viewType, notices, st_noticeCreateDone, st_noticeCreateError } =
-    useSelector((state) => state.notice);
+  const {
+    viewType,
+    notices,
+    maxPage,
+    st_noticeCreateDone,
+    st_noticeCreateError,
+  } = useSelector((state) => state.notice);
 
   ////// HOOKS //////
   const width = useWidth();
   const dispatch = useDispatch();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState(0);
+
+  const searchInput = useInput(``);
   ////// REDUX //////
   ////// USEEFFECT //////
   useEffect(() => {
@@ -56,7 +68,63 @@ const Community = () => {
   }, [st_noticeCreateDone, st_noticeCreateError]);
 
   ////// TOGGLE //////
+  const searchValueToggle = useCallback((data) => {
+    setSearchValue(data);
+  }, []);
+
   ////// HANDLER //////
+
+  const searchHandler = useCallback(() => {
+    if (searchValue === 0) {
+      dispatch({
+        type: NOTICE_LIST_REQUEST,
+        data: {
+          type: "커뮤니티",
+          page: 1,
+          title: searchInput.value,
+        },
+      });
+    } else {
+      dispatch({
+        type: NOTICE_LIST_REQUEST,
+        data: {
+          type: "커뮤니티",
+          page: 1,
+          content: searchInput.value,
+        },
+      });
+    }
+
+    setCurrentPage(1);
+  }, [searchInput]);
+
+  const otherPageCall = useCallback(
+    (changePage) => {
+      setCurrentPage(changePage);
+
+      if (searchValue === 0) {
+        dispatch({
+          type: NOTICE_LIST_REQUEST,
+          data: {
+            type: "커뮤니티",
+            page: changePage,
+            title: searchInput.value,
+          },
+        });
+      } else {
+        dispatch({
+          type: NOTICE_LIST_REQUEST,
+          data: {
+            type: "커뮤니티",
+            page: changePage,
+            content: searchInput.value,
+          },
+        });
+      }
+    },
+    [currentPage, searchValue]
+  );
+
   ////// DATAVIEW //////
 
   return (
@@ -91,9 +159,13 @@ const Community = () => {
                   </Wrapper>
                   <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 20px`}>
                     <CustomSelect width={`90px`}>
-                      <Select placeholder="전체">
-                        <Select.Option>전체</Select.Option>
-                        <Select.Option></Select.Option>
+                      <Select
+                        defaultValue={0}
+                        onChange={searchValueToggle}
+                        value={searchValue}
+                      >
+                        <Select.Option value={0}>제목</Select.Option>
+                        <Select.Option value={1}>내용</Select.Option>
                       </Select>
                     </CustomSelect>
                     <TextInput
@@ -102,16 +174,25 @@ const Community = () => {
                       width={width < 900 ? `150px` : `230px`}
                       height={`40px`}
                       margin={`0 10px`}
+                      {...searchInput}
+                      onKeyDown={(e) => e.keyCode === 13 && searchHandler()}
                     />
                     <CommonButton
                       width={`90px`}
                       height={`40px`}
                       fontSize={`16px`}
+                      onClick={searchHandler}
                     >
                       검색하기
                     </CommonButton>
                   </Wrapper>
-                  <OpBoard data={notices.notices} boardType="커뮤니티" />
+                  <OpBoard
+                    data={notices.notices}
+                    maxPage={maxPage}
+                    currentPage={currentPage}
+                    otherPageCall={otherPageCall}
+                    boardType="커뮤니티"
+                  />
                 </>
               )}
               {viewType === "write" && <OpWrite />}

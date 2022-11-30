@@ -128,6 +128,7 @@ const reducer = (state = initailState, action) =>
         draft.st_noticeListDone = true;
         draft.st_noticeListError = null;
         draft.notices = action.data;
+        draft.maxPage = action.data.lastPage;
         break;
       }
       case NOTICE_LIST_FAILURE: {

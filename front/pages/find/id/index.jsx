@@ -28,6 +28,8 @@ const Index = () => {
 
   ////// HOOKS //////
   const [currentTab, setCurrentTab] = useState(0);
+  const nameInput = useInput(``);
+  const mobileInput = useInput(``);
   ////// REDUX //////
   const router = useRouter();
 
@@ -45,7 +47,7 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>ALAL</title>
+        <title>ICAST | ID찾기</title>
       </Head>
 
       <ClientLayout>
@@ -82,6 +84,7 @@ const Index = () => {
                       height={`55px`}
                       placeholder="이름을 입력해주세요."
                       radius={`5px`}
+                      {...nameInput}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
@@ -99,6 +102,7 @@ const Index = () => {
                       placeholder="연락처를 입력해주세요."
                       radius={`5px`}
                       margin={`0 0 8px`}
+                      {...mobileInput}
                     />
                   </Wrapper>
 
@@ -110,7 +114,7 @@ const Index = () => {
                     fontWeight={`bold`}
                     onClick={() => setCurrentTab(1)}
                   >
-                    코드 전송하기
+                    이메일 찾기
                   </CommonButton>
 
                   <Wrapper dr={`row`} ju={`space-between`} margin={`12px 0 0`}>
@@ -132,27 +136,6 @@ const Index = () => {
               )}
 
               {currentTab === 1 && (
-                <>
-                  <TextInput
-                    width={`100%`}
-                    height={`55px`}
-                    placeholder="코드를 입력해주세요."
-                    margin={`0 0 20px`}
-                  />
-
-                  <CommonButton
-                    width={`100%`}
-                    height={`55px`}
-                    fontSize={`18px`}
-                    fontWeight={`bold`}
-                    onClick={() => setCurrentTab(2)}
-                  >
-                    코드 인증하기
-                  </CommonButton>
-                </>
-              )}
-
-              {currentTab === 2 && (
                 <>
                   <Text margin={`0 0 20px`}>아이디 찾기 결과</Text>
 
