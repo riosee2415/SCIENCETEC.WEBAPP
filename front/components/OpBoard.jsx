@@ -149,12 +149,12 @@ const OpBoard = ({ boardType, data, maxPage, currentPage, otherPageCall }) => {
         )}
       </Wrapper>
 
-      {/* <CustomPage
+      <CustomPage
         defaultCurrent={1}
         current={currentPage}
         total={maxPage * 10}
         onChange={otherPageCall}
-      /> */}
+      />
     </>
   );
 };

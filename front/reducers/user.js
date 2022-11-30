@@ -77,6 +77,10 @@ export const initailState = {
   st_statusListLoading: false, // 조합장 리스트
   st_statusListDone: false,
   st_statusListError: null,
+  //
+  st_findIdLoading: false, // 아이디찾기
+  st_findIdDone: false,
+  st_findIdError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -146,6 +150,10 @@ export const USER_DETAIL_FAILURE = "USER_DETAIL_FAILURE";
 export const STATUS_LIST_REQUEST = "STATUS_LIST_REQUEST";
 export const STATUS_LIST_SUCCESS = "STATUS_LIST_SUCCESS";
 export const STATUS_LIST_FAILURE = "STATUS_LIST_FAILURE";
+//
+export const FIND_ID_REQUEST = "FIND_ID_REQUEST";
+export const FIND_ID_SUCCESS = "FIND_ID_SUCCESS";
+export const FIND_ID_FAILURE = "FIND_ID_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -515,6 +523,28 @@ const reducer = (state = initailState, action) =>
         draft.st_statusListLoading = false;
         draft.st_statusListDone = false;
         draft.st_statusListError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case FIND_ID_REQUEST: {
+        draft.st_findIdLoading = true;
+        draft.st_findIdDone = false;
+        draft.st_findIdError = null;
+        break;
+      }
+      case FIND_ID_SUCCESS: {
+        draft.st_findIdLoading = false;
+        draft.st_findIdDone = true;
+        draft.st_findIdError = null;
+
+        break;
+      }
+      case FIND_ID_FAILURE: {
+        draft.st_findIdLoading = false;
+        draft.st_findIdDone = false;
+        draft.st_findIdError = action.error;
         break;
       }
 

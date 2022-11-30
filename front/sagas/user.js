@@ -69,6 +69,10 @@ import {
   STATUS_LIST_SUCCESS,
   STATUS_LIST_FAILURE,
   /////////////////////////////
+  FIND_ID_REQUEST,
+  FIND_ID_SUCCESS,
+  FIND_ID_FAILURE,
+  /////////////////////////////
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -524,6 +528,34 @@ function* statusList(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function findIdAPI(data) {
+  return await axios.post(`/api/user/findeUserId`, data);
+}
+
+function* findId(action) {
+  try {
+    const result = yield call(findIdAPI, action.data);
+
+    yield put({
+      type: FIND_ID_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: FIND_ID_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -594,6 +626,10 @@ function* watchStatusList() {
   yield takeLatest(STATUS_LIST_REQUEST, statusList);
 }
 
+function* watchFindId() {
+  yield takeLatest(FIND_ID_REQUEST, findId);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
@@ -614,6 +650,7 @@ export default function* userSaga() {
     fork(watchAdminUserExitFalse),
     fork(watchUserDetail),
     fork(watchStatusList),
+    fork(watchFindId),
     //
   ]);
 }
