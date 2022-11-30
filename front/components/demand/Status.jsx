@@ -133,13 +133,13 @@ const Status = ({ surveyList }) => {
         });
       });
 
-      // dispatch({
-      //   type: SURVEY_USER_CREATE_REQUEST,
-      //   data: {
-      //     surveyId: 1,
-      //     questionValues: questionArr,
-      //   },
-      // });
+      dispatch({
+        type: SURVEY_USER_CREATE_REQUEST,
+        data: {
+          surveyId: 1,
+          questionValues: questionArr,
+        },
+      });
     },
     [surveyList]
   );
