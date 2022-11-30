@@ -25,69 +25,108 @@ const Business = () => {
 
   return (
     <Wrapper al={`flex-start`}>
-      <Wrapper
-        width={width < 900 ? `100%` : `470px`}
-        bgColor={Theme.lightGrey_C}
-        radius={`5px`}
-        al={`flex-start`}
-        padding={`15px`}
-        margin={`0 0 20px`}
-      >
-        <Text fontWeight={`bold`} margin={`0 0 14px`} color={Theme.grey2_C}>
-          1. 조합명
-        </Text>
-        <TextInput
-          type="text"
-          width={`100%`}
-          height={`55px`}
-          placeholder="조합명을 입력해주세요."
-          radius={`5px`}
-        />
-      </Wrapper>
-      <Wrapper
-        width={width < 900 ? `100%` : `470px`}
-        bgColor={Theme.lightGrey_C}
-        radius={`5px`}
-        al={`flex-start`}
-        padding={`15px`}
-        margin={`0 0 20px`}
-      >
-        <Text fontWeight={`bold`} margin={`0 0 14px`} color={Theme.grey2_C}>
-          서비스유형
-        </Text>
-        <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-          <Checkbox>컨설팅 및 자문</Checkbox>
+      {surveyList && surveyList.length === 0 ? (
+        <Wrapper margin={`50px 0`}>
+          <Empty description={"등록된 수요조사 설문이 없습니다."} />
         </Wrapper>
-        <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-          <Checkbox>공동프로젝트</Checkbox>
-        </Wrapper>
-        <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-          <Checkbox>과학기술 개발 및 비즈니스 협업</Checkbox>
-        </Wrapper>
-        <Wrapper al={`flex-start`} margin={`0 0 10px`}>
-          <Checkbox>과학기술 교육 및 강연</Checkbox>
-        </Wrapper>
-        <Wrapper al={`flex-start`}>
-          <Checkbox>기타</Checkbox>
-        </Wrapper>
-      </Wrapper>
-      <Wrapper
-        width={width < 900 ? `100%` : `470px`}
-        bgColor={Theme.lightGrey_C}
-        radius={`5px`}
-        al={`flex-start`}
-        padding={`15px`}
-        margin={`0 0 20px`}
-      >
-        <Text fontWeight={`bold`} margin={`0 0 14px`} color={Theme.grey2_C}>
-          서비스유형
-        </Text>
-        <TextArea
-          placeholder="기타사항을 입력해주세요."
-          height={`120px`}
-          width={`100%`}
-        />
-      </Wrapper>
+      ) : (
+        surveyList &&
+        surveyList.map((data) => {
+          return (
+            <Wrapper
+              key={data.id}
+              width={width < 900 ? `100%` : `470px`}
+              bgColor={Theme.lightGrey_C}
+              radius={`5px`}
+              al={`flex-start`}
+              padding={`15px`}
+              margin={`0 0 20px`}
+            >
+              <Text
+                fontWeight={`bold`}
+                margin={`0 0 14px`}
+                color={Theme.grey2_C}
+              >
+                {data.sort}. {data.ques}
+              </Text>
+
+              {data.inner &&
+                data.inner.map((v) => {
+                  return v.innerType === 2 ? (
+                    <Wrapper key={v.id}>
+                      {v.questionValue && (
+                        <Text fontSize={`16px`} margin={`0 0 14px`}>
+                          {v.questionValue}
+                        </Text>
+                      )}
+                      <TextArea
+                        placeholder={v.placeholderValue}
+                        height={`120px`}
+                        width={`100%`}
+                      />
+                    </Wrapper>
+                  ) : v.innerType === 3 ? (
+                    <Wrapper key={v.id} al={`flex-start`} margin={`0 0 10px`}>
+                      <Checkbox>{v.questionValue}</Checkbox>
+                    </Wrapper>
+                  ) : (
+                    v.innerType === 1 && (
+                      <Wrapper key={v.id}>
+                        {v.questionValue && (
+                          <Text fontSize={`16px`} margin={`0 0 14px`}>
+                            {v.questionValue}
+                          </Text>
+                        )}
+                        <TextInput
+                          type="text"
+                          width={`100%`}
+                          height={`55px`}
+                          placeholder={v.placeholderValue}
+                          radius={`5px`}
+                          margin={`0 0 8px 0`}
+                        />
+                      </Wrapper>
+                    )
+                  );
+                })}
+
+              {/* {data.inner &&
+                data.inner.map((v) => {
+                  return (
+                    v.innerType === 3 && (
+                      <Wrapper key={v.id} al={`flex-start`} margin={`0 0 10px`}>
+                        <Checkbox>{v.questionValue}</Checkbox>
+                      </Wrapper>
+                    )
+                  );
+                })}
+
+              {data.inner &&
+                data.inner.map((v) => {
+                  return (
+                    v.innerType === 1 && (
+                      <Wrapper key={v.id}>
+                        {v.questionValue && (
+                          <Text fontSize={`16px`} margin={`0 0 14px`}>
+                            {v.questionValue}
+                          </Text>
+                        )}
+                        <TextInput
+                          type="text"
+                          width={`100%`}
+                          height={`55px`}
+                          placeholder={v.placeholderValue}
+                          radius={`5px`}
+                          margin={`0 0 8px 0`}
+                        />
+                      </Wrapper>
+                    )
+                  );
+                })} */}
+            </Wrapper>
+          );
+        })
+      )}
 
       <CommonButton
         width={width < 900 ? `100%` : `470px`}
@@ -97,7 +136,7 @@ const Business = () => {
         fontSize={`18px`}
         fontWeight={`bold`}
       >
-        다음으로
+        제출하기
       </CommonButton>
       {/* <Wrapper
         dr={`row`}
@@ -139,16 +178,7 @@ const Business = () => {
         >
           이전으로
         </CommonButton>
-        <CommonButton
-          width={width < 900 ? `100%` : `49%`}
-          height={`55px`}
-          kindOf={`subTheme`}
-          fontSize={`18px`}
-          fontWeight={`bold`}
-          onClick={modalToggle}
-        >
-          제출하기
-        </CommonButton>
+     
       </Wrapper> */}
 
       <Modal

@@ -1,10 +1,17 @@
 import produce from "../util/produce";
 
 export const initailState = {
-  surveyQuesList: [],
-  surveyInnerList: null,
+  quesList: [], // 프론트 질문
+  innerList: [], // 프론트 답변
+
+  surveyQuesList: [], // 관리자 질문
+  surveyInnerList: null, // 관리자 답변
   surveyHistoryList: [],
 
+  //
+  st_surveyListLoading: false, // survey 가져오기
+  st_surveyListDone: false,
+  st_surveyListError: null,
   //
   st_surveyQuesListLoading: false, // surveyQues 가져오기
   st_surveyQuesListDone: false,
@@ -42,6 +49,10 @@ export const initailState = {
   st_surveyHistoryListDone: false,
   st_surveyHistoryListError: null,
 };
+
+export const SURVEY_LIST_REQUEST = "SURVEY_LIST_REQUEST";
+export const SURVEY_LIST_SUCCESS = "SURVEY_LIST_SUCCESS";
+export const SURVEY_LIST_FAILURE = "SURVEY_LIST_FAILURE";
 
 export const SURVEY_QUES_LIST_REQUEST = "SURVEY_QUES_LIST_REQUEST";
 export const SURVEY_QUES_LIST_SUCCESS = "SURVEY_QUES_LIST_SUCCESS";
@@ -84,6 +95,29 @@ export const INNER_RESET = "INNER_RESET";
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case SURVEY_LIST_REQUEST: {
+        draft.st_surveyListLoading = true;
+        draft.st_surveyListDone = false;
+        draft.st_surveyListError = null;
+        break;
+      }
+      case SURVEY_LIST_SUCCESS: {
+        draft.st_surveyListLoading = false;
+        draft.st_surveyListDone = true;
+        draft.st_surveyListError = null;
+        draft.quesList = action.data.question;
+        draft.innerList = action.data.innerQuestion;
+        break;
+      }
+      case SURVEY_LIST_FAILURE: {
+        draft.st_surveyListLoading = false;
+        draft.st_surveyListDone = false;
+        draft.st_surveyListError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
       case SURVEY_QUES_LIST_REQUEST: {
         draft.st_surveyQuesListLoading = true;
         draft.st_surveyQuesListDone = false;

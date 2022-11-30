@@ -860,13 +860,7 @@ const Question = ({}) => {
                   </Radio.Group>
                 </Form.Item>
 
-                <Form.Item
-                  label="답변"
-                  name="questionValue"
-                  rules={[
-                    { required: true, message: "답변은 필수 입력사항 입니다." },
-                  ]}
-                >
+                <Form.Item label="답변" name="questionValue">
                   <Input
                     size="small"
                     allowClear
@@ -874,16 +868,7 @@ const Question = ({}) => {
                   />
                 </Form.Item>
 
-                <Form.Item
-                  label="안내문구"
-                  name="placeholderValue"
-                  rules={[
-                    {
-                      required: true,
-                      message: "안내문구은 필수 입력사항 입니다.",
-                    },
-                  ]}
-                >
+                <Form.Item label="안내문구" name="placeholderValue">
                   <Input
                     size="small"
                     allowClear

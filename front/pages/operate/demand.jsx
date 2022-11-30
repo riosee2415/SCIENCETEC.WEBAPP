@@ -5,7 +5,7 @@ import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Image,
   RsWrapper,
@@ -22,6 +22,8 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { useCallback } from "react";
 import Status from "../../components/demand/Status";
 import Business from "../../components/demand/Business";
+import { SURVEY_LIST_REQUEST } from "../../reducers/survey";
+import { useEffect } from "react";
 
 const Btn = styled(Wrapper)`
   width: 335px;
@@ -48,17 +50,58 @@ const Btn = styled(Wrapper)`
 
 const Demand = () => {
   ////// GLOBAL STATE //////
-  const [currentTab, setCurrentTab] = useState(0);
-  const [visible, isVisible] = useState(false);
+
+  const { quesList, innerList } = useSelector((state) => state.survey);
+
   ////// HOOKS //////
   const width = useWidth();
-  ////// REDUX //////
+
+  const dispatch = useDispatch();
+
+  const [currentTab, setCurrentTab] = useState(0);
+  const [visible, isVisible] = useState(false);
+
+  const [surveyList, setSurveyList] = useState([]);
+
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    if (quesList && innerList) {
+      const quesArr = [];
+
+      quesList.map((d) => {
+        quesArr.push({
+          id: d.id,
+          ques: d.value,
+          sort: d.sort,
+          inner: innerList.filter((value) => value.SurveyQuestionId === d.id),
+        });
+
+        setSurveyList(quesArr);
+      });
+    }
+  }, [quesList, innerList]);
+
   ////// TOGGLE //////
   const visibleToggle = useCallback(() => {
     isVisible((prev) => !prev);
   }, [visible]);
   ////// HANDLER //////
+
+  const typeHandler = useCallback(
+    (data) => {
+      setCurrentTab(data);
+
+      dispatch({
+        type: SURVEY_LIST_REQUEST,
+        data: {
+          type: data,
+        },
+      });
+    },
+    [currentTab]
+  );
+
   ////// DATAVIEW //////
 
   return (
@@ -93,12 +136,12 @@ const Demand = () => {
                 <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 100px`}>
                   <Btn
                     margin={width < 800 ? `0 0 20px` : `0 20px 0 0`}
-                    onClick={() => setCurrentTab(1)}
+                    onClick={() => typeHandler(1)}
                   >
                     사업수행 현황조사 참여하기&nbsp;
                     <RightCircleOutlined />
                   </Btn>
-                  <Btn onClick={() => setCurrentTab(2)}>
+                  <Btn onClick={() => typeHandler(2)}>
                     사업 수요조사 참여하기&nbsp;
                     <RightCircleOutlined />
                   </Btn>
@@ -123,7 +166,7 @@ const Demand = () => {
                     />
                     사업수행 현황조사
                   </Wrapper>
-                  <Status />
+                  <Status surveyList={surveyList} />
                 </>
               )}
 
@@ -229,7 +272,7 @@ const Demand = () => {
                     )}
                   </Wrapper>
 
-                  <Business />
+                  <Business surveyList={surveyList} />
                 </>
               )}
             </Wrapper>

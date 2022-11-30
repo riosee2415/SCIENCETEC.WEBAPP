@@ -1,6 +1,10 @@
 import { all, call, delay, fork, put, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 import {
+  SURVEY_LIST_REQUEST,
+  SURVEY_LIST_SUCCESS,
+  SURVEY_LIST_FAILURE,
+  //
   SURVEY_QUES_LIST_REQUEST,
   SURVEY_QUES_LIST_SUCCESS,
   SURVEY_QUES_LIST_FAILURE,
@@ -37,6 +41,33 @@ import {
   SURVEY_HISTORY_LIST_SUCCESS,
   SURVEY_HISTORY_LIST_FAILURE,
 } from "../reducers/survey";
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function surveyListAPI(data) {
+  return await axios.post(`/api/survey/list`, data);
+}
+
+function* surveyList(action) {
+  try {
+    const result = yield call(surveyListAPI, action.data);
+
+    yield put({
+      type: SURVEY_LIST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SURVEY_LIST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
 
 // ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
@@ -282,6 +313,9 @@ function* surveyHistoryList(action) {
 // ******************************************************************************************************************
 
 //////////////////////////////////////////////////////////////
+function* watchSurveyList() {
+  yield takeLatest(SURVEY_LIST_REQUEST, surveyList);
+}
 function* watchSurveyQuesList() {
   yield takeLatest(SURVEY_QUES_LIST_REQUEST, surveyQuesList);
 }
@@ -313,6 +347,7 @@ function* watchSurveyHistoryList() {
 //////////////////////////////////////////////////////////////
 export default function* surveySaga() {
   yield all([
+    fork(watchSurveyList),
     fork(watchSurveyQuesList),
     fork(watchSurveyQuesCreate),
     fork(watchSurveyQuesUpdate),
