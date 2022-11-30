@@ -13,6 +13,11 @@ module.exports = class SurveyQuestion extends Model {
           type: DataTypes.INTEGER, // 질문 순서
           allowNull: false,
         },
+        isOverlap: {
+          type: DataTypes.BOOLEAN, // 중복여부
+          allowNull: false,
+          defaultValue: false,
+        },
         isDelete: {
           type: DataTypes.BOOLEAN,
           allowNull: false,

@@ -292,12 +292,12 @@ const Index = () => {
                     SNS 로그인
                   </Text>
                   <Wrapper dr={`row`}>
-                    <Circle>
+                    {/* <Circle>
                       <Image
                         alt="google"
                         src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
                       />
-                    </Circle>
+                    </Circle> */}
                     <KakaoLogin
                       jsKey={process.env.KAKAO_LOGIN_KEY}
                       onSuccess={(data) => {

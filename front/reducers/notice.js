@@ -187,6 +187,7 @@ const reducer = (state = initailState, action) =>
         draft.st_noticeCreateLoading = false;
         draft.st_noticeCreateDone = true;
         draft.st_noticeCreateError = null;
+        draft.viewType = "list";
         break;
       }
       case NOTICE_CREATE_FAILURE: {
