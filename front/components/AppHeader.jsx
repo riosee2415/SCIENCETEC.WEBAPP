@@ -266,12 +266,10 @@ const AppHeader = () => {
                 </Menu>
               </a>
             </Link>
-            <Link href={``}>
+            <Link href={`/guide`}>
               <a>
                 <Menu
-                  color={
-                    router.pathname.includes(`/service`) && Theme.subTheme_C
-                  }
+                  color={router.pathname.includes(`/guide`) && Theme.subTheme_C}
                 >
                   설립안내
                 </Menu>
@@ -568,16 +566,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/`}>
-                      <a>인사말</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/`}>
+                    <Link href={`/meeting`}>
                       <a>교류회란</a>
                     </Link>
                   </Wrapper>
@@ -586,7 +575,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/`}>
+                    <Link href={`/meeting/status`}>
                       <a>현황</a>
                     </Link>
                   </Wrapper>
@@ -595,12 +584,22 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/`}>
+                    <Link href={`/meeting/group`}>
                       <a>조직</a>
                     </Link>
                   </Wrapper>
+                  <Wrapper
+                    al={`flex-start`}
+                    margin={`0 0 10px`}
+                    onClick={drawarToggle}
+                  >
+                    <Link href={`/meeting/greetings`}>
+                      <a>인사말</a>
+                    </Link>
+                  </Wrapper>
+
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/`}>
+                    <Link href={`/meeting/location`}>
                       <a>오시는 길</a>
                     </Link>
                   </Wrapper>

@@ -37,7 +37,7 @@ const Perform = () => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper padding={`0 0 160px`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
             <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
