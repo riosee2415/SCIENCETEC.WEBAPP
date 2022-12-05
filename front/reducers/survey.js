@@ -59,6 +59,10 @@ export const initailState = {
   st_surveyUserCreateDone: false,
   st_surveyUserCreateError: null,
   //
+  st_surveyUserUpdateLoading: false, // 확인처린
+  st_surveyUserUpdateDone: false,
+  st_surveyUserUpdateError: null,
+  //
   st_surveyHistoryListLoading: false, // survey 이력
   st_surveyHistoryListDone: false,
   st_surveyHistoryListError: null,
@@ -115,6 +119,10 @@ export const SURVEY_USER_DETAIL_FAILURE = "SURVEY_USER_DETAIL_FAILURE";
 export const SURVEY_USER_CREATE_REQUEST = "SURVEY_USER_CREATE_REQUEST";
 export const SURVEY_USER_CREATE_SUCCESS = "SURVEY_USER_CREATE_SUCCESS";
 export const SURVEY_USER_CREATE_FAILURE = "SURVEY_USER_CREATE_FAILURE";
+
+export const SURVEY_USER_UPDATE_REQUEST = "SURVEY_USER_UPDATE_REQUEST";
+export const SURVEY_USER_UPDATE_SUCCESS = "SURVEY_USER_UPDATE_SUCCESS";
+export const SURVEY_USER_UPDATE_FAILURE = "SURVEY_USER_UPDATE_FAILURE";
 
 export const SURVEY_HISTORY_LIST_REQUEST = "SURVEY_HISTORY_LIST_REQUEST";
 export const SURVEY_HISTORY_LIST_SUCCESS = "SURVEY_HISTORY_LIST_SUCCESS";
@@ -384,6 +392,27 @@ const reducer = (state = initailState, action) =>
         draft.st_surveyUserCreateLoading = false;
         draft.st_surveyUserCreateDone = false;
         draft.st_surveyUserCreateError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case SURVEY_USER_UPDATE_REQUEST: {
+        draft.st_surveyUserUpdateLoading = true;
+        draft.st_surveyUserUpdateDone = false;
+        draft.st_surveyUserUpdateError = null;
+        break;
+      }
+      case SURVEY_USER_UPDATE_SUCCESS: {
+        draft.st_surveyUserUpdateLoading = false;
+        draft.st_surveyUserUpdateDone = true;
+        draft.st_surveyUserUpdateError = null;
+        break;
+      }
+      case SURVEY_USER_UPDATE_FAILURE: {
+        draft.st_surveyUserUpdateLoading = false;
+        draft.st_surveyUserUpdateDone = false;
+        draft.st_surveyUserUpdateError = action.error;
         break;
       }
 

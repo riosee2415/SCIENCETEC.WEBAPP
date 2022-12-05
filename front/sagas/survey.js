@@ -49,6 +49,10 @@ import {
   SURVEY_USER_CREATE_SUCCESS,
   SURVEY_USER_CREATE_FAILURE,
   //
+  SURVEY_USER_UPDATE_REQUEST,
+  SURVEY_USER_UPDATE_SUCCESS,
+  SURVEY_USER_UPDATE_FAILURE,
+  //
   SURVEY_HISTORY_LIST_REQUEST,
   SURVEY_HISTORY_LIST_SUCCESS,
   SURVEY_HISTORY_LIST_FAILURE,
@@ -385,6 +389,33 @@ function* surveyUserCreate(action) {
 // ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
+async function surveyUserUpdateAPI(data) {
+  return await axios.post(`/api/survey/user/update`, data);
+}
+
+function* surveyUserUpdate(action) {
+  try {
+    const result = yield call(surveyUserUpdateAPI, action.data);
+
+    yield put({
+      type: SURVEY_USER_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SURVEY_USER_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
 async function surveyHistoryListAPI(data) {
   return await axios.post(`/api/survey/history/list`, data);
 }
@@ -473,6 +504,9 @@ function* watchSurveyUserDetail() {
 function* watchSurveyUserCreate() {
   yield takeLatest(SURVEY_USER_CREATE_REQUEST, surveyUserCreate);
 }
+function* watchSurveyUserUpdate() {
+  yield takeLatest(SURVEY_USER_UPDATE_REQUEST, surveyUserUpdate);
+}
 function* watchSurveyHistoryList() {
   yield takeLatest(SURVEY_HISTORY_LIST_REQUEST, surveyHistoryList);
 }
@@ -495,6 +529,7 @@ export default function* surveySaga() {
     fork(watchSurveyUserList),
     fork(watchSurveyUserDetail),
     fork(watchSurveyUserCreate),
+    fork(watchSurveyUserUpdate),
     fork(watchSurveyHistoryList),
     fork(watchSurveyFileUpload),
 

@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
 import AdminLayout from "../../../components/AdminLayout";
 import styled from "styled-components";
-import { Tabs, Popover, message, Table, Button, Popconfirm, Modal } from "antd";
+import {
+  Tabs,
+  Popover,
+  message,
+  Table,
+  Button,
+  Popconfirm,
+  Modal,
+  Select,
+} from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { ACCEPT_LOG_REQUEST } from "../../../reducers/accept";
 import {
   LOAD_MY_INFO_REQUEST,
+  USERLIST_REQUEST,
   USER_MAIN_REQUEST,
 } from "../../../reducers/user";
 import { items } from "../../../components/AdminLayout";
@@ -31,6 +41,7 @@ import useWidth from "../../../hooks/useWidth";
 import {
   SURVEY_USER_DETAIL_REQUEST,
   SURVEY_USER_LIST_REQUEST,
+  SURVEY_USER_UPDATE_REQUEST,
 } from "../../../reducers/survey";
 
 import { CSVLink } from "react-csv";
@@ -55,10 +66,15 @@ const DownloadBtn = styled(CSVLink)`
 const AcceptLogs = () => {
   ////// HOOKS //////
 
-  const { me, st_loadMyInfoDone } = useSelector((state) => state.user);
-  const { surveyUserList, surveyUserDetail } = useSelector(
-    (state) => state.survey
-  );
+  const { me, users, st_loadMyInfoDone } = useSelector((state) => state.user);
+  const {
+    surveyUserList,
+    surveyUserDetail,
+    //
+    st_surveyUserUpdateLoading,
+    st_surveyUserUpdateDone,
+    st_surveyUserUpdateError,
+  } = useSelector((state) => state.survey);
 
   const width = useWidth();
   const router = useRouter();
@@ -67,6 +83,11 @@ const AcceptLogs = () => {
   const [level1, setLevel1] = useState("설문조사관리");
   const [level2, setLevel2] = useState("");
   const [sameDepth, setSameDepth] = useState([]);
+
+  // 검색
+  const [userIdValue, setUserIdValue] = useState(null);
+  const [typeValue, setTypeValue] = useState(0);
+  const [completeValue, setCompleteValue] = useState(0);
 
   // 상세보기 모달
   const [dModal, setDModal] = useState(false);
@@ -112,6 +133,35 @@ const AcceptLogs = () => {
     }
   }, [st_loadMyInfoDone]);
 
+  // 리스트
+
+  useEffect(() => {
+    dispatch({
+      type: SURVEY_USER_LIST_REQUEST,
+      data: {
+        userId: userIdValue,
+        type: typeValue,
+        isCompleted: completeValue,
+      },
+    });
+  }, [userIdValue, typeValue, completeValue]);
+
+  // 처리완료
+
+  useEffect(() => {
+    if (st_surveyUserUpdateDone) {
+      dispatch({
+        type: SURVEY_USER_LIST_REQUEST,
+      });
+
+      return message.success("처리완료 되었습니다.");
+    }
+
+    if (st_surveyUserUpdateError) {
+      return message.error(st_surveyUserUpdateError);
+    }
+  }, [st_surveyUserUpdateDone, st_surveyUserUpdateError]);
+
   ////// TOGGLE //////
   const dModalToggle = useCallback(
     (data) => {
@@ -130,9 +180,41 @@ const AcceptLogs = () => {
   );
 
   ////// HANDLER //////
+  // 검색
+  const userIdValueHandler = useCallback(
+    (data) => {
+      setUserIdValue(data);
+    },
+    [userIdValue]
+  );
+
+  const typeValueHandler = useCallback(
+    (data) => {
+      setTypeValue(data);
+    },
+    [typeValue]
+  );
+
+  const completeValueHandler = useCallback(
+    (data) => {
+      setCompleteValue(data);
+    },
+    [completeValue]
+  );
 
   const moveLinkHandler = useCallback((link) => {
     router.push(link);
+  }, []);
+
+  // 처리완료
+  const surveyCompleteHandler = useCallback((data) => {
+    dispatch({
+      type: SURVEY_USER_UPDATE_REQUEST,
+      data: {
+        id: data.id,
+        username: data.username,
+      },
+    });
   }, []);
 
   ////// DATAVIEW //////
@@ -160,17 +242,25 @@ const AcceptLogs = () => {
     },
     {
       title: "처리완료",
-      render: (data) => (
-        <Popconfirm
-          title="처리완료 하시겠습니까?"
-          okText="처리"
-          cancelText="취소"
-        >
-          <Button size="small" type="primary">
-            처리완료
-          </Button>
-        </Popconfirm>
-      ),
+      render: (data) =>
+        data.isCompleted ? (
+          "처리완료"
+        ) : (
+          <Popconfirm
+            title="처리완료 하시겠습니까?"
+            okText="처리"
+            cancelText="취소"
+            onConfirm={() => surveyCompleteHandler(data)}
+          >
+            <Button
+              size="small"
+              type="primary"
+              loading={st_surveyUserUpdateLoading}
+            >
+              처리완료
+            </Button>
+          </Popconfirm>
+        ),
     },
     {
       title: "제출일",
@@ -220,12 +310,101 @@ const AcceptLogs = () => {
         <Wrapper margin={`10px 0px 0px 10px`}>
           <GuideUl>
             <GuideLi isImpo={true}>
-              해당 메뉴에서 홈페이지에 접속하 회원의 통계를 확인 할 수 있습니다.
+              해당 메뉴에서 회원이 제출한 설문조사를 확인할 수 있습니다.
             </GuideLi>
             <GuideLi isImpo={true}>
-              30일 이전의 통계를 원하실 시 개발사에 문의해주세요.
+              회원, 유형, 처리여부를 통해 검색할 수 있습니다.
+            </GuideLi>
+            <GuideLi isImpo={true}>
+              처리 확인시 변경이 불가하니 유의해 주시기 바랍니다.
             </GuideLi>
           </GuideUl>
+        </Wrapper>
+
+        {/* TAB */}
+        <Wrapper padding={`10px`} dr={`row`} ju="flex-start">
+          <Wrapper dr={`row`} ju={`flex-start`}>
+            <Select
+              size="small"
+              placeholder="회원을 선택해주세요."
+              style={{ width: "200px", margin: "0 5px 0 0" }}
+              onChange={userIdValueHandler}
+            >
+              {users &&
+                users.map((data) => {
+                  return (
+                    <Select.Option value={data.id}>
+                      {data.username}
+                    </Select.Option>
+                  );
+                })}
+            </Select>
+          </Wrapper>
+
+          <Wrapper dr={`row`} ju={`flex-start`} margin={`5px 0`}>
+            <Button
+              type={typeValue === 0 ? "primary" : "default"}
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => typeValueHandler(0)}
+            >
+              전체
+            </Button>
+
+            <Button
+              type={typeValue === 1 ? "primary" : "default"}
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => typeValueHandler(1)}
+            >
+              사업수행 현황조사
+            </Button>
+            <Button
+              type={typeValue === 2 ? "primary" : "default"}
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => typeValueHandler(2)}
+            >
+              사업 수요조사
+            </Button>
+            <Button
+              type={typeValue === 3 ? "primary" : "default"}
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => typeValueHandler(3)}
+            >
+              기술매칭서비스 신청
+            </Button>
+          </Wrapper>
+
+          <Wrapper dr={`row`} ju={`flex-start`}>
+            <Button
+              type={completeValue === 0 ? "primary" : "default"}
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => completeValueHandler(0)}
+            >
+              전체
+            </Button>
+
+            <Button
+              type={completeValue === 1 ? "primary" : "default"}
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => completeValueHandler(1)}
+            >
+              확인 처리
+            </Button>
+
+            <Button
+              type={completeValue === 2 ? "primary" : "default"}
+              size="small"
+              style={{ marginRight: "5px" }}
+              onClick={() => completeValueHandler(2)}
+            >
+              확인 미처리
+            </Button>
+          </Wrapper>
         </Wrapper>
 
         <Wrapper padding={`0px 50px`}>
@@ -397,6 +576,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: SURVEY_USER_LIST_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: USERLIST_REQUEST,
     });
 
     // 구현부 종료
