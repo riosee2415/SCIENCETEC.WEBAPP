@@ -20,7 +20,7 @@ export const items = {
   통계관리: [
     {
       name: "접속자통계",
-      link: "/",
+      link: "/admin/logs/acceptLogs",
       useYn: true,
     },
     {
@@ -203,7 +203,7 @@ const AdminLayout = ({ children }) => {
               padding={`2px 15px`}
               radius={`6px`}
             >
-              ㅇㅇㅇ 최고관리자님, 환영합니다.
+              관리자님, 환영합니다.
             </Text>
           </Wrapper>
         </Wrapper>
