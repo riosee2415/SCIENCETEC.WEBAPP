@@ -48,10 +48,10 @@ router.post("/admin/main", isAdminCheck, async (req, res, next) => {
     const surveyResult = await models.sequelize.query(findSurveyQuery);
 
     return res.status(200).json({
-      personalUserResult: personalUserResult[0],
-      cooperUserResult: cooperUserResult[0],
-      acceptResult: acceptResult[0],
-      surveyResult: surveyResult[0],
+      personalUserResult: personalUserResult[0][0],
+      cooperUserResult: cooperUserResult[0][0],
+      acceptResult: acceptResult[0][0],
+      surveyResult: surveyResult[0][0],
     });
   } catch (error) {
     console.error(error);

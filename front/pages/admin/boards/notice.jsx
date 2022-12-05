@@ -26,7 +26,10 @@ import {
   GuideUl,
   GuideLi,
 } from "../../../components/commonComponents";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../../reducers/user";
 import {
   NOTICE_ADMIN_LIST_REQUEST,
   NOTICE_UPDATE_REQUEST,
@@ -913,6 +916,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         title: "",
         type: "",
       },
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료

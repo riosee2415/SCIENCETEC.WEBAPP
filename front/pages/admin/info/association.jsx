@@ -16,7 +16,10 @@ import {
   GuideUl,
   GuideLi,
 } from "../../../components/commonComponents";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../../reducers/user";
 import {
   SHARE_PROJECT_REQUEST,
   SHAREPROJECT_IMAGE1_REQUEST,
@@ -473,6 +476,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
       data: {
         type: 3,
       },
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료

@@ -6,7 +6,10 @@ import { Tabs, Popover, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { ACCEPT_LOG_REQUEST } from "../../../reducers/accept";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../../reducers/user";
 import { items } from "../../../components/AdminLayout";
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -262,6 +265,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     context.store.dispatch({
       type: ACCEPT_LOG_REQUEST,
       data: { typeId: "2" },
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료

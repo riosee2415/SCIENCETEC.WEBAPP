@@ -6,25 +6,17 @@ import {
   Wrapper,
   Image,
   CommonButton,
-  RowWrapper,
-  ColWrapper,
 } from "../../components/commonComponents";
 import useInput from "../../hooks/useInput";
-import { LOAD_MY_INFO_REQUEST, LOGIN_ADMIN_REQUEST } from "../../reducers/user";
-import { ACCEPT_LOG_REQUEST } from "../../reducers/accept";
+import {
+  LOAD_MY_INFO_REQUEST,
+  LOGIN_ADMIN_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../reducers/user";
 import Theme from "../../components/Theme";
 import wrapper from "../../store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
-import Link from "next/link";
-
-// let Line;
-
-// if (typeof window !== "undefined") {
-//   const { Line: prevLine } = require("@ant-design/charts");
-
-//   Line = prevLine;
-// }
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -33,10 +25,7 @@ const AdminHome = () => {
     me,
     //
     st_loginAdminError,
-    st_loginAdminDone,
   } = useSelector((state) => state.user);
-
-  const { acceptList } = useSelector((state) => state.accept);
 
   const inputId = useInput("");
   const inputPw = useInput("");
@@ -57,22 +46,6 @@ const AdminHome = () => {
       );
     }
   }, [st_loginAdminError]);
-
-  // const config = {
-  //   data: acceptList,
-  //   height: 400,
-  //   xField: "date",
-  //   yField: "count",
-  //   point: {
-  //     size: 5,
-  //     shape: "diamond",
-  //   },
-  //   label: {
-  //     style: {
-  //       fill: "#aaa",
-  //     },
-  //   },
-  // };
 
   return (
     <>
@@ -151,6 +124,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료

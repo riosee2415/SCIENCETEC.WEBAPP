@@ -31,7 +31,10 @@ import {
   DownBtn,
   DelBtn,
 } from "../../../components/commonComponents";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../../reducers/user";
 import {
   MAIN_BANNER_REQUEST,
   BANNER_SORT_UPDATE_REQUEST,
@@ -767,6 +770,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: MAIN_BANNER_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료

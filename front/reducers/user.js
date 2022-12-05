@@ -14,6 +14,12 @@ export const initailState = {
   combiTypeList: [],
   businessTypeList: [],
   sectorList: [],
+
+  personalUserResult: null,
+  cooperUserResult: null,
+  acceptResult: null,
+  surveyResult: null,
+
   //
   st_loginLoading: false,
   st_loginDone: false,
@@ -94,6 +100,10 @@ export const initailState = {
   st_pwUpdateLoading: false, // 비밀번호 재설정
   st_pwUpdateDone: false,
   st_pwUpdateError: null,
+  //
+  st_userMainLoading: false,
+  st_userMainDone: false,
+  st_userMainError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -179,6 +189,10 @@ export const CHECK_CODE_FAILURE = "CHECK_CODE_FAILURE";
 export const PW_UPDATE_REQUEST = "PW_UPDATE_REQUEST";
 export const PW_UPDATE_SUCCESS = "PW_UPDATE_SUCCESS";
 export const PW_UPDATE_FAILURE = "PW_UPDATE_FAILURE";
+
+export const USER_MAIN_REQUEST = "USER_MAIN_REQUEST";
+export const USER_MAIN_SUCCESS = "USER_MAIN_SUCCESS";
+export const USER_MAIN_FAILURE = "USER_MAIN_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -638,6 +652,30 @@ const reducer = (state = initailState, action) =>
         break;
       }
 
+      //////////////////////////////////////////////
+
+      case USER_MAIN_REQUEST: {
+        draft.st_userMainLoading = true;
+        draft.st_userMainDone = false;
+        draft.st_userMainError = null;
+        break;
+      }
+      case USER_MAIN_SUCCESS: {
+        draft.st_userMainLoading = false;
+        draft.st_userMainDone = true;
+        draft.st_userMainError = null;
+        draft.personalUserResult = action.data.personalUserResult;
+        draft.cooperUserResult = action.data.cooperUserResult;
+        draft.acceptResult = action.data.acceptResult;
+        draft.surveyResult = action.data.surveyResult;
+        break;
+      }
+      case USER_MAIN_FAILURE: {
+        draft.st_userMainLoading = false;
+        draft.st_userMainDone = false;
+        draft.st_userMainError = action.error;
+        break;
+      }
       //////////////////////////////////////////////
 
       case CURRENT_ADMINMENU_STATUS: {

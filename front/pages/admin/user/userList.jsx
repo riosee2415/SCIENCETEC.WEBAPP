@@ -9,6 +9,7 @@ import {
   USERLIST_REQUEST,
   USERLIST_UPDATE_REQUEST,
   USER_DETAIL_REQUEST,
+  USER_MAIN_REQUEST,
 } from "../../../reducers/user";
 import {
   Table,
@@ -1010,6 +1011,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: USERLIST_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료
