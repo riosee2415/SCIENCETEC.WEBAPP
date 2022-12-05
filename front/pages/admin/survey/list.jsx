@@ -33,6 +33,25 @@ import {
   SURVEY_USER_LIST_REQUEST,
 } from "../../../reducers/survey";
 
+import { CSVLink } from "react-csv";
+
+const DownloadBtn = styled(CSVLink)`
+  width: 200px;
+  height: 25px;
+  margin: 0 0 0 10px;
+  border-radius: 3px;
+
+  background: ${(props) => props.theme.subTheme3_C};
+  color: ${(props) => props.theme.white_C};
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.4s;
+`;
+
 const AcceptLogs = () => {
   ////// HOOKS //////
 
@@ -116,6 +135,8 @@ const AcceptLogs = () => {
     router.push(link);
   }, []);
 
+  ////// DATAVIEW //////
+
   const columns = [
     {
       title: "번호",
@@ -155,6 +176,14 @@ const AcceptLogs = () => {
       title: "제출일",
       dataIndex: "viewCreatedAt",
     },
+  ];
+
+  const headers = [
+    { label: "제출자", key: "username" },
+    { label: "제출일", key: "viewCreatedAt" },
+    { label: "유형", key: "viewSurveyType" },
+    { label: "질문", key: "questionName" },
+    { label: "답변", key: "content" },
   ];
 
   return (
@@ -323,9 +352,28 @@ const AcceptLogs = () => {
             </Wrapper>
           )}
 
-          <Wrapper al={`flex-end`} margin={`20px 0 0`}>
-            <Button size="small">엑셀 다운로드</Button>
-          </Wrapper>
+          {surveyUserDetail && (
+            <Wrapper al={`flex-end`} margin={`20px 0 0`}>
+              <DownloadBtn
+                filename={`${surveyUserDetail.detailData.viewSurveyType}-${surveyUserDetail.detailData.username}.csv`}
+                headers={headers}
+                data={surveyUserDetail.questionList.map((data) => ({
+                  username: surveyUserDetail.detailData.username,
+                  viewCreatedAt: surveyUserDetail.detailData.viewCreatedAt,
+                  viewSurveyType: surveyUserDetail.detailData.viewSurveyType,
+                  questionName: data.questionName,
+                  content:
+                    data.content.trim().length === 0
+                      ? data.file
+                        ? data.file
+                        : ""
+                      : data.content,
+                }))}
+              >
+                엑셀 출력
+              </DownloadBtn>
+            </Wrapper>
+          )}
         </Modal>
       </AdminLayout>
     </>
