@@ -10,6 +10,55 @@ const sendSecretMail = require("../utils/mailSender");
 
 const router = express.Router();
 
+router.post("/admin/main", isAdminCheck, async (req, res, next) => {
+  // 오늘 가입한 개인회원
+  const findUserQuery1 = `
+  SELECT  COUNT(id)         AS cnt
+    FROM  users
+   WHERE  DATE_FORMAT(createdAt, "%Y%m%d") = DATE_FORMAT(NOW(), "%Y%m%d")
+     AND  type = 1
+  `;
+
+  // 오늘 가입한 조합장회원
+  const findUserQuery2 = `
+  SELECT  COUNT(id)         AS cnt
+    FROM  users
+   WHERE  DATE_FORMAT(createdAt, "%Y%m%d") = DATE_FORMAT(NOW(), "%Y%m%d")
+     AND  type = 2
+  `;
+
+  // 오늘 접속한 사용자
+  const findAcceptQuery = `
+  SELECT  COUNT(id)         AS cnt
+    FROM  acceptRecords
+   WHERE  DATE_FORMAT(createdAt, "%Y%m%d") = DATE_FORMAT(NOW(), "%Y%m%d")
+  `;
+
+  // 오늘 등록된 현황조사
+  const findSurveyQuery = `
+  SELECT  COUNT(id)         AS cnt
+    FROM  userSurvey
+   WHERE  DATE_FORMAT(createdAt, "%Y%m%d") = DATE_FORMAT(NOW(), "%Y%m%d")
+  `;
+
+  try {
+    const personalUserResult = await models.sequelize.query(findUserQuery1);
+    const cooperUserResult = await models.sequelize.query(findUserQuery2);
+    const acceptResult = await models.sequelize.query(findAcceptQuery);
+    const surveyResult = await models.sequelize.query(findSurveyQuery);
+
+    return res.status(200).json({
+      personalUserResult: personalUserResult[0],
+      cooperUserResult: cooperUserResult[0],
+      acceptResult: acceptResult[0],
+      surveyResult: surveyResult[0],
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("데이터를 조회할 수 없습니다.");
+  }
+});
+
 router.post("/list", isAdminCheck, async (req, res, next) => {
   const { searchData, searchLevel, searchExit } = req.body;
 

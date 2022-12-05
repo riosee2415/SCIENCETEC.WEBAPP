@@ -142,6 +142,7 @@ const Question = ({}) => {
 
   const [typeValue, setTypeValue] = useState(0);
   const [isOverlapCheck, setIsOverlapCheck] = useState(false);
+  const [isTitleState, setIsTitleState] = useState(false);
 
   ////// USEEFFECT //////
 
@@ -306,6 +307,10 @@ const Question = ({}) => {
     setIsOverlapCheck((prev) => !prev);
   }, [isOverlapCheck]);
 
+  const isTitleStateToggle = useCallback(() => {
+    setIsTitleState((prev) => !prev);
+  }, [isTitleState]);
+
   ////// HANDLER //////
 
   const typeValueHandler = useCallback(
@@ -326,8 +331,6 @@ const Question = ({}) => {
       setCurrentData(record);
       setInnerData(null);
 
-      console.log(record.isOverlap === 1 ? true : false);
-
       quesUpdateForm.setFieldsValue({
         surveyId: record.SurveyId,
         sort: record.sort,
@@ -337,6 +340,7 @@ const Question = ({}) => {
         updator: record.updator,
       });
 
+      setIsTitleState(record.isTitle === 1 ? true : false);
       setIsOverlapCheck(record.isOverlap === 1 ? true : false);
 
       dispatch({
@@ -346,14 +350,14 @@ const Question = ({}) => {
         },
       });
     },
-    [currentData, quesUpdateForm, isOverlapCheck]
+    [currentData, quesUpdateForm, isOverlapCheck, isTitleState]
   );
 
   const quesCreateHandler = useCallback((data) => {
-    console.log(data);
     dispatch({
       type: SURVEY_QUES_CREATE_REQUEST,
       data: {
+        isTitle: data.isTitle ? 1 : 0,
         value: data.ques,
         sort: data.sort,
         surveyId: data.surveyId,
@@ -370,7 +374,8 @@ const Question = ({}) => {
           id: currentData.id,
           value: data.ques,
           sort: data.sort,
-          isOverlap: isOverlapCheck,
+          isTitle: isTitleState ? 1 : 0,
+          isOverlap: isOverlapCheck ? 1 : 0,
         },
       });
     },
@@ -592,6 +597,9 @@ const Question = ({}) => {
             이미지는 3:2비율로 업로드해주세요. 이미지비율이 상이할 경우 화면에
             비정상적으로 보일 수 있습니다.
           </GuideLi>
+          <GuideLi isImpo={true}>
+            제목 여부를 선택시 질문이 제목으로 대체 됩니다.
+          </GuideLi>
         </GuideUl>
       </Wrapper>
 
@@ -656,29 +664,43 @@ const Question = ({}) => {
           ></Wrapper>
 
           {surveyInnerList ? (
-            <>
-              <Wrapper al="flex-end" margin={`0px 0px 5px 0px`}>
-                <Button
-                  size="small"
-                  type="primary"
-                  onClick={innerCreateModalToggle}
-                >
-                  답변 생성
-                </Button>
+            currentData &&
+            (currentData.isTitle ? (
+              <Wrapper padding={`50px 0px`} dr="row">
+                <AlertOutlined
+                  style={{
+                    fontSize: "20px",
+                    color: Theme.red_C,
+                    marginRight: "5px",
+                  }}
+                />
+                위 질문은 제목입니다.
               </Wrapper>
-              <Table
-                style={{ width: "100%" }}
-                rowKey="num"
-                columns={innerCol}
-                dataSource={surveyInnerList}
-                size="small"
-                onRow={(record, index) => {
-                  return {
-                    onClick: (e) => innerSetDataHandler(record),
-                  };
-                }}
-              />
-            </>
+            ) : (
+              <>
+                <Wrapper al="flex-end" margin={`0px 0px 5px 0px`}>
+                  <Button
+                    size="small"
+                    type="primary"
+                    onClick={innerCreateModalToggle}
+                  >
+                    답변 생성
+                  </Button>
+                </Wrapper>
+                <Table
+                  style={{ width: "100%" }}
+                  rowKey="num"
+                  columns={innerCol}
+                  dataSource={surveyInnerList}
+                  size="small"
+                  onRow={(record, index) => {
+                    return {
+                      onClick: (e) => innerSetDataHandler(record),
+                    };
+                  }}
+                />
+              </>
+            ))
           ) : (
             <Wrapper padding={`50px 0px`} dr="row">
               <AlertOutlined
@@ -714,6 +736,15 @@ const Question = ({}) => {
                 style={{ width: `100%` }}
                 onFinish={quesUpdateHandler}
               >
+                <Form.Item label="제목 여부" name="isTitle">
+                  <Switch
+                    size="small"
+                    checked={isTitleState}
+                    onChange={isTitleStateToggle}
+                    disabled
+                  />
+                </Form.Item>
+
                 <Form.Item
                   label="질문 유형"
                   name="surveyId"
@@ -972,12 +1003,21 @@ const Question = ({}) => {
         width={`500px`}
         onCancel={quesCreateModalToggle}
       >
+        <GuideUl>
+          <GuideLi isImpo={true}>
+            제목 여부를 선택시 질문이 제목으로 대체 됩니다.
+          </GuideLi>
+        </GuideUl>
         <Form
           form={quesCreateForm}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
           onFinish={quesCreateHandler}
         >
+          <Form.Item label="제목 여부" name="isTitle">
+            <Switch size="small" />
+          </Form.Item>
+
           <Form.Item
             label="질문 유형"
             name="surveyId"
@@ -1055,11 +1095,13 @@ const Question = ({}) => {
             <Select size="small" placeholder={"질문을 선택해주세요."}>
               {surveyQuesList &&
                 surveyQuesList.map((data) => {
-                  return (
-                    <Select.Option key={data.id} value={data.id}>
-                      {data.value}
-                    </Select.Option>
-                  );
+                  if (!data.isTitle) {
+                    return (
+                      <Select.Option key={data.id} value={data.id}>
+                        {data.value}
+                      </Select.Option>
+                    );
+                  }
                 })}
             </Select>
           </Form.Item>
@@ -1110,7 +1152,7 @@ const Question = ({}) => {
 
           <Wrapper al="flex-end">
             <Button size="small" type="primary" htmlType="submit">
-              질문 생성
+              답변 생성
             </Button>
           </Wrapper>
         </Form>
