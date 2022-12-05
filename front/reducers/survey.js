@@ -7,6 +7,7 @@ export const initailState = {
   surveyQuesList: [], // 관리자 질문
   surveyInnerList: null, // 관리자 답변
   surveyHistoryList: [],
+  surveyFilePath: null, // 파일
 
   //
   st_surveyListLoading: false, // survey 가져오기
@@ -52,6 +53,10 @@ export const initailState = {
   st_surveyHistoryListLoading: false, // survey 이력
   st_surveyHistoryListDone: false,
   st_surveyHistoryListError: null,
+  //
+  st_surveyFileUploadLoading: false, // 파일 업로드
+  st_surveyFileUploadDone: false,
+  st_surveyFileUploadError: null,
 };
 
 export const SURVEY_LIST_REQUEST = "SURVEY_LIST_REQUEST";
@@ -98,7 +103,13 @@ export const SURVEY_HISTORY_LIST_REQUEST = "SURVEY_HISTORY_LIST_REQUEST";
 export const SURVEY_HISTORY_LIST_SUCCESS = "SURVEY_HISTORY_LIST_SUCCESS";
 export const SURVEY_HISTORY_LIST_FAILURE = "SURVEY_HISTORY_LIST_FAILURE";
 
+export const FILE_UPLOAD_REQUEST = "FILE_UPLOAD_REQUEST";
+export const FILE_UPLOAD_SUCCESS = "FILE_UPLOAD_SUCCESS";
+export const FILE_UPLOAD_FAILURE = "FILE_UPLOAD_FAILURE";
+
 export const INNER_RESET = "INNER_RESET";
+
+export const FILE_RESET = "FILE_RESET";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -339,9 +350,35 @@ const reducer = (state = initailState, action) =>
 
       //////////////////////////////////////////////
 
+      case FILE_UPLOAD_REQUEST: {
+        draft.st_surveyFileUploadLoading = true;
+        draft.st_surveyFileUploadDone = false;
+        draft.st_surveyFileUploadError = null;
+        break;
+      }
+      case FILE_UPLOAD_SUCCESS: {
+        draft.st_surveyFileUploadLoading = false;
+        draft.st_surveyFileUploadDone = true;
+        draft.st_surveyFileUploadError = null;
+        draft.surveyFilePath = action.data.path;
+        break;
+      }
+      case FILE_UPLOAD_FAILURE: {
+        draft.st_surveyFileUploadLoading = false;
+        draft.st_surveyFileUploadDone = false;
+        draft.st_surveyFileUploadError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
       case INNER_RESET: {
         draft.surveyInnerList = null;
         break;
+      }
+
+      case FILE_RESET: {
+        draft.surveyFilePath = action.data;
       }
 
       //////////////////////////////////////////////

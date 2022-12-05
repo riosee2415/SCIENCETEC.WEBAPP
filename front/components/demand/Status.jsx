@@ -130,6 +130,7 @@ const Status = ({ surveyList }) => {
           questionName: value,
           content: innerContent,
           sort: a.sort,
+          file: null,
         });
       });
 
@@ -147,144 +148,147 @@ const Status = ({ surveyList }) => {
   return (
     <Wrapper al={`flex-start`}>
       <CustomForm onFinish={submitHandler} form={form}>
-        {surveyList && surveyList.length === 0 ? (
-          <Wrapper margin={`50px 0`}>
-            <Empty description={"등록된 수요조사 설문이 없습니다."} />
-          </Wrapper>
-        ) : (
-          surveyList &&
-          surveyList.map((data) => {
-            return (
-              <Form.List
-                key={data.id}
-                name={data.ques.split("(")[0]}
-                rules={[
-                  {
-                    validator: async (_, values) => {
-                      let isError = false;
-                      let errorType = 0;
+        {surveyList &&
+          (surveyList.length === 0 ? (
+            <Wrapper margin={`50px 0`}>
+              <Empty description={"등록된 수요조사 설문이 없습니다."} />
+            </Wrapper>
+          ) : (
+            surveyList.map((data) => {
+              return (
+                <Form.List
+                  key={data.id}
+                  name={data.ques.split("(")[0]}
+                  rules={[
+                    {
+                      validator: async (_, values) => {
+                        let isError = false;
+                        let errorType = 0;
 
-                      data.inner.map((value) => {
-                        // input, area
-                        value.innerType === 1 || value.innerType === 2
-                          ? Object.values(values)
-                              .filter((item) => typeof item === "string")
-                              .map(
-                                (item) =>
-                                  item.trim().length === 0 &&
-                                  ((isError = true), (errorType = 0))
+                        data.inner.map((value) => {
+                          // input, area
+                          value.innerType === 1 || value.innerType === 2
+                            ? Object.values(values)
+                                .filter((item) => typeof item === "string")
+                                .map(
+                                  (item) =>
+                                    item.trim().length === 0 &&
+                                    ((isError = true), (errorType = 0))
+                                )
+                            : // checkbox
+                            data.isOverlap
+                            ? // 선택 안했을때 않넣음
+                              Object.values(values)
+                                .filter((item) => typeof item === "object")
+                                .filter((item) => item.length !== 0).length ===
+                                0 && ((isError = true), (errorType = 1))
+                            : Object.values(values)
+                                .filter((item) => typeof item === "object")
+                                .filter((item) => item.length !== 0).length > 1
+                            ? ((isError = true), (errorType = 2))
+                            : Object.values(values)
+                                .filter((item) => typeof item === "object")
+                                .filter((item) => item.length !== 0).length ===
+                              0
+                            ? ((isError = true), (errorType = 1))
+                            : ((isError = false), (errorType = 1));
+                        });
+
+                        if (isError) {
+                          if (errorType === 0) {
+                            return Promise.reject(
+                              new Error(`${data.ques}를 입력해주세요.`)
+                            );
+                          } else if (errorType === 2) {
+                            return Promise.reject(
+                              new Error(
+                                `${data.ques}는 중복선택 불가능 입니다.`
                               )
-                          : // checkbox
-                          data.isOverlap
-                          ? // 선택 안했을때 않넣음
-                            Object.values(values)
-                              .filter((item) => typeof item === "object")
-                              .filter((item) => item.length !== 0).length ===
-                              0 && ((isError = true), (errorType = 1))
-                          : Object.values(values)
-                              .filter((item) => typeof item === "object")
-                              .filter((item) => item.length !== 0).length > 1
-                          ? ((isError = true), (errorType = 2))
-                          : Object.values(values)
-                              .filter((item) => typeof item === "object")
-                              .filter((item) => item.length !== 0).length === 0
-                          ? ((isError = true), (errorType = 1))
-                          : ((isError = false), (errorType = 1));
-                      });
-
-                      if (isError) {
-                        if (errorType === 0) {
-                          return Promise.reject(
-                            new Error(`${data.ques}를 입력해주세요.`)
-                          );
-                        } else if (errorType === 2) {
-                          return Promise.reject(
-                            new Error(`${data.ques}는 중복선택 불가능 입니다.`)
-                          );
-                        } else {
-                          return Promise.reject(
-                            new Error(`${data.ques}를 선택해주세요.`)
-                          );
+                            );
+                          } else {
+                            return Promise.reject(
+                              new Error(`${data.ques}를 선택해주세요.`)
+                            );
+                          }
                         }
-                      }
+                      },
                     },
-                  },
-                ]}
-              >
-                {(fields, { add, remove }, { errors }) => {
-                  return (
-                    <Wrapper
-                      width={width < 900 ? `100%` : `470px`}
-                      bgColor={Theme.lightGrey_C}
-                      radius={`5px`}
-                      al={`flex-start`}
-                      padding={`15px`}
-                      margin={`0 0 20px`}
-                    >
-                      <Text
-                        fontWeight={`bold`}
-                        margin={`0 0 14px`}
-                        color={Theme.grey2_C}
+                  ]}
+                >
+                  {(fields, { add, remove }, { errors }) => {
+                    return (
+                      <Wrapper
+                        width={width < 900 ? `100%` : `470px`}
+                        bgColor={Theme.lightGrey_C}
+                        radius={`5px`}
+                        al={`flex-start`}
+                        padding={`15px`}
+                        margin={`0 0 20px`}
                       >
-                        {data.sort}. {data.ques}
-                        {data.isOverlap ? "(복수선택가능)" : ""}
-                      </Text>
+                        <Text
+                          fontWeight={`bold`}
+                          margin={`0 0 14px`}
+                          color={Theme.grey2_C}
+                        >
+                          {data.sort}. {data.ques}
+                          {data.isOverlap ? "(복수선택가능)" : ""}
+                        </Text>
 
-                      {data.inner &&
-                        data.inner.map((v, idx) => {
-                          return v.innerType === 2 ? (
-                            <Wrapper key={v.id}>
-                              {v.questionValue && (
-                                <Text fontSize={`16px`} margin={`0 0 14px`}>
-                                  {v.questionValue}
-                                </Text>
-                              )}
-                              <Form.Item name={`textArea${idx}`}>
-                                <TextArea
-                                  placeholder={v.placeholderValue}
-                                  height={`120px`}
-                                  width={`100%`}
-                                />
-                              </Form.Item>
-                            </Wrapper>
-                          ) : v.innerType === 3 ? (
-                            <Wrapper
-                              key={v.id}
-                              al={`flex-start`}
-                              margin={`0 0 10px`}
-                            >
-                              <Form.Item name={`checkBox${idx}`}>
-                                <Checkbox.Group>
-                                  <Checkbox value={v.questionValue}>
-                                    {v.questionValue}
-                                  </Checkbox>
-                                </Checkbox.Group>
-                              </Form.Item>
-                            </Wrapper>
-                          ) : (
-                            v.innerType === 1 && (
+                        {data.inner &&
+                          data.inner.map((v, idx) => {
+                            return v.innerType === 2 ? (
                               <Wrapper key={v.id}>
                                 {v.questionValue && (
                                   <Text fontSize={`16px`} margin={`0 0 14px`}>
                                     {v.questionValue}
                                   </Text>
                                 )}
-                                <Form.Item name={`textInput${idx}`}>
-                                  <TextInput
-                                    type="text"
-                                    width={`100%`}
-                                    height={`55px`}
+                                <Form.Item name={`textArea${idx}`}>
+                                  <TextArea
                                     placeholder={v.placeholderValue}
-                                    radius={`5px`}
-                                    margin={`0 0 8px 0`}
+                                    height={`120px`}
+                                    width={`100%`}
                                   />
                                 </Form.Item>
                               </Wrapper>
-                            )
-                          );
-                        })}
-                      <Form.ErrorList errors={errors} />
-                      {/* {data.inner &&
+                            ) : v.innerType === 3 ? (
+                              <Wrapper
+                                key={v.id}
+                                al={`flex-start`}
+                                margin={`0 0 10px`}
+                              >
+                                <Form.Item name={`checkBox${idx}`}>
+                                  <Checkbox.Group>
+                                    <Checkbox value={v.questionValue}>
+                                      {v.questionValue}
+                                    </Checkbox>
+                                  </Checkbox.Group>
+                                </Form.Item>
+                              </Wrapper>
+                            ) : (
+                              v.innerType === 1 && (
+                                <Wrapper key={v.id}>
+                                  {v.questionValue && (
+                                    <Text fontSize={`16px`} margin={`0 0 14px`}>
+                                      {v.questionValue}
+                                    </Text>
+                                  )}
+                                  <Form.Item name={`textInput${idx}`}>
+                                    <TextInput
+                                      type="text"
+                                      width={`100%`}
+                                      height={`55px`}
+                                      placeholder={v.placeholderValue}
+                                      radius={`5px`}
+                                      margin={`0 0 8px 0`}
+                                    />
+                                  </Form.Item>
+                                </Wrapper>
+                              )
+                            );
+                          })}
+                        <Form.ErrorList errors={errors} />
+                        {/* {data.inner &&
                 data.inner.map((v) => {
                   return (
                     v.innerType === 3 && (
@@ -317,13 +321,13 @@ const Status = ({ surveyList }) => {
                     )
                   );
                 })} */}
-                    </Wrapper>
-                  );
-                }}
-              </Form.List>
-            );
-          })
-        )}
+                      </Wrapper>
+                    );
+                  }}
+                </Form.List>
+              );
+            })
+          ))}
 
         <CommonButton
           width={width < 900 ? `100%` : `470px`}

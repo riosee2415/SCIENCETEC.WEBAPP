@@ -44,6 +44,10 @@ import {
   SURVEY_HISTORY_LIST_REQUEST,
   SURVEY_HISTORY_LIST_SUCCESS,
   SURVEY_HISTORY_LIST_FAILURE,
+  //
+  FILE_UPLOAD_REQUEST,
+  FILE_UPLOAD_SUCCESS,
+  FILE_UPLOAD_FAILURE,
 } from "../reducers/survey";
 
 // ******************************************************************************************************************
@@ -343,6 +347,33 @@ function* surveyHistoryList(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function surveyFileUploadAPI(data) {
+  return await axios.post(`/api/survey/file`, data);
+}
+
+function* surveyFileUpload(action) {
+  try {
+    const result = yield call(surveyFileUploadAPI, action.data);
+
+    yield put({
+      type: FILE_UPLOAD_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: FILE_UPLOAD_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 function* watchSurveyList() {
   yield takeLatest(SURVEY_LIST_REQUEST, surveyList);
@@ -377,6 +408,9 @@ function* watchSurveyUserCreate() {
 function* watchSurveyHistoryList() {
   yield takeLatest(SURVEY_HISTORY_LIST_REQUEST, surveyHistoryList);
 }
+function* watchSurveyFileUpload() {
+  yield takeLatest(FILE_UPLOAD_REQUEST, surveyFileUpload);
+}
 
 //////////////////////////////////////////////////////////////
 export default function* surveySaga() {
@@ -392,6 +426,7 @@ export default function* surveySaga() {
     fork(watchSurveyInnerDelete),
     fork(watchSurveyUserCreate),
     fork(watchSurveyHistoryList),
+    fork(watchSurveyFileUpload),
 
     //
   ]);
