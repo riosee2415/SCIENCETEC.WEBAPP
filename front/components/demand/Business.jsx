@@ -130,6 +130,7 @@ const Business = ({ surveyList }) => {
           questionName: value,
           content: innerContent,
           sort: a.sort,
+          file: null,
         });
       });
 

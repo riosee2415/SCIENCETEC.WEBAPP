@@ -6,6 +6,8 @@ export const initailState = {
   previewImagePath1: null,
   previewImagePath2: null,
 
+  shareProjectHistory: [],
+
   //
   st_shareProjectLoading: false,
   st_shareProjectDone: false,
@@ -23,6 +25,10 @@ export const initailState = {
   st_shareProjecthImage2Loading: false, // 이미지 업로드2
   st_shareProjecthImage2Done: false,
   st_shareProjecthImage2Error: null,
+  //
+  st_shareProjectHistoryLoading: false, // 이력
+  st_shareProjectHistoryDone: false,
+  st_shareProjectHistoryError: null,
 };
 
 export const SHARE_PROJECT_REQUEST = "SHARE_PROJECT_REQUEST";
@@ -40,6 +46,10 @@ export const SHAREPROJECT_IMAGE1_FAILURE = "SHAREPROJECT_IMAGE1_FAILURE";
 export const SHAREPROJECT_IMAGE2_REQUEST = "SHAREPROJECT_IMAGE2_REQUEST";
 export const SHAREPROJECT_IMAGE2_SUCCESS = "SHAREPROJECT_IMAGE2_SUCCESS";
 export const SHAREPROJECT_IMAGE2_FAILURE = "SHAREPROJECT_IMAGE2_FAILURE";
+
+export const SHAREPROJECT_HISTORY_REQUEST = "SHAREPROJECT_HISTORY_REQUEST";
+export const SHAREPROJECT_HISTORY_SUCCESS = "SHAREPROJECT_HISTORY_SUCCESS";
+export const SHAREPROJECT_HISTORY_FAILURE = "SHAREPROJECT_HISTORY_FAILURE";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -102,6 +112,27 @@ const reducer = (state = initailState, action) =>
         draft.st_shareProjecthImage1Loading = false;
         draft.st_shareProjecthImage1Done = false;
         draft.st_shareProjecthImage1Error = action.data;
+        break;
+      }
+
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_HISTORY_REQUEST: {
+        draft.st_shareProjectHistoryLoading = true;
+        draft.st_shareProjectHistoryDone = false;
+        draft.st_shareProjectHistoryError = null;
+        break;
+      }
+      case SHAREPROJECT_HISTORY_SUCCESS: {
+        draft.st_shareProjectHistoryLoading = false;
+        draft.st_shareProjectHistoryDone = true;
+        draft.st_shareProjectHistoryError = null;
+        draft.shareProjectHistory = action.data;
+        break;
+      }
+      case SHAREPROJECT_HISTORY_FAILURE: {
+        draft.st_shareProjectHistoryLoading = false;
+        draft.st_shareProjectHistoryDone = false;
+        draft.st_shareProjectHistoryError = action.data;
         break;
       }
 

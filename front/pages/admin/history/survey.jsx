@@ -24,11 +24,11 @@ import {
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
 import { HomeOutlined, RightOutlined } from "@ant-design/icons";
-import { NOTICE_HISTORY_REQUEST } from "../../../reducers/notice";
+import { SURVEY_HISTORY_LIST_REQUEST } from "../../../reducers/survey";
 
-const MainBannerHistory = ({}) => {
+const SurveyHistory = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
-  const { noticeHistory } = useSelector((state) => state.notice);
+  const { surveyHistoryList } = useSelector((state) => state.survey);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -39,8 +39,6 @@ const MainBannerHistory = ({}) => {
   const [sameDepth, setSameDepth] = useState([]);
 
   const [datePick, setDatePick] = useState("");
-
-  const [selectType, setSelectType] = useState("공지사항");
 
   const moveLinkHandler = useCallback((link) => {
     router.push(link);
@@ -88,13 +86,12 @@ const MainBannerHistory = ({}) => {
 
   useEffect(() => {
     dispatch({
-      type: NOTICE_HISTORY_REQUEST,
+      type: SURVEY_HISTORY_LIST_REQUEST,
       data: {
         datePick,
-        type: selectType,
       },
     });
-  }, [datePick, selectType]);
+  }, [datePick]);
 
   ////// HANDLER //////
   const dateChange = useCallback(
@@ -102,14 +99,6 @@ const MainBannerHistory = ({}) => {
       setDatePick(dateString);
     },
     [datePick]
-  );
-
-  // 타입 선택
-  const selectCheckHandler = useCallback(
-    (type) => {
-      setSelectType(type);
-    },
-    [selectType]
   );
 
   ////// DATAVIEW //////
@@ -179,34 +168,6 @@ const MainBannerHistory = ({}) => {
         padding={`0px 50px`}
       >
         <DatePicker size="small" onChange={dateChange} />
-        <ModalBtn
-          size="small"
-          type={selectType === "공지사항" && "primary"}
-          onClick={() => selectCheckHandler("공지사항")}
-        >
-          공지사항
-        </ModalBtn>
-        <ModalBtn
-          size="small"
-          type={selectType === "자료실" && "primary"}
-          onClick={() => selectCheckHandler("자료실")}
-        >
-          자료실
-        </ModalBtn>
-        <ModalBtn
-          size="small"
-          type={selectType === "커뮤니티" && "primary"}
-          onClick={() => selectCheckHandler("커뮤니티")}
-        >
-          커뮤니티
-        </ModalBtn>
-        <ModalBtn
-          size="small"
-          type={selectType === "FAQ" && "primary"}
-          onClick={() => selectCheckHandler("FAQ")}
-        >
-          FAQ
-        </ModalBtn>
       </Wrapper>
 
       <Wrapper padding={`0px 50px`}>
@@ -214,7 +175,7 @@ const MainBannerHistory = ({}) => {
           style={{ width: "100%" }}
           rowKey="id"
           columns={col}
-          dataSource={noticeHistory ? noticeHistory : []}
+          dataSource={surveyHistoryList ? surveyHistoryList : []}
           size="small"
         />
       </Wrapper>
@@ -238,10 +199,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     });
 
     context.store.dispatch({
-      type: NOTICE_HISTORY_REQUEST,
-      data: {
-        type: "공지사항",
-      },
+      type: SURVEY_HISTORY_LIST_REQUEST,
     });
 
     context.store.dispatch({
@@ -255,4 +213,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default withRouter(MainBannerHistory);
+export default withRouter(SurveyHistory);
