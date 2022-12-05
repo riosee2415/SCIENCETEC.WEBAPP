@@ -227,6 +227,7 @@ const Status = ({ surveyList }) => {
                         color={Theme.grey2_C}
                       >
                         {data.sort}. {data.ques}
+                        {data.isOverlap ? "(복수선택가능)" : ""}
                       </Text>
 
                       {data.inner &&
