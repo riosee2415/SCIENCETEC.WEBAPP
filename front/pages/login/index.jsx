@@ -153,6 +153,10 @@ const Index = () => {
   }, []);
   ////// DATAVIEW //////
 
+  if (typeof window === "undefined") {
+    return null;
+  }
+
   return (
     <>
       <Head>

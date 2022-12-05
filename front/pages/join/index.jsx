@@ -403,7 +403,7 @@ const Index = () => {
                     </Wrapper>
                   </CommonButton> */}
                   <KakaoLogin
-                    jsKey={process.env.KAKAO_LOGIN_KEY}
+                    jsKey={process.env.NEXT_PUBLIC_KAKAO_LOGIN_KEY}
                     onSuccess={(data) => {
                       setSnsData(data.profile.kakao_account);
                     }}
