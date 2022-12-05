@@ -5,6 +5,7 @@ import { Wrapper, Image, Text } from "./commonComponents";
 import Theme from "./Theme";
 import AdminMenuBox from "./AdminMenuBox";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 const AdminHeader = styled(Wrapper)`
   transition: 0.6s;
@@ -20,7 +21,7 @@ export const items = {
   통계관리: [
     {
       name: "접속자통계",
-      link: "/",
+      link: "/admin/logs/acceptLogs",
       useYn: true,
     },
     {
@@ -173,6 +174,9 @@ export const items = {
 const AdminLayout = ({ children }) => {
   const router = useRouter();
 
+  const { personalUserResult, cooperUserResult, acceptResult, surveyResult } =
+    useSelector((state) => state.user);
+
   return (
     <Wrapper className="whole__admin__wrapper">
       {/* ADMIN HEADER */}
@@ -203,7 +207,7 @@ const AdminLayout = ({ children }) => {
               padding={`2px 15px`}
               radius={`6px`}
             >
-              ㅇㅇㅇ 최고관리자님, 환영합니다.
+              관리자님, 환영합니다.
             </Text>
           </Wrapper>
         </Wrapper>
@@ -223,8 +227,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 가입한 회원</Text>
-              <Text>1건</Text>
+              <Text>오늘 가입한 개인회원</Text>
+              <Text>{personalUserResult && personalUserResult.cnt}명</Text>
             </Wrapper>
 
             <Wrapper
@@ -234,8 +238,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 접수된 문의사항</Text>
-              <Text>1건</Text>
+              <Text>오늘 가입한 조합장회원</Text>
+              <Text>{cooperUserResult && cooperUserResult.cnt}명</Text>
             </Wrapper>
 
             <Wrapper
@@ -245,8 +249,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 새로 등록된 공지사항</Text>
-              <Text>1건</Text>
+              <Text>오늘 접속한 사용자</Text>
+              <Text>{acceptResult && acceptResult.cnt}명</Text>
             </Wrapper>
 
             <Wrapper
@@ -256,8 +260,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 어쩌구 저쩌구 저쩌구 저쩌구</Text>
-              <Text>1건</Text>
+              <Text>오늘 등록된 현황조사</Text>
+              <Text>{surveyResult && surveyResult.cnt}건</Text>
             </Wrapper>
           </Wrapper>
         </Wrapper>

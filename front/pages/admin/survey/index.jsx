@@ -29,7 +29,10 @@ import {
   GuideLi,
   DelBtn,
 } from "../../../components/commonComponents";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../../reducers/user";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
 import {
@@ -1174,6 +1177,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료
