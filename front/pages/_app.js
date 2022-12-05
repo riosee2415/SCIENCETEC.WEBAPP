@@ -79,7 +79,7 @@ const Fourleaf = ({ Component }) => {
         {/* 구글 로그인 */}
         <meta
           name="google-signin-client_id"
-          content="955366742386-pn71tpn5luibm9c0f6g59esbv7cpmsgs.apps.googleusercontent.com"
+          content="409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com"
         ></meta>
 
         <script

@@ -28,6 +28,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
+import GoogleLogin from "react-google-login";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -203,6 +204,18 @@ const Index = () => {
     }
   }, []);
 
+  const googleLogin = useCallback(async (response) => {
+    console.log(response);
+
+    // const userInfo = {
+    //   profileImg: response.profileObj.imageUrl,
+    //   email: response.profileObj.email,
+    //   name: response.profileObj.name,
+    // };
+
+    // console.log(userInfo);
+  }, []);
+
   // 주소검색
   const completeHandler = useCallback((data) => {
     addressInput.setValue(data.address);
@@ -354,6 +367,9 @@ const Index = () => {
     return null;
   }
 
+  const clientId =
+    "409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com";
+
   return (
     <>
       <Head>
@@ -385,6 +401,38 @@ const Index = () => {
 
               {currentTab === 0 ? (
                 <>
+                  <GoogleLogin
+                    clientId={
+                      "409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com"
+                    }
+                    responseType={"id_token"}
+                    onSuccess={googleLogin}
+                    onFailure={(res) => console.log(res)}
+                    render={({ onClick }) => {
+                      return (
+                        <CommonButton
+                          width={`100%`}
+                          height={`70px`}
+                          kindOf={`grey`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            onClick();
+                          }}
+                        >
+                          <Wrapper position={`relative`} fontSize={`18px`}>
+                            <Circle>
+                              <Image
+                                alt="google"
+                                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
+                              />
+                            </Circle>
+                            구글로 시작하기
+                          </Wrapper>
+                        </CommonButton>
+                      );
+                    }}
+                  />
+
                   {/* <CommonButton
                     width={`100%`}
                     height={`70px`}
@@ -402,6 +450,22 @@ const Index = () => {
                       구글로 시작하기
                     </Wrapper>
                   </CommonButton> */}
+
+                  {/* <GoogleOAuthProvider
+                    clientId={
+                      "409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com"
+                    }
+                  >
+                    <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse);
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </GoogleOAuthProvider> */}
+
                   <KakaoLogin
                     jsKey={process.env.NEXT_PUBLIC_KAKAO_LOGIN_KEY}
                     onSuccess={(data) => {
