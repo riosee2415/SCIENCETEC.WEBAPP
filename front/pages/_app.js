@@ -93,7 +93,9 @@ const Fourleaf = ({ Component }) => {
 
         <script
           dangerouslySetInnerHTML={{
-            __html: `Kakao.init('1681af47f9121c2e20b64480bbc3e631');`,
+            __html: `
+            Kakao.init('1681af47f9121c2e20b64480bbc3e631');
+            `,
           }}
         />
       </Head>
