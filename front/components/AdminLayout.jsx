@@ -152,12 +152,12 @@ export const items = {
       useYn: false,
     },
     {
-      name: "공지사항이력관리",
+      name: "게시글이력관리",
       link: "/admin/history/notice",
       useYn: true,
     },
   ],
-  서버관리: [
+  설문조사관리: [
     {
       name: "포럼관리",
       link: "/admin/forum",
@@ -276,7 +276,7 @@ const AdminLayout = ({ children }) => {
           <AdminMenuBox title={`회원관리`} menus={items["회원관리"]} />
           {/* <AdminMenuBox title={`고객지원관리`} menus={items["고객지원관리"]} /> */}
           <AdminMenuBox title={`기록관리`} menus={items["기록관리"]} />
-          <AdminMenuBox title={`서버관리`} menus={items["서버관리"]} />
+          <AdminMenuBox title={`설문조사관리`} menus={items["설문조사관리"]} />
         </Wrapper>
       ) : (
         <Wrapper>{children}</Wrapper>

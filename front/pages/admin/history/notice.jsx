@@ -15,6 +15,7 @@ import {
   OtherMenu,
   GuideUl,
   GuideLi,
+  ModalBtn,
 } from "../../../components/commonComponents";
 import {
   LOAD_MY_INFO_REQUEST,
@@ -38,6 +39,8 @@ const MainBannerHistory = ({}) => {
   const [sameDepth, setSameDepth] = useState([]);
 
   const [datePick, setDatePick] = useState("");
+
+  const [selectType, setSelectType] = useState("공지사항");
 
   const moveLinkHandler = useCallback((link) => {
     router.push(link);
@@ -88,9 +91,10 @@ const MainBannerHistory = ({}) => {
       type: NOTICE_HISTORY_REQUEST,
       data: {
         datePick,
+        type: selectType,
       },
     });
-  }, [datePick]);
+  }, [datePick, selectType]);
 
   ////// HANDLER //////
   const dateChange = useCallback(
@@ -98,6 +102,14 @@ const MainBannerHistory = ({}) => {
       setDatePick(dateString);
     },
     [datePick]
+  );
+
+  // 타입 선택
+  const selectCheckHandler = useCallback(
+    (type) => {
+      setSelectType(type);
+    },
+    [selectType]
   );
 
   ////// DATAVIEW //////
@@ -161,11 +173,40 @@ const MainBannerHistory = ({}) => {
       </Wrapper>
 
       <Wrapper
-        al={`flex-start`}
+        dr={`row`}
+        ju={`flex-start`}
         margin={`0px 0px 10px 0px`}
         padding={`0px 50px`}
       >
-        <DatePicker onChange={dateChange} />
+        <DatePicker size="small" onChange={dateChange} />
+        <ModalBtn
+          size="small"
+          type={selectType === "공지사항" && "primary"}
+          onClick={() => selectCheckHandler("공지사항")}
+        >
+          공지사항
+        </ModalBtn>
+        <ModalBtn
+          size="small"
+          type={selectType === "자료실" && "primary"}
+          onClick={() => selectCheckHandler("자료실")}
+        >
+          자료실
+        </ModalBtn>
+        <ModalBtn
+          size="small"
+          type={selectType === "커뮤니티" && "primary"}
+          onClick={() => selectCheckHandler("커뮤니티")}
+        >
+          커뮤니티
+        </ModalBtn>
+        <ModalBtn
+          size="small"
+          type={selectType === "FAQ" && "primary"}
+          onClick={() => selectCheckHandler("FAQ")}
+        >
+          FAQ
+        </ModalBtn>
       </Wrapper>
 
       <Wrapper padding={`0px 50px`}>
@@ -198,6 +239,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: NOTICE_HISTORY_REQUEST,
+      data: {
+        type: "공지사항",
+      },
     });
 
     context.store.dispatch({
