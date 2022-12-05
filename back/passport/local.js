@@ -22,6 +22,12 @@ module.exports = () => {
             });
           }
 
+          if (user.isExit) {
+            return done(null, false, {
+              reason: "탈퇴한 회원은 로그인 할 수 없습니다.",
+            });
+          }
+
           const result = await bcrypt.compare(password, user.password);
           if (result) {
             return done(null, user);
