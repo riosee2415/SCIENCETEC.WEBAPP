@@ -168,6 +168,11 @@ export const items = {
       link: "/admin/survey",
       useYn: true,
     },
+    {
+      name: "수요조사설문리스트",
+      link: "/admin/survey/list",
+      useYn: true,
+    },
   ],
 };
 

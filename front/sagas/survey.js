@@ -37,6 +37,14 @@ import {
   SURVEY_INNER_DELETE_SUCCESS,
   SURVEY_INNER_DELETE_FAILURE,
   //
+  SURVEY_USER_LIST_REQUEST,
+  SURVEY_USER_LIST_SUCCESS,
+  SURVEY_USER_LIST_FAILURE,
+  //
+  SURVEY_USER_DETAIL_REQUEST,
+  SURVEY_USER_DETAIL_SUCCESS,
+  SURVEY_USER_DETAIL_FAILURE,
+  //
   SURVEY_USER_CREATE_REQUEST,
   SURVEY_USER_CREATE_SUCCESS,
   SURVEY_USER_CREATE_FAILURE,
@@ -296,6 +304,60 @@ function* surveyInnerDelete(action) {
 // ******************************************************************************************************************
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
+async function surveyUserListAPI(data) {
+  return await axios.post(`/api/survey/user/list`, data);
+}
+
+function* surveyUserList(action) {
+  try {
+    const result = yield call(surveyUserListAPI, action.data);
+
+    yield put({
+      type: SURVEY_USER_LIST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SURVEY_USER_LIST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function surveyUserDetailAPI(data) {
+  return await axios.post(`/api/survey/user/detail`, data);
+}
+
+function* surveyUserDetail(action) {
+  try {
+    const result = yield call(surveyUserDetailAPI, action.data);
+
+    yield put({
+      type: SURVEY_USER_DETAIL_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SURVEY_USER_DETAIL_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
 async function surveyUserCreateAPI(data) {
   return await axios.post(`/api/survey/user/create`, data);
 }
@@ -402,6 +464,12 @@ function* watchSurveyInnerUpdate() {
 function* watchSurveyInnerDelete() {
   yield takeLatest(SURVEY_INNER_DELETE_REQUEST, surveyInnerDelete);
 }
+function* watchSurveyUserList() {
+  yield takeLatest(SURVEY_USER_LIST_REQUEST, surveyUserList);
+}
+function* watchSurveyUserDetail() {
+  yield takeLatest(SURVEY_USER_DETAIL_REQUEST, surveyUserDetail);
+}
 function* watchSurveyUserCreate() {
   yield takeLatest(SURVEY_USER_CREATE_REQUEST, surveyUserCreate);
 }
@@ -424,6 +492,8 @@ export default function* surveySaga() {
     fork(watchSurveyInnerCreate),
     fork(watchSurveyInnerUpdate),
     fork(watchSurveyInnerDelete),
+    fork(watchSurveyUserList),
+    fork(watchSurveyUserDetail),
     fork(watchSurveyUserCreate),
     fork(watchSurveyHistoryList),
     fork(watchSurveyFileUpload),

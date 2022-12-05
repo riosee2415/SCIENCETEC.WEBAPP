@@ -8,7 +8,8 @@ export const initailState = {
   surveyInnerList: null, // 관리자 답변
   surveyHistoryList: [],
   surveyFilePath: null, // 파일
-
+  surveyUserList: [], // 관리자
+  surveyUserDetail: null,
   //
   st_surveyListLoading: false, // survey 가져오기
   st_surveyListDone: false,
@@ -45,6 +46,14 @@ export const initailState = {
   st_surveyInnerDeleteLoading: false, // surveyInner 삭제하기
   st_surveyInnerDeleteDone: false,
   st_surveyInnerDeleteError: null,
+  //
+  st_surveyUserListLoading: false,
+  st_surveyUserListDone: false,
+  st_surveyUserListError: null,
+  //
+  st_surveyUserDetailLoading: false,
+  st_surveyUserDetailDone: false,
+  st_surveyUserDetailError: null,
   //
   st_surveyUserCreateLoading: false, // 회원에게 넘기기
   st_surveyUserCreateDone: false,
@@ -94,6 +103,14 @@ export const SURVEY_INNER_UPDATE_FAILURE = "SURVEY_INNER_UPDATE_FAILURE";
 export const SURVEY_INNER_DELETE_REQUEST = "SURVEY_INNER_DELETE_REQUEST";
 export const SURVEY_INNER_DELETE_SUCCESS = "SURVEY_INNER_DELETE_SUCCESS";
 export const SURVEY_INNER_DELETE_FAILURE = "SURVEY_INNER_DELETE_FAILURE";
+
+export const SURVEY_USER_LIST_REQUEST = "SURVEY_USER_LIST_REQUEST";
+export const SURVEY_USER_LIST_SUCCESS = "SURVEY_USER_LIST_SUCCESS";
+export const SURVEY_USER_LIST_FAILURE = "SURVEY_USER_LIST_FAILURE";
+
+export const SURVEY_USER_DETAIL_REQUEST = "SURVEY_USER_DETAIL_REQUEST";
+export const SURVEY_USER_DETAIL_SUCCESS = "SURVEY_USER_DETAIL_SUCCESS";
+export const SURVEY_USER_DETAIL_FAILURE = "SURVEY_USER_DETAIL_FAILURE";
 
 export const SURVEY_USER_CREATE_REQUEST = "SURVEY_USER_CREATE_REQUEST";
 export const SURVEY_USER_CREATE_SUCCESS = "SURVEY_USER_CREATE_SUCCESS";
@@ -302,6 +319,50 @@ const reducer = (state = initailState, action) =>
         draft.st_surveyInnerDeleteLoading = false;
         draft.st_surveyInnerDeleteDone = false;
         draft.st_surveyInnerDeleteError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case SURVEY_USER_LIST_REQUEST: {
+        draft.st_surveyUserListLoading = true;
+        draft.st_surveyUserListDone = false;
+        draft.st_surveyUserListError = null;
+        break;
+      }
+      case SURVEY_USER_LIST_SUCCESS: {
+        draft.st_surveyUserListLoading = false;
+        draft.st_surveyUserListDone = true;
+        draft.st_surveyUserListError = null;
+        draft.surveyUserList = action.data;
+        break;
+      }
+      case SURVEY_USER_LIST_FAILURE: {
+        draft.st_surveyUserListLoading = false;
+        draft.st_surveyUserListDone = false;
+        draft.st_surveyUserListError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+
+      case SURVEY_USER_DETAIL_REQUEST: {
+        draft.st_surveyUserDetailLoading = true;
+        draft.st_surveyUserDetailDone = false;
+        draft.st_surveyUserDetailError = null;
+        break;
+      }
+      case SURVEY_USER_DETAIL_SUCCESS: {
+        draft.st_surveyUserDetailLoading = false;
+        draft.st_surveyUserDetailDone = true;
+        draft.st_surveyUserDetailError = null;
+        draft.surveyUserDetail = action.data;
+        break;
+      }
+      case SURVEY_USER_DETAIL_FAILURE: {
+        draft.st_surveyUserDetailLoading = false;
+        draft.st_surveyUserDetailDone = false;
+        draft.st_surveyUserDetailError = action.error;
         break;
       }
 
