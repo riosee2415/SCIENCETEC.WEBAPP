@@ -26,7 +26,7 @@ export const items = {
     {
       name: "페이지접속통계",
       link: "/",
-      useYn: true,
+      useYn: false,
     },
   ],
   기초정보관리: [
@@ -43,12 +43,12 @@ export const items = {
     {
       name: "SNS정보관리",
       link: "/admin/info/snsInfo",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "카카오톡채널관리",
       link: "/admin/info/kakaoch",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "회원조합관리",
@@ -65,7 +65,7 @@ export const items = {
     {
       name: "팝업관리",
       link: "/admin/banner/popup",
-      useYn: true,
+      useYn: false,
     },
   ],
   게시판관리: [
@@ -106,7 +106,7 @@ export const items = {
     {
       name: "자주묻는질문관리",
       link: "/admin/supports/faq",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "문의관리",
@@ -116,7 +116,7 @@ export const items = {
     {
       name: "관리이력",
       link: "/",
-      useYn: true,
+      useYn: false,
     },
   ],
   기록관리: [
@@ -133,12 +133,12 @@ export const items = {
     {
       name: "SNS정보이력관리",
       link: "/admin/history/sns",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "카카오톡채널이력관리",
       link: "/admin/history/kakaoch",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "메인배너이력관리",
@@ -148,7 +148,7 @@ export const items = {
     {
       name: "팝업이력관리",
       link: "/admin/history/popup",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "공지사항이력관리",
@@ -270,7 +270,7 @@ const AdminLayout = ({ children }) => {
           <AdminMenuBox title={`배너관리`} menus={items["배너관리"]} />
           <AdminMenuBox title={`게시판관리`} menus={items["게시판관리"]} />
           <AdminMenuBox title={`회원관리`} menus={items["회원관리"]} />
-          <AdminMenuBox title={`고객지원관리`} menus={items["고객지원관리"]} />
+          {/* <AdminMenuBox title={`고객지원관리`} menus={items["고객지원관리"]} /> */}
           <AdminMenuBox title={`기록관리`} menus={items["기록관리"]} />
           <AdminMenuBox title={`서버관리`} menus={items["서버관리"]} />
         </Wrapper>
