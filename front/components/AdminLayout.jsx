@@ -156,6 +156,16 @@ export const items = {
       link: "/admin/history/notice",
       useYn: true,
     },
+    {
+      name: "수요조사이력관리",
+      link: "/admin/history/survey",
+      useYn: true,
+    },
+    {
+      name: "회원조합이력",
+      link: "/admin/history/shareProject",
+      useYn: true,
+    },
   ],
   설문조사관리: [
     {
