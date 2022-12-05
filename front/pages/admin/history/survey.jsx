@@ -202,6 +202,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
       type: SURVEY_HISTORY_LIST_REQUEST,
     });
 
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
+    });
+
     // 구현부 종료
     context.store.dispatch(END);
     console.log("🍀 SERVER SIDE PROPS END");
