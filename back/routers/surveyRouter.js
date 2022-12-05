@@ -562,6 +562,7 @@ router.post("/user/detail", async (req, res, next) => {
           questionName,
           content,
           sort,
+          file,
           createdAt,
           updatedAt,
           UserSurveyId
@@ -623,6 +624,7 @@ VALUES
                 questionName,
                 content,
                 sort,
+                file,
                 UserSurveyId,
                 createdAt,
                 updatedAt
@@ -632,6 +634,7 @@ VALUES
                 "${data.questionName}",
                 "${data.content}",
                 ${data.sort},     
+                ${data.file ? `"${data.file}"` : null},     
                 ${insertResult[0].insertId},
                 NOW(),
                 NOW()    
