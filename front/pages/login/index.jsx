@@ -180,7 +180,7 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>iCAST</title>
+        <title>iCAST | 로그인</title>
       </Head>
 
       <ClientLayout>

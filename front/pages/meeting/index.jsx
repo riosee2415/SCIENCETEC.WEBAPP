@@ -1,34 +1,20 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  KAKAO_LOGIN_REQUEST,
-  LOAD_MY_INFO_REQUEST,
-  LOGIN_REQUEST,
-} from "../../reducers/user";
-import useInput from "../../hooks/useInput";
+import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import ClientLayout from "../../components/ClientLayout";
 import axios from "axios";
 import wrapper from "../../store/configureStore";
 import { END } from "redux-saga";
 import {
-  ColWrapper,
-  RowWrapper,
   Image,
   WholeWrapper,
   Wrapper,
   RsWrapper,
-  SpanText,
   Text,
   CommonButton,
 } from "../../components/commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import styled, { ThemeContext } from "styled-components";
 import Head from "next/head";
-import Popup from "../../components/popup/popup";
-import Mainslider from "../../components/slide/MainSlider";
-import ToastEditorComponent from "../../components/editor/ToastEditorComponent";
-import CC01 from "../../components/common/CC01";
 import { DownloadOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCallback } from "react";
@@ -55,7 +41,7 @@ const Home = ({}) => {
   return (
     <>
       <Head>
-        <title>ICAST</title>
+        <title>ICAST | 교류회</title>
       </Head>
 
       <ClientLayout>
@@ -164,19 +150,22 @@ const Home = ({}) => {
                   <Text fontSize={`20px`} fontWeight={`600`}>
                     정관 미리보기
                   </Text>
-
-                  <CommonButton
-                    kindOf={`grey3`}
-                    fontSize={`14px`}
-                    padding={`0 0 2px`}
-                    width={`80px`}
-                    height={`20px`}
-                    margin={`0 0 0 10px`}
-                    onClick={downToggle}
+                  <a
+                    href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/1.+%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8+%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%E1%84%8C%E1%85%A5%E1%86%BC%E1%84%80%E1%85%AA%E1%86%AB(2020).hwp`}
+                    download
                   >
-                    다운로드
-                    <DownloadOutlined />
-                  </CommonButton>
+                    <CommonButton
+                      kindOf={`grey3`}
+                      fontSize={`12px`}
+                      padding={`0`}
+                      width={`80px`}
+                      height={`20px`}
+                      margin={`0 0 0 10px`}
+                    >
+                      다운로드
+                      <DownloadOutlined />
+                    </CommonButton>
+                  </a>
                 </Wrapper>
               </Wrapper>
             </Wrapper>

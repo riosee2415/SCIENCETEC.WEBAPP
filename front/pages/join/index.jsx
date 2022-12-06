@@ -317,7 +317,7 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>iCAST</title>
+        <title>iCAST | 회원가입</title>
       </Head>
 
       <ClientLayout>

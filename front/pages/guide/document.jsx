@@ -108,30 +108,34 @@ const Document = ({}) => {
                   >
                     <Text>정관 필수 기재 사항 (정관 작성)</Text>
                     <Wrapper dr={`row`} width={`auto`}>
-                      <CommonButton
-                        kindOf={`subTheme2`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
-                        margin={`0 10px`}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/1.+%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8+%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%E1%84%8C%E1%85%A5%E1%86%BC%E1%84%80%E1%85%AA%E1%86%AB(2020).hwp`}
+                        download
                       >
-                        표준정관
-                        <DownloadOutlined />
-                      </CommonButton>
-
-                      <CommonButton
+                        <CommonButton
+                          kindOf={`subTheme2`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                          margin={`0 10px`}
+                        >
+                          표준정관
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
+                      {/* <CommonButton
                         kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
+                        fontSize={`12px`}
+                        padding={`0`}
                         width={`80px`}
                         height={`20px`}
                         onClick={downToggle}
                       >
                         다운로드
                         <DownloadOutlined />
-                      </CommonButton>
+                      </CommonButton> */}
                     </Wrapper>
                   </Wrapper>
                 </Wrapper>
@@ -406,84 +410,100 @@ const Document = ({}) => {
                       <Text fontSize={`18px`} margin={`0 10px 0 0`}>
                         0.설립신고서
                       </Text>
-
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/0.+%5B%E1%84%87%E1%85%A7%E1%86%AF%E1%84%8C%E1%85%B5+%E1%84%8C%E1%85%A62%E1%84%92%E1%85%A9%E1%84%89%E1%85%A5%E1%84%89%E1%85%B5%E1%86%A8%5D+(%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%C2%B8+%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%92%E1%85%A1%E1%86%B8%E1%84%92%E1%85%AC)%E1%84%89%E1%85%A5%E1%86%AF%E1%84%85%E1%85%B5%E1%86%B8%E1%84%89%E1%85%B5%E1%86%AB%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
                       <Text fontSize={`18px`} margin={`0 10px 0 0`}>
                         1. 정관 사본
                       </Text>
-                      <CommonButton
-                        kindOf={`subTheme2`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
-                        margin={`0 10px 0 0`}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/1.+%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8+%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%E1%84%8C%E1%85%A5%E1%86%BC%E1%84%80%E1%85%AA%E1%86%AB(2020).hwp`}
+                        download
                       >
-                        표준정관
-                        <DownloadOutlined />
-                      </CommonButton>
-
-                      <CommonButton
+                        <CommonButton
+                          kindOf={`subTheme2`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                          margin={`0 10px 0 0`}
+                        >
+                          표준정관
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
+                      {/* <CommonButton
                         kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
+                        fontSize={`12px`}
+                        padding={`0`}
                         width={`80px`}
                         height={`20px`}
                         onClick={downToggle}
                       >
                         다운로드
                         <DownloadOutlined />
-                      </CommonButton>
+                      </CommonButton> */}
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
                       <Text fontSize={`18px`} margin={`0 10px 0 0`}>
                         2. 창립총회 개최 공고문
                       </Text>
-
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/2.+(%E1%84%8E%E1%85%A1%E1%86%BC%E1%84%85%E1%85%B5%E1%86%B8)%E1%84%8E%E1%85%A9%E1%86%BC%E1%84%92%E1%85%AC+%E1%84%80%E1%85%A2%E1%84%8E%E1%85%AC+%E1%84%80%E1%85%A9%E1%86%BC%E1%84%80%E1%85%A9%E1%84%86%E1%85%AE%E1%86%AB.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
                       <Text fontSize={`18px`} margin={`0 10px 0 0`}>
                         3. 창립총회 의사록 사본
                       </Text>
-
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/3.+(%E1%84%8E%E1%85%A1%E1%86%BC%E1%84%85%E1%85%B5%E1%86%B8)%E1%84%8E%E1%85%A9%E1%86%BC%E1%84%92%E1%85%AC+%E1%84%8B%E1%85%B4%E1%84%89%E1%85%A1%E1%84%85%E1%85%A9%E1%86%A8.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
@@ -491,17 +511,22 @@ const Document = ({}) => {
                         4. 임원명부
                       </Text>
 
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/4.+%5B%E1%84%87%E1%85%A7%E1%86%AF%E1%84%8C%E1%85%B5+%E1%84%8C%E1%85%A63%E1%84%92%E1%85%A9%E1%84%89%E1%85%A5%E1%84%89%E1%85%B5%E1%86%A8%5D+%E1%84%8B%E1%85%B5%E1%86%B7%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%86%E1%85%A7%E1%86%BC%E1%84%87%E1%85%AE.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
@@ -509,17 +534,22 @@ const Document = ({}) => {
                         5. 사업 계획서
                       </Text>
 
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/5.+%5B%E1%84%87%E1%85%A7%E1%86%AF%E1%84%8C%E1%85%B5+%E1%84%8C%E1%85%A64%E1%84%92%E1%85%A9%E1%84%89%E1%85%A5%E1%84%89%E1%85%B5%E1%86%A8%5D+(%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%C2%B8+%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%92%E1%85%A1%E1%86%B8%E1%84%92%E1%85%AC)%E1%84%89%E1%85%A1%E1%84%8B%E1%85%A5%E1%86%B8%E1%84%80%E1%85%A8%E1%84%92%E1%85%AC%E1%86%A8%E1%84%89%E1%85%A5.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
@@ -527,17 +557,22 @@ const Document = ({}) => {
                         6. 수입 지출 예산서
                       </Text>
 
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/6.+%5B%E1%84%87%E1%85%A7%E1%86%AF%E1%84%8C%E1%85%B5+%E1%84%8C%E1%85%A65%E1%84%92%E1%85%A9%E1%84%89%E1%85%A5%E1%84%89%E1%85%B5%E1%86%A8%5D+(%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%C2%B8+%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%92%E1%85%A1%E1%86%B8%E1%84%92%E1%85%AC)%E1%84%89%E1%85%AE%E1%84%8B%E1%85%B5%E1%86%B8%E3%86%8D%E1%84%8C%E1%85%B5%E1%84%8E%E1%85%AE%E1%86%AF+%E1%84%8B%E1%85%A8%E1%84%89%E1%85%A1%E1%86%AB%E1%84%89%E1%85%A5.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
@@ -546,17 +581,22 @@ const Document = ({}) => {
                         출자좌를 적은 서류 (출자자명부)
                       </Text>
 
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/7.8.+%5B%E1%84%87%E1%85%A7%E1%86%AF%E1%84%8C%E1%85%B5+%E1%84%8C%E1%85%A66%E1%84%92%E1%85%A9%E1%84%89%E1%85%A5%E1%84%89%E1%85%B5%E1%86%A8%5D+(%E1%84%87%E1%85%A1%E1%86%AF%E1%84%80%E1%85%B5%E1%84%8B%E1%85%B5%E1%86%AB+%E1%84%86%E1%85%B5%E1%86%BE+%E1%84%89%E1%85%A5%E1%86%AF%E1%84%85%E1%85%B5%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B4%E1%84%8C%E1%85%A1%C2%B8+%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%E1%84%8B%E1%85%AF%E1%86%AB(%E1%84%92%E1%85%AC%E1%84%8B%E1%85%AF%E1%86%AB))%E1%84%86%E1%85%A7%E1%86%BC%E1%84%87%E1%85%AE.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
 
                     <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 5px`}>
@@ -564,17 +604,22 @@ const Document = ({}) => {
                         8. 발기인 및 설립동의자 명부
                       </Text>
 
-                      <CommonButton
-                        kindOf={`grey3`}
-                        fontSize={`14px`}
-                        padding={`0 0 2px`}
-                        width={`80px`}
-                        height={`20px`}
-                        onClick={downToggle}
+                      <a
+                        href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/7.8.+%5B%E1%84%87%E1%85%A7%E1%86%AF%E1%84%8C%E1%85%B5+%E1%84%8C%E1%85%A66%E1%84%92%E1%85%A9%E1%84%89%E1%85%A5%E1%84%89%E1%85%B5%E1%86%A8%5D+(%E1%84%87%E1%85%A1%E1%86%AF%E1%84%80%E1%85%B5%E1%84%8B%E1%85%B5%E1%86%AB+%E1%84%86%E1%85%B5%E1%86%BE+%E1%84%89%E1%85%A5%E1%86%AF%E1%84%85%E1%85%B5%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B4%E1%84%8C%E1%85%A1%C2%B8+%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%E1%84%8B%E1%85%AF%E1%86%AB(%E1%84%92%E1%85%AC%E1%84%8B%E1%85%AF%E1%86%AB))%E1%84%86%E1%85%A7%E1%86%BC%E1%84%87%E1%85%AE.hwp`}
+                        download
                       >
-                        다운로드
-                        <DownloadOutlined />
-                      </CommonButton>
+                        <CommonButton
+                          kindOf={`grey3`}
+                          fontSize={`12px`}
+                          padding={`0`}
+                          width={`80px`}
+                          height={`20px`}
+                          onClick={downToggle}
+                        >
+                          다운로드
+                          <DownloadOutlined />
+                        </CommonButton>
+                      </a>
                     </Wrapper>
                   </Wrapper>
                 </Wrapper>
