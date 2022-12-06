@@ -690,7 +690,7 @@ function* userMain(action) {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function userGoogleAPI(data) {
-  return await axios.post(`/api/user/googleLogin`, data);
+  return await axios.post(`/api/user/checkUser`, data);
 }
 
 function* userGoogle(action) {

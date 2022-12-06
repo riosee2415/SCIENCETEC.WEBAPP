@@ -14,6 +14,7 @@ export const initailState = {
   combiTypeList: [],
   businessTypeList: [],
   sectorList: [],
+  userCheck: false,
 
   personalUserResult: null,
   cooperUserResult: null,
@@ -108,6 +109,10 @@ export const initailState = {
   st_userGoogleLoading: false,
   st_userGoogleDone: false,
   st_userGoogleError: null,
+  //
+  st_userCheckLoading: false,
+  st_userCheckDone: false,
+  st_userCheckError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -696,7 +701,7 @@ const reducer = (state = initailState, action) =>
         draft.st_userGoogleLoading = false;
         draft.st_userGoogleDone = true;
         draft.st_userGoogleError = null;
-
+        draft.userCheck = action.data;
         break;
       }
       case USER_GOOGLE_FAILURE: {

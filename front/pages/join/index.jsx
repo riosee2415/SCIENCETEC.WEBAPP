@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
-import { LOAD_MY_INFO_REQUEST, SIGNUP_REQUEST } from "../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  SIGNUP_REQUEST,
+  USER_GOOGLE_REQUEST,
+} from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,7 +67,15 @@ const Circle = styled(Wrapper)`
 
 const Index = () => {
   ////// GLOBAL STATE //////
-  const { st_signUpDone, st_signUpError } = useSelector((state) => state.user);
+  const {
+    userCheck,
+    //
+    st_signUpDone,
+    st_signUpError,
+    //
+    st_userGoogleDone,
+    st_userGoogleError,
+  } = useSelector((state) => state.user);
   ////// HOOKS //////
 
   // 구글 로그인
@@ -99,9 +111,31 @@ const Index = () => {
   // 구글 로그인
   useEffect(() => {
     if (session) {
-      setSnsData(session.user);
+      dispatch({
+        type: USER_GOOGLE_REQUEST,
+        data: {
+          email: session.user.email,
+        },
+      });
     }
   }, [session]);
+
+  useEffect(() => {
+    if (st_userGoogleDone) {
+      if (userCheck.result) {
+        setSnsData(session.user);
+      } else {
+        router.push("/login");
+        message.error("이미 계정이 있습니다.");
+        // signOut();
+      }
+
+      return;
+    }
+    if (st_userGoogleError) {
+      return message.error(st_userGoogleError);
+    }
+  }, [st_userGoogleDone, st_userGoogleError]);
 
   // 기본
   useEffect(() => {
