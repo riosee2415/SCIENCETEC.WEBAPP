@@ -665,6 +665,29 @@ router.post("/signin/admin", (req, res, next) => {
   })(req, res, next);
 });
 
+router.post("/checkUser", async (req, res, next) => {
+  const { email } = req.body;
+
+  const findUserQuery = `
+  SELECT  password
+    FROM  users
+   WHERE  email = "${email}"
+  `;
+
+  try {
+    const userFindResult = await models.sequelize.query(findUserQuery);
+
+    if (userFindResult[0].length === 0) {
+      return res.status(200).json({ result: true });
+    }
+
+    return res.status(200).json({ result: false });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("잠시 후 다시 시도하여 주십시오.");
+  }
+});
+
 router.post("/signup", async (req, res, next) => {
   const {
     type,
