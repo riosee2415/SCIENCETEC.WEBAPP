@@ -57,12 +57,12 @@ const Fourleaf = ({ Component, pageProps: { session, ...pageProps } }) => {
           <meta name="author" content="4LEAF SOFTWARE <4leaf.ysh@gmail.com>" />
           {/* <!-- OG tag  --> */}
           <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://www.sample.com/" />
+          <meta property="og:url" content="https://icast.or.kr/" />
           <meta property="og:image:width" content="800" />
           <meta property="og:image:height" content="400" />
           <meta property="og:image" content="./og_img.png" />
           <link rel="shortcut icon" href="/favicon.ico" />
-          <link rel="canonical" href="https://www.sample.com" />
+          <link rel="canonical" href="https://icast.or.kr" />
 
           <meta
             name="keywords"
