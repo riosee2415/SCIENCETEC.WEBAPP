@@ -28,6 +28,7 @@ import { Form, message } from "antd";
 import { useRouter } from "next/router";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -85,6 +86,12 @@ const Index = () => {
   } = useSelector((state) => state.user);
 
   ////// HOOKS //////
+
+  // 구글 로그인
+  const { data: session } = useSession();
+
+  console.log(session);
+
   const width = useWidth();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -117,8 +124,21 @@ const Index = () => {
     if (st_snsLoginError) {
       message.error(st_snsLoginError);
       router.push("/join");
+      signOut();
     }
   }, [st_snsLoginError]);
+
+  useEffect(() => {
+    if (session) {
+      dispatch({
+        type: SNS_LOGIN_REQUEST,
+        data: {
+          userId: session.user.email,
+          password: session.user.email,
+        },
+      });
+    }
+  }, [session]);
 
   ////// TOGGLE //////
   ////// HANDLER //////
@@ -296,12 +316,12 @@ const Index = () => {
                     SNS 로그인
                   </Text>
                   <Wrapper dr={`row`}>
-                    {/* <Circle>
+                    <Circle onClick={() => signIn("google")}>
                       <Image
                         alt="google"
                         src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
                       />
-                    </Circle> */}
+                    </Circle>
                     <KakaoLogin
                       jsKey={process.env.KAKAO_LOGIN_KEY}
                       onSuccess={(data) => {

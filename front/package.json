@@ -26,6 +26,7 @@
     "immer": "^9.0.5",
     "naver-id-login": "2.0.0",
     "next": "^9.5.5",
+    "next-auth": "^4.18.0",
     "next-redux-wrapper": "^6.0.2",
     "next-remove-imports": "^1.0.8",
     "passport-kakao": "^1.0.1",

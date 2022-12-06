@@ -21,6 +21,7 @@ import { LOAD_MY_INFO_REQUEST, LOGOUT_REQUEST } from "../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../hooks/useWidth";
 import { LOGO_GET_REQUEST } from "../reducers/logo";
+import { useSession, signOut } from "next-auth/react";
 
 const HoverWrapper = styled(Wrapper)`
   position: absolute;
@@ -136,6 +137,8 @@ const AppHeader = () => {
   const [drawar, setDrawar] = useState(false);
   const [subMenu, setSubMenu] = useState(``);
 
+  const { data: session } = useSession();
+
   ///////////// - EVENT HANDLER- ////////////
 
   const drawarToggle = useCallback(() => {
@@ -170,6 +173,9 @@ const AppHeader = () => {
 
   useEffect(() => {
     if (st_logoutDone) {
+      if (session) {
+        signOut();
+      }
       router.push("/login");
       return message.success("로그아웃 되었습니다.");
     }

@@ -88,6 +88,10 @@ import {
   USER_MAIN_REQUEST,
   USER_MAIN_SUCCESS,
   USER_MAIN_FAILURE,
+  //
+  USER_GOOGLE_REQUEST,
+  USER_GOOGLE_SUCCESS,
+  USER_GOOGLE_FAILURE,
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -682,6 +686,33 @@ function* userMain(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function userGoogleAPI(data) {
+  return await axios.post(`/api/user/googleLogin`, data);
+}
+
+function* userGoogle(action) {
+  try {
+    const result = yield call(userGoogleAPI, action.data);
+    yield put({
+      type: USER_GOOGLE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: USER_GOOGLE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -772,6 +803,10 @@ function* watchUserMain() {
   yield takeLatest(USER_MAIN_REQUEST, userMain);
 }
 
+function* watchUserGoogle() {
+  yield takeLatest(USER_GOOGLE_REQUEST, userGoogle);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
@@ -797,6 +832,7 @@ export default function* userSaga() {
     fork(watchCheckCode),
     fork(watchPwUpdate),
     fork(watchUserMain),
+    fork(watchUserGoogle),
     //
   ]);
 }

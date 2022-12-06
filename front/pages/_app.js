@@ -10,8 +10,10 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { ACCEPT_LOG_CREATE_REQUEST } from "../reducers/accept";
 import wrapper from "../store/configureStore";
+import { AppProps } from "next/app";
+import { SessionProvider } from "next-auth/react";
 
-const Fourleaf = ({ Component }) => {
+const Fourleaf = ({ Component, pageProps: { session, ...pageProps } }) => {
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -46,61 +48,69 @@ const Fourleaf = ({ Component }) => {
   }, []);
 
   return (
-    <ThemeProvider theme={Theme}>
-      <GlobalStyles />
-      <Head>
-        <title>[[**4LEAF GEAR SAMPLE**]] | administrator</title>
+    <SessionProvider session={session}>
+      <ThemeProvider theme={Theme}>
+        <GlobalStyles />
+        <Head>
+          <title>[[**4LEAF GEAR SAMPLE**]] | administrator</title>
 
-        <meta name="author" content="4LEAF SOFTWARE <4leaf.ysh@gmail.com>" />
-        {/* <!-- OG tag  --> */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.sample.com/" />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="400" />
-        <meta property="og:image" content="./og_img.png" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="canonical" href="https://www.sample.com" />
+          <meta name="author" content="4LEAF SOFTWARE <4leaf.ysh@gmail.com>" />
+          {/* <!-- OG tag  --> */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://www.sample.com/" />
+          <meta property="og:image:width" content="800" />
+          <meta property="og:image:height" content="400" />
+          <meta property="og:image" content="./og_img.png" />
+          <link rel="shortcut icon" href="/favicon.ico" />
+          <link rel="canonical" href="https://www.sample.com" />
 
-        <meta name="keywords" content="[[**4LEAF GEAR SAMPLE**]]" />
-        <meta property="og:keywords" content="[[**4LEAF GEAR SAMPLE**]]" />
+          <meta name="keywords" content="[[**4LEAF GEAR SAMPLE**]]" />
+          <meta property="og:keywords" content="[[**4LEAF GEAR SAMPLE**]]" />
 
-        {/* 프리텐다드 폰트 */}
-        <link
-          href="https://webfontworld.github.io/pretendard/Pretendard.css"
-          rel="stylesheet"
-        />
+          {/* 프리텐다드 폰트 */}
+          <link
+            href="https://webfontworld.github.io/pretendard/Pretendard.css"
+            rel="stylesheet"
+          />
 
-        {/* 나눔스퀘어 네오 폰트 */}
-        <link
-          href="https://fonts.cdnfonts.com/css/nanumsquare-neo"
-          rel="stylesheet"
-        />
+          {/* 나눔스퀘어 네오 폰트 */}
+          <link
+            href="https://fonts.cdnfonts.com/css/nanumsquare-neo"
+            rel="stylesheet"
+          />
 
-        {/* 구글 로그인 */}
-        <meta
-          name="google-signin-client_id"
-          content="409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com"
-        ></meta>
+          {/* 구글 로그인 */}
+          <meta
+            name="google-signin-client_id"
+            content="1092536473300-8sdb19s6g973htdhpkdgotpr156n8qv2.apps.googleusercontent.com"
+          ></meta>
 
-        <script
+          {/* <script
           src="https://apis.google.com/js/platform.js?onload=init"
           async
           defer
-        ></script>
+        ></script> */}
+          <script
+            src="https://apis.google.com/js/platform.js"
+            async
+            defer
+          ></script>
 
-        {/* 카카오 */}
-        <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+          {/* 카카오 */}
+          <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
             Kakao.init('1681af47f9121c2e20b64480bbc3e631');
             `,
-          }}
-        />
-      </Head>
-      <Component />
-    </ThemeProvider>
+            }}
+          />
+        </Head>
+
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </SessionProvider>
   );
 };
 Fourleaf.propTypes = {
