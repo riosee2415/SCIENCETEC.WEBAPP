@@ -2,7 +2,11 @@ import React, { useCallback, useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
-import { LOAD_MY_INFO_REQUEST, SIGNUP_REQUEST } from "../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  SIGNUP_REQUEST,
+  USER_GOOGLE_REQUEST,
+} from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +31,7 @@ import DaumPostcode from "react-daum-postcode";
 import { useEffect } from "react";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Circle = styled(Wrapper)`
   width: 44px;
@@ -61,9 +66,19 @@ const Btn = styled(Wrapper)`
 
 const Index = () => {
   ////// GLOBAL STATE //////
-  const { st_signUpDone, st_signUpError } = useSelector((state) => state.user);
+  const {
+    userCheck,
+    //
+    st_signUpDone,
+    st_signUpError,
+    //
+    st_userGoogleDone,
+    st_userGoogleError,
+  } = useSelector((state) => state.user);
   ////// HOOKS //////
   const width = useWidth();
+
+  const { data: session } = useSession();
 
   // 회원가입
   const idInput = useInput(``); // 아이디
@@ -104,12 +119,44 @@ const Index = () => {
   const dispatch = useDispatch();
   ////// USEEFFECT //////
 
+  // 구글 로그인
+  useEffect(() => {
+    if (session) {
+      dispatch({
+        type: USER_GOOGLE_REQUEST,
+        data: {
+          email: session.user.email,
+        },
+      });
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (st_userGoogleDone) {
+      if (userCheck.result) {
+        setSnsData(session.user);
+      } else {
+        router.push("/login");
+        message.error("이미 계정이 있습니다.");
+        // signOut();
+      }
+
+      return;
+    }
+    if (st_userGoogleError) {
+      return message.error(st_userGoogleError);
+    }
+  }, [st_userGoogleDone, st_userGoogleError]);
+
   useEffect(() => {
     if (snsData) {
       setCurrentTab(1);
 
       idInput.setValue(snsData.email);
       emailInput.setValue(snsData.email);
+
+      pwInput.setValue(snsData.email);
+      pwCheckInput.setValue(snsData.email);
 
       mobileInput.setValue(snsData.mobile_e164 ? snsData.mobile_e164 : ``);
       return;
@@ -465,6 +512,23 @@ const Index = () => {
 
               {currentTab === 0 ? (
                 <>
+                  <CommonButton
+                    width={`100%`}
+                    height={`70px`}
+                    kindOf={`grey`}
+                    onClick={() => signIn("google")}
+                  >
+                    <Wrapper position={`relative`} fontSize={`18px`}>
+                      <Circle>
+                        <Image
+                          alt="google"
+                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
+                        />
+                      </Circle>
+                      구글로 시작하기
+                    </Wrapper>
+                  </CommonButton>
+
                   <KakaoLogin
                     jsKey={process.env.KAKAO_LOGIN_KEY}
                     onSuccess={(data) => {
@@ -569,6 +633,7 @@ const Index = () => {
                       radius={`5px`}
                       margin={`0 0 8px`}
                       {...pwInput}
+                      readOnly={snsData}
                     />
                     <TextInput
                       type="password"
@@ -577,6 +642,7 @@ const Index = () => {
                       placeholder="비밀번호를 재입력해주세요."
                       radius={`5px`}
                       {...pwCheckInput}
+                      readOnly={snsData}
                     />
                   </Wrapper>
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>

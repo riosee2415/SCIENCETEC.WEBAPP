@@ -89,6 +89,7 @@ const Index = () => {
 
   // 구글 로그인
   const { data: session } = useSession();
+  console.log(session);
 
   const width = useWidth();
   const router = useRouter();
