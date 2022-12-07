@@ -103,6 +103,8 @@ const Notice = ({}) => {
 
   const [infoForm] = Form.useForm();
 
+  const [filename, setFilename] = useState(null);
+
   const fileRef = useRef();
 
   const moveLinkHandler = useCallback((link) => {
@@ -385,18 +387,23 @@ const Notice = ({}) => {
     fileRef.current.click();
   }, [fileRef.current]);
 
-  const onChangeFiles = useCallback((e) => {
-    const formData = new FormData();
+  const onChangeFiles = useCallback(
+    (e) => {
+      const formData = new FormData();
 
-    [].forEach.call(e.target.files, (file) => {
-      formData.append("file", file);
-    });
+      [].forEach.call(e.target.files, (file) => {
+        formData.append("file", file);
+      });
 
-    dispatch({
-      type: NOTICE_FILE_REQUEST,
-      data: formData,
-    });
-  });
+      setFilename(e.target.files[0].name);
+
+      dispatch({
+        type: NOTICE_FILE_REQUEST,
+        data: formData,
+      });
+    },
+    [filename]
+  );
 
   const fileDownloadHandler = useCallback(async (filepath) => {
     const filename = "web_notice_file";
@@ -465,12 +472,13 @@ const Notice = ({}) => {
       type: NOTICE_FILE_INFO_REQUEST,
       data: {
         id: currentData.id,
+        filename: filename,
         filepath: uploadFilePath,
         title: currentData.title,
         type: currentData.type,
       },
     });
-  }, [uploadFilePath, currentData]);
+  }, [uploadFilePath, currentData, filename]);
 
   const isTopChangeHandler = useCallback(
     (data) => {
@@ -759,6 +767,7 @@ const Notice = ({}) => {
                     {currentData.file ? (
                       <Wrapper al="flex-start">
                         <Text>등록된 파일이 1개 있습니다.</Text>
+                        <Text>{filename}</Text>
                         <Wrapper dr="row" ju="flex-start">
                           <Button
                             type="defalut"

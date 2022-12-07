@@ -181,7 +181,7 @@ const OpDetail = () => {
                     <SpanText color={Theme.basicTheme_C} margin={`0 5px 0 0`}>
                       <FileFilled />
                     </SpanText>
-                    {noticeDetail.file}
+                    {noticeDetail.filename}
                   </Text>
                 </ATag>
               </Wrapper>
