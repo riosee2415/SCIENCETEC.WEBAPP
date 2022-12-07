@@ -26,7 +26,10 @@ import {
   GuideLi,
   DelBtn,
 } from "../../../components/commonComponents";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../../reducers/user";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
 import {
@@ -76,7 +79,7 @@ const Index = ({}) => {
   const dispatch = useDispatch();
 
   // 상위메뉴 변수
-  const [level1, setLevel1] = useState("고객지원관리");
+  const [level1, setLevel1] = useState("설문조사관리");
   const [level2, setLevel2] = useState("");
   const [sameDepth, setSameDepth] = useState([]);
   const [currentData, setCurrentData] = useState(null);
@@ -490,6 +493,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: FORUM_ADMIN_LIST_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료

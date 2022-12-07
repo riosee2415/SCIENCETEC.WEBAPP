@@ -17,6 +17,10 @@ module.exports = class UserSurveyQuestion extends Model {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
+        file: {
+          type: DataTypes.STRING(600),
+          allowNull: true,
+        },
       },
       {
         modelName: "UserSurveyQuestion",

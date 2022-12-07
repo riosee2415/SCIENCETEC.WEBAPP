@@ -21,6 +21,7 @@ import { LOAD_MY_INFO_REQUEST, LOGOUT_REQUEST } from "../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../hooks/useWidth";
 import { LOGO_GET_REQUEST } from "../reducers/logo";
+import { useSession, signOut } from "next-auth/react";
 
 const HoverWrapper = styled(Wrapper)`
   position: absolute;
@@ -136,6 +137,8 @@ const AppHeader = () => {
   const [drawar, setDrawar] = useState(false);
   const [subMenu, setSubMenu] = useState(``);
 
+  const { data: session } = useSession();
+
   ///////////// - EVENT HANDLER- ////////////
 
   const drawarToggle = useCallback(() => {
@@ -170,6 +173,9 @@ const AppHeader = () => {
 
   useEffect(() => {
     if (st_logoutDone) {
+      if (session) {
+        signOut();
+      }
       router.push("/login");
       return message.success("로그아웃 되었습니다.");
     }
@@ -266,12 +272,10 @@ const AppHeader = () => {
                 </Menu>
               </a>
             </Link>
-            <Link href={``}>
+            <Link href={`/guide`}>
               <a>
                 <Menu
-                  color={
-                    router.pathname.includes(`/service`) && Theme.subTheme_C
-                  }
+                  color={router.pathname.includes(`/guide`) && Theme.subTheme_C}
                 >
                   설립안내
                 </Menu>
@@ -568,16 +572,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/`}>
-                      <a>인사말</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/`}>
+                    <Link href={`/meeting`}>
                       <a>교류회란</a>
                     </Link>
                   </Wrapper>
@@ -586,7 +581,7 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/`}>
+                    <Link href={`/meeting/status`}>
                       <a>현황</a>
                     </Link>
                   </Wrapper>
@@ -595,12 +590,22 @@ const AppHeader = () => {
                     margin={`0 0 10px`}
                     onClick={drawarToggle}
                   >
-                    <Link href={`/`}>
+                    <Link href={`/meeting/group`}>
                       <a>조직</a>
                     </Link>
                   </Wrapper>
+                  <Wrapper
+                    al={`flex-start`}
+                    margin={`0 0 10px`}
+                    onClick={drawarToggle}
+                  >
+                    <Link href={`/meeting/greetings`}>
+                      <a>인사말</a>
+                    </Link>
+                  </Wrapper>
+
                   <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/`}>
+                    <Link href={`/meeting/location`}>
                       <a>오시는 길</a>
                     </Link>
                   </Wrapper>

@@ -5,6 +5,7 @@ import { Wrapper, Image, Text } from "./commonComponents";
 import Theme from "./Theme";
 import AdminMenuBox from "./AdminMenuBox";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 const AdminHeader = styled(Wrapper)`
   transition: 0.6s;
@@ -20,13 +21,13 @@ export const items = {
   통계관리: [
     {
       name: "접속자통계",
-      link: "/",
+      link: "/admin/logs/acceptLogs",
       useYn: true,
     },
     {
       name: "페이지접속통계",
       link: "/",
-      useYn: true,
+      useYn: false,
     },
   ],
   기초정보관리: [
@@ -43,12 +44,12 @@ export const items = {
     {
       name: "SNS정보관리",
       link: "/admin/info/snsInfo",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "카카오톡채널관리",
       link: "/admin/info/kakaoch",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "회원조합관리",
@@ -65,7 +66,7 @@ export const items = {
     {
       name: "팝업관리",
       link: "/admin/banner/popup",
-      useYn: true,
+      useYn: false,
     },
   ],
   게시판관리: [
@@ -106,7 +107,7 @@ export const items = {
     {
       name: "자주묻는질문관리",
       link: "/admin/supports/faq",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "문의관리",
@@ -116,7 +117,7 @@ export const items = {
     {
       name: "관리이력",
       link: "/",
-      useYn: true,
+      useYn: false,
     },
   ],
   기록관리: [
@@ -133,12 +134,12 @@ export const items = {
     {
       name: "SNS정보이력관리",
       link: "/admin/history/sns",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "카카오톡채널이력관리",
       link: "/admin/history/kakaoch",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "메인배너이력관리",
@@ -148,15 +149,25 @@ export const items = {
     {
       name: "팝업이력관리",
       link: "/admin/history/popup",
-      useYn: true,
+      useYn: false,
     },
     {
-      name: "공지사항이력관리",
+      name: "게시글이력관리",
       link: "/admin/history/notice",
       useYn: true,
     },
+    {
+      name: "수요조사이력관리",
+      link: "/admin/history/survey",
+      useYn: true,
+    },
+    {
+      name: "회원조합이력",
+      link: "/admin/history/shareProject",
+      useYn: true,
+    },
   ],
-  서버관리: [
+  설문조사관리: [
     {
       name: "포럼관리",
       link: "/admin/forum",
@@ -167,11 +178,19 @@ export const items = {
       link: "/admin/survey",
       useYn: true,
     },
+    {
+      name: "수요조사설문리스트",
+      link: "/admin/survey/list",
+      useYn: true,
+    },
   ],
 };
 
 const AdminLayout = ({ children }) => {
   const router = useRouter();
+
+  const { personalUserResult, cooperUserResult, acceptResult, surveyResult } =
+    useSelector((state) => state.user);
 
   return (
     <Wrapper className="whole__admin__wrapper">
@@ -193,8 +212,8 @@ const AdminLayout = ({ children }) => {
           />
 
           <Image
-            width={`170px`}
-            src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/4LEAFSOFTWARE/assets/images/LOGO/logo4.png`}
+            width={`100px`}
+            src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/logo/logo_footer.png`}
           />
 
           <Wrapper margin={`20px 0px 0px 0px`}>
@@ -203,7 +222,7 @@ const AdminLayout = ({ children }) => {
               padding={`2px 15px`}
               radius={`6px`}
             >
-              ㅇㅇㅇ 최고관리자님, 환영합니다.
+              관리자님, 환영합니다.
             </Text>
           </Wrapper>
         </Wrapper>
@@ -223,8 +242,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 가입한 회원</Text>
-              <Text>1건</Text>
+              <Text>오늘 가입한 개인회원</Text>
+              <Text>{personalUserResult && personalUserResult.cnt}명</Text>
             </Wrapper>
 
             <Wrapper
@@ -234,8 +253,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 접수된 문의사항</Text>
-              <Text>1건</Text>
+              <Text>오늘 가입한 조합장회원</Text>
+              <Text>{cooperUserResult && cooperUserResult.cnt}명</Text>
             </Wrapper>
 
             <Wrapper
@@ -245,8 +264,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 새로 등록된 공지사항</Text>
-              <Text>1건</Text>
+              <Text>오늘 접속한 사용자</Text>
+              <Text>{acceptResult && acceptResult.cnt}명</Text>
             </Wrapper>
 
             <Wrapper
@@ -256,8 +275,8 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 어쩌구 저쩌구 저쩌구 저쩌구</Text>
-              <Text>1건</Text>
+              <Text>오늘 등록된 현황조사</Text>
+              <Text>{surveyResult && surveyResult.cnt}건</Text>
             </Wrapper>
           </Wrapper>
         </Wrapper>
@@ -270,9 +289,9 @@ const AdminLayout = ({ children }) => {
           <AdminMenuBox title={`배너관리`} menus={items["배너관리"]} />
           <AdminMenuBox title={`게시판관리`} menus={items["게시판관리"]} />
           <AdminMenuBox title={`회원관리`} menus={items["회원관리"]} />
-          <AdminMenuBox title={`고객지원관리`} menus={items["고객지원관리"]} />
+          {/* <AdminMenuBox title={`고객지원관리`} menus={items["고객지원관리"]} /> */}
           <AdminMenuBox title={`기록관리`} menus={items["기록관리"]} />
-          <AdminMenuBox title={`서버관리`} menus={items["서버관리"]} />
+          <AdminMenuBox title={`설문조사관리`} menus={items["설문조사관리"]} />
         </Wrapper>
       ) : (
         <Wrapper>{children}</Wrapper>

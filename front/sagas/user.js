@@ -4,87 +4,94 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  /////////////////////////////
+  //
   SNS_LOGIN_REQUEST,
   SNS_LOGIN_SUCCESS,
   SNS_LOGIN_FAILURE,
-  /////////////////////////////
+  //
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
-  /////////////////////////////
+  //
   LOGIN_ADMIN_REQUEST,
   LOGIN_ADMIN_SUCCESS,
   LOGIN_ADMIN_FAILURE,
-  /////////////////////////////
+  //
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE,
-  /////////////////////////////
+  //
   USERLIST_REQUEST,
   USERLIST_SUCCESS,
   USERLIST_FAILURE,
-  /////////////////////////////
+  //
   USERLIST_UPDATE_REQUEST,
   USERLIST_UPDATE_SUCCESS,
   USERLIST_UPDATE_FAILURE,
-  /////////////////////////////
+  //
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
   LOAD_MY_INFO_FAILURE,
-  /////////////////////////////
+  //
   KAKAO_LOGIN_REQUEST,
   KAKAO_LOGIN_SUCCESS,
   KAKAO_LOGIN_FAILURE,
-  /////////////////////////////
+  //
   USER_HISTORY_REQUEST,
   USER_HISTORY_SUCCESS,
   USER_HISTORY_FAILURE,
-  /////////////////////////////
+  //
   MENURIGHT_UPDATE_REQUEST,
   MENURIGHT_UPDATE_SUCCESS,
   MENURIGHT_UPDATE_FAILURE,
-  /////////////////////////////
+  //
   ADMINUSERLIST_REQUEST,
   ADMINUSERLIST_SUCCESS,
   ADMINUSERLIST_FAILURE,
-  /////////////////////////////
+  //
   ADMINUSERRIGHT_HISTORY_REQUEST,
   ADMINUSERRIGHT_HISTORY_SUCCESS,
   ADMINUSERRIGHT_HISTORY_FAILURE,
-  /////////////////////////////
+  //
   ADMINUSER_EXITTRUE_REQUEST,
   ADMINUSER_EXITTRUE_SUCCESS,
   ADMINUSER_EXITTRUE_FAILURE,
-  /////////////////////////////
+  //
   ADMINUSER_EXITFALSE_REQUEST,
   ADMINUSER_EXITFALSE_SUCCESS,
   ADMINUSER_EXITFALSE_FAILURE,
-  /////////////////////////////
+  //
   USER_DETAIL_REQUEST,
   USER_DETAIL_SUCCESS,
   USER_DETAIL_FAILURE,
-  /////////////////////////////
+  //
   STATUS_LIST_REQUEST,
   STATUS_LIST_SUCCESS,
   STATUS_LIST_FAILURE,
-  /////////////////////////////
+  //
   FIND_ID_REQUEST,
   FIND_ID_SUCCESS,
   FIND_ID_FAILURE,
-  /////////////////////////////
+  //
   FIND_PW_REQUEST,
   FIND_PW_SUCCESS,
   FIND_PW_FAILURE,
-  /////////////////////////////
+  //
   CHECK_CODE_REQUEST,
   CHECK_CODE_SUCCESS,
   CHECK_CODE_FAILURE,
-  /////////////////////////////
+  //
   PW_UPDATE_REQUEST,
   PW_UPDATE_SUCCESS,
   PW_UPDATE_FAILURE,
-  /////////////////////////////
+  //
+  USER_MAIN_REQUEST,
+  USER_MAIN_SUCCESS,
+  USER_MAIN_FAILURE,
+  //
+  USER_GOOGLE_REQUEST,
+  USER_GOOGLE_SUCCESS,
+  USER_GOOGLE_FAILURE,
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -652,6 +659,60 @@ function* pwUpdate(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function userMainAPI(data) {
+  return await axios.post(`/api/user/admin/main`, data);
+}
+
+function* userMain(action) {
+  try {
+    const result = yield call(userMainAPI, action.data);
+    yield put({
+      type: USER_MAIN_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: USER_MAIN_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function userGoogleAPI(data) {
+  return await axios.post(`/api/user/checkUser`, data);
+}
+
+function* userGoogle(action) {
+  try {
+    const result = yield call(userGoogleAPI, action.data);
+    yield put({
+      type: USER_GOOGLE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: USER_GOOGLE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -738,6 +799,14 @@ function* watchPwUpdate() {
   yield takeLatest(PW_UPDATE_REQUEST, pwUpdate);
 }
 
+function* watchUserMain() {
+  yield takeLatest(USER_MAIN_REQUEST, userMain);
+}
+
+function* watchUserGoogle() {
+  yield takeLatest(USER_GOOGLE_REQUEST, userGoogle);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
@@ -762,6 +831,8 @@ export default function* userSaga() {
     fork(watchFindPw),
     fork(watchCheckCode),
     fork(watchPwUpdate),
+    fork(watchUserMain),
+    fork(watchUserGoogle),
     //
   ]);
 }

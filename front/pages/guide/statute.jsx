@@ -59,7 +59,7 @@ const Statute = ({}) => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
 
@@ -109,7 +109,12 @@ const Statute = ({}) => {
                     dr={`row`}
                     ju={`flex-start`}
                   >
-                    협동조합 기본법
+                    <a
+                      href={`https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%ED%98%91%EB%8F%99%EC%A1%B0%ED%95%A9%EA%B8%B0%EB%B3%B8%EB%B2%95/(14053,20160302)`}
+                      target={`_blank`}
+                    >
+                      <Text isHover>협동조합 기본법</Text>
+                    </a>
                     <Image
                       src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/link.png"
                       alt="icon"
@@ -134,7 +139,12 @@ const Statute = ({}) => {
                     dr={`row`}
                     ju={`flex-start`}
                   >
-                    국가연구개발혁신법
+                    <a
+                      href={` https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B5%AD%EA%B0%80%EC%97%B0%EA%B5%AC%EA%B0%9C%EB%B0%9C%ED%98%81%EC%8B%A0%EB%B2%95/`}
+                      target={`_blank`}
+                    >
+                      <Text isHover>국가연구개발혁신법</Text>
+                    </a>
                     <Image
                       src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/link.png"
                       alt="icon"

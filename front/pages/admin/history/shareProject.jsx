@@ -15,6 +15,7 @@ import {
   OtherMenu,
   GuideUl,
   GuideLi,
+  ModalBtn,
 } from "../../../components/commonComponents";
 import {
   LOAD_MY_INFO_REQUEST,
@@ -23,11 +24,11 @@ import {
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
 import { HomeOutlined, RightOutlined } from "@ant-design/icons";
-import { LOGO_HISTORY_REQUEST } from "../../../reducers/logo";
+import { SHAREPROJECT_HISTORY_REQUEST } from "../../../reducers/shareProject";
 
-const Logo = ({}) => {
+const ShareProjectHistory = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
-  const { logoHistory } = useSelector((state) => state.logo);
+  const { shareProjectHistory } = useSelector((state) => state.shareProject);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ const Logo = ({}) => {
 
   useEffect(() => {
     dispatch({
-      type: LOGO_HISTORY_REQUEST,
+      type: SHAREPROJECT_HISTORY_REQUEST,
       data: {
         datePick,
       },
@@ -110,7 +111,7 @@ const Logo = ({}) => {
     },
     {
       title: "유형",
-      dataIndex: "typeOf",
+      dataIndex: "value",
     },
     {
       title: "작업자",
@@ -153,9 +154,7 @@ const Logo = ({}) => {
       {/* GUIDE */}
       <Wrapper margin={`10px 0px 0px 0px`}>
         <GuideUl>
-          <GuideLi>
-            해더로고 또는 푸터로고의 변경이력을 확인할 수 있습니다.
-          </GuideLi>
+          <GuideLi>공지사항 제어이력을 확인할 수 있습니다.</GuideLi>
           <GuideLi isImpo={true}>
             전체조회가 기본이지만, 특정날짜를 선택하여 조회할 수 있습니다.
           </GuideLi>
@@ -163,11 +162,12 @@ const Logo = ({}) => {
       </Wrapper>
 
       <Wrapper
-        al={`flex-start`}
+        dr={`row`}
+        ju={`flex-start`}
         margin={`0px 0px 10px 0px`}
         padding={`0px 50px`}
       >
-        <DatePicker onChange={dateChange} />
+        <DatePicker size="small" onChange={dateChange} />
       </Wrapper>
 
       <Wrapper padding={`0px 50px`}>
@@ -175,7 +175,7 @@ const Logo = ({}) => {
           style={{ width: "100%" }}
           rowKey="id"
           columns={col}
-          dataSource={logoHistory ? logoHistory : []}
+          dataSource={shareProjectHistory ? shareProjectHistory : []}
           size="small"
         />
       </Wrapper>
@@ -199,7 +199,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     });
 
     context.store.dispatch({
-      type: LOGO_HISTORY_REQUEST,
+      type: SHAREPROJECT_HISTORY_REQUEST,
     });
 
     context.store.dispatch({
@@ -213,4 +213,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default withRouter(Logo);
+export default withRouter(ShareProjectHistory);

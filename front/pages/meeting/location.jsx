@@ -34,7 +34,7 @@ const Location = ({}) => {
       kakao.maps.load(() => {
         const mapContainer = document.getElementById("map");
         const mapOption = {
-          center: new kakao.maps.LatLng(36.42047910961381, 127.40579665909655), // 지도의 중심좌표
+          center: new kakao.maps.LatLng(36.42035902530491, 127.40599674027139), // 지도의 중심좌표
           level: 3, // 지도의 확대 레벨
         };
         const map = new kakao.maps.Map(mapContainer, mapOption);
@@ -44,8 +44,8 @@ const Location = ({}) => {
 
         // 마커가 표시될 위치입니다
         let markerPosition = new kakao.maps.LatLng(
-          36.42047910961381,
-          127.40579665909655
+          36.42035902530491,
+          127.40599674027139
         );
 
         // 마커를 생성합니다
@@ -66,8 +66,8 @@ const Location = ({}) => {
 
         // 커스텀 오버레이가 표시될 위치입니다
         let position = new kakao.maps.LatLng(
-          36.42047910961381,
-          127.40579665909655
+          36.42035902530491,
+          127.40599674027139
         );
 
         // 커스텀 오버레이를 생성합니다

@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
-import { LOAD_MY_INFO_REQUEST, SIGNUP_REQUEST } from "../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  SIGNUP_REQUEST,
+  USER_GOOGLE_REQUEST,
+} from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +24,7 @@ import {
 import styled from "styled-components";
 import Theme from "../../components/Theme";
 import Link from "next/link";
-import { Checkbox, message, Modal } from "antd";
+import { Button, Checkbox, message, Modal } from "antd";
 import useInput from "../../hooks/useInput";
 import { useCallback } from "react";
 import DaumPostCode from "react-daum-postcode";
@@ -28,6 +32,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -62,8 +67,19 @@ const Circle = styled(Wrapper)`
 
 const Index = () => {
   ////// GLOBAL STATE //////
-  const { st_signUpDone, st_signUpError } = useSelector((state) => state.user);
+  const {
+    userCheck,
+    //
+    st_signUpDone,
+    st_signUpError,
+    //
+    st_userGoogleDone,
+    st_userGoogleError,
+  } = useSelector((state) => state.user);
   ////// HOOKS //////
+
+  // 구글 로그인
+  const { data: session } = useSession();
 
   // 회원가입
   const idInput = useInput(``);
@@ -92,11 +108,39 @@ const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   ////// USEEFFECT //////
+  // 구글 로그인
+  useEffect(() => {
+    if (session) {
+      dispatch({
+        type: USER_GOOGLE_REQUEST,
+        data: {
+          email: session.user.email,
+        },
+      });
+    }
+  }, [session]);
 
+  useEffect(() => {
+    if (st_userGoogleDone) {
+      if (userCheck.result) {
+        setSnsData(session.user);
+      } else {
+        router.push("/login");
+        message.error("이미 계정이 있습니다.");
+        // signOut();
+      }
+
+      return;
+    }
+    if (st_userGoogleError) {
+      return message.error(st_userGoogleError);
+    }
+  }, [st_userGoogleDone, st_userGoogleError]);
+
+  // 기본
   useEffect(() => {
     if (snsData) {
       setCurrentTab(1);
-
       idInput.setValue(snsData.email);
       emailInput.setValue(snsData.email);
 
@@ -119,13 +163,16 @@ const Index = () => {
       router.push(`/login`);
       setSnsData(null);
 
+      if (session) {
+        signOut();
+      }
+
       return message.success("회원가입이 되었습니다.");
     }
   }, [st_signUpDone]);
 
   useEffect(() => {
     const query = router.query;
-    console.log(query);
 
     if (query.naver) {
       naver.handleTokenResponse();
@@ -145,62 +192,6 @@ const Index = () => {
     const userId = "Naver_" + profile.response.id;
 
     setSnsData(profile.response);
-  }, []);
-
-  // 구글
-  //처음 실행하는 함수
-  const initHandler = useCallback(() => {
-    function init() {
-      gapi.load("auth2", function () {
-        gapi.auth2.init();
-        const options = new gapi.auth2.SigninOptionsBuilder();
-        options.setPrompt("select_account");
-        // 추가는 Oauth 승인 권한 추가 후 띄어쓰기 기준으로 추가
-        options.setScope(
-          "email profile openid https://www.googleapis.com/auth/user.birthday.read"
-        );
-        // 인스턴스의 함수 호출 - element에 로그인 기능 추가
-        // GgCustomLogin은 li태그안에 있는 ID, 위에 설정한 options와 아래 성공,실패시 실행하는 함수들
-        gapi.auth2
-          .getAuthInstance()
-          .attachClickHandler(
-            "GgCustomLogin",
-            options,
-            onSignIn,
-            onSignInFailure
-          );
-      });
-    }
-
-    init();
-
-    function onSignIn(googleUser) {
-      var access_token = googleUser.getAuthResponse().access_token;
-      $.ajax({
-        // people api를 이용하여 프로필 및 생년월일에 대한 선택동의후 가져온다.
-        url: "https://people.googleapis.com/v1/people/me",
-        // key에 자신의 API 키를 넣습니다.
-        data: {
-          personFields: "birthdays",
-          key: "AIzaSyDTDcWAv6tbhQEM8QWVbaWIQDOOabiCOBA",
-          access_token: access_token,
-        },
-        method: "GET",
-      })
-        .done(function (e) {
-          //프로필을 가져온다.
-          var profile = googleUser.getBasicProfile();
-          console.log(profile);
-          console.log(e);
-        })
-        .fail(function (e) {
-          console.log(e);
-        });
-    }
-
-    function onSignInFailure(t) {
-      console.log(t);
-    }
   }, []);
 
   // 주소검색
@@ -354,10 +345,13 @@ const Index = () => {
     return null;
   }
 
+  const clientId =
+    "409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com";
+
   return (
     <>
       <Head>
-        <title>iCAST</title>
+        <title>iCAST | 회원가입</title>
       </Head>
 
       <ClientLayout>
@@ -382,9 +376,25 @@ const Index = () => {
                   </a>
                 </Link>
               </Wrapper>
-
               {currentTab === 0 ? (
                 <>
+                  <CommonButton
+                    width={`100%`}
+                    height={`70px`}
+                    kindOf={`grey`}
+                    onClick={() => signIn("google")}
+                  >
+                    <Wrapper position={`relative`} fontSize={`18px`}>
+                      <Circle>
+                        <Image
+                          alt="google"
+                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
+                        />
+                      </Circle>
+                      구글로 시작하기
+                    </Wrapper>
+                  </CommonButton>
+
                   {/* <CommonButton
                     width={`100%`}
                     height={`70px`}
@@ -402,8 +412,24 @@ const Index = () => {
                       구글로 시작하기
                     </Wrapper>
                   </CommonButton> */}
+
+                  {/* <GoogleOAuthProvider
+                    clientId={
+                      "409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com"
+                    }
+                  >
+                    <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse);
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </GoogleOAuthProvider> */}
+
                   <KakaoLogin
-                    jsKey={process.env.KAKAO_LOGIN_KEY}
+                    jsKey={process.env.NEXT_PUBLIC_KAKAO_LOGIN_KEY}
                     onSuccess={(data) => {
                       setSnsData(data.profile.kakao_account);
                     }}

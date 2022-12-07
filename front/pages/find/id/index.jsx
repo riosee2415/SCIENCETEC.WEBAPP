@@ -27,7 +27,9 @@ import { message } from "antd";
 const Index = () => {
   const width = useWidth();
   ////// GLOBAL STATE //////
-  const { findUserId } = useSelector((state) => state.user);
+  const { findUserId, st_findIdDone, st_findIdError } = useSelector(
+    (state) => state.user
+  );
 
   ////// HOOKS //////
   const [currentTab, setCurrentTab] = useState(0);
@@ -39,10 +41,13 @@ const Index = () => {
 
   ////// USEEFFECT //////
   useEffect(() => {
-    if (findUserId) {
+    if (st_findIdDone) {
       setCurrentTab(1);
     }
-  }, [findUserId]);
+    if (st_findIdError) {
+      return message.error(st_findIdError);
+    }
+  }, [st_findIdDone, st_findIdError]);
   ////// TOGGLE //////
   ////// HANDLER //////
 

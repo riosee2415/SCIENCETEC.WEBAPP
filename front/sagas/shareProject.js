@@ -16,6 +16,10 @@ import {
   SHAREPROJECT_UPDATE_REQUEST,
   SHAREPROJECT_UPDATE_SUCCESS,
   SHAREPROJECT_UPDATE_FAILURE,
+  //
+  SHAREPROJECT_HISTORY_REQUEST,
+  SHAREPROJECT_HISTORY_SUCCESS,
+  SHAREPROJECT_HISTORY_FAILURE,
 } from "../reducers/shareProject";
 
 // ******************************************************************************************************************
@@ -130,6 +134,34 @@ function* shareUpdate(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function shareHistoryListAPI(data) {
+  return await axios.post(`/api/share/history/list`, data);
+}
+
+function* shareHistoryList(action) {
+  try {
+    const result = yield call(shareHistoryListAPI, action.data);
+
+    yield put({
+      type: SHAREPROJECT_HISTORY_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SHAREPROJECT_HISTORY_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 function* watchShareProject() {
   yield takeLatest(SHARE_PROJECT_REQUEST, shareProject);
@@ -147,6 +179,10 @@ function* watchShareUpdate() {
   yield takeLatest(SHAREPROJECT_UPDATE_REQUEST, shareUpdate);
 }
 
+function* watchShareHistoryList() {
+  yield takeLatest(SHAREPROJECT_HISTORY_REQUEST, shareHistoryList);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* shareSaga() {
   yield all([
@@ -154,6 +190,7 @@ export default function* shareSaga() {
     fork(watchImage1),
     fork(watchImage2),
     fork(watchShareUpdate),
+    fork(watchShareHistoryList),
     //
   ]);
 }

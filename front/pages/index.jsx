@@ -303,7 +303,7 @@ const Home = ({}) => {
   return (
     <>
       <Head>
-        <title>ICAST</title>
+        <title>기관형 과학기술인 협동조합 교류회</title>
       </Head>
 
       <ClientLayout>

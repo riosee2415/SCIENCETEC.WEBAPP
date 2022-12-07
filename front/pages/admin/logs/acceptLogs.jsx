@@ -1,55 +1,130 @@
 import React, { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import AdminLayout from "../../../components/AdminLayout";
-import PageHeader from "../../../components/admin/PageHeader";
-import AdminTop from "../../../components/admin/AdminTop";
 import styled from "styled-components";
-import { Button, Tabs } from "antd";
+import { Tabs, Popover, message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ACCEPT_LOG_REQUEST } from "../../../reducers/accept";
-import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  USER_MAIN_REQUEST,
+} from "../../../reducers/user";
+import { items } from "../../../components/AdminLayout";
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 import wrapper from "../../../store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
+import {
+  HomeText,
+  Text,
+  GuideUl,
+  OtherMenu,
+  GuideLi,
+  Wrapper,
+  PopWrapper,
+} from "../../../components/commonComponents";
+import Theme from "../../../components/Theme";
+import { HomeOutlined, RightOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
+import useWidth from "../../../hooks/useWidth";
 
 const { TabPane } = Tabs;
 
-const AdminContent = styled.div`
-  padding: 20px;
+const TabWrapper = styled(Wrapper)`
+  width: 1800px;
+
+  @media (max-width: 1850px) {
+    width: 1700px;
+  }
+
+  @media (max-width: 1750px) {
+    width: 1600px;
+  }
+
+  @media (max-width: 1650px) {
+    width: 1500px;
+  }
+
+  @media (max-width: 1550px) {
+    width: 1400px;
+  }
+`;
+
+const CustomChart = styled(Chart)`
+  width: 1800px;
+
+  @media (max-width: 1850px) {
+    width: 1700px;
+  }
+
+  @media (max-width: 1750px) {
+    width: 1600px;
+  }
+
+  @media (max-width: 1650px) {
+    width: 1500px;
+  }
+
+  @media (max-width: 1550px) {
+    width: 1400px;
+  }
 `;
 
 const AcceptLogs = () => {
-  const [click, setClick] = useState(false);
+  ////// HOOKS //////
 
   const { me, st_loadMyInfoDone } = useSelector((state) => state.user);
   const { acceptList } = useSelector((state) => state.accept);
 
-  // LOAD CURRENT INFO AREA /////////////////////////////////////////////
+  const width = useWidth();
+  const router = useRouter();
 
   const [dataList, setDataList] = useState(null);
   const [categoryList, setCategoryList] = useState(null);
-
   const [chartConfig, setChartConfig] = useState(null);
+  const [sameDepth, setSameDepth] = useState([]);
+  const [level1, setLevel1] = useState("통계관리");
+  const [level2, setLevel2] = useState("");
 
-  const setDataToConfig = useCallback(() => {
-    const tempData = acceptList.map((data) => data.count);
-    const tempCategory = acceptList.map((data) => data.date);
+  const content = (
+    <PopWrapper>
+      {sameDepth.map((data) => {
+        if (data.name === level2) return;
 
-    setDataList(tempData);
-    setCategoryList(tempCategory);
-  }, [acceptList]);
+        return (
+          <OtherMenu key={data.link} onClick={() => moveLinkHandler(data.link)}>
+            {data.name}
+          </OtherMenu>
+        );
+      })}
+    </PopWrapper>
+  );
 
-  const moveLinkHandler = useCallback((link) => {
-    router.push(link);
+  ////// USEEFFECT //////
+
+  useEffect(() => {
+    const currentMenus = items[level1];
+
+    setSameDepth(currentMenus);
+
+    currentMenus.map((data) => {
+      if (data.link === router.pathname) {
+        setLevel2(data.name);
+      }
+    });
   }, []);
 
   useEffect(() => {
     if (st_loadMyInfoDone) {
       if (!me || parseInt(me.level) < 3) {
+        moveLinkHandler(`/admin`);
+      }
+
+      if (!(me && me.menuRight1)) {
+        message.error("접근권한이 없는 페이지 입니다.");
         moveLinkHandler(`/admin`);
       }
     }
@@ -73,7 +148,6 @@ const AcceptLogs = () => {
         ],
         options: {
           chart: {
-            height: 350,
             type: "line",
             zoom: {
               enabled: false,
@@ -103,34 +177,73 @@ const AcceptLogs = () => {
     }
   }, [dataList, categoryList]);
 
-  /////////////////////////////////////////////////////////////////////////
+  ////// HANDLER //////
+
+  const moveLinkHandler = useCallback((link) => {
+    router.push(link);
+  }, []);
 
   return (
-    <AdminLayout>
-      <PageHeader
-        breadcrumbs={["접속자 관리", "접속자 통계"]}
-        title={`접속자 통계`}
-        subTitle={`접속자 통계를 확인할 수 있습니다.`}
-      />
-      {/* createButton<Boolean>,  createButtonAction*/}
-      <AdminTop />
+    <>
+      <AdminLayout>
+        {/* MENU TAB */}
+        <Wrapper
+          height={`30px`}
+          bgColor={Theme.lightGrey_C}
+          dr={`row`}
+          ju={`flex-start`}
+          al={`center`}
+          padding={`0px 15px`}
+          color={Theme.grey_C}
+        >
+          <HomeText
+            margin={`3px 20px 0px 20px`}
+            onClick={() => moveLinkHandler("/admin")}
+          >
+            <HomeOutlined style={{ fontSize: "15px", marginRight: "5px" }} />
+            메인
+          </HomeText>
+          <RightOutlined />
+          <Text margin={`3px 20px 0px 20px`}>{level1} </Text>
+          <RightOutlined />
+          <Popover content={content}>
+            <HomeText cur={true} margin={`3px 20px 0px 20px`}>
+              {level2}
+            </HomeText>
+          </Popover>
+        </Wrapper>
 
-      <AdminContent>
-        <Tabs type="card">
-          <TabPane tab="최근 30일" key="1"></TabPane>
-        </Tabs>
-        {chartConfig ? (
-          <Chart
-            options={chartConfig.options}
-            series={chartConfig.series}
-            type="line"
-            height="550"
-          />
-        ) : (
-          <LoadingOutlined spin />
-        )}
-      </AdminContent>
-    </AdminLayout>
+        {/* GUIDE */}
+        <Wrapper margin={`10px 0px 0px 10px`}>
+          <GuideUl>
+            <GuideLi isImpo={true}>
+              해당 메뉴에서 홈페이지에 접속하 회원의 통계를 확인 할 수 있습니다.
+            </GuideLi>
+            <GuideLi isImpo={true}>
+              30일 이전의 통계를 원하실 시 개발사에 문의해주세요.
+            </GuideLi>
+          </GuideUl>
+        </Wrapper>
+
+        <Wrapper padding="0px 20px">
+          <TabWrapper al={`flex-start`}>
+            <Tabs type="card">
+              <TabPane tab="최근 30일" key="1"></TabPane>
+            </Tabs>
+          </TabWrapper>
+          {me && me.menuRight1 && chartConfig ? (
+            <CustomChart
+              options={chartConfig.options}
+              series={chartConfig.series}
+              type="line"
+              height="550"
+            />
+          ) : (
+            <LoadingOutlined spin />
+          )}
+        </Wrapper>
+      </AdminLayout>
+    </>
   );
 };
 
@@ -152,6 +265,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     context.store.dispatch({
       type: ACCEPT_LOG_REQUEST,
       data: { typeId: "2" },
+    });
+
+    context.store.dispatch({
+      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료
