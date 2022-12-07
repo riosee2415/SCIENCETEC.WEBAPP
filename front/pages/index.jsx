@@ -38,6 +38,7 @@ import {
   RightOutlined,
 } from "@ant-design/icons";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -72,6 +73,7 @@ const Home = ({}) => {
 
   ////// HOOKS //////
   const width = useWidth();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [boardType, setBoardType] = useState("전체");
@@ -169,6 +171,10 @@ const Home = ({}) => {
   );
 
   ////// HANDLER //////
+
+  const moveLinkHandler = useCallback((link) => {
+    router.push(link);
+  }, []);
 
   ////// DATAVIEW //////
 
@@ -548,9 +554,23 @@ const Home = ({}) => {
                       <Empty description="게시글이 없습니다." />
                     </Wrapper>
                   ) : (
-                    mainBoard.map((data) => {
+                    mainBoard.map((data, idx) => {
                       return (
-                        <BoardWrapper>
+                        <BoardWrapper
+                          key={idx}
+                          onClick={() =>
+                            moveLinkHandler(
+                              data.type === "공지사항"
+                                ? `/operate/notice?type=detail&id=${data.id}`
+                                : data.type === "커뮤니티"
+                                ? `/operate/community?type=detail&id=${data.id}`
+                                : data.type === "자료실"
+                                ? `/operate/reference?type=detail&id=${data.id}`
+                                : data.type === "FAQ" &&
+                                  `/operate/notice?type=detail&id=${data.id}`
+                            )
+                          }
+                        >
                           <Wrapper
                             al={`flex-start`}
                             width={width < 700 ? `25%` : `10%`}

@@ -24,7 +24,12 @@ import { Form, Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
 import OpDetail from "../../components/OpDetail";
-import { NOTICE_LIST_REQUEST } from "../../reducers/notice";
+import {
+  NOTICE_DETAIL_REQUEST,
+  NOTICE_LIST_REQUEST,
+  SET_TEMP_TYPE,
+} from "../../reducers/notice";
+import { useRouter } from "next/router";
 
 const CustomForm = styled(Form)`
   display: flex;
@@ -40,7 +45,7 @@ const Reference = () => {
   const { viewType, notices, maxPage } = useSelector((state) => state.notice);
   ////// HOOKS //////
   const width = useWidth();
-
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [searchForm] = Form.useForm();
@@ -52,16 +57,36 @@ const Reference = () => {
   ////// USEEFFECT //////
 
   useEffect(() => {
-    dispatch({
-      type: NOTICE_LIST_REQUEST,
-      data: {
-        type: "자료실",
-        title: searchType === "제목" ? searchTitle : null,
-        content: searchType === "내용" ? searchTitle : null,
-        page: currentPage,
-      },
-    });
-  }, [searchType, searchTitle, currentPage]);
+    if (router.query) {
+      if (router.query.type === "detail") {
+        // 디테일 데이터 조회
+        dispatch({
+          type: NOTICE_DETAIL_REQUEST,
+          data: { id: router.query.id },
+        });
+
+        setTimeout(() => {
+          dispatch({
+            type: SET_TEMP_TYPE,
+            data: {
+              boardType: "자료실",
+              viewType: "detail",
+            },
+          });
+        }, 500);
+      } else {
+        dispatch({
+          type: NOTICE_LIST_REQUEST,
+          data: {
+            type: "자료실",
+            title: searchType === "제목" ? searchTitle : null,
+            content: searchType === "내용" ? searchTitle : null,
+            page: currentPage,
+          },
+        });
+      }
+    }
+  }, [router.query, searchType, searchTitle, currentPage]);
   ////// TOGGLE //////
   ////// HANDLER //////
 

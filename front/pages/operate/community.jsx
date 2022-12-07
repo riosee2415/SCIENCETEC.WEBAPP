@@ -25,12 +25,14 @@ import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
 import OpDetail from "../../components/OpDetail";
 import {
-  NOTICE_DELETE_REQUEST,
+  NOTICE_DETAIL_REQUEST,
   NOTICE_LIST_REQUEST,
+  SET_TEMP_TYPE,
 } from "../../reducers/notice";
 import { useEffect } from "react";
 import { useState } from "react";
 import useInput from "../../hooks/useInput";
+import { useRouter } from "next/router";
 
 const Community = () => {
   ////// GLOBAL STATE //////
@@ -44,6 +46,7 @@ const Community = () => {
 
   ////// HOOKS //////
   const width = useWidth();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,6 +55,29 @@ const Community = () => {
   const searchInput = useInput(``);
   ////// REDUX //////
   ////// USEEFFECT //////
+
+  useEffect(() => {
+    if (router.query) {
+      if (router.query.type === "detail") {
+        // 디테일 데이터 조회
+        dispatch({
+          type: NOTICE_DETAIL_REQUEST,
+          data: { id: router.query.id },
+        });
+
+        setTimeout(() => {
+          dispatch({
+            type: SET_TEMP_TYPE,
+            data: {
+              boardType: "커뮤니티",
+              viewType: "detail",
+            },
+          });
+        }, 500);
+      }
+    }
+  }, [router.query]);
+
   useEffect(() => {
     if (st_noticeCreateDone) {
       message.info("게시글이 작성되었습니다.");
