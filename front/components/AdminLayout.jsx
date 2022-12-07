@@ -95,7 +95,7 @@ export const items = {
     {
       name: "관리자 관리",
       link: "/admin/user/adminUserRight",
-      useYn: true,
+      useYn: false,
     },
     {
       name: "탈퇴회원관리",
