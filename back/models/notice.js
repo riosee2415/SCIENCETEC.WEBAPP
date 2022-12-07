@@ -33,6 +33,10 @@ module.exports = class Notice extends Model {
           type: DataTypes.STRING(2000),
           allowNull: true,
         },
+        filename: {
+          type: DataTypes.STRING(300),
+          allowNull: true,
+        },
         isDelete: {
           type: DataTypes.BOOLEAN,
           allowNull: false,

@@ -86,6 +86,7 @@ router.post("/main/list", async (req, res, next) => {
           A.author,
           A.hit,
           A.file,
+          A.filename,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -111,6 +112,7 @@ router.post("/main/list", async (req, res, next) => {
           A.author,
           A.hit,
           A.file,
+          A.filename,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -171,6 +173,7 @@ router.post("/list", async (req, res, next) => {
           A.author,
           A.hit,
           A.file,
+          A.filename,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -196,6 +199,7 @@ router.post("/list", async (req, res, next) => {
           A.author,
           A.hit,
           A.file,
+          A.filename,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -250,6 +254,7 @@ router.post("/admin/list", async (req, res, next) => {
           A.author,
           A.hit,
           A.file,
+          A.filename,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -288,6 +293,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         author,
         type,
         file,
+        filename,
         updator,
         createdAt,
         updatedAt
@@ -298,6 +304,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         ${type !== "커뮤니티" ? `"임시 내용"` : `"${content}"`},
         "${author}",
         "${type}",
+        NULL,
         NULL,
         ${req.user.id},
         now(),
@@ -405,11 +412,12 @@ router.post("/update", isLoggedIn, async (req, res, next) => {
 });
 
 router.post("/update/file", isAdminCheck, async (req, res, next) => {
-  const { id, filepath, title, type } = req.body;
+  const { id, filepath, title, type, filename } = req.body;
 
   const updateQ = `
       UPDATE  notices
         SET   file = "${filepath}",
+              filename = "${filename}",
               updatedAt = now(),
               updator = ${req.user.id}
       WHERE  id = ${id}
@@ -517,6 +525,7 @@ router.post("/detail", async (req, res, next) => {
           A.author,
           A.hit,
           A.file,
+          A.filename,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
