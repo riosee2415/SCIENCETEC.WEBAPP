@@ -100,7 +100,7 @@ export const items = {
     {
       name: "탈퇴회원관리",
       link: "/admin/user/userExitList",
-      useYn: true,
+      useYn: false,
     },
   ],
   고객지원관리: [

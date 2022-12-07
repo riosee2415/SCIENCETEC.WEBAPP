@@ -492,6 +492,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     });
 
     context.store.dispatch({
+      type: FORUM_ADMIN_LIST_REQUEST,
+    });
+
+    context.store.dispatch({
       type: USER_MAIN_REQUEST,
     });
 
