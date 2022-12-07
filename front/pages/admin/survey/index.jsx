@@ -147,6 +147,8 @@ const Question = ({}) => {
   const [isOverlapCheck, setIsOverlapCheck] = useState(false);
   const [isTitleState, setIsTitleState] = useState(false);
 
+  const [surveyType, setSurveyType] = useState(null);
+
   ////// USEEFFECT //////
 
   useEffect(() => {
@@ -299,8 +301,10 @@ const Question = ({}) => {
   ////// TOGGLE //////
 
   const quesCreateModalToggle = useCallback(() => {
+    quesCreateForm.resetFields();
+    setSurveyType(null);
     setQCModal((prev) => !prev);
-  }, [qcModal]);
+  }, [qcModal, surveyType]);
 
   const innerCreateModalToggle = useCallback(() => {
     setICModal((prev) => !prev);
@@ -313,6 +317,13 @@ const Question = ({}) => {
   const isTitleStateToggle = useCallback(() => {
     setIsTitleState((prev) => !prev);
   }, [isTitleState]);
+
+  const surveyTypeToggle = useCallback(
+    (type) => {
+      setSurveyType(type);
+    },
+    [surveyType]
+  );
 
   ////// HANDLER //////
 
@@ -1006,20 +1017,24 @@ const Question = ({}) => {
         width={`500px`}
         onCancel={quesCreateModalToggle}
       >
-        <GuideUl>
-          <GuideLi isImpo={true}>
-            제목 여부를 선택시 질문이 제목으로 대체 됩니다.
-          </GuideLi>
-        </GuideUl>
+        {surveyType === 3 && (
+          <GuideUl>
+            <GuideLi isImpo={true}>
+              제목 여부를 선택시 질문이 제목으로 대체 됩니다.
+            </GuideLi>
+          </GuideUl>
+        )}
         <Form
           form={quesCreateForm}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
           onFinish={quesCreateHandler}
         >
-          <Form.Item label="제목 여부" name="isTitle">
-            <Switch size="small" />
-          </Form.Item>
+          {surveyType === 3 && (
+            <Form.Item label="제목 여부" name="isTitle">
+              <Switch size="small" />
+            </Form.Item>
+          )}
 
           <Form.Item
             label="질문 유형"
@@ -1028,7 +1043,11 @@ const Question = ({}) => {
               { required: true, message: "질문 유형은 필수 선택사항 입니다." },
             ]}
           >
-            <Select size="small" placeholder={"질문 유형을 선택해주세요."}>
+            <Select
+              size="small"
+              placeholder={"질문 유형을 선택해주세요."}
+              onChange={surveyTypeToggle}
+            >
               <Select.Option value={1}>사업수행 현황조사</Select.Option>
               <Select.Option value={2}>사업 수요조사</Select.Option>
               <Select.Option value={3}>기술매칭서비스 신청</Select.Option>
