@@ -12,6 +12,7 @@ import {
   message,
   Switch,
   Modal,
+  Popconfirm,
 } from "antd";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
@@ -25,6 +26,7 @@ import {
   OtherMenu,
   GuideUl,
   GuideLi,
+  ModalBtn,
 } from "../../../components/commonComponents";
 import {
   LOAD_MY_INFO_REQUEST,
@@ -38,6 +40,7 @@ import {
   NOTICE_FILE_INFO_REQUEST,
   UPLOAD_PATH_INIT,
   NOTICE_CREATE_REQUEST,
+  NOTICE_DELETE_REQUEST,
 } from "../../../reducers/notice";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
@@ -74,18 +77,28 @@ const Notice = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
   const {
     adminNotices,
+    uploadFilePath,
+    //
     st_noticeAdminListError,
+    //
     st_noticeUpdateDone,
     st_noticeUpdateError,
+    //
     st_noticeUpdateTopDone,
     st_noticeUpdateTopError,
-    uploadFilePath,
+    //
     st_noticeFileLoading,
     st_noticeFileDone,
+    //
     st_noticeFileInfoDone,
     st_noticeFileInfoError,
+    //
     st_noticeCreateDone,
     st_noticeCreateError,
+    //
+    st_noticeDeleteLoading,
+    st_noticeDeleteDone,
+    st_noticeDeleteError,
   } = useSelector((state) => state.notice);
 
   const router = useRouter();
@@ -200,6 +213,54 @@ const Notice = ({}) => {
       return message.error(st_noticeCreateError);
     }
   }, [st_noticeCreateError]);
+
+  // ********************** 공지사항 삭제 *************************
+
+  useEffect(() => {
+    if (st_noticeDeleteDone) {
+      let sendType = "";
+
+      switch (tab) {
+        case 0:
+          sendType = "";
+          break;
+
+        case 1:
+          sendType = "공지사항";
+          break;
+
+        case 2:
+          sendType = "자료실";
+          break;
+
+        case 3:
+          sendType = "커뮤니티";
+          break;
+
+        case 4:
+          sendType = "FAQ";
+          break;
+
+        default:
+          break;
+      }
+
+      dispatch({
+        type: NOTICE_ADMIN_LIST_REQUEST,
+        data: {
+          type: sendType,
+        },
+      });
+
+      setCurrentData(null);
+
+      return message.success("해당 게시글이 삭제되었습니다.");
+    }
+
+    if (st_noticeDeleteError) {
+      return message.error(st_noticeDeleteError);
+    }
+  }, [st_noticeDeleteDone, st_noticeDeleteError]);
 
   // ********************** 공지사항 수정 *************************
   useEffect(() => {
@@ -496,6 +557,15 @@ const Notice = ({}) => {
     [currentData, currentTop]
   );
 
+  const deleteNoticeHandler = useCallback(() => {
+    dispatch({
+      type: NOTICE_DELETE_REQUEST,
+      data: {
+        id: currentData.id,
+      },
+    });
+  }, [currentData]);
+
   ////// DATAVIEW //////
 
   ////// DATA COLUMNS //////
@@ -740,10 +810,20 @@ const Notice = ({}) => {
                   />
                 </Form.Item>
 
-                <Wrapper al="flex-end">
+                <Wrapper dr={`row`} ju="flex-end">
                   <Button type="primary" size="small" htmlType="submit">
                     정보 업데이트
                   </Button>
+                  <Popconfirm
+                    title="삭제하시겠습니까?"
+                    okText="삭제"
+                    cancelText="취소"
+                    onConfirm={deleteNoticeHandler}
+                  >
+                    <ModalBtn type="danger" size="small">
+                      삭제
+                    </ModalBtn>
+                  </Popconfirm>
                 </Wrapper>
               </Form>
 
