@@ -132,7 +132,7 @@ SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
               ? `AND level = 5`
               : ``
           } 
-          AND	isExit = ${_searchExit}
+          AND	isExit = 0
    ORDER	BY num DESC
   `;
 
@@ -1210,7 +1210,7 @@ router.get("/logout", function (req, res) {
   });
 });
 
-router.post("/exit", isLoggedIn, async (req, res, next) => {
+router.post("/exit", async (req, res, next) => {
   const { id, exitReason } = req.body;
 
   const updateQuery = `
