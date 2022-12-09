@@ -229,10 +229,6 @@ const AcceptLogs = () => {
       dataIndex: "viewSurveyType",
     },
     {
-      title: "제출자",
-      dataIndex: "username",
-    },
-    {
       title: "상세보기",
       render: (data) => (
         <Button size="small" type="primary" onClick={() => dModalToggle(data)}>
@@ -269,7 +265,6 @@ const AcceptLogs = () => {
   ];
 
   const headers = [
-    { label: "제출자", key: "username" },
     { label: "제출일", key: "viewCreatedAt" },
     { label: "유형", key: "viewSurveyType" },
     { label: "질문", key: "questionName" },

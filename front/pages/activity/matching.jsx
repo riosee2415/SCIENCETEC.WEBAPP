@@ -74,13 +74,13 @@ const Project = () => {
   const [fileData, setFileData] = useState(null);
   ////// REDUX //////
   ////// USEEFFECT //////
-  useEffect(() => {
-    if (!me) {
-      router.push("/login");
+  // useEffect(() => {
+  //   if (!me) {
+  //     router.push("/login");
 
-      return message.error("로그인이 필요한 페이지입니다.");
-    }
-  }, [me]);
+  //     return message.error("로그인이 필요한 페이지입니다.");
+  //   }
+  // }, [me]);
 
   useEffect(() => {
     if (quesList && innerList) {
