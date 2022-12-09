@@ -118,7 +118,7 @@ SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
           DATE_FORMAT(createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
           DATE_FORMAT(updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
     FROM	users
-   WHERE	CONCAT(username, email) LIKE '%${_searchData}%'
+   WHERE	email LIKE '%${_searchData}%'
           ${
             _searchLevel === parseInt(0)
               ? ``
