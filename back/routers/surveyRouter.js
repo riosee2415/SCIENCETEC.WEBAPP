@@ -587,7 +587,7 @@ router.post("/user/detail", async (req, res, next) => {
                 WHEN  C.type = 3 THEN "기술매칭서비스 신청"
             END                                              AS viewSurveyType
     FROM    userSurvey      A
-    LFET
+    LEFT
    OUTER
     JOIN    users           B
       ON    A.UserId = B.id
