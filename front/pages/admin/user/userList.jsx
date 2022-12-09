@@ -9,6 +9,7 @@ import {
   USERLIST_REQUEST,
   USERLIST_UPDATE_REQUEST,
   USER_DETAIL_REQUEST,
+  USER_EXIT_REQUEST,
   USER_MAIN_REQUEST,
 } from "../../../reducers/user";
 import {
@@ -22,6 +23,7 @@ import {
   Input,
   Form,
   Empty,
+  Popconfirm,
 } from "antd";
 import {
   HomeText,
@@ -35,6 +37,7 @@ import {
   Text,
   Wrapper,
   PopWrapper,
+  DelBtn,
 } from "../../../components/commonComponents";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
@@ -43,6 +46,7 @@ import { items } from "../../../components/AdminLayout";
 import axios from "axios";
 import Theme from "../../../components/Theme";
 import { HomeOutlined, RightOutlined } from "@ant-design/icons";
+import useInput from "../../../hooks/useInput";
 
 const TypeButton = styled(Button)`
   margin-right: 5px;
@@ -106,6 +110,9 @@ const UserList = ({}) => {
     //
     st_userListUpdateDone,
     st_userListUpdateError,
+    //
+    st_userExitDone,
+    st_userExitError,
   } = useSelector((state) => state.user);
 
   const [sameDepth, setSameDepth] = useState([]);
@@ -123,6 +130,8 @@ const UserList = ({}) => {
 
   const [level1, setLevel1] = useState("회원관리");
   const [level2, setLevel2] = useState("");
+
+  const delInput = useInput();
 
   ////// USEEFFECT //////
 
@@ -166,6 +175,28 @@ const UserList = ({}) => {
       return message.error(st_userListUpdateError);
     }
   }, [st_userListUpdateError]);
+
+  // 회원 탈퇴
+
+  useEffect(() => {
+    if (st_userExitDone) {
+      delInput.setValue("");
+
+      dispatch({
+        type: USERLIST_REQUEST,
+        data: {
+          searchData: sData,
+          searchLevel: currentTab,
+        },
+      });
+
+      return message.success("해당 회원이 탈퇴되었습니다.");
+    }
+
+    if (st_userExitError) {
+      return message.error(st_userExitError);
+    }
+  }, [st_userExitDone, st_userExitError]);
 
   useEffect(() => {
     dispatch({
@@ -257,6 +288,23 @@ const UserList = ({}) => {
       });
     },
     [updateData]
+  );
+
+  const delUserHandler = useCallback(
+    (data) => {
+      if (!delInput.value || delInput.value.trim().length === 0) {
+        return message.info("탈퇴 사유를 입력해주세요.");
+      }
+
+      dispatch({
+        type: USER_EXIT_REQUEST,
+        data: {
+          id: data.id,
+          exitReason: delInput.value,
+        },
+      });
+    },
+    [delInput.value]
   );
 
   const content = (
@@ -355,6 +403,28 @@ const UserList = ({}) => {
         >
           상세
         </DetailBtn>
+      ),
+    },
+    {
+      title: "회원탈퇴",
+      render: (data) => (
+        <Popconfirm
+          title={() => (
+            <Input
+              size="small"
+              placeholder="탈퇴사유를 작성해주세요."
+              {...delInput}
+            />
+          )}
+          okText="탈퇴"
+          cancelText="취소"
+          onConfirm={() => delUserHandler(data)}
+          onCancel={() => delInput.setValue("")}
+        >
+          <DelBtn size="small" type="primary">
+            탈퇴
+          </DelBtn>
+        </Popconfirm>
       ),
     },
   ];

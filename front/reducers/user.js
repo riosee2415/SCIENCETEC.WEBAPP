@@ -113,6 +113,10 @@ export const initailState = {
   st_userCheckLoading: false,
   st_userCheckDone: false,
   st_userCheckError: null,
+  //
+  st_userExitLoading: false,
+  st_userExitDone: false,
+  st_userExitError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -206,6 +210,10 @@ export const USER_MAIN_FAILURE = "USER_MAIN_FAILURE";
 export const USER_GOOGLE_REQUEST = "USER_GOOGLE_REQUEST";
 export const USER_GOOGLE_SUCCESS = "USER_GOOGLE_SUCCESS";
 export const USER_GOOGLE_FAILURE = "USER_GOOGLE_FAILURE";
+
+export const USER_EXIT_REQUEST = "USER_EXIT_REQUEST";
+export const USER_EXIT_SUCCESS = "USER_EXIT_SUCCESS";
+export const USER_EXIT_FAILURE = "USER_EXIT_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -708,6 +716,26 @@ const reducer = (state = initailState, action) =>
         draft.st_userGoogleLoading = false;
         draft.st_userGoogleDone = false;
         draft.st_userGoogleError = action.error;
+        break;
+      }
+      //////////////////////////////////////////////
+
+      case USER_EXIT_REQUEST: {
+        draft.st_userExitLoading = true;
+        draft.st_userExitDone = false;
+        draft.st_userExitError = null;
+        break;
+      }
+      case USER_EXIT_SUCCESS: {
+        draft.st_userExitLoading = false;
+        draft.st_userExitDone = true;
+        draft.st_userExitError = null;
+        break;
+      }
+      case USER_EXIT_FAILURE: {
+        draft.st_userExitLoading = false;
+        draft.st_userExitDone = false;
+        draft.st_userExitError = action.error;
         break;
       }
       //////////////////////////////////////////////
