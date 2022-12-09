@@ -524,7 +524,8 @@ router.post("/user/list", isAdminCheck, async (req, res, next) => {
                 WHEN  C.type = 3 THEN "기술매칭서비스 신청"
             END                                              AS viewSurveyType
     FROM    userSurvey      A
-   INNER
+    LEFT
+   OUTER
     JOIN    users           B
       ON    A.UserId = B.id
    INNER
@@ -586,7 +587,8 @@ router.post("/user/detail", async (req, res, next) => {
                 WHEN  C.type = 3 THEN "기술매칭서비스 신청"
             END                                              AS viewSurveyType
     FROM    userSurvey      A
-   INNER
+    LFET
+   OUTER
     JOIN    users           B
       ON    A.UserId = B.id
    INNER
@@ -629,7 +631,7 @@ router.post("/user/detail", async (req, res, next) => {
   }
 });
 
-router.post("/user/create", isLoggedIn, async (req, res, next) => {
+router.post("/user/create", async (req, res, next) => {
   const { surveyId, questionValues } = req.body;
 
   if (!Array.isArray(questionValues)) {
@@ -646,7 +648,7 @@ INSERT    INTO  userSurvey
 )
 VALUES
 (
-    ${req.user.id},
+    ${req.user ? req.user.id : null},
     ${surveyId},
     NOW(),
     NOW()
