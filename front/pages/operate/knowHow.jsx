@@ -118,21 +118,37 @@ const Perform = () => {
                 fontSize={`18px`}
                 al={`flexs-tart`}
               >
-                <Text margin={`0 0 12px`}>
-                  홈페이지 <LinkOutlined />
-                </Text>
-                <Text margin={`0 0 12px`}>
-                  기장 및 회계 <LinkOutlined />
-                </Text>
-                <Text margin={`0 0 12px`}>
-                  비즈니스 <LinkOutlined />
-                </Text>
-                <Text margin={`0 0 12px`}>
-                  마케팅 <LinkOutlined />
-                </Text>
-                <Text>
-                  투자 <LinkOutlined />
-                </Text>
+                <a href={`https://sites.google.com/new`} target={`_blank`}>
+                  <Text isHover margin={`0 0 12px`}>
+                    홈페이지 <LinkOutlined />
+                  </Text>
+                </a>
+                <a
+                  href={`http://www.djse.org/app/board/view?md_id=board001&bc_code=13&code=904&page=1`}
+                  target={`_blank`}
+                >
+                  <Text isHover margin={`0 0 12px`}>
+                    기장 및 회계 <LinkOutlined />
+                  </Text>
+                </a>
+                <a href={`https://posep.org/`} target={`_blank`}>
+                  <Text isHover margin={`0 0 12px`}>
+                    비즈니스 <LinkOutlined />
+                  </Text>
+                </a>
+                <a
+                  href={`https://www.bizinfo.go.kr/web/index.do`}
+                  target={`_blank`}
+                >
+                  <Text isHover margin={`0 0 12px`}>
+                    마케팅 <LinkOutlined />
+                  </Text>
+                </a>
+                <a href={`https://bluepoint.ac/`} target={`_blank`}>
+                  <Text isHover>
+                    투자 <LinkOutlined />
+                  </Text>
+                </a>
               </Wrapper>
             </Wrapper>
           </RsWrapper>

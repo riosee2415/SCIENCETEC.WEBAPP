@@ -55,7 +55,7 @@ const Line = styled(Wrapper)`
   top: 0;
   left: 0;
   height: 100%;
-  animation: ${animation} 3s;
+  animation: ${animation} 5s;
   background: ${Theme.black_C};
 `;
 
@@ -63,13 +63,77 @@ const MainSliderWrapper = styled(RowWrapper)`
   & .ant-carousel {
     width: 100%;
   }
+
+  .ant-carousel .slick-dots li button,
+  .ant-carousel .slick-dots li {
+    width: 18px;
+    height: 18px;
+    border-radius: 100%;
+  }
+
+  .ant-carousel .slick-dots li {
+    margin: 0 7px;
+  }
+
+  .ant-carousel .slick-dots li.slick-active button {
+    background: ${Theme.basicTheme_C};
+  }
+
+  .ant-carousel .slick-prev,
+  .ant-carousel .slick-next {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.4);
+    z-index: 10;
+    border-radius: 100%;
+    transition: 0.3s;
+  }
+  .ant-carousel .slick-prev {
+    left: 20px;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 20px;
+      background-size: cover;
+      transform: translate(-50%, -50%);
+      background-image: url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/real-casting/assets/images/main-page/icon_ban-prev.png");
+    }
+    &:hover:before {
+      background-image: url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/real-casting/assets/images/main-page/icon_ban-prev_h.png");
+    }
+    @media (max-width: 1280px) {
+      left: 20px;
+    }
+  }
+  .ant-carousel .slick-next {
+    right: 20px;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 20px;
+      background-size: cover;
+      transform: translate(-50%, -50%);
+      background-image: url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/real-casting/assets/images/main-page/icon_ban-next.png");
+    }
+    &:hover:before {
+      background-image: url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/real-casting/assets/images/main-page/icon_ban-next_h.png");
+    }
+    @media (max-width: 1280px) {
+      right: 20px;
+    }
+  }
 `;
 
 const MainSlider = ({ banner }) => {
   const width = useWidth();
 
   const dispatch = useDispatch();
-  const { me } = useSelector((state) => state.user);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isStop, setIsStop] = useState(false);
@@ -97,10 +161,11 @@ const MainSlider = ({ banner }) => {
         autoplay={isStop ? false : true}
         speed={1000}
         beforeChange={handler}
-        autoplaySpeed={3000}
+        autoplaySpeed={5000}
         fade={true}
         initialSlide={0}
         dots={false}
+        arrows={true}
       >
         {banner &&
           banner.map((data, idx) => {

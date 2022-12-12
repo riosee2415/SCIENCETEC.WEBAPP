@@ -11,28 +11,19 @@ import axios from "axios";
 import wrapper from "../../store/configureStore";
 import { END } from "redux-saga";
 import {
-  ColWrapper,
-  RowWrapper,
   Image,
   WholeWrapper,
   Wrapper,
   RsWrapper,
-  SpanText,
   Text,
-  CommonButton,
 } from "../../components/commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
 import styled, { ThemeContext } from "styled-components";
 import Head from "next/head";
-import Popup from "../../components/popup/popup";
-import Mainslider from "../../components/slide/MainSlider";
-import ToastEditorComponent from "../../components/editor/ToastEditorComponent";
-import CC01 from "../../components/common/CC01";
-import { DownloadOutlined } from "@ant-design/icons";
+
 import { useState } from "react";
 import { useCallback } from "react";
-import { Modal } from "antd";
 import LeftMenu from "../../components/LeftMenu";
 import BreadCrumb from "../../components/BreadCrumb";
 
@@ -41,14 +32,10 @@ const Greetings = ({}) => {
   ////// GLOBAL STATE //////
 
   ////// HOOKS //////
-  const [isDown, setIsDown] = useState(false);
   ////// REDUX //////
   ////// USEEFFECT //////
   ////// TOGGLE //////
 
-  const downToggle = useCallback(() => {
-    setIsDown(!isDown);
-  }, [isDown]);
   ////// HANDLER //////
   ////// DATAVIEW //////
 
@@ -59,7 +46,7 @@ const Greetings = ({}) => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
 
@@ -138,11 +125,11 @@ const Greetings = ({}) => {
                   <Text fontSize={width < 700 ? `16px` : `20px`}>
                     기관형과학기술인 협동조합 교류회장
                   </Text>
-                  <Image
+                  {/* <Image
                     src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/img_sign.png"
                     alt="signImg"
                     width={`auto`}
-                  />
+                  /> */}
                 </Wrapper>
               </Wrapper>
             </Wrapper>

@@ -557,8 +557,8 @@ const MainBanner = ({}) => {
             슬라이드 형식의 메인페이지 최상단 베너이미지를 관리할 수 있습니다.
           </GuideLi>
           <GuideLi isImpo={true}>
-            이미지는 화면 디자인 크기에 알맞게 자동으로 조정됩니다. 비율이
-            상이할 경우 이미지가 늘어나 보일 수 있습니다.
+            이미지는 가로 710px, 세로 440px로 업로드 해주세요. 비율이 상이할
+            경우 이미지가 늘어나 보일 수 있습니다.
           </GuideLi>
         </GuideUl>
       </Wrapper>
@@ -633,7 +633,7 @@ const MainBanner = ({}) => {
 
               <InfoTitle>
                 <CheckOutlined />
-                베너이미지 제어
+                베너이미지 제어 (가로 710px, 세로 440px)
               </InfoTitle>
               <Wrapper margin={`0px 0px 5px 0px`}>
                 <BannerImage

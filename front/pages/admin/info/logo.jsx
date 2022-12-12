@@ -51,7 +51,7 @@ const HFView = styled.div`
 const VImage = styled(Image)`
   width: 500px;
   height: 200px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 4px;
 
   border: 1px solid ${(props) => props.theme.lightGrey_C};
@@ -326,8 +326,8 @@ const Logo = ({}) => {
             로고 이미지는 [해더]로고와 [푸터]로고를 관리할 수 있습니다.
           </GuideLi>
           <GuideLi isImpo={true}>
-            이미지는 3:2비율로 업로드해주세요. 이미지비율이 상이할 경우 화면에
-            비정상적으로 보일 수 있습니다.
+            로고의 가로 사이즈는 200px이상으로 업로드 해주세요. 200px이하일 경우
+            화면에서 해상도가 깨져보일 수 있습니다.
           </GuideLi>
         </GuideUl>
       </Wrapper>

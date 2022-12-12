@@ -232,7 +232,7 @@ const Index = () => {
     }
 
     if (!mobileInput.value) {
-      return message.error("전화번호를 입력해주세요.");
+      return message.error("'-'를 빼고 입력해주세요.");
     }
 
     if (!emailInput.value) {
@@ -621,7 +621,7 @@ const Index = () => {
                       type="number"
                       width={`100%`}
                       height={`55px`}
-                      placeholder="전화번호를 입력해주세요."
+                      placeholder="'-'를 빼고 입력해주세요."
                       radius={`5px`}
                       {...mobileInput}
                     />

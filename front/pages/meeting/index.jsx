@@ -45,7 +45,7 @@ const Home = ({}) => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper>
+        <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <LeftMenu />
 
@@ -150,22 +150,19 @@ const Home = ({}) => {
                   <Text fontSize={`20px`} fontWeight={`600`}>
                     정관 미리보기
                   </Text>
-                  <a
-                    href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/1.+%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8+%E1%84%91%E1%85%AD%E1%84%8C%E1%85%AE%E1%86%AB%E1%84%8C%E1%85%A5%E1%86%BC%E1%84%80%E1%85%AA%E1%86%AB(2020).hwp`}
-                    download
+
+                  <CommonButton
+                    kindOf={`grey3`}
+                    fontSize={`12px`}
+                    padding={`0`}
+                    width={`80px`}
+                    height={`20px`}
+                    margin={`0 0 0 10px`}
+                    onClick={downToggle}
                   >
-                    <CommonButton
-                      kindOf={`grey3`}
-                      fontSize={`12px`}
-                      padding={`0`}
-                      width={`80px`}
-                      height={`20px`}
-                      margin={`0 0 0 10px`}
-                    >
-                      다운로드
-                      <DownloadOutlined />
-                    </CommonButton>
-                  </a>
+                    다운로드
+                    <DownloadOutlined />
+                  </CommonButton>
                 </Wrapper>
               </Wrapper>
             </Wrapper>

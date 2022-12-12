@@ -258,6 +258,10 @@ const Association = ({}) => {
             수정할 수 있습니다.
           </GuideLi>
           <GuideLi isImpo={true}>
+            이미지 사이즈는 가로 575px으로 올려주세요. 575px이하일 경우 해상도가
+            깨져보일 수 있습니다.
+          </GuideLi>
+          <GuideLi isImpo={true}>
             수정하는 즉시 화면에 반영되니 신중한 처리바랍니다.
           </GuideLi>
         </GuideUl>

@@ -251,7 +251,7 @@ const Index = () => {
     }
 
     if (!mobileInput.value) {
-      return message.error("전화번호를 입력해주세요.");
+      return message.error("'-'를 빼고 입력해주세요.");
     }
 
     if (!emailInput.value) {
@@ -880,7 +880,7 @@ const Index = () => {
                       type="number"
                       width={`100%`}
                       height={`55px`}
-                      placeholder="전화번호를 입력해주세요."
+                      placeholder="'-'를 빼고 입력해주세요."
                       radius={`5px`}
                       {...mobileInput}
                     />
@@ -1024,14 +1024,17 @@ const Index = () => {
                       자본금
                     </Text>
 
-                    <TextInput
-                      type="number"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="자본금을 입력해주세요."
-                      radius={`5px`}
-                      {...importantBusinessCapitalInput}
-                    />
+                    <Wrapper dr={`row`} ju={`space-between`}>
+                      <TextInput
+                        type="number"
+                        width={`96%`}
+                        height={`55px`}
+                        placeholder="자본금을 입력해주세요."
+                        radius={`5px`}
+                        {...importantBusinessCapitalInput}
+                      />
+                      원
+                    </Wrapper>
                   </Wrapper>
 
                   <Wrapper al={`flex-start`}>
@@ -1043,14 +1046,17 @@ const Index = () => {
                       매출액
                     </Text>
 
-                    <TextInput
-                      type="number"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="매출액을 입력해주세요."
-                      radius={`5px`}
-                      {...importantBusinessPriceInput}
-                    />
+                    <Wrapper dr={`row`} ju={`space-between`}>
+                      <TextInput
+                        type="number"
+                        width={`96%`}
+                        height={`55px`}
+                        placeholder="매출액을 입력해주세요."
+                        radius={`5px`}
+                        {...importantBusinessPriceInput}
+                      />
+                      원
+                    </Wrapper>
                   </Wrapper>
 
                   <Wrapper margin={`30px 0 14px`} al={`flex-start`}>

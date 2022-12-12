@@ -22,24 +22,13 @@ import { FORUM_LIST_REQUEST } from "../../reducers/forum";
 import { Empty, message } from "antd";
 
 const Box = styled(Wrapper)`
-  width: calc(100% / 4 - 14px);
+  width: calc(100% / 3 - 12px);
+
   margin: 0 18px 60px 0;
   align-items: flex-start;
 
-  &:nth-child(4n) {
+  &:nth-child(3n) {
     margin: 0 0 60px 0;
-  }
-
-  @media (max-width: 1280px) {
-    width: calc(100% / 3 - 12px);
-
-    &:nth-child(4n) {
-      margin: 0 18px 60px 0;
-    }
-
-    &:nth-child(3n) {
-      margin: 0 0 60px 0;
-    }
   }
 
   @media (max-width: 700px) {
@@ -154,7 +143,11 @@ const Forum = () => {
                         <Box key={data.id}>
                           <iframe
                             src={data.youtubeLink}
-                            style={{ margin: `0 0 10px`, border: 0 }}
+                            style={{
+                              margin: `0 0 10px`,
+                              border: 0,
+                              height: width < 700 ? `150px` : `210px`,
+                            }}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                           />
                           <Text fontSize={width < 900 ? `14px` : `16px`}>
