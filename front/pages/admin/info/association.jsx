@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import AdminLayout from "../../../components/AdminLayout";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, DatePicker, Form, Image, Input, message, Popover } from "antd";
+import { Button, Form, Input, Popconfirm, Popover, Table } from "antd";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
 import { END } from "redux-saga";
@@ -15,123 +15,52 @@ import {
   OtherMenu,
   GuideUl,
   GuideLi,
+  DelBtn,
 } from "../../../components/commonComponents";
-import {
-  LOAD_MY_INFO_REQUEST,
-  USER_MAIN_REQUEST,
-} from "../../../reducers/user";
-import {
-  SHARE_PROJECT_REQUEST,
-  SHAREPROJECT_IMAGE1_REQUEST,
-  SHAREPROJECT_IMAGE2_REQUEST,
-  SHAREPROJECT_UPDATE_REQUEST,
-} from "../../../reducers/shareProject";
+import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
-import { HomeOutlined, RightOutlined } from "@ant-design/icons";
-import moment from "moment";
+import {
+  AlertOutlined,
+  CheckOutlined,
+  EyeOutlined,
+  HomeOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+
+const InfoTitle = styled.div`
+  font-size: 19px;
+  margin: 15px 0px 5px 0px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding-left: 15px;
+  color: ${(props) => props.theme.subTheme5_C};
+`;
+
+const ViewStatusIcon = styled(EyeOutlined)`
+  font-size: 18px;
+  color: ${(props) =>
+    props.active ? props.theme.subTheme5_C : props.theme.lightGrey_C};
+`;
 
 const Association = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
-  const {
-    shareProjects,
-    previewImagePath1,
-    previewImagePath2,
-    st_shareProjectDone,
-    st_shareProjecthImage1Loading,
-    st_shareProjecthImage2Loading,
-    st_shareProjecthUpdateDone,
-    st_shareProjecthUpdateError,
-  } = useSelector((state) => state.shareProject);
 
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const logoImageRef1 = useRef();
-  const logoImageRef2 = useRef();
-
-  const [infoForm1] = Form.useForm();
-  const [infoForm2] = Form.useForm();
-
-  useEffect(() => {
-    if (st_shareProjectDone) {
-      infoForm1.setFieldsValue({
-        id: shareProjects[0].id,
-        repreName: shareProjects[0].repreName,
-        estimateDate: moment(shareProjects[0].estimateDate),
-        empCnt: shareProjects[0].empCnt,
-        jobType: shareProjects[0].jobType,
-        importantWork: shareProjects[0].importantWork,
-        link: shareProjects[0].link,
-      });
-
-      infoForm2.setFieldsValue({
-        id: shareProjects[1].id,
-        repreName: shareProjects[1].repreName,
-        estimateDate: moment(shareProjects[1].estimateDate),
-        empCnt: shareProjects[1].empCnt,
-        jobType: shareProjects[1].jobType,
-        importantWork: shareProjects[1].importantWork,
-        link: shareProjects[1].link,
-      });
-    }
-  }, [st_shareProjectDone]);
-
-  useEffect(() => {
-    if (st_shareProjecthUpdateDone) {
-      message.success(
-        "기술융합협동조합 정보가 수정되었습니다. 데이터를 재조회 합니다."
-      );
-    }
-    dispatch({
-      type: SHARE_PROJECT_REQUEST,
-    });
-  }, [st_shareProjecthUpdateDone]);
-
-  useEffect(() => {
-    if (st_shareProjecthUpdateError) {
-      return message.error(st_shareProjecthUpdateError);
-    }
-  }, [st_shareProjecthUpdateError]);
-
-  const clickImageUpload1 = useCallback(() => {
-    logoImageRef1.current.click();
-  }, [logoImageRef1.current]);
-
-  const onChangeImages1 = useCallback((e) => {
-    const formData = new FormData();
-
-    [].forEach.call(e.target.files, (file) => {
-      formData.append("image", file);
-    });
-
-    dispatch({
-      type: SHAREPROJECT_IMAGE1_REQUEST,
-      data: formData,
-    });
-  });
-
-  const clickImageUpload2 = useCallback(() => {
-    logoImageRef2.current.click();
-  }, [logoImageRef2.current]);
-
-  const onChangeImages2 = useCallback((e) => {
-    const formData = new FormData();
-
-    [].forEach.call(e.target.files, (file) => {
-      formData.append("image", file);
-    });
-
-    dispatch({
-      type: SHAREPROJECT_IMAGE2_REQUEST,
-      data: formData,
-    });
-  });
-
   // 상위메뉴 변수
-  const [level1, setLevel1] = useState("기초정보관리");
+  const [level1, setLevel1] = useState("고객지원관리");
   const [level2, setLevel2] = useState("");
   const [sameDepth, setSameDepth] = useState([]);
+  const [currentData, setCurrentData] = useState(null);
+
+  const [infoForm] = Form.useForm();
 
   const moveLinkHandler = useCallback((link) => {
     router.push(link);
@@ -179,47 +108,68 @@ const Association = ({}) => {
 
   ////// HANDLER //////
 
-  const updateHandler = useCallback(
-    (data) => {
-      dispatch({
-        type: SHAREPROJECT_UPDATE_REQUEST,
-        data: {
-          id: data.id,
-          repreName: data.repreName,
-          estimateDate: data.estimateDate.format("YYYY-MM-DD"),
-          empCnt: data.empCnt,
-          jobType: data.jobType,
-          importantWork: data.importantWork,
-          link: data.link,
-          imagePath: previewImagePath1 ? previewImagePath1 : data.imagePath,
-        },
-      });
-    },
-    [previewImagePath1]
-  );
+  const beforeSetDataHandler = useCallback(
+    (record) => {
+      setCurrentData(record);
 
-  const update2Handler = useCallback(
-    (data) => {
-      dispatch({
-        type: SHAREPROJECT_UPDATE_REQUEST,
-        data: {
-          id: data.id,
-          repreName: data.repreName,
-          estimateDate: data.estimateDate.format("YYYY-MM-DD"),
-          empCnt: data.empCnt,
-          jobType: data.jobType,
-          importantWork: data.importantWork,
-          link: data.link,
-          imagePath: previewImagePath2 ? previewImagePath2 : data.imagePath,
-        },
+      infoForm.setFieldsValue({
+        title: record.title,
+        typeId: record.NoticeTypeId,
+        content: record.content,
+        hit: record.hit,
+        createdAt: record.viewCreatedAt,
+        updatedAt: record.viewUpdatedAt,
+        updator: record.updator,
       });
     },
-    [previewImagePath2]
+    [currentData, infoForm]
   );
 
   ////// DATAVIEW //////
 
   ////// DATA COLUMNS //////
+
+  const col = [
+    {
+      title: "번호",
+      dataIndex: "num",
+    },
+    {
+      title: "이미지 명칭",
+      dataIndex: "title",
+    },
+
+    {
+      title: "생성일",
+      dataIndex: "viewCreatedAt",
+    },
+    {
+      title: "상태창",
+      render: (data) => (
+        <>
+          <ViewStatusIcon
+            active={
+              parseInt(data.id) === (currentData && parseInt(currentData.id))
+            }
+          />
+        </>
+      ),
+    },
+
+    {
+      title: "삭제",
+      render: (data) => (
+        <Popconfirm
+          title="정말 삭제하시겠습니까?"
+          onConfirm={() => {}}
+          okText="삭제"
+          cancelText="취소"
+        >
+          <DelBtn />
+        </Popconfirm>
+      ),
+    },
+  ];
 
   return (
     <AdminLayout>
@@ -232,6 +182,7 @@ const Association = ({}) => {
         al={`center`}
         padding={`0px 15px`}
         color={Theme.grey_C}
+        // shadow={`2px 2px 6px  ${Theme.adminTheme_2}`}
       >
         <HomeText
           margin={`3px 20px 0px 20px`}
@@ -245,7 +196,7 @@ const Association = ({}) => {
         <RightOutlined />
         <Popover content={content}>
           <HomeText cur={true} margin={`3px 20px 0px 20px`}>
-            {level2}
+            {level2}{" "}
           </HomeText>
         </Popover>
       </Wrapper>
@@ -267,193 +218,124 @@ const Association = ({}) => {
         </GuideUl>
       </Wrapper>
 
-      <Wrapper
-        dr={`row`}
-        ju={`space-between`}
-        al={`flex-start`}
-        padding={`20px 20px 50px`}
-      >
-        <Wrapper width={`49%`}>
-          <Wrapper
-            borderBottom={`2px solid ${Theme.basicTheme_C}`}
-            padding={`0 0 15px`}
-            al={`flex-start`}
-            fontSize={`18px`}
-            fontWeight={`700`}
-          >
-            기술융합협동조합
+      <Wrapper dr="row" padding="0px 50px" al="flex-start" ju="space-between">
+        <Wrapper
+          width="50%"
+          padding="0px 10px"
+          shadow={`3px 3px 6px ${Theme.lightGrey_C}`}
+        >
+          <Wrapper al="flex-end">
+            <Button size="small" type="primary">
+              회원조합 생성
+            </Button>
           </Wrapper>
-          <Image
-            alt="image"
-            src={
-              previewImagePath1
-                ? previewImagePath1
-                : shareProjects[0] && shareProjects[0].imagePath
-            }
-          />
-
-          {/* IMAGE AREA */}
-          <input
-            type="file"
-            name="image"
-            accept=".png, .jpg"
-            // multiple
-            hidden
-            ref={logoImageRef1}
-            onChange={onChangeImages1}
-          />
-          <Button
-            type="primary"
+          <Table
+            style={{ width: "100%" }}
+            rowKey="id"
+            columns={col}
+            dataSource={[]}
             size="small"
-            onClick={clickImageUpload1}
-            loading={
-              st_shareProjecthImage1Loading || st_shareProjecthImage2Loading
-            }
-          >
-            이미지 업로드
-          </Button>
-          {/* IMAGE AREA */}
-
-          <Wrapper
-            dr={`row`}
-            height={`55px`}
-            fontSize={`16px`}
-            padding={`20px 0 0`}
-            borderTop={`1px solid ${Theme.lightGrey2_C}`}
-          >
-            <Form
-              form={infoForm1}
-              style={{ width: "100%" }}
-              labelCol={{ span: 4 }}
-              wrapperCol={{ span: 20 }}
-              onFinish={updateHandler}
-            >
-              <Form.Item name="id" hidden>
-                <Input size="small" allowClear />
-              </Form.Item>
-
-              <Form.Item label="대표자명" name="repreName">
-                <Input size="small" allowClear />
-              </Form.Item>
-
-              <Form.Item label="설립연도" name="estimateDate">
-                <DatePicker style={{ width: `100%` }} />
-              </Form.Item>
-
-              <Form.Item label="직원수" name="empCnt">
-                <Input size="small" allowClear />
-              </Form.Item>
-
-              <Form.Item label="업종" name="jobType">
-                <Input size="small" allowClear />
-              </Form.Item>
-
-              <Form.Item label="주업무" name="importantWork">
-                <Input size="small" allowClear />
-              </Form.Item>
-
-              <Form.Item label="링크" name="link">
-                <Input size="small" allowClear />
-              </Form.Item>
-
-              <Wrapper al="flex-end" margin="0px 0px 20px 0px">
-                <Button type="primary" size="small" htmlType="submit">
-                  데이터 수정
-                </Button>
-              </Wrapper>
-            </Form>
-          </Wrapper>
+            onRow={(record, index) => {
+              return {
+                onClick: (e) => beforeSetDataHandler(record),
+              };
+            }}
+          />
         </Wrapper>
-        <Wrapper width={`49%`}>
-          <Wrapper
-            borderBottom={`2px solid ${Theme.basicTheme_C}`}
-            padding={`0 0 15px`}
-            al={`flex-start`}
-            fontSize={`18px`}
-            fontWeight={`700`}
-          >
-            회원법인조합
-          </Wrapper>
-          <Image
-            alt="image"
-            src={
-              previewImagePath2
-                ? previewImagePath2
-                : shareProjects[1] && shareProjects[1].imagePath
-            }
-          />
 
-          {/* IMAGE AREA */}
-          <input
-            type="file"
-            name="image"
-            accept=".png, .jpg"
-            // multiple
-            hidden
-            ref={logoImageRef2}
-            onChange={onChangeImages2}
-          />
-          <Button
-            type="primary"
-            size="small"
-            onClick={clickImageUpload2}
-            loading={
-              st_shareProjecthImage1Loading || st_shareProjecthImage2Loading
-            }
-          >
-            이미지 업로드
-          </Button>
-          {/* IMAGE AREA */}
+        <Wrapper
+          width={`calc(50% - 10px)`}
+          padding="5px"
+          shadow={`3px 3px 6px ${Theme.lightGrey_C}`}
+        >
+          {currentData ? (
+            <Wrapper>
+              <Wrapper margin={`0px 0px 5px 0px`}>
+                <InfoTitle>
+                  <CheckOutlined />
+                  공지사항 기본정보
+                </InfoTitle>
+              </Wrapper>
 
-          <Wrapper
-            dr={`row`}
-            height={`55px`}
-            fontSize={`16px`}
-            padding={`20px 0 0`}
-            borderTop={`1px solid ${Theme.lightGrey2_C}`}
-          >
-            <Form
-              form={infoForm2}
-              style={{ width: "100%" }}
-              labelCol={{ span: 4 }}
-              wrapperCol={{ span: 20 }}
-              onFinish={update2Handler}
-            >
-              <Form.Item name="id" hidden>
-                <Input size="small" allowClear />
-              </Form.Item>
+              <Form form={infoForm} style={{ width: `100%` }}>
+                <Form.Item
+                  label="제목"
+                  name="title"
+                  rules={[
+                    { required: true, message: "제목은 필수 입력사항 입니다." },
+                  ]}
+                >
+                  <Input size="small" />
+                </Form.Item>
 
-              <Form.Item label="대표자명" name="repreName">
-                <Input size="small" allowClear />
-              </Form.Item>
+                <Form.Item
+                  label="내용"
+                  name="content"
+                  rules={[
+                    { required: true, message: "내용은 필수 입력사항 입니다." },
+                  ]}
+                >
+                  <Input.TextArea rows={10} />
+                </Form.Item>
 
-              <Form.Item label="설립연도" name="estimateDate">
-                <DatePicker style={{ width: `100%` }} />
-              </Form.Item>
+                <Form.Item label="조회수" name="hit">
+                  <Input
+                    size="small"
+                    style={{ background: Theme.lightGrey_C, border: "none" }}
+                    readOnly
+                  />
+                </Form.Item>
 
-              <Form.Item label="직원수" name="empCnt">
-                <Input size="small" allowClear />
-              </Form.Item>
+                <Form.Item label="작성일" name="createdAt">
+                  <Input
+                    size="small"
+                    style={{ background: Theme.lightGrey_C, border: "none" }}
+                    readOnly
+                  />
+                </Form.Item>
 
-              <Form.Item label="업종" name="jobType">
-                <Input size="small" allowClear />
-              </Form.Item>
+                <Form.Item label="수정일" name="updatedAt">
+                  <Input
+                    size="small"
+                    style={{ background: Theme.lightGrey_C, border: "none" }}
+                    readOnly
+                  />
+                </Form.Item>
 
-              <Form.Item label="주업무" name="importantWork">
-                <Input size="small" allowClear />
-              </Form.Item>
+                <Form.Item label="최근작업자" name="updator">
+                  <Input
+                    size="small"
+                    style={{ background: Theme.lightGrey_C, border: "none" }}
+                    readOnly
+                  />
+                </Form.Item>
+              </Form>
 
-              <Form.Item label="링크" name="link">
-                <Input size="small" allowClear />
-              </Form.Item>
-
-              <Wrapper al="flex-end" margin="0px 0px 20px 0px">
+              <Wrapper al="flex-end">
                 <Button type="primary" size="small" htmlType="submit">
-                  데이터 수정
+                  정보 업데이트
                 </Button>
               </Wrapper>
-            </Form>
-          </Wrapper>
+
+              <Wrapper
+                width="100%"
+                height="1px"
+                bgColor={Theme.lightGrey_C}
+                margin={`30px 0px`}
+              ></Wrapper>
+            </Wrapper>
+          ) : (
+            <Wrapper padding={`50px 0px`} dr="row">
+              <AlertOutlined
+                style={{
+                  fontSize: "20px",
+                  color: Theme.red_C,
+                  marginRight: "5px",
+                }}
+              />
+              좌측 데이터를 선택하여 상세정보를 확인하세요.
+            </Wrapper>
+          )}
         </Wrapper>
       </Wrapper>
     </AdminLayout>
@@ -473,17 +355,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
-    });
-
-    context.store.dispatch({
-      type: SHARE_PROJECT_REQUEST,
-      data: {
-        type: 3,
-      },
-    });
-
-    context.store.dispatch({
-      type: USER_MAIN_REQUEST,
     });
 
     // 구현부 종료
