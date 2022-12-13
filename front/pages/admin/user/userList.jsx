@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import {
   LOAD_MY_INFO_REQUEST,
+  STATUS_LIST_REQUEST,
   UPDATE_MODAL_CLOSE_REQUEST,
   UPDATE_MODAL_OPEN_REQUEST,
   USERLIST_REQUEST,
@@ -38,6 +39,7 @@ import {
   Wrapper,
   PopWrapper,
   DelBtn,
+  CommonButton,
 } from "../../../components/commonComponents";
 import { useRouter, withRouter } from "next/router";
 import wrapper from "../../../store/configureStore";
@@ -47,6 +49,7 @@ import axios from "axios";
 import Theme from "../../../components/Theme";
 import { HomeOutlined, RightOutlined } from "@ant-design/icons";
 import useInput from "../../../hooks/useInput";
+import { CSVLink, CSVDownload } from "react-csv";
 
 const TypeButton = styled(Button)`
   margin-right: 5px;
@@ -113,6 +116,8 @@ const UserList = ({}) => {
     //
     st_userExitDone,
     st_userExitError,
+
+    statusList,
   } = useSelector((state) => state.user);
 
   const [sameDepth, setSameDepth] = useState([]);
@@ -126,7 +131,8 @@ const UserList = ({}) => {
   const [levelForm] = Form.useForm();
   const [sForm] = Form.useForm();
 
-  const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState(0); // 유형
+  const [allExcelData, setAllExcelData] = useState([]); // 선택 조합장 엑셀 데이터 출력
 
   const [level1, setLevel1] = useState("회원관리");
   const [level2, setLevel2] = useState("");
@@ -186,7 +192,7 @@ const UserList = ({}) => {
         type: USERLIST_REQUEST,
         data: {
           searchData: sData,
-          searchLevel: currentTab,
+          searchUserType: currentTab,
         },
       });
 
@@ -203,7 +209,7 @@ const UserList = ({}) => {
       type: USERLIST_REQUEST,
       data: {
         searchData: sData,
-        searchLevel: currentTab,
+        searchUserType: currentTab,
       },
     });
   }, [currentTab, sData]);
@@ -214,6 +220,62 @@ const UserList = ({}) => {
       return message.error(st_userDetailError);
     }
   }, [st_userDetailError]);
+
+  // 엑셀데이터
+  useEffect(() => {
+    if (statusList) {
+      const tempArr1 = [];
+
+      statusList.userList.map((data) => {
+        const tempArr2 = [];
+        const tempArr3 = [];
+        const tempArr4 = [];
+
+        statusList.sectorList.map((sector) => {
+          if (data.id === sector.UserId) {
+            tempArr2.push(sector.value);
+          }
+        });
+        statusList.combiTypeList.map((combi) => {
+          if (data.id === combi.UserId) {
+            tempArr3.push(combi.value);
+          }
+        });
+        statusList.businessTypeList.map((business) => {
+          if (data.id === business.UserId) {
+            tempArr4.push(business.value);
+          }
+        });
+
+        tempArr1.push({
+          회원유형: data.viewType,
+          회원조합: data.combiName,
+          회원아이디: data.userId,
+          회원이메일: data.email,
+          회원전화번호: data.mobile,
+          회원우편: data.postCode,
+          회원주소: data.address,
+          회원상세주소: data.detailAddress,
+          회원이사장: data.repreName,
+          회원지역: data.combiArea,
+          회원법인수: data.corporationCnt,
+          회원개인수: data.personalCnt,
+          회원홈페이지: data.combiHomepage,
+          회원설립날짜: data.viewEstimateDate,
+          회원조합원수1: data.importantBusiness1,
+          회원조합원수2: data.importantBusiness2,
+          회원조합원수3: data.importantBusiness3,
+          회원자본금: data.viewBusinessCapital,
+          회원매출액: data.viewBusinessPrice,
+          회원사업분야: tempArr2.toString(),
+          회원조합유형: tempArr3.toString(),
+          회원사업유형: tempArr4.toString(),
+        });
+      });
+
+      setAllExcelData(tempArr1);
+    }
+  }, [statusList]);
 
   ////// TOGGLE //////
   const updateModalOpen = useCallback(
@@ -377,22 +439,22 @@ const UserList = ({}) => {
       title: "가입일",
       dataIndex: "viewCreatedAt",
     },
-    {
-      title: "권한",
-      dataIndex: "viewLevel",
-    },
-    {
-      title: "권한수정",
-      render: (data) => (
-        <SettingBtn
-          size="small"
-          type="primary"
-          onClick={() => updateModalOpen(data)}
-        >
-          수정
-        </SettingBtn>
-      ),
-    },
+    // {
+    //   title: "권한",
+    //   dataIndex: "viewLevel",
+    // },
+    // {
+    //   title: "권한수정",
+    //   render: (data) => (
+    //     <SettingBtn
+    //       size="small"
+    //       type="primary"
+    //       onClick={() => updateModalOpen(data)}
+    //     >
+    //       수정
+    //     </SettingBtn>
+    //   ),
+    // },
     {
       title: "상세정보",
       render: (data) => (
@@ -427,6 +489,31 @@ const UserList = ({}) => {
         </Popconfirm>
       ),
     },
+  ];
+
+  const allHeaders = [
+    { label: "유형", key: "회원유형" },
+    { label: "조합명", key: "회원조합" },
+    { label: "아이디", key: "회원아이디" },
+    { label: "이메일", key: "회원이메일" },
+    { label: "전화번호", key: "회원전화번호" },
+    { label: "우편번호", key: "회원우편" },
+    { label: "주소", key: "회원주소" },
+    { label: "상세주소", key: "회원상세주소" },
+    { label: "이사장명", key: "회원이사장" },
+    { label: "지역", key: "회원지역" },
+    { label: "법인 조합원수", key: "회원법인수" },
+    { label: "개인 조합원수", key: "회원개인수" },
+    { label: "홈페이지", key: "회원홈페이지" },
+    { label: "설립날짜", key: "회원설립날짜" },
+    { label: "조합원수1", key: "회원조합원수1" },
+    { label: "조합원수2", key: "회원조합원수2" },
+    { label: "조합원수3", key: "회원조합원수3" },
+    { label: "주요사업 자본금", key: "회원자본금" },
+    { label: "주요사업 매출액", key: "회원매출액" },
+    { label: "사업분야", key: "회원사업분야" },
+    { label: "조합유형", key: "회원조합유형" },
+    { label: "사업유형", key: "회원사업유형" },
   ];
 
   return (
@@ -512,7 +599,38 @@ const UserList = ({}) => {
           전체
         </TypeButton>
 
-        {levelArr.map((data) => (
+        <TypeButton
+          type={currentTab === 1 ? "primary" : "default"}
+          size="small"
+          onClick={() => tabClickHandler(1)}
+        >
+          개인
+        </TypeButton>
+
+        <TypeButton
+          type={currentTab === 2 ? "primary" : "default"}
+          size="small"
+          onClick={() => tabClickHandler(2)}
+        >
+          조합장
+        </TypeButton>
+
+        {currentTab === 2 && (
+          <Wrapper dr={`row`} margin={`0 0 10px`} ju={`flex-end`}>
+            <CommonButton size="small" radius={`2px`} kindOf={`subTheme`}>
+              <CSVLink
+                headers={allHeaders}
+                data={allExcelData ? allExcelData : []}
+                filename="조합장 회원목록.csv"
+                target="_blank"
+              >
+                조합장 회원목록 파일 출력하기
+              </CSVLink>
+            </CommonButton>
+          </Wrapper>
+        )}
+
+        {/* {levelArr.map((data) => (
           <TypeButton
             type={currentTab === data.id ? "primary" : "default"}
             size="small"
@@ -520,7 +638,7 @@ const UserList = ({}) => {
           >
             {data.name}
           </TypeButton>
-        ))}
+        ))} */}
       </Wrapper>
 
       <Wrapper padding={`0px 20px`}>
@@ -640,7 +758,7 @@ const UserList = ({}) => {
                   padding={`10px`}
                   borderBottom={`1px solid ${Theme.subTheme2_C}`}
                 >
-                  {userDetail.combiName}
+                  {userDetail.userId}
                 </Text>
               </DetailWrapper>
 
@@ -1085,6 +1203,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: USER_MAIN_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: STATUS_LIST_REQUEST,
     });
 
     // 구현부 종료
