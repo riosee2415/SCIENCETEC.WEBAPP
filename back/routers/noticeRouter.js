@@ -359,15 +359,6 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// router.post("/answer", isAdminCheck, async(req,res,next) => {
-//   try {
-
-//   } catch (error) {
-//     console.error(error)
-//     return res.status(401).send("")
-//   }
-// })
-
 router.post("/update", isLoggedIn, async (req, res, next) => {
   const { id, title, content } = req.body;
 
@@ -427,6 +418,77 @@ router.post("/update", isLoggedIn, async (req, res, next) => {
   } catch (error) {
     console.error(error);
     return res.status(401).send("공지사항을 수정할 수 없습니다. [CODE 087]");
+  }
+});
+
+router.post("/answer", isAdminCheck, async (req, res, next) => {
+  const { id, answer } = req.body;
+
+  const selectQuery = `
+  SELECT  title,
+          type,
+          CASE
+              WHEN  answer IS NULL THEN 0
+              ELSE  1
+          END                 AS isAnswer
+    FROM  notices
+   WHERE  id = ${id}
+     AND  isDelete = 0
+  `;
+
+  const updateQ = `
+    UPDATE  notices
+      SET   answer = "${answer}",
+            answeredAt = NOW()
+     WHERE  id = ${id}
+  `;
+
+  try {
+    const findResult = await models.sequelize.query(selectQuery);
+
+    if (findResult[0].length === 0) {
+      return res.status(401).send("존재하지 않는 게시글입니다.");
+    }
+
+    if (findResult[0][0].type !== "커뮤니티") {
+      return res
+        .status(401)
+        .send("커뮤니티 게시글에만 답변을 작성할 수 있습니다.");
+    }
+
+    if (findResult[0][0].isAnswer) {
+      return res.status(401).send("이미 답변을 남긴 게시글입니다.");
+    }
+
+    await models.sequelize.query(updateQ);
+
+    const insertQuery2 = `
+    INSERT INTO noticeHistory
+    (
+      content,
+      title,
+      type,
+      updator,
+      createdAt,
+      updatedAt
+    )
+    VALUES 
+    (
+      "게시글 답변",
+      "${findResult[0][0].title}",
+      "커뮤니티",
+      ${req.user.id},
+      now(),
+      now()
+    )
+    `;
+
+    await models.sequelize.query(insertQuery2);
+
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("게시글에 답변을 남길 수 없습니다.");
   }
 });
 
