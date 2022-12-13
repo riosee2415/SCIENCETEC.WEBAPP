@@ -60,13 +60,15 @@ router.post("/admin/main", isAdminCheck, async (req, res, next) => {
 });
 
 router.post("/list", isAdminCheck, async (req, res, next) => {
-  const { searchData, searchLevel, searchExit } = req.body;
+  const { searchData, searchLevel, searchExit, searchUserType } = req.body;
 
   const _searchData = searchData ? searchData : ``;
 
   const _searchLevel = parseInt(searchLevel) === 0 ? 0 : parseInt(searchLevel);
 
-  const _searchExit = searchExit ? searchExit : false;
+  // const _searchExit = searchExit ? searchExit : false;
+
+  const _searchUserType = parseInt(searchUserType) || 3;
 
   const selectQuery = `
 SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
@@ -119,6 +121,15 @@ SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
           DATE_FORMAT(updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
     FROM	users
    WHERE	email LIKE '%${_searchData}%'
+          ${
+            _searchUserType === 1
+              ? `AND type = 1`
+              : _searchUserType === 2
+              ? `AND type = 2`
+              : _searchUserType === 3
+              ? ``
+              : ``
+          }
           ${
             _searchLevel === parseInt(0)
               ? ``
@@ -720,10 +731,6 @@ router.post("/signup", async (req, res, next) => {
     sector,
   } = req.body;
 
-  if (!terms) {
-    return res.status(401).send("이용약관에 동의해주세요.");
-  }
-
   if (!Array.isArray(businessType)) {
     return res.status(401).send("잘못된 요청입니다.");
   }
@@ -947,24 +954,321 @@ router.get("/me", isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.post("/me/update", isLoggedIn, async (req, res, next) => {
-  const { id, username, mobile } = req.body;
+router.post("/update", async (req, res, next) => {
+  const {
+    id,
+    type,
+    combiName,
+    combiHomepage,
+    combiEstimateDate,
+    combiArea,
+    corporationCnt,
+    personalCnt,
+    repreName,
+    postCode,
+    address,
+    detailAddress,
+    mobile,
+    email,
+    importantBusiness1,
+    importantBusiness2,
+    importantBusiness3,
+    importantBusinessCapital,
+    importantBusinessPrice,
+    businessType,
+    combiType,
+    sector,
+  } = req.body;
+
+  if (!Array.isArray(businessType)) {
+    return res.status(401).send("잘못된 요청입니다.");
+  }
+
+  if (!Array.isArray(combiType)) {
+    return res.status(401).send("잘못된 요청입니다.");
+  }
+
+  if (!Array.isArray(sector)) {
+    return res.status(401).send("잘못된 요청입니다.");
+  }
 
   try {
-    const exUser = await User.findOne({ where: { id: parseInt(id) } });
+    if (type === 1) {
+      const updateQuery = `
+      UPDATE  users
+         SET  combiName = "${combiName}",
+              postCode = "${postCode}",
+              address = "${address}",
+              detailAddress = "${detailAddress}",
+              mobile = "${mobile}",
+              email = "${email}",
+              updatedAt = NOW()
+       WHERE  id = ${id}
+      `;
 
-    if (!exUser) {
-      return res.status(401).send("존재하지 않는 사용자 입니다.");
+      const deleteQuery1 = `
+      DELETE
+        FROM  userBusinessTypes
+       WHERE  UserId = ${id}
+      `;
+      const deleteQuery2 = `
+      DELETE
+        FROM  userCombiTypes
+       WHERE  UserId = ${id}
+      `;
+      const deleteQuery3 = `
+      DELETE
+        FROM  userSectors
+       WHERE  UserId = ${id}
+      `;
+
+      await models.sequelize.query(updateQuery);
+      /////////////////////////////////////////////
+      await models.sequelize.query(deleteQuery1);
+      await models.sequelize.query(deleteQuery2);
+      await models.sequelize.query(deleteQuery3);
+      /////////////////////////////////////////////
+      await Promise.all(
+        businessType.map(async (data) => {
+          const insertQuery = `
+          INSERT  INTO  userBusinessTypes
+          (
+            value,
+            createdAt,
+            updatedAt,
+            UserId
+          )
+          VALUES
+          (
+            "${data}",
+            NOW(),
+            NOW(),
+            ${id}
+          )
+          `;
+
+          await models.sequelize.query(insertQuery);
+        })
+      );
+
+      await Promise.all(
+        combiType.map(async (data) => {
+          const insertQuery = `
+          INSERT  INTO  userCombiTypes
+          (
+            value,
+            createdAt,
+            updatedAt,
+            UserId
+          )
+          VALUES
+          (
+            "${data}",
+            NOW(),
+            NOW(),
+            ${id}
+          )
+          `;
+
+          await models.sequelize.query(insertQuery);
+        })
+      );
+
+      await Promise.all(
+        sector.map(async (data) => {
+          const insertQuery = `
+          INSERT  INTO  userSectors
+          (
+            value,
+            createdAt,
+            updatedAt,
+            UserId
+          )
+          VALUES
+          (
+            "${data}",
+            NOW(),
+            NOW(),
+            ${id}
+          )
+          `;
+
+          await models.sequelize.query(insertQuery);
+        })
+      );
+
+      const historyInsertQuery = `
+      INSERT  INTO  userHistory
+      (
+        value,
+        content,
+        updator,
+        createdAt,
+        updatedAt
+      )
+      VALUES
+      (
+        "회원 수정",
+        "${combiName}",
+        ${req.user.id},
+        NOW(),
+        NOW()
+      )
+      `;
+
+      await models.sequelize.query(historyInsertQuery);
+
+      return res.status(200).json({ result: true });
     }
 
-    const updateUser = await User.update(
-      { username, mobile },
-      {
-        where: { id: parseInt(id) },
-      }
-    );
+    if (type === 2) {
+      const updateQuery = `
+      UPDATE  users
+         SET  combiName = "${combiName}",
+              combiHomepage = "${combiHomepage}",
+              combiEstimateDate = "${combiEstimateDate}",
+              combiArea = "${combiArea}",
+              corporationCnt = ${corporationCnt},
+              personalCnt = ${personalCnt},
+              repreName = "${repreName}",
+              postCode = "${postCode}",
+              address = "${address}",
+              detailAddress = "${detailAddress}",
+              mobile = "${mobile}",
+              email = "${email}",
+              importantBusiness1 = ${
+                importantBusiness1 ? `"${importantBusiness1}"` : null
+              },
+              importantBusiness2 = ${
+                importantBusiness2 ? `"${importantBusiness2}"` : null
+              },
+              importantBusiness3 = ${
+                importantBusiness3 ? `"${importantBusiness3}"` : null
+              },
+              importantBusinessCapital = ${
+                importantBusinessCapital ? `${importantBusinessCapital}` : null
+              },
+              importantBusinessPrice = ${
+                importantBusinessPrice ? `${importantBusinessPrice}` : null
+              },
+              updatedAt = NOW()
+       WHERE  id = ${id}
+      `;
 
-    return res.status(200).json({ result: true });
+      const deleteQuery1 = `
+      DELETE
+        FROM  userBusinessTypes
+       WHERE  UserId = ${id}
+      `;
+      const deleteQuery2 = `
+      DELETE
+        FROM  userCombiTypes
+       WHERE  UserId = ${id}
+      `;
+      const deleteQuery3 = `
+      DELETE
+        FROM  userSectors
+       WHERE  UserId = ${id}
+      `;
+
+      await models.sequelize.query(updateQuery);
+      /////////////////////////////////////////////
+      await models.sequelize.query(deleteQuery1);
+      await models.sequelize.query(deleteQuery2);
+      await models.sequelize.query(deleteQuery3);
+      /////////////////////////////////////////////
+      await Promise.all(
+        businessType.map(async (data) => {
+          const insertQuery = `
+          INSERT  INTO  userBusinessTypes
+          (
+            value,
+            createdAt,
+            updatedAt,
+            UserId
+          )
+          VALUES
+          (
+            "${data}",
+            NOW(),
+            NOW(),
+            ${id}
+          )
+          `;
+
+          await models.sequelize.query(insertQuery);
+        })
+      );
+
+      await Promise.all(
+        combiType.map(async (data) => {
+          const insertQuery = `
+          INSERT  INTO  userCombiTypes
+          (
+            value,
+            createdAt,
+            updatedAt,
+            UserId
+          )
+          VALUES
+          (
+            "${data}",
+            NOW(),
+            NOW(),
+            ${id}
+          )
+          `;
+
+          await models.sequelize.query(insertQuery);
+        })
+      );
+
+      await Promise.all(
+        sector.map(async (data) => {
+          const insertQuery = `
+          INSERT  INTO  userSectors
+          (
+            value,
+            createdAt,
+            updatedAt,
+            UserId
+          )
+          VALUES
+          (
+            "${data}",
+            NOW(),
+            NOW(),
+            ${id}
+          )
+          `;
+
+          await models.sequelize.query(insertQuery);
+        })
+      );
+
+      const historyInsertQuery = `
+      INSERT  INTO  userHistory
+      (
+        value,
+        content,
+        updator,
+        createdAt,
+        updatedAt
+      )
+      VALUES
+      (
+        "회원 수정",
+        "${combiName}",
+        ${req.user.id},
+        NOW(),
+        NOW()
+      )
+      `;
+
+      await models.sequelize.query(historyInsertQuery);
+
+      return res.status(200).json({ result: true });
+    }
   } catch (error) {
     console.error(error);
     return res.status(401).send("정보를 수정할 수 없습니다.");

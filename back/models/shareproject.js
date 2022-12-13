@@ -9,6 +9,10 @@ module.exports = class ShareProject extends Model {
           type: DataTypes.INTEGER, // [1. 기술융합협동조합 | 2. 회원법인조합]
           allowNull: false,
         },
+        name: {
+          type: DataTypes.STRING(100), // 이름
+          allowNull: false,
+        },
         imagePath: {
           type: DataTypes.STRING(600), // 이미지
           allowNull: false,

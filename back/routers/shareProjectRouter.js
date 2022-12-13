@@ -50,37 +50,59 @@ router.post(
 );
 
 router.post("/list", async (req, res, next) => {
-  const { type } = req.body;
+  const { type, searchData } = req.body;
 
   const _type = parseInt(type) || 3;
+  const _searchData = searchData ? searchData : ``;
 
   const selectQuery = `
-SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		            AS	num,
-		A.id,
-		A.type,
-		CASE
-			WHEN	A.type = 1 THEN "기술융합협동조합"
-			WHEN	A.type = 2 THEN "회원법인조합"
-		END											           AS viewType,
-		A.imagePath,
-		A.link,
-		A.repreName,
-		A.estimateDate,
-		DATE_FORMAT(A.estimateDate, "%Y년 %m월 %d일")	        AS viewEstimateDate,
-		A.empCnt,
-		CONCAT(FORMAT(A.empCnt, 0), "명")			           AS viewEmpCnt,
-		A.jobType,
-		A.importantWork,
-		B.username 									          AS updator,
-		A.createdAt,
-		A.updatedAt,
-		DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
-  		DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
+SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		      AS	num,
+        A.id,
+        A.name,
+        A.type,
+        CASE
+          WHEN	A.type = 1 THEN "기술융합협동조합"
+          WHEN	A.type = 2 THEN "회원법인조합"
+        END											                        AS viewType,
+        A.imagePath,
+        A.link,
+        A.repreName,
+        A.estimateDate,
+        DATE_FORMAT(A.estimateDate, "%Y년 %m월 %d일")	    AS viewEstimateDate,
+        A.empCnt,
+        CONCAT(FORMAT(A.empCnt, 0), "명")			           AS viewEmpCnt,
+        A.jobType,
+        A.importantWork,
+        B.username 									                    AS updator,
+        A.createdAt,
+        A.updatedAt,
+        DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
+  		  DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
   FROM	shareProjects		A
  INNER
   JOIN	users				B
     ON	A.updator = B.id
  WHERE	A.isDelete = 0
+        ${
+          _searchData !== ``
+            ? `
+            AND (name RLIKE '^(ㄱ|ㄲ)' OR ( name >= '가' AND name < '나' ))
+            AND (name RLIKE '^ㄴ' OR ( name >= '나' AND name < '다' ))
+            AND (name RLIKE '^(ㄷ|ㄸ)' OR ( name >= '다' AND name < '라' ))
+            AND (name RLIKE '^ㄹ' OR ( name >= '라' AND name < '마' ))
+            AND (name RLIKE '^ㅁ' OR ( name >= '마' AND name < '바' ))
+            AND (name RLIKE '^ㅂ' OR ( name >= '바' AND name < '사' ))
+            AND (name RLIKE '^(ㅅ|ㅆ)' OR ( name >= '사' AND name < '아' ))
+            AND (name RLIKE '^ㅇ' OR ( name >= '아' AND name < '자' ))
+            AND (name RLIKE '^(ㅈ|ㅉ)' OR ( name >= '자' AND name < '차' ))
+            AND (name RLIKE '^ㅊ' OR ( name >= '차' AND name < '카' ))
+            AND (name RLIKE '^ㅋ' OR ( name >= '카' AND name < '타' ))
+            AND (name RLIKE '^ㅌ' OR ( name >= '타' AND name < '파' ))
+            AND (name RLIKE '^ㅍ' OR ( name >= '파' AND name < '하' ))
+            AND (name RLIKE '^ㅎ' OR ( name >= '하'))
+        `
+            : ``
+        }
         ${
           _type === 1
             ? `AND A.type = 1`
@@ -110,6 +132,7 @@ router.post("/create", async (req, res, next) => {
   INSERT    INTO    shareProjects
   (
     type,
+    name,
     imagePath,
     link,
     repreName,
@@ -124,6 +147,7 @@ router.post("/create", async (req, res, next) => {
   VALUES
   (
     ${type},
+    "임시 조합명",
     "https://via.placeholder.com/500x300",
     "/",
     "임시 대표자명",
@@ -168,6 +192,7 @@ router.post("/create", async (req, res, next) => {
 router.post("/update", async (req, res, next) => {
   const {
     id,
+    name,
     imagePath,
     link,
     repreName,
@@ -180,6 +205,7 @@ router.post("/update", async (req, res, next) => {
   const updateQuery = `
   UPDATE    shareProjects
      SET    imagePath = "${imagePath}",
+            name = "${name}",
             link = "${link}",
             repreName = "${repreName}",
             estimateDate = "${estimateDate}",
@@ -266,6 +292,7 @@ router.post("/under/list", async (req, res, next) => {
   const selectQuery = `
 SELECT	ROW_NUMBER()	OVER(ORDER	BY A.createdAt)				AS num,
         A.id,
+        A.name,
         A.imagePath,
         A.link,
         A.repreName,
@@ -308,6 +335,7 @@ router.post("/under/create", isAdminCheck, async (req, res, next) => {
   const insertQuery = `
   INSERT    INTO    underShareProjects
   (
+    name,
     imagePath,
     link,
     repreName,
@@ -322,6 +350,7 @@ router.post("/under/create", isAdminCheck, async (req, res, next) => {
   )
   VALUES
   (
+    "임시 조합명",
     "https://via.placeholder.com/500x300",
     "/",
     "임시 대표자명",
@@ -367,6 +396,7 @@ router.post("/under/create", isAdminCheck, async (req, res, next) => {
 router.post("/under/update", isAdminCheck, async (req, res, next) => {
   const {
     id,
+    name,
     shareProjectId,
     imagePath,
     link,
@@ -379,7 +409,8 @@ router.post("/under/update", isAdminCheck, async (req, res, next) => {
 
   const updateQuery = `
   UPDATE  underShareProjects
-     SET  imagePath = "${imagePath}",
+     SET  name = "${name}",
+          imagePath = "${imagePath}",
           link = "${link}",
           repreName = "${repreName}",
           estimateDate = "${estimateDate}",

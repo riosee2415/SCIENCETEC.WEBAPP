@@ -5,6 +5,10 @@ module.exports = class UnderShareProject extends Model {
   static init(sequelize) {
     return super.init(
       {
+        name: {
+          type: DataTypes.STRING(100), // 이름
+          allowNull: false,
+        },
         imagePath: {
           type: DataTypes.STRING(600), // 이미지
           allowNull: false,
