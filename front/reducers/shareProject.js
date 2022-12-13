@@ -29,6 +29,14 @@ export const initailState = {
   st_shareProjectHistoryLoading: false, // 이력
   st_shareProjectHistoryDone: false,
   st_shareProjectHistoryError: null,
+  //
+  st_shareProjectCreateLoading: false, // 생성하기
+  st_shareProjectCreateDone: false,
+  st_shareProjectCreateError: null,
+  //
+  st_shareProjectDeleteLoading: false, // 삭제하기
+  st_shareProjectDeleteDone: false,
+  st_shareProjectDeleteError: null,
 };
 
 export const SHARE_PROJECT_REQUEST = "SHARE_PROJECT_REQUEST";
@@ -50,6 +58,16 @@ export const SHAREPROJECT_IMAGE2_FAILURE = "SHAREPROJECT_IMAGE2_FAILURE";
 export const SHAREPROJECT_HISTORY_REQUEST = "SHAREPROJECT_HISTORY_REQUEST";
 export const SHAREPROJECT_HISTORY_SUCCESS = "SHAREPROJECT_HISTORY_SUCCESS";
 export const SHAREPROJECT_HISTORY_FAILURE = "SHAREPROJECT_HISTORY_FAILURE";
+
+export const SHAREPROJECT_CREATE_REQUEST = "SHAREPROJECT_CREATE_REQUEST";
+export const SHAREPROJECT_CREATE_SUCCESS = "SHAREPROJECT_CREATE_SUCCESS";
+export const SHAREPROJECT_CREATE_FAILURE = "SHAREPROJECT_CREATE_FAILURE";
+
+export const SHAREPROJECT_DELETE_REQUEST = "SHAREPROJECT_DELETE_REQUEST";
+export const SHAREPROJECT_DELETE_SUCCESS = "SHAREPROJECT_DELETE_SUCCESS";
+export const SHAREPROJECT_DELETE_FAILURE = "SHAREPROJECT_DELETE_FAILURE";
+
+export const SHAREPROJECT_IMAGE_RESET = "SHAREPROJECT_IMAGE_RESET";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -155,6 +173,53 @@ const reducer = (state = initailState, action) =>
         draft.st_shareProjecthImage2Done = false;
         draft.st_shareProjecthImage2Error = action.data;
         break;
+      }
+
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_CREATE_REQUEST: {
+        draft.st_shareProjecthCreateLoading = true;
+        draft.st_shareProjecthCreateDone = false;
+        draft.st_shareProjecthCreateError = null;
+        break;
+      }
+      case SHAREPROJECT_CREATE_SUCCESS: {
+        draft.st_shareProjecthCreateLoading = false;
+        draft.st_shareProjecthCreateDone = true;
+        draft.st_shareProjecthCreateError = null;
+
+        break;
+      }
+      case SHAREPROJECT_CREATE_FAILURE: {
+        draft.st_shareProjecthCreateLoading = false;
+        draft.st_shareProjecthCreateDone = false;
+        draft.st_shareProjecthCreateError = action.data;
+        break;
+      }
+
+      //////////////////////////////////////////////////////
+      case SHAREPROJECT_DELETE_REQUEST: {
+        draft.st_shareProjecthDeleteLoading = true;
+        draft.st_shareProjecthDeleteDone = false;
+        draft.st_shareProjecthDeleteError = null;
+        break;
+      }
+      case SHAREPROJECT_DELETE_SUCCESS: {
+        draft.st_shareProjecthDeleteLoading = false;
+        draft.st_shareProjecthDeleteDone = true;
+        draft.st_shareProjecthDeleteError = null;
+
+        break;
+      }
+      case SHAREPROJECT_DELETE_FAILURE: {
+        draft.st_shareProjecthDeleteLoading = false;
+        draft.st_shareProjecthDeleteDone = false;
+        draft.st_shareProjecthDeleteError = action.data;
+        break;
+      }
+      //////////////////////////////////////////////////////
+
+      case SHAREPROJECT_IMAGE_RESET: {
+        draft.previewImagePath1 = null;
       }
 
       default:
