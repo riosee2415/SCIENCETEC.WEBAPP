@@ -50,10 +50,60 @@ router.post(
 );
 
 router.post("/list", async (req, res, next) => {
-  const { type, searchData } = req.body;
+  const { type, searchData, searchname } = req.body;
 
   const _type = parseInt(type) || 3;
-  const _searchData = searchData ? searchData : ``;
+  const _searchname = searchname ? searchname : ``;
+
+  let _searchData = ``;
+
+  switch (parseInt(searchData)) {
+    case 1:
+      _searchData = `AND (A.name RLIKE '^(ㄱ|ㄲ)' OR ( A.name >= '가' AND A.name < '나' ))`;
+      break;
+    case 2:
+      _searchData = `AND (A.name RLIKE '^ㄴ' OR ( A.name >= '나' AND A.name < '다' ))`;
+      break;
+    case 3:
+      _searchData = `AND (A.name RLIKE '^(ㄷ|ㄸ)' OR ( A.name >= '다' AND A.name < '라' ))`;
+      break;
+    case 4:
+      _searchData = `AND (A.name RLIKE '^ㄹ' OR ( A.name >= '라' AND A.name < '마' ))`;
+      break;
+    case 5:
+      _searchData = `AND (A.name RLIKE '^ㅁ' OR ( A.name >= '마' AND A.name < '바' ))`;
+      break;
+    case 6:
+      _searchData = `AND (A.name RLIKE '^ㅂ' OR ( A.name >= '바' AND A.name < '사' ))`;
+      break;
+    case 7:
+      _searchData = `AND (A.name RLIKE '^(ㅅ|ㅆ)' OR ( A.name >= '사' AND A.name < '아' ))`;
+      break;
+    case 8:
+      _searchData = `AND (A.name RLIKE '^ㅇ' OR ( A.name >= '아' AND A.name < '자' ))`;
+      break;
+    case 9:
+      _searchData = `AND (A.name RLIKE '^(ㅈ|ㅉ)' OR ( A.name >= '자' AND A.name < '차' ))`;
+      break;
+    case 10:
+      _searchData = `AND (A.name RLIKE '^ㅊ' OR ( A.name >= '차' AND A.name < '카' ))`;
+      break;
+    case 11:
+      _searchData = `AND (A.name RLIKE '^ㅋ' OR ( A.name >= '카' AND A.name < '타' ))`;
+      break;
+    case 12:
+      _searchData = `AND (A.name RLIKE '^ㅌ' OR ( A.name >= '타' AND A.name < '파' ))`;
+      break;
+    case 13:
+      _searchData = `AND (A.name RLIKE '^ㅍ' OR ( A.name >= '파' AND A.name < '하' ))`;
+      break;
+    case 14:
+      _searchData = `AND (A.name RLIKE '^ㅎ' OR ( A.name >= '하'))`;
+      break;
+
+    default:
+      break;
+  }
 
   const selectQuery = `
 SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		      AS	num,
@@ -83,26 +133,8 @@ SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		      AS	num,
   JOIN	users				B
     ON	A.updator = B.id
  WHERE	A.isDelete = 0
-        ${
-          _searchData !== ``
-            ? `
-            AND (name RLIKE '^(ㄱ|ㄲ)' OR ( name >= '가' AND name < '나' ))
-            AND (name RLIKE '^ㄴ' OR ( name >= '나' AND name < '다' ))
-            AND (name RLIKE '^(ㄷ|ㄸ)' OR ( name >= '다' AND name < '라' ))
-            AND (name RLIKE '^ㄹ' OR ( name >= '라' AND name < '마' ))
-            AND (name RLIKE '^ㅁ' OR ( name >= '마' AND name < '바' ))
-            AND (name RLIKE '^ㅂ' OR ( name >= '바' AND name < '사' ))
-            AND (name RLIKE '^(ㅅ|ㅆ)' OR ( name >= '사' AND name < '아' ))
-            AND (name RLIKE '^ㅇ' OR ( name >= '아' AND name < '자' ))
-            AND (name RLIKE '^(ㅈ|ㅉ)' OR ( name >= '자' AND name < '차' ))
-            AND (name RLIKE '^ㅊ' OR ( name >= '차' AND name < '카' ))
-            AND (name RLIKE '^ㅋ' OR ( name >= '카' AND name < '타' ))
-            AND (name RLIKE '^ㅌ' OR ( name >= '타' AND name < '파' ))
-            AND (name RLIKE '^ㅍ' OR ( name >= '파' AND name < '하' ))
-            AND (name RLIKE '^ㅎ' OR ( name >= '하'))
-        `
-            : ``
-        }
+        ${_searchData !== `` ? _searchData : ``}
+   AND  A.name LIKE '%${_searchname}%'
         ${
           _type === 1
             ? `AND A.type = 1`
@@ -287,7 +319,65 @@ router.post("/delete", async (req, res, next) => {
 ///////////////////////////////////////////////////////////////////////////
 
 router.post("/under/list", async (req, res, next) => {
-  const { shareProjectId } = req.body;
+  const { shareProjectId, searchData, searchname } = req.body;
+
+  const _searchname = searchname ? searchname : ``;
+
+  let _searchData = ``;
+
+  switch (parseInt(searchData)) {
+    case searchData > 1:
+      _searchData = ``;
+      break;
+    case 1:
+      _searchData = `AND (A.name RLIKE '^(ㄱ|ㄲ)' OR ( A.name >= '가' AND A.name < '나' ))`;
+      break;
+    case 2:
+      _searchData = `AND (A.name RLIKE '^ㄴ' OR ( A.name >= '나' AND A.name < '다' ))`;
+      break;
+    case 3:
+      _searchData = `AND (A.name RLIKE '^(ㄷ|ㄸ)' OR ( A.name >= '다' AND A.name < '라' ))`;
+      break;
+    case 4:
+      _searchData = `AND (A.name RLIKE '^ㄹ' OR ( A.name >= '라' AND A.name < '마' ))`;
+      break;
+    case 5:
+      _searchData = `AND (A.name RLIKE '^ㅁ' OR ( A.name >= '마' AND A.name < '바' ))`;
+      break;
+    case 6:
+      _searchData = `AND (A.name RLIKE '^ㅂ' OR ( A.name >= '바' AND A.name < '사' ))`;
+      break;
+    case 7:
+      _searchData = `AND (A.name RLIKE '^(ㅅ|ㅆ)' OR ( A.name >= '사' AND A.name < '아' ))`;
+      break;
+    case 8:
+      _searchData = `AND (A.name RLIKE '^ㅇ' OR ( A.name >= '아' AND A.name < '자' ))`;
+      break;
+    case 9:
+      _searchData = `AND (A.name RLIKE '^(ㅈ|ㅉ)' OR ( A.name >= '자' AND A.name < '차' ))`;
+      break;
+    case 10:
+      _searchData = `AND (A.name RLIKE '^ㅊ' OR ( A.name >= '차' AND A.name < '카' ))`;
+      break;
+    case 11:
+      _searchData = `AND (A.name RLIKE '^ㅋ' OR ( A.name >= '카' AND A.name < '타' ))`;
+      break;
+    case 12:
+      _searchData = `AND (A.name RLIKE '^ㅌ' OR ( A.name >= '타' AND A.name < '파' ))`;
+      break;
+    case 13:
+      _searchData = `AND (A.name RLIKE '^ㅍ' OR ( A.name >= '파' AND A.name < '하' ))`;
+      break;
+    case 14:
+      _searchData = `AND (A.name RLIKE '^ㅎ' OR ( A.name >= '하'))`;
+      break;
+    case searchData > 14:
+      _searchData = ``;
+      break;
+
+    default:
+      break;
+  }
 
   const selectQuery = `
 SELECT	ROW_NUMBER()	OVER(ORDER	BY A.createdAt)				AS num,
@@ -313,7 +403,9 @@ SELECT	ROW_NUMBER()	OVER(ORDER	BY A.createdAt)				AS num,
   JOIN	users					        B
     ON	A.updator = B.id
  WHERE	A.isDelete = 0
+        ${_searchData !== `` ? _searchData : ``} 
    AND  A.ShareProjectId = ${shareProjectId}
+   AND  A.name LIKE '%${_searchname}%'
  ORDER	BY num DESC
 `;
 
