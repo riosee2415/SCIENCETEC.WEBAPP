@@ -87,6 +87,8 @@ router.post("/main/list", async (req, res, next) => {
           A.hit,
           A.file,
           A.filename,
+          A.answer,
+          A.answeredAt,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -113,6 +115,8 @@ router.post("/main/list", async (req, res, next) => {
           A.hit,
           A.file,
           A.filename,
+          A.answer,
+          A.answeredAt,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -174,6 +178,8 @@ router.post("/list", async (req, res, next) => {
           A.hit,
           A.file,
           A.filename,
+          A.answer,
+          A.answeredAt,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -200,6 +206,8 @@ router.post("/list", async (req, res, next) => {
           A.hit,
           A.file,
           A.filename,
+          A.answer,
+          A.answeredAt,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -255,6 +263,8 @@ router.post("/admin/list", async (req, res, next) => {
           A.hit,
           A.file,
           A.filename,
+          A.answer,
+          A.answeredAt,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		AS viewCreatedAt,
@@ -348,6 +358,15 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
     return res.status(401).send("게시글을 등록할 수 없습니다. [CODE 077]");
   }
 });
+
+// router.post("/answer", isAdminCheck, async(req,res,next) => {
+//   try {
+
+//   } catch (error) {
+//     console.error(error)
+//     return res.status(401).send("")
+//   }
+// })
 
 router.post("/update", isLoggedIn, async (req, res, next) => {
   const { id, title, content } = req.body;

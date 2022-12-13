@@ -50,6 +50,14 @@ module.exports = class Notice extends Model {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
+        answer: {
+          type: DataTypes.TEXT,
+          allowNull: true,
+        },
+        answeredAt: {
+          type: DataTypes.DATE,
+          allowNull: true,
+        },
       },
       {
         modelName: "Notice",
