@@ -694,11 +694,13 @@ const Notice = ({}) => {
           margin="5px"
           shadow={`3px 3px 6px ${Theme.lightGrey_C}`}
         >
-          <Wrapper al="flex-end">
-            <Button size="small" type="primary" onClick={createModalToggle}>
-              공지사항 생성
-            </Button>
-          </Wrapper>
+          {tab !== 3 && (
+            <Wrapper al="flex-end">
+              <Button size="small" type="primary" onClick={createModalToggle}>
+                게시판 생성
+              </Button>
+            </Wrapper>
+          )}
           <Table
             size="small"
             dataSource={adminNotices ? adminNotices : []}
@@ -729,7 +731,7 @@ const Notice = ({}) => {
               <Wrapper margin={`0px 0px 5px 0px`}>
                 <InfoTitle>
                   <CheckOutlined />
-                  공지사항 기본정보
+                  게시판 기본정보
                 </InfoTitle>
               </Wrapper>
 
@@ -757,7 +759,7 @@ const Notice = ({}) => {
                     { required: true, message: "유형은 필수 선택사항 입니다." },
                   ]}
                 >
-                  <Input size="small" readOnly />
+                  <Input size="small" disabled={true} />
                 </Form.Item>
 
                 <Form.Item
