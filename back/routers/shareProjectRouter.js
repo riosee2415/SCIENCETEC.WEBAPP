@@ -256,6 +256,207 @@ router.post("/delete", async (req, res, next) => {
   }
 });
 
+///////////////////////////////////////////////////////////////////////////
+//////////////////////// - UNDER SHARE PROJECT - //////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+router.post("/under/list", async (req, res, next) => {
+  const { shareProjectId } = req.body;
+
+  const selectQuery = `
+SELECT	ROW_NUMBER()	OVER(ORDER	BY A.createdAt)				AS num,
+        A.id,
+        A.imagePath,
+        A.link,
+        A.repreName,
+        A.estimateDate,
+        DATE_FORMAT(A.estimateDate, "%Y년 %m월 %d일")	    AS viewEstimateDate,
+        A.empCnt,
+        CONCAT(FORMAT(A.empCnt, 0), "명")			           AS viewEmpCnt,
+        A.jobType,
+        A.importantWork,
+        B.username 									          	        AS updator,
+        A.ShareProjectId,
+        A.createdAt,
+        A.updatedAt,
+        DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
+  		  DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
+  FROM	underShareProjects		A
+ INNER
+  JOIN	users					        B
+    ON	A.updator = B.id
+ WHERE	A.isDelete = 0
+   AND  A.ShareProjectId = ${shareProjectId}
+ ORDER	BY num DESC
+`;
+
+  try {
+    const list = await models.sequelize.query(selectQuery);
+
+    return res.status(200).json(list[0]);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(401)
+      .send("해당 조합의 산하 조합 목록을 불러올 수 없습니다.");
+  }
+});
+
+router.post("/under/create", isAdminCheck, async (req, res, next) => {
+  const { shareProjectId } = req.body;
+
+  const insertQuery = `
+  INSERT    INTO    underShareProjects
+  (
+    imagePath,
+    link,
+    repreName,
+    estimateDate,
+    empCnt,
+    jobType,
+    importantWork,
+    updator,
+    createdAt,
+    updatedAt,
+    ShareProjectId
+  )
+  VALUES
+  (
+    "https://via.placeholder.com/500x300",
+    "/",
+    "임시 대표자명",
+    NOW(),
+    0,
+    "임시 업종 내용",
+    "임시 주업무 내용",
+    ${req.user.id},
+    NOW(),
+    NOW(),
+    ${shareProjectId}
+  )
+  `;
+
+  const historyInsertQuery = `
+  INSERT INTO shareProjectHistory
+  (
+    value,
+    updator,
+    createdAt,
+    updatedAt
+  )
+  VALUES 
+  (
+    "임시 산하조합 생성",
+    ${req.user.id},
+    now(),
+    now()
+  )
+  `;
+
+  try {
+    await models.sequelize.query(insertQuery);
+    await models.sequelize.query(historyInsertQuery);
+
+    return res.status(201).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("산하 조합을 등록할 수 없습니다.");
+  }
+});
+
+router.post("/under/update", isAdminCheck, async (req, res, next) => {
+  const {
+    id,
+    shareProjectId,
+    imagePath,
+    link,
+    repreName,
+    estimateDate,
+    empCnt,
+    jobType,
+    importantWork,
+  } = req.body;
+
+  const updateQuery = `
+  UPDATE  underShareProjects
+     SET  imagePath = "${imagePath}",
+          link = "${link}",
+          repreName = "${repreName}",
+          estimateDate = "${estimateDate}",
+          empCnt = ${empCnt},
+          jobType = "${jobType}",
+          importantWork = "${importantWork}",
+          ShareProjectId = ${shareProjectId},
+          updatedAt = NOW()
+   WHERE  id = ${id}
+  `;
+
+  const historyInsertQuery = `
+  INSERT INTO shareProjectHistory
+  (
+    value,
+    updator,
+    createdAt,
+    updatedAt
+  )
+  VALUES 
+  (
+    "산하 조합 정보 수정",
+    ${req.user.id},
+    now(),
+    now()
+  )
+  `;
+
+  try {
+    await models.sequelize.query(updateQuery);
+    await models.sequelize.query(historyInsertQuery);
+
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("산하 조합 정보를 수정할 수 없습니다.");
+  }
+});
+
+router.post("/under/delete", isAdminCheck, async (req, res, next) => {
+  const { id } = req.body;
+
+  const deleteQuery = `
+  UPDATE  underShareProjects
+     SET  isDelete = 1,
+          deletedAt = NOW()
+   WHERE  id = ${id}
+  `;
+
+  const historyInsertQuery = `
+  INSERT INTO shareProjectHistory
+  (
+    value,
+    updator,
+    createdAt,
+    updatedAt
+  )
+  VALUES 
+  (
+    "산하 조합 정보 삭제",
+    ${req.user.id},
+    now(),
+    now()
+  )
+  `;
+
+  try {
+    await models.sequelize.query(deleteQuery);
+    await models.sequelize.query(historyInsertQuery);
+
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("산하 조합을 삭제할 수 없습니다.");
+  }
+});
+
 router.post("/history/list", isAdminCheck, async (req, res, next) => {
   const { datePick } = req.body;
 
