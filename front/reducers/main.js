@@ -3,6 +3,7 @@ import produce from "../util/produce";
 export const initailState = {
   banner: [],
   business: [],
+  year: [],
   city: [],
 
   //
@@ -32,6 +33,7 @@ const reducer = (state = initailState, action) =>
         draft.st_mainError = null;
         draft.banner = action.data.bannerData;
         draft.business = action.data.businessData;
+        draft.year = action.data.yearData;
         draft.city = action.data.cityData;
         break;
       }

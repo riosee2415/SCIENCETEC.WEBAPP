@@ -68,7 +68,7 @@ const MainBtn = styled(CommonButton)`
 
 const Home = ({}) => {
   ////// GLOBAL STATE //////
-  const { banner, business, city } = useSelector((state) => state.main);
+  const { banner, business, year, city } = useSelector((state) => state.main);
   const { mainBoard } = useSelector((state) => state.notice);
 
   ////// HOOKS //////
@@ -78,6 +78,7 @@ const Home = ({}) => {
 
   const [boardType, setBoardType] = useState("전체");
   const [chartConfig, setChartConfig] = useState(null);
+  const [chartConfig2, setChartConfig2] = useState(null);
 
   const [type, setType] = useState(0);
   ////// REDUX //////
@@ -121,12 +122,7 @@ const Home = ({}) => {
           xaxis: {
             categories: business.map((data) => data.value),
             position: "bottom",
-            // axisBorder: {
-            //   show: false,
-            // },
-            // axisTicks: {
-            //   show: false,
-            // },
+
             crosshairs: {
               fill: {
                 type: "gradient",
@@ -144,14 +140,7 @@ const Home = ({}) => {
             },
           },
           yaxis: {
-            // axisBorder: {
-            //   show: false,
-            // },
-            // axisTicks: {
-            //   show: false,
-            // },
             labels: {
-              // show: false,
               formatter: function (val) {
                 return val;
               },
@@ -161,6 +150,66 @@ const Home = ({}) => {
       });
     }
   }, [business]);
+
+  useEffect(() => {
+    if (year) {
+      setChartConfig2({
+        series: [
+          {
+            name: "",
+            data: year.map((data) => data.cnt),
+            // data: [5, 6, 3, 7],
+          },
+        ],
+        options: {
+          chart: {
+            type: "bar",
+          },
+
+          dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+              return;
+            },
+            offsetY: -20,
+            style: {
+              fontSize: "12px",
+              colors: ["#304758"],
+            },
+          },
+
+          xaxis: {
+            categories: year.map((data) => data.year),
+            // categories: ["2019", "2020", "2021", "2022"],
+            position: "bottom",
+
+            crosshairs: {
+              fill: {
+                type: "gradient",
+                gradient: {
+                  colorFrom: "#D8E3F0",
+                  colorTo: "#BED1E6",
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5,
+                },
+              },
+            },
+            tooltip: {
+              enabled: true,
+            },
+          },
+          yaxis: {
+            labels: {
+              formatter: function (val) {
+                return val;
+              },
+            },
+          },
+        },
+      });
+    }
+  }, [year]);
   ////// TOGGLE //////
 
   const boardTypeToggle = useCallback(
@@ -348,6 +397,32 @@ const Home = ({}) => {
 
                   {type === 0 && (
                     <Wrapper overflow="hidden" overflowX={`auto`}>
+                      {chartConfig2 ? (
+                        <Chart
+                          options={{
+                            ...chartConfig2.options,
+                            plotOptions: {
+                              width: "20px",
+                              bar: {
+                                borderRadius: 4,
+                                horizontal: width < 700 ? false : true,
+                              },
+                            },
+                          }}
+                          series={chartConfig2.series}
+                          type="line"
+                          width={width < 700 ? "350px" : "650px"}
+                          height={width < 700 ? "450px" : "390px"}
+                        />
+                      ) : (
+                        // <Text>test</Text>
+                        <LoadingOutlined spin />
+                      )}
+                    </Wrapper>
+                  )}
+
+                  {type === 1 && (
+                    <Wrapper overflow="hidden" overflowX={`auto`}>
                       {chartConfig ? (
                         <Chart
                           options={{
@@ -363,7 +438,7 @@ const Home = ({}) => {
                           series={chartConfig.series}
                           type="bar"
                           width={width < 700 ? "350px" : "650px"}
-                          height={width < 700 ? "450px" : "400px"}
+                          height={width < 700 ? "450px" : "390px"}
                         />
                       ) : (
                         <LoadingOutlined spin />
@@ -371,7 +446,7 @@ const Home = ({}) => {
                     </Wrapper>
                   )}
 
-                  {type === 1 && (
+                  {type === 2 && (
                     <Wrapper>
                       <Image
                         src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_map.png`}
@@ -428,7 +503,7 @@ const Home = ({}) => {
                       radius={`100%`}
                       width={`30px`}
                       height={`30px`}
-                      onClick={() => setType(0)}
+                      onClick={() => setType(type - 1 >= 0 ? type - 1 : type)}
                     >
                       <LeftOutlined />
                     </MainBtn>
@@ -437,7 +512,7 @@ const Home = ({}) => {
                       radius={`100%`}
                       width={`30px`}
                       height={`30px`}
-                      onClick={() => setType(1)}
+                      onClick={() => setType(type + 1 <= 2 ? type + 1 : type)}
                     >
                       <RightOutlined />
                     </MainBtn>
