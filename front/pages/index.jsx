@@ -390,7 +390,7 @@ const Home = ({}) => {
                                       content={
                                         <Wrapper>
                                           <Text>
-                                            {v.combiArea} {v.cnt}명
+                                            {v.combiArea} {v.cnt}개
                                           </Text>
                                         </Wrapper>
                                       }
