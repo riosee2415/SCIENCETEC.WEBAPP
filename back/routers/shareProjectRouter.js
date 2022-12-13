@@ -74,7 +74,7 @@ router.post("/list", async (req, res, next) => {
       _searchData = `AND (A.name RLIKE '^ㅁ' OR ( A.name >= '마' AND A.name < '바' ))`;
       break;
     case 6:
-      _searchData = `AND (A.name RLIKE '^ㅂ' OR ( A.name >= '바' AND A.name < '사' ))`;
+      _searchData = `AND (A.name RLIKE '^(ㅂ|ㅃ)' OR ( A.name >= '바' AND A.name < '사' ))`;
       break;
     case 7:
       _searchData = `AND (A.name RLIKE '^(ㅅ|ㅆ)' OR ( A.name >= '사' AND A.name < '아' ))`;
@@ -345,7 +345,7 @@ router.post("/under/list", async (req, res, next) => {
       _searchData = `AND (A.name RLIKE '^ㅁ' OR ( A.name >= '마' AND A.name < '바' ))`;
       break;
     case 6:
-      _searchData = `AND (A.name RLIKE '^ㅂ' OR ( A.name >= '바' AND A.name < '사' ))`;
+      _searchData = `AND (A.name RLIKE '^(ㅂ|ㅃ)' OR ( A.name >= '바' AND A.name < '사' ))`;
       break;
     case 7:
       _searchData = `AND (A.name RLIKE '^(ㅅ|ㅆ)' OR ( A.name >= '사' AND A.name < '아' ))`;
