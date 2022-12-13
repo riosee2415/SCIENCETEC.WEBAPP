@@ -34,7 +34,7 @@ router.post("/list", async (req, res, next) => {
      WHERE  isExit = 0
        AND  type = 2
      GROUP  BY DATE_FORMAT(combiEstimateDate, "%Y")
-     OPRDER BY year ASC
+     ORDER BY year ASC
     `;
 
   // 사업 유형 별 그래프
