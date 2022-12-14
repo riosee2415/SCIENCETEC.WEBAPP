@@ -247,11 +247,13 @@ router.post("/list", async (req, res, next) => {
 });
 
 router.post("/admin/list", async (req, res, next) => {
-  const { title, content, type } = req.body;
+  const { title, content, type, isAnswer } = req.body;
 
   const _title = title ? title : "";
   const _content = content ? content : ``;
   const _type = type ? type : "";
+
+  const _isAnswer = parseInt(isAnswer) || 3;
 
   const selectQuery = `
   SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		AS num, 
@@ -279,6 +281,15 @@ router.post("/admin/list", async (req, res, next) => {
      AND	A.title LIKE "%${_title}%"
      AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
+          ${
+            _isAnswer === 1
+              ? `AND A.answer IS NULL`
+              : _isAnswer === 2
+              ? `AND A.answer IS NOT NULL`
+              : _isAnswer === 3
+              ? ``
+              : ``
+          }
    ORDER	BY num DESC
   `;
 
