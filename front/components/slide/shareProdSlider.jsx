@@ -161,161 +161,155 @@ const ShareProdSlider = ({
         verticalSwiping={false}
         draggable={true}
       >
-        {slideDatum.length === 0 ? (
-          <Wrapper height={`300px`}>
-            <Empty description="산하가 존재하지 않습니다." />
-          </Wrapper>
-        ) : (
-          slideDatum.map((slide, idx) => {
-            return (
+        {slideDatum.map((slide, idx) => {
+          return (
+            <Wrapper
+              display={`flex !important`}
+              dr={`row`}
+              key={idx}
+              padding={`0 50px`}
+            >
               <Wrapper
-                display={`flex !important`}
+                wrap={`nowrap`}
+                borderBottom={`2px solid ${Theme.basicTheme_C}`}
+                padding={`0 0 20px`}
                 dr={`row`}
-                key={idx}
-                padding={`0 50px`}
+                ju={`flex-start`}
+                fontSize={width < 900 ? `18px` : `20px`}
+                fontWeight={`700`}
               >
-                <Wrapper
-                  wrap={`nowrap`}
-                  borderBottom={`2px solid ${Theme.basicTheme_C}`}
-                  padding={`0 0 20px`}
-                  dr={`row`}
-                  ju={`flex-start`}
-                  fontSize={width < 900 ? `18px` : `20px`}
-                  fontWeight={`700`}
-                >
-                  {/* <Image
+                {/* <Image
                     alt="icon"
                     src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
                     width={`14px`}
                     margin={`0 6px 0 0`}
                   />
                   {slide[0].viewType} */}
-                </Wrapper>
-                <Image
-                  alt="image"
-                  src={slide[0].imagePath}
-                  onClick={() => moveLinkHandler(slide[0].link)}
-                  cursor={`pointer`}
-                  height={`300px`}
-                />
+              </Wrapper>
+              <Image
+                alt="image"
+                src={slide[0].imagePath}
+                onClick={() => moveLinkHandler(slide[0].link)}
+                cursor={`pointer`}
+                height={`300px`}
+              />
+              <Wrapper
+                dr={`row`}
+                height={`55px`}
+                fontSize={`16px`}
+                borderTop={`1px solid ${Theme.lightGrey2_C}`}
+              >
                 <Wrapper
-                  dr={`row`}
-                  height={`55px`}
-                  fontSize={`16px`}
-                  borderTop={`1px solid ${Theme.lightGrey2_C}`}
+                  fontWeight={`bold`}
+                  color={Theme.grey2_C}
+                  width={width < 900 ? `100px` : `180px`}
                 >
-                  <Wrapper
-                    fontWeight={`bold`}
-                    color={Theme.grey2_C}
-                    width={width < 900 ? `100px` : `180px`}
-                  >
-                    조합명
-                  </Wrapper>
-                  <Wrapper
-                    width={
-                      width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
-                    }
-                    al={`flex-start`}
-                  >
-                    {slide[0].name}
-                  </Wrapper>
-                </Wrapper>
-
-                <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                  <Wrapper
-                    fontWeight={`bold`}
-                    color={Theme.grey2_C}
-                    width={width < 900 ? `100px` : `180px`}
-                  >
-                    대표자명
-                  </Wrapper>
-                  <Wrapper
-                    width={
-                      width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
-                    }
-                    al={`flex-start`}
-                  >
-                    {slide[0].repreName}
-                  </Wrapper>
-                </Wrapper>
-                <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                  <Wrapper
-                    fontWeight={`bold`}
-                    color={Theme.grey2_C}
-                    width={width < 900 ? `100px` : `180px`}
-                  >
-                    설립연도
-                  </Wrapper>
-                  <Wrapper
-                    width={
-                      width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
-                    }
-                    al={`flex-start`}
-                  >
-                    {slide[0].viewEstimateDate}
-                  </Wrapper>
-                </Wrapper>
-                <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                  <Wrapper
-                    fontWeight={`bold`}
-                    color={Theme.grey2_C}
-                    width={width < 900 ? `100px` : `180px`}
-                  >
-                    직원수
-                  </Wrapper>
-                  <Wrapper
-                    width={
-                      width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
-                    }
-                    al={`flex-start`}
-                  >
-                    {slide[0].viewEmpCnt}
-                  </Wrapper>
-                </Wrapper>
-                <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                  <Wrapper
-                    fontWeight={`bold`}
-                    color={Theme.grey2_C}
-                    width={width < 900 ? `100px` : `180px`}
-                  >
-                    업종
-                  </Wrapper>
-                  <Wrapper
-                    width={
-                      width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
-                    }
-                    al={`flex-start`}
-                  >
-                    {slide[0].jobType}
-                  </Wrapper>
+                  조합명
                 </Wrapper>
                 <Wrapper
-                  dr={`row`}
-                  height={`75px`}
-                  fontSize={`16px`}
-                  borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                  width={
+                    width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
+                  }
+                  al={`flex-start`}
                 >
-                  <Wrapper
-                    fontWeight={`bold`}
-                    color={Theme.grey2_C}
-                    width={width < 900 ? `100px` : `180px`}
-                  >
-                    주업무
-                  </Wrapper>
-                  <Wrapper
-                    width={
-                      width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
-                    }
-                    al={`flex-start`}
-                    fontSize={`14px`}
-                  >
-                    {slide[0].importantWork}
-                  </Wrapper>
+                  {slide[0].name}
                 </Wrapper>
               </Wrapper>
-            );
-          })
-        )}
+
+              <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                <Wrapper
+                  fontWeight={`bold`}
+                  color={Theme.grey2_C}
+                  width={width < 900 ? `100px` : `180px`}
+                >
+                  대표자명
+                </Wrapper>
+                <Wrapper
+                  width={
+                    width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
+                  }
+                  al={`flex-start`}
+                >
+                  {slide[0].repreName}
+                </Wrapper>
+              </Wrapper>
+              <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                <Wrapper
+                  fontWeight={`bold`}
+                  color={Theme.grey2_C}
+                  width={width < 900 ? `100px` : `180px`}
+                >
+                  설립연도
+                </Wrapper>
+                <Wrapper
+                  width={
+                    width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
+                  }
+                  al={`flex-start`}
+                >
+                  {slide[0].viewEstimateDate}
+                </Wrapper>
+              </Wrapper>
+              <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                <Wrapper
+                  fontWeight={`bold`}
+                  color={Theme.grey2_C}
+                  width={width < 900 ? `100px` : `180px`}
+                >
+                  직원수
+                </Wrapper>
+                <Wrapper
+                  width={
+                    width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
+                  }
+                  al={`flex-start`}
+                >
+                  {slide[0].viewEmpCnt}
+                </Wrapper>
+              </Wrapper>
+              <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                <Wrapper
+                  fontWeight={`bold`}
+                  color={Theme.grey2_C}
+                  width={width < 900 ? `100px` : `180px`}
+                >
+                  업종
+                </Wrapper>
+                <Wrapper
+                  width={
+                    width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
+                  }
+                  al={`flex-start`}
+                >
+                  {slide[0].jobType}
+                </Wrapper>
+              </Wrapper>
+              <Wrapper
+                dr={`row`}
+                height={`75px`}
+                fontSize={`16px`}
+                borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+              >
+                <Wrapper
+                  fontWeight={`bold`}
+                  color={Theme.grey2_C}
+                  width={width < 900 ? `100px` : `180px`}
+                >
+                  주업무
+                </Wrapper>
+                <Wrapper
+                  width={
+                    width < 900 ? `calc(100% - 100px)` : `calc(100% - 180px)`
+                  }
+                  al={`flex-start`}
+                  fontSize={`14px`}
+                >
+                  {slide[0].importantWork}
+                </Wrapper>
+              </Wrapper>
+            </Wrapper>
+          );
+        })}
       </Carousel>
 
       {dots && (

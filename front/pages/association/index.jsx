@@ -396,9 +396,15 @@ const Association = () => {
             footer={null}
             width="800px"
           >
-            <Wrapper padding={`50px`}>
-              <ShareProdSlider datum={underList} />
-            </Wrapper>
+            {underList.length === 0 ? (
+              <Wrapper>
+                <Empty description="산하가 존재하지 않습니다." />
+              </Wrapper>
+            ) : (
+              <Wrapper padding={`50px`}>
+                <ShareProdSlider datum={underList} />
+              </Wrapper>
+            )}
           </Modal>
         </WholeWrapper>
       </ClientLayout>
