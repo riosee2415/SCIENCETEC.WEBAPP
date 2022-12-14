@@ -117,6 +117,10 @@ export const initailState = {
   st_userExitLoading: false,
   st_userExitDone: false,
   st_userExitError: null,
+  //
+  st_userInfoUpdateeLoading: false, // 회원정보 수정
+  st_userInfoUpdateeDone: false,
+  st_userInfoUpdateeError: null,
 };
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -214,6 +218,10 @@ export const USER_GOOGLE_FAILURE = "USER_GOOGLE_FAILURE";
 export const USER_EXIT_REQUEST = "USER_EXIT_REQUEST";
 export const USER_EXIT_SUCCESS = "USER_EXIT_SUCCESS";
 export const USER_EXIT_FAILURE = "USER_EXIT_FAILURE";
+
+export const USER_INFO_UPDATE_REQUEST = "USER_INFO_UPDATE_REQUEST";
+export const USER_INFO_UPDATE_SUCCESS = "USER_INFO_UPDATE_SUCCESS";
+export const USER_INFO_UPDATE_FAILURE = "USER_INFO_UPDATE_FAILURE";
 
 export const UPDATE_MODAL_OPEN_REQUEST = "UPDATE_MODAL_OPEN_REQUEST";
 export const UPDATE_MODAL_CLOSE_REQUEST = "UPDATE_MODAL_CLOSE_REQUEST";
@@ -736,6 +744,26 @@ const reducer = (state = initailState, action) =>
         draft.st_userExitLoading = false;
         draft.st_userExitDone = false;
         draft.st_userExitError = action.error;
+        break;
+      }
+      //////////////////////////////////////////////
+
+      case USER_INFO_UPDATE_REQUEST: {
+        draft.st_userInfoUpdateeLoading = true;
+        draft.st_userInfoUpdateeDone = false;
+        draft.st_userInfoUpdateeError = null;
+        break;
+      }
+      case USER_INFO_UPDATE_SUCCESS: {
+        draft.st_userInfoUpdateeLoading = false;
+        draft.st_userInfoUpdateeDone = true;
+        draft.st_userInfoUpdateeError = null;
+        break;
+      }
+      case USER_INFO_UPDATE_FAILURE: {
+        draft.st_userInfoUpdateeLoading = false;
+        draft.st_userInfoUpdateeDone = false;
+        draft.st_userInfoUpdateeError = action.error;
         break;
       }
       //////////////////////////////////////////////

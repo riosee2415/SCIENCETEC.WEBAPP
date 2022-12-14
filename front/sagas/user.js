@@ -96,6 +96,10 @@ import {
   USER_EXIT_REQUEST,
   USER_EXIT_SUCCESS,
   USER_EXIT_FAILURE,
+  //
+  USER_INFO_UPDATE_REQUEST,
+  USER_INFO_UPDATE_SUCCESS,
+  USER_INFO_UPDATE_FAILURE,
 } from "../reducers/user";
 
 // SAGA AREA ********************************************************************************************************
@@ -744,6 +748,33 @@ function* userExit(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// ******************************************************************************************************************
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function userInfoUpdateAPI(data) {
+  return await axios.post(`/api/user/update`, data);
+}
+
+function* userInfoUpdate(action) {
+  try {
+    const result = yield call(userInfoUpdateAPI, action.data);
+    yield put({
+      type: USER_INFO_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: USER_INFO_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 
 function* watchLoadMyInfo() {
@@ -842,6 +873,10 @@ function* watchUserExit() {
   yield takeLatest(USER_EXIT_REQUEST, userExit);
 }
 
+function* watchUserInfoUpdate() {
+  yield takeLatest(USER_INFO_UPDATE_REQUEST, userInfoUpdate);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* userSaga() {
   yield all([
@@ -869,6 +904,7 @@ export default function* userSaga() {
     fork(watchUserMain),
     fork(watchUserGoogle),
     fork(watchUserExit),
+    fork(watchUserInfoUpdate),
     //
   ]);
 }

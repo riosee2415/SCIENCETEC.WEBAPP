@@ -93,7 +93,7 @@ export const items = {
       useYn: true,
     },
     {
-      name: "관리자 관리",
+      name: "관리자관리",
       link: "/admin/user/adminUserRight",
       useYn: false,
     },
@@ -101,6 +101,11 @@ export const items = {
       name: "탈퇴회원관리",
       link: "/admin/user/userExitList",
       useYn: false,
+    },
+    {
+      name: "회원등록및수정관리",
+      link: "/admin/user/userCreate",
+      useYn: true,
     },
   ],
   고객지원관리: [
