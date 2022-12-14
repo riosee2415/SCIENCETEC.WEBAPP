@@ -226,52 +226,56 @@ const UserList = ({}) => {
     if (statusList) {
       const tempArr1 = [];
 
-      statusList.userList.map((data) => {
-        const tempArr2 = [];
-        const tempArr3 = [];
-        const tempArr4 = [];
+      statusList.userList &&
+        statusList.userList.map((data) => {
+          const tempArr2 = [];
+          const tempArr3 = [];
+          const tempArr4 = [];
 
-        statusList.sectorList.map((sector) => {
-          if (data.id === sector.UserId) {
-            tempArr2.push(sector.value);
-          }
-        });
-        statusList.combiTypeList.map((combi) => {
-          if (data.id === combi.UserId) {
-            tempArr3.push(combi.value);
-          }
-        });
-        statusList.businessTypeList.map((business) => {
-          if (data.id === business.UserId) {
-            tempArr4.push(business.value);
-          }
-        });
+          statusList.sectorList &&
+            statusList.sectorList.map((sector) => {
+              if (data.id === sector.UserId) {
+                tempArr2.push(sector.value);
+              }
+            });
+          statusList.combiTypeList &&
+            statusList.combiTypeList.map((combi) => {
+              if (data.id === combi.UserId) {
+                tempArr3.push(combi.value);
+              }
+            });
+          statusList.businessTypeList &&
+            statusList.businessTypeList.map((business) => {
+              if (data.id === business.UserId) {
+                tempArr4.push(business.value);
+              }
+            });
 
-        tempArr1.push({
-          회원유형: data.viewType,
-          회원조합: data.combiName,
-          회원아이디: data.userId,
-          회원이메일: data.email,
-          회원전화번호: data.mobile,
-          회원우편: data.postCode,
-          회원주소: data.address,
-          회원상세주소: data.detailAddress,
-          회원이사장: data.repreName,
-          회원지역: data.combiArea,
-          회원법인수: data.corporationCnt,
-          회원개인수: data.personalCnt,
-          회원홈페이지: data.combiHomepage,
-          회원설립날짜: data.viewEstimateDate,
-          회원조합원수1: data.importantBusiness1,
-          회원조합원수2: data.importantBusiness2,
-          회원조합원수3: data.importantBusiness3,
-          회원자본금: data.viewBusinessCapital,
-          회원매출액: data.viewBusinessPrice,
-          회원사업분야: tempArr2.toString(),
-          회원조합유형: tempArr3.toString(),
-          회원사업유형: tempArr4.toString(),
+          tempArr1.push({
+            회원유형: data.viewType,
+            회원조합: data.combiName,
+            회원아이디: data.userId,
+            회원이메일: data.email,
+            회원전화번호: data.mobile,
+            회원우편: data.postCode,
+            회원주소: data.address,
+            회원상세주소: data.detailAddress,
+            회원이사장: data.repreName,
+            회원지역: data.combiArea,
+            회원법인수: data.corporationCnt,
+            회원개인수: data.personalCnt,
+            회원홈페이지: data.combiHomepage,
+            회원설립날짜: data.viewEstimateDate,
+            회원조합원수1: data.importantBusiness1,
+            회원조합원수2: data.importantBusiness2,
+            회원조합원수3: data.importantBusiness3,
+            회원자본금: data.viewBusinessCapital,
+            회원매출액: data.viewBusinessPrice,
+            회원사업분야: tempArr2.toString(),
+            회원조합유형: tempArr3.toString(),
+            회원사업유형: tempArr4.toString(),
+          });
         });
-      });
 
       setAllExcelData(tempArr1);
     }
