@@ -28,6 +28,22 @@ import {
   SHAREPROJECT_DELETE_REQUEST,
   SHAREPROJECT_DELETE_SUCCESS,
   SHAREPROJECT_DELETE_FAILURE,
+  //
+  UNDER_LIST_REQUEST,
+  UNDER_LIST_SUCCESS,
+  UNDER_LIST_FAILURE,
+  //
+  UNDER_CREATE_REQUEST,
+  UNDER_CREATE_SUCCESS,
+  UNDER_CREATE_FAILURE,
+  //
+  UNDER_UPDATE_REQUEST,
+  UNDER_UPDATE_SUCCESS,
+  UNDER_UPDATE_FAILURE,
+  //
+  UNDER_DELETE_REQUEST,
+  UNDER_DELETE_SUCCESS,
+  UNDER_DELETE_FAILURE,
 } from "../reducers/shareProject";
 
 // ******************************************************************************************************************
@@ -222,6 +238,98 @@ function* shareDelete(action) {
   }
 }
 
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function underListAPI(data) {
+  return await axios.post(`/api/share/under/list`, data);
+}
+
+function* underList(action) {
+  try {
+    const result = yield call(underListAPI, action.data);
+
+    yield put({
+      type: UNDER_LIST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNDER_LIST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function underCreateAPI(data) {
+  return await axios.post(`/api/share/under/create`, data);
+}
+
+function* underCreate(action) {
+  try {
+    const result = yield call(underCreateAPI, action.data);
+
+    yield put({
+      type: UNDER_CREATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNDER_CREATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function underUpdateAPI(data) {
+  return await axios.post(`/api/share/under/update`, data);
+}
+
+function* underUpdate(action) {
+  try {
+    const result = yield call(underUpdateAPI, action.data);
+
+    yield put({
+      type: UNDER_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNDER_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function underDeleteAPI(data) {
+  return await axios.post(`/api/share/under/delete`, data);
+}
+
+function* underDelete(action) {
+  try {
+    const result = yield call(underDeleteAPI, action.data);
+
+    yield put({
+      type: UNDER_DELETE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNDER_DELETE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
@@ -254,6 +362,19 @@ function* watchShareCreate() {
 function* watchShareDelete() {
   yield takeLatest(SHAREPROJECT_DELETE_REQUEST, shareDelete);
 }
+//
+function* watchUnderList() {
+  yield takeLatest(UNDER_LIST_REQUEST, underList);
+}
+function* watchUnderCreate() {
+  yield takeLatest(UNDER_CREATE_REQUEST, underCreate);
+}
+function* watchUnderUpdate() {
+  yield takeLatest(UNDER_UPDATE_REQUEST, underUpdate);
+}
+function* watchUnderDelete() {
+  yield takeLatest(UNDER_DELETE_REQUEST, underDelete);
+}
 
 //////////////////////////////////////////////////////////////
 export default function* shareSaga() {
@@ -265,6 +386,11 @@ export default function* shareSaga() {
     fork(watchShareHistoryList),
     fork(watchShareCreate),
     fork(watchShareDelete),
+    //
+    fork(watchUnderList),
+    fork(watchUnderCreate),
+    fork(watchUnderUpdate),
+    fork(watchUnderDelete),
     //
   ]);
 }

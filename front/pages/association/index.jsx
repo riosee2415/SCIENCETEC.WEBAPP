@@ -20,21 +20,47 @@ import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import { SHARE_PROJECT_REQUEST } from "../../reducers/shareProject";
-import { Empty } from "antd";
+import {
+  SHARE_PROJECT_REQUEST,
+  UNDER_LIST_REQUEST,
+} from "../../reducers/shareProject";
+import { Empty, Modal } from "antd";
 import useInput from "../../hooks/useInput";
+import { useState } from "react";
+import ShareProdSlider from "../../components/slide/shareProdSlider";
 
 const Association = () => {
   ////// GLOBAL STATE //////
-  const { shareProjects } = useSelector((state) => state.shareProject);
+  const { shareProjects, underList } = useSelector(
+    (state) => state.shareProject
+  );
   ////// HOOKS //////
   const width = useWidth();
 
   const searchInput = useInput(``);
+
+  const [vModal, setVModal] = useState(false);
   ////// REDUX //////
   const dispatch = useDispatch();
   ////// USEEFFECT //////
   ////// TOGGLE //////
+
+  const vModalToggle = useCallback(
+    (data) => {
+      if (data) {
+        dispatch({
+          type: UNDER_LIST_REQUEST,
+          data: {
+            shareProjectId: data.id,
+          },
+        });
+      }
+
+      setVModal(!vModal);
+    },
+    [vModal]
+  );
+
   ////// HANDLER //////
 
   const searchInputHandler = useCallback(() => {
@@ -195,7 +221,6 @@ const Association = () => {
                   </Wrapper>
                 ) : (
                   shareProjects.map((data) => {
-                    console.log(data);
                     return (
                       <Wrapper
                         width={width < 1000 ? `100%` : `49%`}
@@ -352,7 +377,9 @@ const Association = () => {
                           </Wrapper>
 
                           <Wrapper al={`flex-end`}>
-                            <CommonButton>자세히 보기</CommonButton>
+                            <CommonButton onClick={() => vModalToggle(data)}>
+                              자세히 보기
+                            </CommonButton>
                           </Wrapper>
                         </Wrapper>
                       </Wrapper>
@@ -362,6 +389,17 @@ const Association = () => {
               </Wrapper>
             </Wrapper>
           </RsWrapper>
+
+          <Modal
+            visible={vModal}
+            onCancel={() => vModalToggle(null)}
+            footer={null}
+            width="800px"
+          >
+            <Wrapper padding={`50px`}>
+              <ShareProdSlider datum={underList} />
+            </Wrapper>
+          </Modal>
         </WholeWrapper>
       </ClientLayout>
     </>
