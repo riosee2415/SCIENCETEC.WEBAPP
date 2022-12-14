@@ -47,7 +47,6 @@ const Devel = () => {
   }, [searchInput]);
 
   const searchHandler = useCallback((data) => {
-    console.log(data);
     dispatch({
       type: SHARE_PROJECT_REQUEST,
       data: {

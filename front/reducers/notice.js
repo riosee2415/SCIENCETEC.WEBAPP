@@ -59,6 +59,10 @@ export const initailState = {
   st_noticeDetailLoading: false, // 공지사항 디테일
   st_noticeDetailDone: false,
   st_noticeDetailError: null,
+  //
+  st_noticeAnswerLoading: false, // 답변
+  st_noticeAnswerDone: false,
+  st_noticeAnswerError: null,
 };
 
 export const NOTICE_LIST_REQUEST = "NOTICE_LIST_REQUEST";
@@ -104,6 +108,10 @@ export const NOTICE_HISTORY_FAILURE = "NOTICE_HISTORY_FAILURE";
 export const NOTICE_DETAIL_REQUEST = "NOTICE_DETAIL_REQUEST";
 export const NOTICE_DETAIL_SUCCESS = "NOTICE_DETAIL_SUCCESS";
 export const NOTICE_DETAIL_FAILURE = "NOTICE_DETAIL_FAILURE";
+//
+export const NOTICE_ANSWER_REQUEST = "NOTICE_ANSWER_REQUEST";
+export const NOTICE_ANSWER_SUCCESS = "NOTICE_ANSWER_SUCCESS";
+export const NOTICE_ANSWER_FAILURE = "NOTICE_ANSWER_FAILURE";
 //
 export const CREATE_MODAL_OPEN_REQUEST = "CREATE_MODAL_OPEN_REQUEST";
 export const CREATE_MODAL_CLOSE_REQUEST = "CREATE_MODAL_CLOSE_REQUEST";
@@ -347,6 +355,27 @@ const reducer = (state = initailState, action) =>
         draft.st_noticeDetailLoading = false;
         draft.st_noticeDetailDone = false;
         draft.st_noticeDetailError = action.error;
+        break;
+      }
+      ///////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////
+      case NOTICE_ANSWER_REQUEST: {
+        draft.st_noticeAnswerLoading = true;
+        draft.st_noticeAnswerDone = false;
+        draft.st_noticeAnswerError = null;
+        break;
+      }
+      case NOTICE_ANSWER_SUCCESS: {
+        draft.st_noticeAnswerLoading = false;
+        draft.st_noticeAnswerDone = true;
+        draft.st_noticeAnswerError = null;
+        break;
+      }
+      case NOTICE_ANSWER_FAILURE: {
+        draft.st_noticeAnswerLoading = false;
+        draft.st_noticeAnswerDone = false;
+        draft.st_noticeAnswerError = action.error;
         break;
       }
       ///////////////////////////////////////////////////////

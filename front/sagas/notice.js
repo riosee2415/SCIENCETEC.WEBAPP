@@ -44,6 +44,10 @@ import {
   NOTICE_DETAIL_REQUEST,
   NOTICE_DETAIL_SUCCESS,
   NOTICE_DETAIL_FAILURE,
+  //
+  NOTICE_ANSWER_REQUEST,
+  NOTICE_ANSWER_SUCCESS,
+  NOTICE_ANSWER_FAILURE,
 } from "../reducers/notice";
 
 // ******************************************************************************************************************
@@ -347,6 +351,33 @@ function* noticeDetail(action) {
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function noticeAnswerAPI(data) {
+  return await axios.post(`/api/notice/answer`, data);
+}
+
+function* noticeAnswer(action) {
+  try {
+    const result = yield call(noticeAnswerAPI, action.data);
+
+    yield put({
+      type: NOTICE_ANSWER_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: NOTICE_ANSWER_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
 //////////////////////////////////////////////////////////////
 function* watchNoticeList() {
   yield takeLatest(NOTICE_LIST_REQUEST, noticeList);
@@ -392,6 +423,10 @@ function* watchNoticeDetail() {
   yield takeLatest(NOTICE_DETAIL_REQUEST, noticeDetail);
 }
 
+function* watchNoticeAnswer() {
+  yield takeLatest(NOTICE_ANSWER_REQUEST, noticeAnswer);
+}
+
 //////////////////////////////////////////////////////////////
 export default function* noticeSaga() {
   yield all([
@@ -406,6 +441,7 @@ export default function* noticeSaga() {
     fork(watchNoticeFileInfo),
     fork(watchNoticeHistory),
     fork(watchNoticeDetail),
+    fork(watchNoticeAnswer),
     //
   ]);
 }

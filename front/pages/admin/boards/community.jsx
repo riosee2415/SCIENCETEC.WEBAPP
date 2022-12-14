@@ -41,6 +41,7 @@ import {
   UPLOAD_PATH_INIT,
   NOTICE_CREATE_REQUEST,
   NOTICE_DELETE_REQUEST,
+  NOTICE_ANSWER_REQUEST,
 } from "../../../reducers/notice";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
@@ -73,7 +74,7 @@ const ViewStatusIcon = styled(EyeOutlined)`
     props.active ? props.theme.subTheme5_C : props.theme.lightGrey_C};
 `;
 
-const Notice = ({}) => {
+const Community = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
   const {
     adminNotices,
@@ -99,6 +100,9 @@ const Notice = ({}) => {
     st_noticeDeleteLoading,
     st_noticeDeleteDone,
     st_noticeDeleteError,
+    //
+    st_noticeAnswerDone,
+    st_noticeAnswerError,
   } = useSelector((state) => state.notice);
 
   const router = useRouter();
@@ -145,6 +149,26 @@ const Notice = ({}) => {
   ////// USEEFFECT //////
 
   useEffect(() => {
+    if (st_noticeAnswerDone) {
+      dispatch({
+        type: NOTICE_ADMIN_LIST_REQUEST,
+        data: {
+          type: "커뮤니티",
+          isAnswer: tab,
+        },
+      });
+
+      setCurrentData(null);
+
+      return message.success("답변을 등록하였습니다.");
+    }
+
+    if (st_noticeAnswerError) {
+      return message.error(st_noticeAnswerError);
+    }
+  }, [st_noticeAnswerDone, st_noticeAnswerError]);
+
+  useEffect(() => {
     if (st_noticeFileDone) {
       setCurrentData((prev) => {
         return {
@@ -172,37 +196,11 @@ const Notice = ({}) => {
     if (st_noticeCreateDone) {
       message.success("정보가 업데이트 되었습니다.");
 
-      let sendType = "";
-
-      switch (tab) {
-        case 0:
-          sendType = "";
-          break;
-
-        case 1:
-          sendType = "공지사항";
-          break;
-
-        case 2:
-          sendType = "자료실";
-          break;
-
-        case 3:
-          sendType = "커뮤니티";
-          break;
-
-        case 4:
-          sendType = "FAQ";
-          break;
-
-        default:
-          break;
-      }
-
       dispatch({
         type: NOTICE_ADMIN_LIST_REQUEST,
         data: {
-          type: sendType,
+          type: "커뮤니티",
+          isAnswer: tab,
         },
       });
     }
@@ -218,37 +216,11 @@ const Notice = ({}) => {
 
   useEffect(() => {
     if (st_noticeDeleteDone) {
-      let sendType = "";
-
-      switch (tab) {
-        case 0:
-          sendType = "";
-          break;
-
-        case 1:
-          sendType = "공지사항";
-          break;
-
-        case 2:
-          sendType = "자료실";
-          break;
-
-        case 3:
-          sendType = "커뮤니티";
-          break;
-
-        case 4:
-          sendType = "FAQ";
-          break;
-
-        default:
-          break;
-      }
-
       dispatch({
         type: NOTICE_ADMIN_LIST_REQUEST,
         data: {
-          type: sendType,
+          type: "커뮤니티",
+          isAnswer: tab,
         },
       });
 
@@ -267,37 +239,11 @@ const Notice = ({}) => {
     if (st_noticeUpdateDone) {
       message.success("정보가 업데이트 되었습니다.");
 
-      let sendType = "";
-
-      switch (tab) {
-        case 0:
-          sendType = "";
-          break;
-
-        case 1:
-          sendType = "공지사항";
-          break;
-
-        case 2:
-          sendType = "자료실";
-          break;
-
-        case 3:
-          sendType = "커뮤니티";
-          break;
-
-        case 4:
-          sendType = "FAQ";
-          break;
-
-        default:
-          break;
-      }
-
       dispatch({
         type: NOTICE_ADMIN_LIST_REQUEST,
         data: {
-          type: sendType,
+          type: "커뮤니티",
+          isAnswer: tab,
         },
       });
     }
@@ -312,37 +258,11 @@ const Notice = ({}) => {
   // ********************** 공지사항 상단고정 수정 *************************
   useEffect(() => {
     if (st_noticeUpdateTopDone) {
-      let sendType = "";
-
-      switch (tab) {
-        case 0:
-          sendType = "";
-          break;
-
-        case 1:
-          sendType = "공지사항";
-          break;
-
-        case 2:
-          sendType = "자료실";
-          break;
-
-        case 3:
-          sendType = "커뮤니티";
-          break;
-
-        case 4:
-          sendType = "FAQ";
-          break;
-
-        default:
-          break;
-      }
-
       dispatch({
         type: NOTICE_ADMIN_LIST_REQUEST,
         data: {
-          type: sendType,
+          type: "커뮤니티",
+          isAnswer: tab,
         },
       });
 
@@ -371,37 +291,12 @@ const Notice = ({}) => {
 
   useEffect(() => {
     setCurrentData(null);
-    let sendType = "";
-
-    switch (tab) {
-      case 0:
-        sendType = "";
-        break;
-
-      case 1:
-        sendType = "공지사항";
-        break;
-
-      case 2:
-        sendType = "자료실";
-        break;
-
-      case 3:
-        sendType = "커뮤니티";
-        break;
-
-      case 4:
-        sendType = "FAQ";
-        break;
-
-      default:
-        break;
-    }
 
     dispatch({
       type: NOTICE_ADMIN_LIST_REQUEST,
       data: {
-        type: sendType,
+        type: "커뮤니티",
+        isAnswer: tab,
       },
     });
   }, [tab]);
@@ -502,6 +397,7 @@ const Notice = ({}) => {
       infoForm.setFieldsValue({
         title: record.title,
         type: record.type,
+        answer: record.answer,
         content: record.content,
         hit: record.hit,
         createdAt: record.viewCreatedAt,
@@ -516,12 +412,10 @@ const Notice = ({}) => {
   const infoFormFinish = useCallback(
     (data) => {
       dispatch({
-        type: NOTICE_UPDATE_REQUEST,
+        type: NOTICE_ANSWER_REQUEST,
         data: {
           id: currentData.id,
-          title: data.title,
-          content: data.content,
-          type: data.type,
+          answer: data.answer,
         },
       });
     },
@@ -576,8 +470,10 @@ const Notice = ({}) => {
       dataIndex: "num",
     },
     {
-      title: "유형",
-      dataIndex: "type",
+      title: "답변상태",
+      render: (data) => (
+        <Wrapper al={`flex-start`}>{data.answer ? "완료" : "미완료"}</Wrapper>
+      ),
     },
     {
       title: "공지사항 제목",
@@ -600,6 +496,7 @@ const Notice = ({}) => {
     },
   ];
 
+  console.log(adminNotices);
   return (
     <AdminLayout>
       {/* MENU TAB */}
@@ -644,21 +541,13 @@ const Notice = ({}) => {
 
       {/* TAB */}
       <Wrapper padding={`10px`} dr={`row`} ju="flex-start">
-        {/* <Button
-          type={tab === 0 ? "primary" : "default"}
-          size="small"
-          style={{ marginRight: "5px" }}
-          onClick={() => setTab(0)}
-        >
-          전체
-        </Button> */}
         <Button
           type={tab === 1 ? "primary" : "default"}
           size="small"
           style={{ marginRight: "5px" }}
           onClick={() => setTab(1)}
         >
-          공지사항
+          미완료
         </Button>
         <Button
           type={tab === 2 ? "primary" : "default"}
@@ -666,23 +555,16 @@ const Notice = ({}) => {
           style={{ marginRight: "5px" }}
           onClick={() => setTab(2)}
         >
-          자료실
+          완료
         </Button>
-        {/* <Button
+
+        <Button
           type={tab === 3 ? "primary" : "default"}
           size="small"
           style={{ marginRight: "5px" }}
           onClick={() => setTab(3)}
         >
-          커뮤니티
-        </Button> */}
-        <Button
-          type={tab === 4 ? "primary" : "default"}
-          size="small"
-          style={{ marginRight: "5px" }}
-          onClick={() => setTab(4)}
-        >
-          FAQ
+          전체
         </Button>
       </Wrapper>
 
@@ -694,13 +576,6 @@ const Notice = ({}) => {
           margin="5px"
           shadow={`3px 3px 6px ${Theme.lightGrey_C}`}
         >
-          {tab !== 3 && (
-            <Wrapper al="flex-end">
-              <Button size="small" type="primary" onClick={createModalToggle}>
-                게시판 생성
-              </Button>
-            </Wrapper>
-          )}
           <Table
             size="small"
             dataSource={adminNotices ? adminNotices : []}
@@ -727,14 +602,12 @@ const Notice = ({}) => {
                 bgColor={Theme.lightGrey_C}
                 margin={`30px 0px`}
               ></Wrapper>
-
               <Wrapper margin={`0px 0px 5px 0px`}>
                 <InfoTitle>
                   <CheckOutlined />
-                  게시판 기본정보
+                  커뮤니티 기본정보
                 </InfoTitle>
               </Wrapper>
-
               <Form
                 form={infoForm}
                 labelCol={{ span: 3 }}
@@ -749,7 +622,7 @@ const Notice = ({}) => {
                     { required: true, message: "제목은 필수 입력사항 입니다." },
                   ]}
                 >
-                  <Input size="small" />
+                  <Input size="small" disabled={true} />
                 </Form.Item>
 
                 <Form.Item
@@ -769,7 +642,14 @@ const Notice = ({}) => {
                     { required: true, message: "내용은 필수 입력사항 입니다." },
                   ]}
                 >
-                  <Input.TextArea rows={10} />
+                  <Input.TextArea rows={10} disabled={true} />
+                </Form.Item>
+
+                <Form.Item label="답변" name="answer">
+                  <Input.TextArea
+                    rows={10}
+                    disabled={currentData.answer ? true : false}
+                  />
                 </Form.Item>
 
                 <Form.Item label="조회수" name="hit">
@@ -814,7 +694,7 @@ const Notice = ({}) => {
 
                 <Wrapper dr={`row`} ju="flex-end">
                   <Button type="primary" size="small" htmlType="submit">
-                    정보 업데이트
+                    답변 업데이트
                   </Button>
                   <Popconfirm
                     title="삭제하시겠습니까?"
@@ -822,112 +702,18 @@ const Notice = ({}) => {
                     cancelText="취소"
                     onConfirm={deleteNoticeHandler}
                   >
-                    <ModalBtn type="danger" size="small">
+                    {/* <ModalBtn type="danger" size="small">
                       삭제
-                    </ModalBtn>
+                    </ModalBtn> */}
                   </Popconfirm>
                 </Wrapper>
               </Form>
-
               <Wrapper
                 width="100%"
                 height="1px"
                 bgColor={Theme.lightGrey_C}
                 margin={`30px 0px`}
               ></Wrapper>
-
-              {currentData.type !== "커뮤니티" && (
-                <>
-                  <Wrapper margin={`0px 0px 5px 0px`}>
-                    <InfoTitle>
-                      <CheckOutlined />
-                      공지사항 파일정보
-                    </InfoTitle>
-                  </Wrapper>
-
-                  <Wrapper padding="0px 20px">
-                    {currentData.file ? (
-                      <Wrapper al="flex-start">
-                        <Text>등록된 파일이 1개 있습니다.</Text>
-                        <Text>{filename}</Text>
-                        <Wrapper dr="row" ju="flex-start">
-                          <Button
-                            type="defalut"
-                            size="small"
-                            onClick={() =>
-                              fileDownloadHandler(currentData.file)
-                            }
-                          >
-                            다운로드
-                          </Button>
-
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
-
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={clickFileUpload}
-                            loading={st_noticeFileLoading}
-                          >
-                            수정하기
-                          </Button>
-
-                          {uploadFilePath && (
-                            <Button
-                              type="primary"
-                              size="small"
-                              style={{ marginLeft: "10px" }}
-                              onClick={applyFileHandler}
-                            >
-                              적용하기
-                            </Button>
-                          )}
-                        </Wrapper>
-                      </Wrapper>
-                    ) : (
-                      <Wrapper al="flex-start">
-                        <Text>등록된 파일이 없습니다.</Text>
-
-                        <Wrapper ju="flex-start" dr="row">
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
-
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={clickFileUpload}
-                            loading={st_noticeFileLoading}
-                          >
-                            등록하기
-                          </Button>
-                        </Wrapper>
-                      </Wrapper>
-                    )}
-                  </Wrapper>
-
-                  <Wrapper
-                    width="100%"
-                    height="1px"
-                    bgColor={Theme.lightGrey_C}
-                    margin={`30px 0px`}
-                  ></Wrapper>
-                </>
-              )}
             </>
           ) : (
             <Wrapper padding={`50px 0px`} dr="row">
@@ -1005,7 +791,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       type: NOTICE_ADMIN_LIST_REQUEST,
       data: {
         title: "",
-        type: "",
+        type: "커뮤니티",
+        isAnswer: 1,
       },
     });
 
@@ -1020,4 +807,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default withRouter(Notice);
+export default withRouter(Community);

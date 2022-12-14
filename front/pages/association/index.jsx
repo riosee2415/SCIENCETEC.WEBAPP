@@ -42,7 +42,6 @@ const Association = () => {
       type: SHARE_PROJECT_REQUEST,
       data: {
         searchname: searchInput.value,
-        type: 2,
       },
     });
   }, [searchInput]);
