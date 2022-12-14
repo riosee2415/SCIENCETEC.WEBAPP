@@ -34,7 +34,7 @@ import {
 // SAGA AREA ********************************************************************************************************
 // ******************************************************************************************************************
 async function shareProjectAPI(data) {
-  return await axios.post(`/api/share/list`);
+  return await axios.post(`/api/share/list`, data);
 }
 
 function* shareProject(action) {

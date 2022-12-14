@@ -107,6 +107,14 @@ export const menus = [
         subMenuName: "회원조합소개",
         subMenuLink: "/association",
       },
+      {
+        subMenuName: "회원법인조합",
+        subMenuLink: "/association/com",
+      },
+      {
+        subMenuName: "기술융합협동조합",
+        subMenuLink: "/association/devel",
+      },
     ],
   },
 ];

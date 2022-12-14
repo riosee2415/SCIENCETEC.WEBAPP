@@ -24,12 +24,11 @@ import { SHARE_PROJECT_REQUEST } from "../../reducers/shareProject";
 import { Empty } from "antd";
 import useInput from "../../hooks/useInput";
 
-const Association = () => {
+const Devel = () => {
   ////// GLOBAL STATE //////
   const { shareProjects } = useSelector((state) => state.shareProject);
   ////// HOOKS //////
   const width = useWidth();
-
   const searchInput = useInput(``);
   ////// REDUX //////
   const dispatch = useDispatch();
@@ -42,7 +41,7 @@ const Association = () => {
       type: SHARE_PROJECT_REQUEST,
       data: {
         searchname: searchInput.value,
-        type: 2,
+        type: 1,
       },
     });
   }, [searchInput]);
@@ -53,6 +52,7 @@ const Association = () => {
       type: SHARE_PROJECT_REQUEST,
       data: {
         searchData: data,
+        type: 1,
       },
     });
   }, []);
@@ -167,7 +167,6 @@ const Association = () => {
                     </CommonButton>
                   );
                 })}
-
                 <TextInput
                   height={`35px`}
                   width={`200px`}
@@ -386,6 +385,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: SHARE_PROJECT_REQUEST,
+      data: {
+        type: 1,
+      },
     });
 
     // 구현부 종료
@@ -395,4 +397,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default Association;
+export default Devel;

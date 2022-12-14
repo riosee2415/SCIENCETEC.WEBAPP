@@ -24,13 +24,13 @@ import { SHARE_PROJECT_REQUEST } from "../../reducers/shareProject";
 import { Empty } from "antd";
 import useInput from "../../hooks/useInput";
 
-const Association = () => {
+const Com = () => {
   ////// GLOBAL STATE //////
   const { shareProjects } = useSelector((state) => state.shareProject);
   ////// HOOKS //////
   const width = useWidth();
-
   const searchInput = useInput(``);
+
   ////// REDUX //////
   const dispatch = useDispatch();
   ////// USEEFFECT //////
@@ -48,11 +48,11 @@ const Association = () => {
   }, [searchInput]);
 
   const searchHandler = useCallback((data) => {
-    console.log(data);
     dispatch({
       type: SHARE_PROJECT_REQUEST,
       data: {
         searchData: data,
+        type: 2,
       },
     });
   }, []);
@@ -386,6 +386,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: SHARE_PROJECT_REQUEST,
+      data: {
+        type: 2,
+      },
     });
 
     // 구현부 종료
@@ -395,4 +398,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default Association;
+export default Com;
