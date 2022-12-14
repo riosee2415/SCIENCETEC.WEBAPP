@@ -28,6 +28,7 @@ import {
   GuideUl,
   GuideLi,
   DelBtn,
+  DetailBtn,
 } from "../../../components/commonComponents";
 import { LOAD_MY_INFO_REQUEST } from "../../../reducers/user";
 import Theme from "../../../components/Theme";
@@ -43,9 +44,14 @@ import {
   SHAREPROJECT_CREATE_REQUEST,
   SHAREPROJECT_DELETE_REQUEST,
   SHAREPROJECT_IMAGE1_REQUEST,
+  SHAREPROJECT_IMAGE2_REQUEST,
   SHAREPROJECT_IMAGE_RESET,
   SHAREPROJECT_UPDATE_REQUEST,
   SHARE_PROJECT_REQUEST,
+  UNDER_CREATE_REQUEST,
+  UNDER_DELETE_REQUEST,
+  UNDER_LIST_REQUEST,
+  UNDER_UPDATE_REQUEST,
 } from "../../../reducers/shareProject";
 import moment from "moment";
 
@@ -74,16 +80,24 @@ const Association = ({}) => {
   const {
     shareProjects,
     previewImagePath1,
+    previewImagePath2,
+    underList,
     //
     st_shareProjecthCreateDone,
     //
     st_shareProjecthImage1Loading,
+    st_shareProjecthImage2Loading,
     //
     st_shareProjecthUpdateDone,
     //
     st_shareProjecthDeleteDone,
+    //
+    st_underCreateDone,
+    //
+    st_underUpdateDone,
+    //
+    st_underDeleteDone,
   } = useSelector((state) => state.shareProject);
-  console.log(shareProjects);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -93,8 +107,10 @@ const Association = ({}) => {
   const [level2, setLevel2] = useState("");
   const [sameDepth, setSameDepth] = useState([]);
   const [currentData, setCurrentData] = useState(null);
+  const [currentUnderData, setCurrentUnderData] = useState(null); // 산하 수정 데이터
 
   const [infoForm] = Form.useForm();
+  const [underForm] = Form.useForm();
 
   const moveLinkHandler = useCallback((link) => {
     router.push(link);
@@ -119,10 +135,65 @@ const Association = ({}) => {
   ////// HOOKS //////
 
   const [cModal, setCModal] = useState(false); // create모달
+  const [underUModal, setUnderUModal] = useState(false); // 산하 수정 모달
 
   const imgRef = useRef();
+  const img2Ref = useRef();
 
   ////// USEEFFECT //////
+
+  // --------- 산하 삭제 후 처리 ----------- //
+  useEffect(() => {
+    if (st_underDeleteDone) {
+      dispatch({
+        type: UNDER_LIST_REQUEST,
+        data: {
+          shareProjectId: currentData && currentData.id,
+        },
+      });
+
+      dispatch({
+        type: SHARE_PROJECT_REQUEST,
+      });
+
+      return message.success("산하가 삭제되었습니다.");
+    }
+  }, [st_underDeleteDone]);
+  // --------- 산하 수정 후 처리 ----------- //
+  useEffect(() => {
+    if (st_underUpdateDone) {
+      dispatch({
+        type: UNDER_LIST_REQUEST,
+        data: {
+          shareProjectId: currentData && currentData.id,
+        },
+      });
+
+      dispatch({
+        type: SHAREPROJECT_IMAGE_RESET,
+      });
+
+      dispatch({
+        type: SHARE_PROJECT_REQUEST,
+      });
+      setUnderUModal(false);
+
+      return message.success("산하를 수정했습니다.");
+    }
+  }, [st_underUpdateDone]);
+  // --------- 산하 생성 후 처리 ----------- //
+  useEffect(() => {
+    if (st_underCreateDone) {
+      dispatch({
+        type: UNDER_LIST_REQUEST,
+        data: {
+          shareProjectId: currentData && currentData.id,
+        },
+      });
+
+      return message.success("산하를 생성했습니다.");
+    }
+  }, [st_underCreateDone]);
 
   useEffect(() => {
     if (st_shareProjecthDeleteDone) {
@@ -182,6 +253,36 @@ const Association = ({}) => {
 
   ////// TOGGLE //////
 
+  const underUpdateToggle = useCallback(
+    (record) => {
+      if (record) {
+        setCurrentUnderData(record);
+        underForm.setFieldsValue({
+          type: record.type,
+          repreName: record.repreName,
+          jobType: record.jobType,
+          importantWork: record.importantWork,
+          empCnt: record.empCnt,
+          link: record.link,
+          estimateDate: moment(record.estimateDate),
+          createdAt: record.viewCreatedAt,
+          updatedAt: record.viewUpdatedAt,
+          updator: record.updator,
+        });
+      }
+
+      dispatch({
+        type: SHAREPROJECT_IMAGE_RESET,
+      });
+      setUnderUModal(!underUModal);
+    },
+    [underUModal]
+  );
+
+  const createUnderClickToggle = useCallback(() => {
+    img2Ref.current.click();
+  }, [img2Ref]);
+
   const createClickToggle = useCallback(() => {
     imgRef.current.click();
   }, [imgRef]);
@@ -191,6 +292,81 @@ const Association = ({}) => {
   }, [cModal]);
 
   ////// HANDLER //////
+
+  // 산하 삭제하기
+  const underDeleteHandler = useCallback((data) => {
+    dispatch({
+      type: UNDER_DELETE_REQUEST,
+      data: {
+        id: data.id,
+      },
+    });
+  }, []);
+
+  // 산하 이미지 수정하기
+  const imageUnderUpdateHandler = useCallback(() => {
+    dispatch({
+      type: UNDER_UPDATE_REQUEST,
+      data: {
+        shareProjectId: currentData.id,
+        id: currentUnderData.id,
+        imagePath: previewImagePath2,
+        link: currentUnderData.link,
+        repreName: currentUnderData.repreName,
+        estimateDate: moment(currentUnderData.estimateDate).format(
+          "YYYY-MM-DD"
+        ),
+        empCnt: currentUnderData.empCnt,
+        jobType: currentUnderData.jobType,
+        importantWork: currentUnderData.importantWork,
+      },
+    });
+  }, [currentData, previewImagePath2]);
+
+  //  산하 이미지 업로드
+  const onChangeUnderImages = useCallback((e) => {
+    const formData = new FormData();
+
+    [].forEach.call(e.target.files, (file) => {
+      formData.append("image", file);
+    });
+
+    dispatch({
+      type: SHAREPROJECT_IMAGE2_REQUEST,
+      data: formData,
+    });
+  });
+
+  // 산하 수정하기
+  const underUpdateHandler = useCallback(
+    (data) => {
+      dispatch({
+        type: UNDER_UPDATE_REQUEST,
+        data: {
+          shareProjectId: currentData.id,
+          id: currentUnderData.id,
+          imagePath: currentUnderData.imagePath,
+          link: data.link,
+          repreName: data.repreName,
+          estimateDate: data.estimateDate.format("YYYY-MM-DD"),
+          empCnt: data.empCnt,
+          jobType: data.jobType,
+          importantWork: data.importantWork,
+        },
+      });
+    },
+    [currentData, currentUnderData]
+  );
+
+  // 산하 생성하기
+  const underCreateHandler = useCallback(() => {
+    dispatch({
+      type: UNDER_CREATE_REQUEST,
+      data: {
+        shareProjectId: currentData.id,
+      },
+    });
+  }, [currentData]);
 
   // delete
   const deleteHandler = useCallback((data) => {
@@ -269,6 +445,13 @@ const Association = ({}) => {
         type: SHAREPROJECT_IMAGE_RESET,
       });
 
+      dispatch({
+        type: UNDER_LIST_REQUEST,
+        data: {
+          shareProjectId: record.id,
+        },
+      });
+
       infoForm.setFieldsValue({
         type: record.type,
         repreName: record.repreName,
@@ -288,6 +471,41 @@ const Association = ({}) => {
   ////// DATAVIEW //////
 
   ////// DATA COLUMNS //////
+
+  const underCol = [
+    {
+      title: "번호",
+      dataIndex: "num",
+    },
+    {
+      title: "대표자명",
+      dataIndex: "repreName",
+    },
+
+    {
+      title: "생성일",
+      dataIndex: "viewCreatedAt",
+    },
+    {
+      title: "수정",
+      render: (data) => <DetailBtn onClick={() => underUpdateToggle(data)} />,
+    },
+    {
+      title: "삭제",
+      render: (data) => (
+        <Popconfirm
+          title="정말 삭제하시겠습니까?"
+          onConfirm={() => {
+            underDeleteHandler(data);
+          }}
+          okText="삭제"
+          cancelText="취소"
+        >
+          <DelBtn />
+        </Popconfirm>
+      ),
+    },
+  ];
 
   const col = [
     {
@@ -588,12 +806,30 @@ const Association = ({}) => {
                     readOnly
                   />
                 </Form.Item>
-                <Wrapper al="flex-end">
+                <Wrapper al="flex-end" margin={`0 0 10px`}>
                   <Button type="primary" size="small" htmlType="submit">
                     정보 업데이트
                   </Button>
                 </Wrapper>
               </Form>
+
+              <Table
+                columns={underCol}
+                style={{ width: "100%" }}
+                rowKey="id"
+                dataSource={underList}
+                size="small"
+              />
+
+              <Wrapper al={`flex-end`} margin={`10px 0 0`}>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={underCreateHandler}
+                >
+                  산하 생성하기
+                </Button>
+              </Wrapper>
 
               <Wrapper
                 width="100%"
@@ -637,6 +873,167 @@ const Association = ({}) => {
             회원법인조합
           </Button>
         </Wrapper>
+      </Modal>
+
+      <Modal
+        visible={underUModal}
+        onCancel={() => underUpdateToggle(null)}
+        footer={null}
+        title="산하 수정하기"
+        width="900px"
+      >
+        <Wrapper>
+          <Image
+            style={{ width: `100%` }}
+            src={
+              previewImagePath2
+                ? previewImagePath2
+                : currentUnderData && currentUnderData.imagePath
+            }
+          />
+        </Wrapper>
+
+        <Wrapper dr={`row`} ju={`flex-end`} margin={`10px 0`}>
+          <input
+            type="file"
+            name="image"
+            accept=".png, .jpg"
+            // multiple
+            hidden
+            ref={img2Ref}
+            onChange={onChangeUnderImages}
+          />
+
+          <Button
+            size="small"
+            type="primary"
+            onClick={createUnderClickToggle}
+            loading={st_shareProjecthImage2Loading}
+            style={{ margin: `0 5px 0 0` }}
+          >
+            이미지 업로드
+          </Button>
+
+          {previewImagePath2 && (
+            <Button
+              type="danger"
+              size="small"
+              onClick={imageUnderUpdateHandler}
+            >
+              적용하기
+            </Button>
+          )}
+        </Wrapper>
+
+        <Form
+          size="small"
+          labelCol={{ span: 4 }}
+          labelAlign={`left`}
+          form={underForm}
+          onFinish={underUpdateHandler}
+        >
+          <Form.Item
+            label="대표자명"
+            name="repreName"
+            rules={[
+              {
+                required: true,
+                message: "대표자명은 필수 입력사항 입니다.",
+              },
+            ]}
+          >
+            <Input size="small" />
+          </Form.Item>
+          <Form.Item
+            label="업종내용"
+            name="jobType"
+            rules={[
+              {
+                required: true,
+                message: "업종내용은 필수 입력사항 입니다.",
+              },
+            ]}
+          >
+            <Input.TextArea rows={10} />
+          </Form.Item>
+          <Form.Item
+            label="주 업종 내용"
+            name="importantWork"
+            rules={[
+              {
+                required: true,
+                message: "주 업종 내용은 필수 입력사항 입니다.",
+              },
+            ]}
+          >
+            <Input.TextArea rows={10} />
+          </Form.Item>
+          <Form.Item
+            label="직원수"
+            name="empCnt"
+            rules={[
+              {
+                required: true,
+                message: "직원수는 필수 입력사항 입니다.",
+              },
+            ]}
+          >
+            <Input size="small" type="number" />
+          </Form.Item>
+          <Form.Item
+            label="링크"
+            name="link"
+            rules={[
+              {
+                required: true,
+                message: "링크는 필수 입력사항 입니다.",
+              },
+            ]}
+          >
+            <Input size="small" />
+          </Form.Item>
+          <Form.Item
+            label="설립연도"
+            name="estimateDate"
+            rules={[
+              {
+                required: true,
+                message: "설립연도는 필수 입력사항 입니다.",
+              },
+            ]}
+          >
+            <DatePicker style={{ width: `100%` }} />
+          </Form.Item>
+
+          <Form.Item label="작성일" name="createdAt">
+            <Input
+              size="small"
+              style={{ background: Theme.lightGrey_C, border: "none" }}
+              readOnly
+            />
+          </Form.Item>
+
+          <Form.Item label="수정일" name="updatedAt">
+            <Input
+              size="small"
+              style={{ background: Theme.lightGrey_C, border: "none" }}
+              readOnly
+            />
+          </Form.Item>
+
+          <Form.Item label="최근작업자" name="updator">
+            <Input
+              size="small"
+              style={{ background: Theme.lightGrey_C, border: "none" }}
+              readOnly
+            />
+          </Form.Item>
+          <Wrapper al="flex-end" margin={`0 0 10px`}>
+            <Button type="primary" size="small" htmlType="submit">
+              정보 업데이트
+            </Button>
+          </Wrapper>
+        </Form>
       </Modal>
     </AdminLayout>
   );

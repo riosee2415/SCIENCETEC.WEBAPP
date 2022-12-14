@@ -9,6 +9,9 @@ export const initailState = {
   shareProjectHistory: [],
 
   //
+  underList: [], // 산하 리스트
+
+  //
   st_shareProjectLoading: false,
   st_shareProjectDone: false,
   st_shareProjectError: null,
@@ -37,6 +40,24 @@ export const initailState = {
   st_shareProjectDeleteLoading: false, // 삭제하기
   st_shareProjectDeleteDone: false,
   st_shareProjectDeleteError: null,
+
+  //
+  st_underListLoading: false, // under 가져오기
+  st_underListDone: false,
+  st_underListError: null,
+  //
+  st_underCreateLoading: false, // under 생성하기
+  st_underCreateDone: false,
+  st_underCreateError: null,
+  //
+  st_underUpdateLoading: false, // under 수정하기
+  st_underUpdateDone: false,
+  st_underUpdateError: null,
+  //
+  st_underDeleteLoading: false, // under 삭제하기
+  st_underDeleteDone: false,
+  st_underDeleteError: null,
+  //
 };
 
 export const SHARE_PROJECT_REQUEST = "SHARE_PROJECT_REQUEST";
@@ -68,6 +89,24 @@ export const SHAREPROJECT_DELETE_SUCCESS = "SHAREPROJECT_DELETE_SUCCESS";
 export const SHAREPROJECT_DELETE_FAILURE = "SHAREPROJECT_DELETE_FAILURE";
 
 export const SHAREPROJECT_IMAGE_RESET = "SHAREPROJECT_IMAGE_RESET";
+
+//
+
+export const UNDER_LIST_REQUEST = "UNDER_LIST_REQUEST";
+export const UNDER_LIST_SUCCESS = "UNDER_LIST_SUCCESS";
+export const UNDER_LIST_FAILURE = "UNDER_LIST_FAILURE";
+
+export const UNDER_CREATE_REQUEST = "UNDER_CREATE_REQUEST";
+export const UNDER_CREATE_SUCCESS = "UNDER_CREATE_SUCCESS";
+export const UNDER_CREATE_FAILURE = "UNDER_CREATE_FAILURE";
+
+export const UNDER_UPDATE_REQUEST = "UNDER_UPDATE_REQUEST";
+export const UNDER_UPDATE_SUCCESS = "UNDER_UPDATE_SUCCESS";
+export const UNDER_UPDATE_FAILURE = "UNDER_UPDATE_FAILURE";
+
+export const UNDER_DELETE_REQUEST = "UNDER_DELETE_REQUEST";
+export const UNDER_DELETE_SUCCESS = "UNDER_DELETE_SUCCESS";
+export const UNDER_DELETE_FAILURE = "UNDER_DELETE_FAILURE";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -220,6 +259,88 @@ const reducer = (state = initailState, action) =>
 
       case SHAREPROJECT_IMAGE_RESET: {
         draft.previewImagePath1 = null;
+        draft.previewImagePath2 = null;
+      }
+
+      //
+      case UNDER_LIST_REQUEST: {
+        draft.st_underListLoading = true;
+        draft.st_underListDone = false;
+        draft.st_underListError = null;
+        break;
+      }
+      case UNDER_LIST_SUCCESS: {
+        draft.st_underListLoading = false;
+        draft.st_underListDone = true;
+        draft.st_underListError = null;
+        draft.underList = action.data;
+        break;
+      }
+      case UNDER_LIST_FAILURE: {
+        draft.st_underListLoading = false;
+        draft.st_underListDone = false;
+        draft.st_underListError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+      case UNDER_CREATE_REQUEST: {
+        draft.st_underCreateLoading = true;
+        draft.st_underCreateDone = false;
+        draft.st_underCreateError = null;
+        break;
+      }
+      case UNDER_CREATE_SUCCESS: {
+        draft.st_underCreateLoading = false;
+        draft.st_underCreateDone = true;
+        draft.st_underCreateError = null;
+        break;
+      }
+      case UNDER_CREATE_FAILURE: {
+        draft.st_underCreateLoading = false;
+        draft.st_underCreateDone = false;
+        draft.st_underCreateError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+      case UNDER_UPDATE_REQUEST: {
+        draft.st_underUpdateLoading = true;
+        draft.st_underUpdateDone = false;
+        draft.st_underUpdateError = null;
+        break;
+      }
+      case UNDER_UPDATE_SUCCESS: {
+        draft.st_underUpdateLoading = false;
+        draft.st_underUpdateDone = true;
+        draft.st_underUpdateError = null;
+        break;
+      }
+      case UNDER_UPDATE_FAILURE: {
+        draft.st_underUpdateLoading = false;
+        draft.st_underUpdateDone = false;
+        draft.st_underUpdateError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+      case UNDER_DELETE_REQUEST: {
+        draft.st_underDeleteLoading = true;
+        draft.st_underDeleteDone = false;
+        draft.st_underDeleteError = null;
+        break;
+      }
+      case UNDER_DELETE_SUCCESS: {
+        draft.st_underDeleteLoading = false;
+        draft.st_underDeleteDone = true;
+        draft.st_underDeleteError = null;
+        break;
+      }
+      case UNDER_DELETE_FAILURE: {
+        draft.st_underDeleteLoading = false;
+        draft.st_underDeleteDone = false;
+        draft.st_underDeleteError = action.error;
+        break;
       }
 
       default:

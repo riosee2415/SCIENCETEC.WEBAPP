@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
@@ -26,24 +26,24 @@ import {
 } from "../../reducers/shareProject";
 import { Empty, Modal } from "antd";
 import useInput from "../../hooks/useInput";
-import { useState } from "react";
 import ShareProdSlider from "../../components/slide/shareProdSlider";
 
-const Association = () => {
+const Com = () => {
   ////// GLOBAL STATE //////
   const { shareProjects, underList } = useSelector(
     (state) => state.shareProject
   );
   ////// HOOKS //////
   const width = useWidth();
-
   const searchInput = useInput(``);
 
   const [vModal, setVModal] = useState(false);
+
   ////// REDUX //////
   const dispatch = useDispatch();
   ////// USEEFFECT //////
   ////// TOGGLE //////
+  ////// HANDLER //////
 
   const vModalToggle = useCallback(
     (data) => {
@@ -61,23 +61,22 @@ const Association = () => {
     [vModal]
   );
 
-  ////// HANDLER //////
-
   const searchInputHandler = useCallback(() => {
     dispatch({
       type: SHARE_PROJECT_REQUEST,
       data: {
         searchname: searchInput.value,
+        type: 2,
       },
     });
   }, [searchInput]);
 
   const searchHandler = useCallback((data) => {
-    console.log(data);
     dispatch({
       type: SHARE_PROJECT_REQUEST,
       data: {
         searchData: data,
+        type: 2,
       },
     });
   }, []);
@@ -221,6 +220,7 @@ const Association = () => {
                   </Wrapper>
                 ) : (
                   shareProjects.map((data) => {
+                    console.log(data);
                     return (
                       <Wrapper
                         width={width < 1000 ? `100%` : `49%`}
@@ -429,6 +429,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     context.store.dispatch({
       type: SHARE_PROJECT_REQUEST,
+      data: {
+        type: 2,
+      },
     });
 
     // 구현부 종료
@@ -438,4 +441,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default Association;
+export default Com;
