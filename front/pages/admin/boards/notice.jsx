@@ -668,14 +668,14 @@ const Notice = ({}) => {
         >
           자료실
         </Button>
-        <Button
+        {/* <Button
           type={tab === 3 ? "primary" : "default"}
           size="small"
           style={{ marginRight: "5px" }}
           onClick={() => setTab(3)}
         >
           커뮤니티
-        </Button>
+        </Button> */}
         <Button
           type={tab === 4 ? "primary" : "default"}
           size="small"
