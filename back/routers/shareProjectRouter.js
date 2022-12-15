@@ -106,7 +106,7 @@ router.post("/list", async (req, res, next) => {
   }
 
   const selectQuery = `
-SELECT	ROW_NUMBER() OVER(ORDER BY A.createdAt)		      AS	num,
+SELECT	ROW_NUMBER() OVER(ORDER BY RAND())		      AS	num,
         A.id,
         A.name,
         A.type,
@@ -380,7 +380,7 @@ router.post("/under/list", async (req, res, next) => {
   }
 
   const selectQuery = `
-SELECT	ROW_NUMBER()	OVER(ORDER	BY A.createdAt)				AS num,
+SELECT	ROW_NUMBER()	OVER(ORDER	BY RAND())				AS num,
         A.id,
         A.name,
         A.imagePath,
