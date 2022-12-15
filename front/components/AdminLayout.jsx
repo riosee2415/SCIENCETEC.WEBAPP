@@ -263,7 +263,7 @@ const AdminLayout = ({ children }) => {
               borderBottom={`0.5px solid ${Theme.adminTheme_3}`}
               margin={`0px 0px 5px 0px`}
             >
-              <Text>오늘 가입한 조합장회원</Text>
+              <Text>오늘 가입한 조합회원</Text>
               <Text>{cooperUserResult && cooperUserResult.cnt}명</Text>
             </Wrapper>
 

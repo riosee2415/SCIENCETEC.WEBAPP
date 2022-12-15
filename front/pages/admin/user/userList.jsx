@@ -132,7 +132,7 @@ const UserList = ({}) => {
   const [sForm] = Form.useForm();
 
   const [currentTab, setCurrentTab] = useState(0); // 유형
-  const [allExcelData, setAllExcelData] = useState([]); // 선택 조합장 엑셀 데이터 출력
+  const [allExcelData, setAllExcelData] = useState([]); // 선택 조합 엑셀 데이터 출력
 
   const [level1, setLevel1] = useState("회원관리");
   const [level2, setLevel2] = useState("");
@@ -616,7 +616,7 @@ const UserList = ({}) => {
           size="small"
           onClick={() => tabClickHandler(2)}
         >
-          조합장
+          조합
         </TypeButton>
 
         {currentTab === 2 && (
@@ -625,10 +625,10 @@ const UserList = ({}) => {
               <CSVLink
                 headers={allHeaders}
                 data={allExcelData ? allExcelData : []}
-                filename="조합장 회원목록.csv"
+                filename="조합 회원목록.csv"
                 target="_blank"
               >
-                조합장 회원목록 파일 출력하기
+                조합 회원목록 파일 출력하기
               </CSVLink>
             </CommonButton>
           </Wrapper>
@@ -863,7 +863,7 @@ const UserList = ({}) => {
               </DetailWrapper>
 
               {userDetail.type === 2 && (
-                // 조합장
+                // 조합
                 <>
                   <DetailWrapper>
                     <Text

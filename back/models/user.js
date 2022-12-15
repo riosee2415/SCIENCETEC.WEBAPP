@@ -6,7 +6,7 @@ module.exports = class User extends Model {
     return super.init(
       {
         type: {
-          type: DataTypes.INTEGER, // [1. 개인 | 2. 조합장]
+          type: DataTypes.INTEGER, // [1. 개인 | 2. 조합]
           allowNull: false,
         },
         userId: {

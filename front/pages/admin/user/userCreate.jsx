@@ -655,7 +655,7 @@ const UserCreate = ({}) => {
           size="small"
           onClick={() => tabClickHandler(2)}
         >
-          조합장
+          조합
         </TypeButton>
       </Wrapper>
 

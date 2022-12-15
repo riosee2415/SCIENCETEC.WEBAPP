@@ -82,7 +82,7 @@ export const initailState = {
   st_userDetailDone: false,
   st_userDetailError: null,
   //
-  st_statusListLoading: false, // 조합장 리스트
+  st_statusListLoading: false, // 조합 리스트
   st_statusListDone: false,
   st_statusListError: null,
   //

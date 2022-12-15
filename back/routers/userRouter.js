@@ -19,7 +19,7 @@ router.post("/admin/main", isAdminCheck, async (req, res, next) => {
      AND  type = 1
   `;
 
-  // 오늘 가입한 조합장회원
+  // 오늘 가입한 조합회원
   const findUserQuery2 = `
   SELECT  COUNT(id)         AS cnt
     FROM  users
@@ -76,7 +76,7 @@ SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
         type,
         CASE
             WHEN	type = 1 THEN "개인"
-            WHEN	type = 2 THEN "조합장"
+            WHEN	type = 2 THEN "조합"
         END									        		AS viewType,
         userId,
         combiName,
@@ -168,7 +168,7 @@ router.post("/status/list", async (req, res, next) => {
             type,
             CASE
                 WHEN	type = 1 THEN "개인"
-                WHEN	type = 2 THEN "조합장"
+                WHEN	type = 2 THEN "조합"
             END									        		AS viewType,
             userId,
             combiName,
@@ -269,7 +269,7 @@ router.post("/detail", isAdminCheck, async (req, res, next) => {
             type,
             CASE
                 WHEN	type = 1 THEN "개인"
-                WHEN	type = 2 THEN "조합장"
+                WHEN	type = 2 THEN "조합"
             END									        		AS viewType,
             userId,
             combiName,
