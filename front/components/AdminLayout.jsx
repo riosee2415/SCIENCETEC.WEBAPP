@@ -6,6 +6,9 @@ import Theme from "./Theme";
 import AdminMenuBox from "./AdminMenuBox";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { USER_MAIN_REQUEST } from "../reducers/user";
 
 const AdminHeader = styled(Wrapper)`
   transition: 0.6s;
@@ -198,9 +201,16 @@ export const items = {
 
 const AdminLayout = ({ children }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const { personalUserResult, cooperUserResult, acceptResult, surveyResult } =
     useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch({
+      type: USER_MAIN_REQUEST,
+    });
+  }, [router]);
 
   return (
     <Wrapper className="whole__admin__wrapper">
