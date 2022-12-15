@@ -150,7 +150,40 @@ SELECT	ROW_NUMBER() OVER(ORDER BY RAND())		      AS	num,
   try {
     const list = await models.sequelize.query(selectQuery);
 
-    return res.status(200).json(list[0]);
+    const selectQuery2 = `
+  SELECT	ROW_NUMBER()	OVER(ORDER	BY RAND())				AS num,
+          A.id,
+          A.name,
+          A.imagePath,
+          A.link,
+          A.repreName,
+          A.estimateDate,
+          DATE_FORMAT(A.estimateDate, "%Y년 %m월 %d일")	    AS viewEstimateDate,
+          A.empCnt,
+          CONCAT(FORMAT(A.empCnt, 0), "명")			           AS viewEmpCnt,
+          A.jobType,
+          A.importantWork,
+          B.username 									          	        AS updator,
+          A.ShareProjectId,
+          A.createdAt,
+          A.updatedAt,
+          DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일")				AS viewCreatedAt,
+          DATE_FORMAT(A.updatedAt, "%Y년 %m월 %d일")				AS viewUpdatedAt
+    FROM	underShareProjects		A
+   INNER
+    JOIN	users					        B
+      ON	A.updator = B.id
+   WHERE	A.isDelete = 0
+     AND  A.name LIKE '%${_searchname}%'
+   ORDER	BY num DESC
+  `;
+
+    const underList = await models.sequelize.query(selectQuery2);
+
+    return res.status(200).json({
+      share: list[0],
+      underList: underList[0],
+    });
   } catch (error) {
     console.error(error);
     return res.status(401).send("공동 프로젝트 목록을 불러올 수 없습니다.");
