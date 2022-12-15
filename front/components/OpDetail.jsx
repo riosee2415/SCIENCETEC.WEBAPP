@@ -156,6 +156,58 @@ const OpDetail = () => {
               <Text>{noticeDetail.content}</Text>
             </Wrapper>
           </Wrapper>
+          {noticeDetail && noticeDetail.answer && (
+            <>
+              <Wrapper
+                dr={`row`}
+                fontSize={`16px`}
+                borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                bgColor={Theme.subTheme4_C}
+              >
+                <Wrapper
+                  width={width < 900 ? `100%` : `180px`}
+                  padding={`18px 20px`}
+                  al={`flex-start`}
+                >
+                  <Text isNeo>답변 작성일</Text>
+                </Wrapper>
+                <Wrapper
+                  width={width < 900 ? `100%` : `calc(100% - 180px)`}
+                  padding={`18px 20px`}
+                  al={`flex-start`}
+                  bgColor={Theme.white_C}
+                >
+                  {noticeDetail.viewAnsweredAt}
+                </Wrapper>
+              </Wrapper>
+
+              <Wrapper
+                dr={`row`}
+                fontSize={`16px`}
+                borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                bgColor={Theme.subTheme4_C}
+                al={`flex-start`}
+              >
+                <Wrapper
+                  width={width < 900 ? `100%` : `180px`}
+                  padding={`18px 20px`}
+                  al={`flex-start`}
+                >
+                  <Text isNeo>답변 </Text>
+                </Wrapper>
+                <Wrapper
+                  width={width < 900 ? `100%` : `calc(100% - 180px)`}
+                  padding={`18px 20px`}
+                  al={`flex-start`}
+                  bgColor={Theme.white_C}
+                  minHeight={`200px`}
+                  ju={`flex-start`}
+                >
+                  <Text>{noticeDetail.answer}</Text>
+                </Wrapper>
+              </Wrapper>
+            </>
+          )}
           {noticeDetail.file && (
             <Wrapper
               dr={`row`}
@@ -187,6 +239,7 @@ const OpDetail = () => {
               </Wrapper>
             </Wrapper>
           )}
+          {console.log(noticeDetail)}
           <Wrapper
             margin={`60px 0 30px`}
             borderTop={`1px solid ${Theme.lightGrey2_C}`}
