@@ -620,6 +620,7 @@ router.post("/detail", async (req, res, next) => {
           A.filename,
           A.answer,
           A.answeredAt,
+          DATE_FORMAT(A.answeredAt, "%Y년 %m월 %d일") 		  AS viewAnsweredAt,
           A.createdAt,
           A.updatedAt,
           DATE_FORMAT(A.createdAt, "%Y년 %m월 %d일") 		  AS viewCreatedAt,
