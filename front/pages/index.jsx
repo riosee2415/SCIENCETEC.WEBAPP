@@ -11,8 +11,6 @@ import axios from "axios";
 import wrapper from "../store/configureStore";
 import { END } from "redux-saga";
 import {
-  ColWrapper,
-  RowWrapper,
   Image,
   WholeWrapper,
   Wrapper,
@@ -20,15 +18,13 @@ import {
   SpanText,
   Text,
   CommonButton,
+  ATag,
 } from "../components/commonComponents";
 import useWidth from "../hooks/useWidth";
 import Theme from "../components/Theme";
 import styled, { ThemeContext } from "styled-components";
 import Head from "next/head";
-import Popup from "../components/popup/popup";
 import Mainslider from "../components/slide/MainSlider";
-import ToastEditorComponent from "../components/editor/ToastEditorComponent";
-import CC01 from "../components/common/CC01";
 import { MAIN_REQUEST } from "../reducers/main";
 import { Empty, Popover } from "antd";
 import { MAIN_BOARD_REQUEST } from "../reducers/notice";
@@ -693,36 +689,66 @@ const Home = ({}) => {
           >
             <RsWrapper>
               <Wrapper dr={`row`} ju={`space-between`} minWidth={`900px`}>
-                <Image
-                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_gover.png"
-                  alt="logo"
+                <ATag
+                  href={`https://www.msit.go.kr/index.do`}
                   width={`15%`}
-                />
-                <Image
-                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_nrf.png"
-                  alt="logo"
+                  target={`_blank`}
+                >
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_gover.png"
+                    alt="logo"
+                  />
+                </ATag>
+                <ATag
+                  href={`https://www.nrf.re.kr/index`}
                   width={`10%`}
-                />
-                <Image
-                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_coop.png"
-                  alt="logo"
+                  target={`_blank`}
+                >
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_nrf.png"
+                    alt="logo"
+                  />
+                </ATag>
+                <ATag
+                  href={`https://www.coop.go.kr/home/index.do`}
                   width={`10%`}
-                />
-                <Image
-                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_setcoop.png"
-                  alt="logo"
+                  target={`_blank`}
+                >
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_coop.png"
+                    alt="logo"
+                  />
+                </ATag>
+                <ATag
+                  href={`https://www.setcoop.net/`}
                   width={`18%`}
-                />
-                <Image
-                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_social.png"
-                  alt="logo"
+                  target={`_blank`}
+                >
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_setcoop.png"
+                    alt="logo"
+                  />
+                </ATag>
+                <ATag
+                  href={`http://www.djse.org/app/main/index`}
                   width={`10%`}
-                />
-                <Image
-                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_posep.png"
-                  alt="logo"
+                  target={`_blank`}
+                >
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_social.png"
+                    alt="logo"
+                  />
+                </ATag>
+                <ATag
+                  href={`https://posep.org/`}
                   width={`20%`}
-                />
+                  target={`_blank`}
+                >
+                  <Image
+                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_posep.png"
+                    alt="logo"
+                  />
+                </ATag>
               </Wrapper>
             </RsWrapper>
           </Wrapper>
