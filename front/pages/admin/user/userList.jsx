@@ -379,9 +379,14 @@ const UserList = ({}) => {
         if (data.name === level2) return;
 
         return (
-          <OtherMenu key={data.link} onClick={() => moveLinkHandler(data.link)}>
-            {data.name}
-          </OtherMenu>
+          data.useYn && (
+            <OtherMenu
+              key={data.link}
+              onClick={() => moveLinkHandler(data.link)}
+            >
+              {data.name}
+            </OtherMenu>
+          )
         );
       })}
     </PopWrapper>
