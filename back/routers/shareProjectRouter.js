@@ -177,8 +177,6 @@ SELECT	ROW_NUMBER() OVER(ORDER BY RAND())		      AS	num,
 });
 
 router.post("/create", async (req, res, next) => {
-  const { type } = req.body;
-
   const insertQuery = `
   INSERT    INTO    shareProjects
   (
@@ -197,7 +195,7 @@ router.post("/create", async (req, res, next) => {
   )
   VALUES
   (
-    "${type}",
+    "임시 조합유형",
     "임시 조합명",
     "https://via.placeholder.com/500x300",
     "/",

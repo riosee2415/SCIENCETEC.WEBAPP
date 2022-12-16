@@ -223,13 +223,14 @@ const Association = () => {
                   </Wrapper>
                 ) : (
                   shareProjects.map((data) => {
+                    console.log(data);
                     return (
                       <Wrapper
                         margin={`10px 0`}
                         al={`flex-start`}
                         position={`relative`}
                       >
-                        <Wrapper width={width < 700 ? `100%` : `45%`}>
+                        <Wrapper width={width < 700 ? `100%` : `48%`}>
                           <Wrapper
                             wrap={`nowrap`}
                             borderBottom={`2px solid ${Theme.basicTheme_C}`}
@@ -245,7 +246,8 @@ const Association = () => {
                               width={`14px`}
                               margin={`0 6px 0 0`}
                             />
-                            {data.viewType}
+
+                            {data.type}
                           </Wrapper>
                           <Image
                             alt="image"
@@ -383,7 +385,7 @@ const Association = () => {
                         </Wrapper>
 
                         <Wrapper
-                          width={width < 700 ? `100%` : `55%`}
+                          width={width < 700 ? `100%` : `48%`}
                           position={width < 700 ? `` : `absolute`}
                           bottom={`0`}
                           right={`0`}
@@ -395,11 +397,28 @@ const Association = () => {
                               <Empty description="산하기업이 없습니다." />
                             </Wrapper>
                           ) : (
-                            <ShareProdSlider
-                              datum={underProjects.filter(
-                                (value) => value.ShareProjectId === data.id
-                              )}
-                            />
+                            <>
+                              <Wrapper
+                                dr={`row`}
+                                ju={`flex-start`}
+                                fontSize={width < 900 ? `18px` : `20px`}
+                                fontWeight={`700`}
+                                padding={`0 10px 20px`}
+                              >
+                                <Image
+                                  alt="icon"
+                                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
+                                  width={`14px`}
+                                  margin={`0 6px 0 0`}
+                                />
+                                회원법인조합원
+                              </Wrapper>
+                              <ShareProdSlider
+                                datum={underProjects.filter(
+                                  (value) => value.ShareProjectId === data.id
+                                )}
+                              />
+                            </>
                           )}
                         </Wrapper>
                       </Wrapper>

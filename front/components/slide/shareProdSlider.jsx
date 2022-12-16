@@ -35,7 +35,7 @@ const ArrowWrapper = styled(Wrapper)`
 const ShareProdSlider = ({
   datum,
   //
-  dots = false,
+  dots = true,
   arrow = false,
   effect = `scrollx`, // scrollx or fade
   //
@@ -51,6 +51,8 @@ const ShareProdSlider = ({
   const width = useWidth();
 
   const [slideDatum, setSlideDatum] = useState(null);
+
+  const [currentTab, setCurrentTab] = useState(1);
 
   const slideRef = useRef();
 
@@ -77,6 +79,7 @@ const ShareProdSlider = ({
   };
 
   const movePageHandler = (idx) => {
+    setCurrentTab(idx);
     for (let i = 0; i < slideDatum.length; i++) {
       slideRef.current.goTo(idx);
     }
@@ -163,7 +166,7 @@ const ShareProdSlider = ({
         vertical={false}
         ref={slideRef}
         autoplay={autoplay}
-        centerMode={slideDatum.length === 1 ? false : true} // 양쪽에 겹쳐서 보이는 디자인
+        centerMode={false} // 양쪽에 겹쳐서 보이는 디자인
         centerPadding={width < 700 ? `10px` : `50px`} // 얼만큼 겹쳐 보일건지 결정
         fade={false} // fade or slide
         initialSlide={0} // 초기에 몇번째 슬라이드를 보여줄 것인지 결정
@@ -173,18 +176,7 @@ const ShareProdSlider = ({
       >
         {slideDatum.map((slide, idx) => {
           return (
-            <Wrapper
-              display={`flex !important`}
-              dr={`row`}
-              key={idx}
-              padding={
-                width < 700
-                  ? slideDatum.length === 1
-                    ? `0`
-                    : `0 10px 0 0`
-                  : `0 30px`
-              }
-            >
+            <Wrapper display={`flex !important`} dr={`row`} key={idx}>
               <Wrapper
                 wrap={`nowrap`}
                 borderBottom={`2px solid ${Theme.basicTheme_C}`}
@@ -192,15 +184,8 @@ const ShareProdSlider = ({
                 ju={`flex-start`}
                 fontSize={width < 900 ? `18px` : `20px`}
                 fontWeight={`700`}
-              >
-                {/* <Image
-                    alt="icon"
-                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
-                    width={`14px`}
-                    margin={`0 6px 0 0`}
-                  />
-                  {slide[0].viewType} */}
-              </Wrapper>
+                padding={`0 10px`}
+              ></Wrapper>
               <Image
                 alt="image"
                 src={slide[0].imagePath}
@@ -331,7 +316,7 @@ const ShareProdSlider = ({
         <Wrapper
           dr={`row`}
           position={`absolute`}
-          bottom={`10px`}
+          bottom={`0`}
           className={`dots`}
         >
           {slideDatum.map((_, idx) => {
@@ -341,6 +326,7 @@ const ShareProdSlider = ({
                 width={`auto`}
                 margin={`0 10px`}
                 cursor={`pointer`}
+                color={currentTab === idx ? Theme.basicTheme_C : Theme.grey_C}
                 onClick={() => {
                   movePageHandler(idx);
                 }}

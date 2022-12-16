@@ -390,6 +390,7 @@ const Association = ({}) => {
         type: SHAREPROJECT_UPDATE_REQUEST,
         data: {
           id: currentData.id,
+          type: data.type,
           imagePath: currentData.imagePath,
           link: data.link,
           repreName: data.repreName,
@@ -409,6 +410,7 @@ const Association = ({}) => {
       type: SHAREPROJECT_UPDATE_REQUEST,
       data: {
         id: currentData.id,
+        type: currentData.type,
         imagePath: previewImagePath1,
         link: currentData.link,
         repreName: currentData.repreName,
@@ -437,9 +439,6 @@ const Association = ({}) => {
   const createHandler = useCallback((data) => {
     dispatch({
       type: SHAREPROJECT_CREATE_REQUEST,
-      data: {
-        type: data,
-      },
     });
   }, []);
 
@@ -610,7 +609,7 @@ const Association = ({}) => {
           shadow={`3px 3px 6px ${Theme.lightGrey_C}`}
         >
           <Wrapper al="flex-end" margin={`0 0 5px`}>
-            <Button size="small" type="primary" onClick={cModalToggle}>
+            <Button size="small" type="primary" onClick={createHandler}>
               회원조합 생성
             </Button>
           </Wrapper>
@@ -710,10 +709,7 @@ const Association = ({}) => {
                     },
                   ]}
                 >
-                  <Select disabled={true}>
-                    <Select.Option value={1}>기술융합조합</Select.Option>
-                    <Select.Option value={2}>회원법인조합</Select.Option>
-                  </Select>
+                  <Input />
                 </Form.Item>
                 <Form.Item
                   label="대표자명"
