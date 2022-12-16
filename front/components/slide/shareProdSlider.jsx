@@ -182,9 +182,6 @@ const ShareProdSlider = ({
                 borderBottom={`2px solid ${Theme.basicTheme_C}`}
                 dr={`row`}
                 ju={`flex-start`}
-                fontSize={width < 900 ? `18px` : `20px`}
-                fontWeight={`700`}
-                padding={`0 10px`}
               ></Wrapper>
               <Image
                 alt="image"
