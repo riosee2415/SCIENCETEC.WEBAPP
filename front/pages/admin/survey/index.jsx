@@ -610,14 +610,11 @@ const Question = ({}) => {
       <Wrapper margin={`10px 0px 0px 0px`}>
         <GuideUl>
           <GuideLi>
-            로고 이미지는 [해더]로고와 [푸터]로고를 관리할 수 있습니다.
+            수요조사 페이지에 보여지는 질문들을 관리할 수 있습니다.
           </GuideLi>
           <GuideLi isImpo={true}>
-            이미지는 3:2비율로 업로드해주세요. 이미지비율이 상이할 경우 화면에
-            비정상적으로 보일 수 있습니다.
-          </GuideLi>
-          <GuideLi isImpo={true}>
-            제목 여부를 선택시 질문이 제목으로 대체 됩니다.
+            변경된 정보는 홈페이지에 즉시 적용되기 때문에, 신중한 처리를 필요로
+            합니다.
           </GuideLi>
         </GuideUl>
       </Wrapper>
