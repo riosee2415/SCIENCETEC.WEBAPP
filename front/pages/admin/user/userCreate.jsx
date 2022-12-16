@@ -564,6 +564,7 @@ const UserCreate = ({}) => {
     { label: "우주항공", value: "우주항공" },
     { label: "기초과학", value: "기초과학" },
     { label: "의약과", value: "의약과" },
+    { label: "바이오", value: "바이오" },
     { label: "기타", value: "기타" },
   ];
 
