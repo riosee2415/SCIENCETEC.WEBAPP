@@ -6,7 +6,7 @@ module.exports = class ShareProject extends Model {
     return super.init(
       {
         type: {
-          type: DataTypes.INTEGER, // [1. 기술융합협동조합 | 2. 회원법인조합]
+          type: DataTypes.STRING(100),
           allowNull: false,
         },
         name: {

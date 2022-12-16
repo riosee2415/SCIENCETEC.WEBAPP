@@ -50,9 +50,8 @@ router.post(
 );
 
 router.post("/list", async (req, res, next) => {
-  const { type, searchData, searchname } = req.body;
+  const { searchData, searchname } = req.body;
 
-  const _type = parseInt(type) || 3;
   const _searchname = searchname ? searchname : ``;
 
   let _searchData = ``;
@@ -108,12 +107,8 @@ router.post("/list", async (req, res, next) => {
   const selectQuery = `
 SELECT	ROW_NUMBER() OVER(ORDER BY RAND())		      AS	num,
         A.id,
-        A.name,
         A.type,
-        CASE
-          WHEN	A.type = 1 THEN "기술융합협동조합"
-          WHEN	A.type = 2 THEN "회원법인조합"
-        END											                        AS viewType,
+        A.name,
         A.imagePath,
         A.link,
         A.repreName,
@@ -135,15 +130,6 @@ SELECT	ROW_NUMBER() OVER(ORDER BY RAND())		      AS	num,
  WHERE	A.isDelete = 0
         ${_searchData !== `` ? _searchData : ``}
    AND  A.name LIKE '%${_searchname}%'
-        ${
-          _type === 1
-            ? `AND A.type = 1`
-            : _type === 2
-            ? `AND A.type = 2`
-            : _type === 3
-            ? ``
-            : ``
-        }
  ORDER	BY num DESC
   `;
 
@@ -211,7 +197,7 @@ router.post("/create", async (req, res, next) => {
   )
   VALUES
   (
-    ${type},
+    "${type}",
     "임시 조합명",
     "https://via.placeholder.com/500x300",
     "/",
@@ -257,6 +243,7 @@ router.post("/create", async (req, res, next) => {
 router.post("/update", async (req, res, next) => {
   const {
     id,
+    type,
     name,
     imagePath,
     link,
@@ -270,6 +257,7 @@ router.post("/update", async (req, res, next) => {
   const updateQuery = `
   UPDATE    shareProjects
      SET    imagePath = "${imagePath}",
+            type = "${type}",
             name = "${name}",
             link = "${link}",
             repreName = "${repreName}",

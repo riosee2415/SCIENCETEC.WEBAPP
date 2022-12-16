@@ -69,7 +69,7 @@ export const items = {
     {
       name: "팝업관리",
       link: "/admin/banner/popup",
-      useYn: false,
+      useYn: true,
     },
   ],
   게시판관리: [
@@ -162,7 +162,7 @@ export const items = {
     {
       name: "팝업이력관리",
       link: "/admin/history/popup",
-      useYn: false,
+      useYn: true,
     },
     {
       name: "게시글이력관리",
