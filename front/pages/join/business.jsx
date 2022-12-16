@@ -675,7 +675,7 @@ const Index = () => {
                       type="text"
                       width={`100%`}
                       height={`55px`}
-                      placeholder="조합 홈페이지 주소를 입력해주세요."
+                      placeholder="www가 붙지 않은 홈페이지 주소를 입력해주세요."
                       radius={`5px`}
                       {...combiHomepageInput}
                     />
