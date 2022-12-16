@@ -7,6 +7,12 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import useWidth from "../../hooks/useWidth";
 import { useRouter } from "next/router";
 
+const Custom = styled(Carousel)`
+  .slick-list {
+    padding: 0 !important;
+  }
+`;
+
 const ArrowWrapper = styled(Wrapper)`
   width: 35px;
   height: 35px;
@@ -30,7 +36,7 @@ const ShareProdSlider = ({
   datum,
   //
   dots = false,
-  arrow = true,
+  arrow = false,
   effect = `scrollx`, // scrollx or fade
   //
   autoplay = false,
@@ -49,6 +55,10 @@ const ShareProdSlider = ({
   const slideRef = useRef();
 
   const router = useRouter();
+
+  const moveLinkHandler = useCallback((link) => {
+    router.push(link);
+  }, []);
 
   const moveSlideHandler = (isNext) => {
     if (isNext) {
@@ -145,7 +155,7 @@ const ShareProdSlider = ({
         </Wrapper>
       )}
 
-      <Carousel
+      <Custom
         className="one-slide"
         effect={effect}
         dots={false}
@@ -153,8 +163,8 @@ const ShareProdSlider = ({
         vertical={false}
         ref={slideRef}
         autoplay={autoplay}
-        centerMode={false} // 양쪽에 겹쳐서 보이는 디자인
-        centerPadding={`30px`} // 얼만큼 겹쳐 보일건지 결정
+        centerMode={slideDatum.length === 1 ? false : true} // 양쪽에 겹쳐서 보이는 디자인
+        centerPadding={width < 700 ? `10px` : `50px`} // 얼만큼 겹쳐 보일건지 결정
         fade={false} // fade or slide
         initialSlide={0} // 초기에 몇번째 슬라이드를 보여줄 것인지 결정
         variableWidth={false} // 각각 다른 크기를 지정할 수 있음
@@ -167,12 +177,17 @@ const ShareProdSlider = ({
               display={`flex !important`}
               dr={`row`}
               key={idx}
-              padding={`0 50px`}
+              padding={
+                width < 700
+                  ? slideDatum.length === 1
+                    ? `0`
+                    : `0 10px 0 0`
+                  : `0 30px`
+              }
             >
               <Wrapper
                 wrap={`nowrap`}
                 borderBottom={`2px solid ${Theme.basicTheme_C}`}
-                padding={`0 0 20px`}
                 dr={`row`}
                 ju={`flex-start`}
                 fontSize={width < 900 ? `18px` : `20px`}
@@ -310,7 +325,7 @@ const ShareProdSlider = ({
             </Wrapper>
           );
         })}
-      </Carousel>
+      </Custom>
 
       {dots && (
         <Wrapper

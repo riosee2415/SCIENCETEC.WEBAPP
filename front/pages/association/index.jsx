@@ -31,9 +31,11 @@ import ShareProdSlider from "../../components/slide/shareProdSlider";
 
 const Association = () => {
   ////// GLOBAL STATE //////
-  const { shareProjects, underList } = useSelector(
+  const { shareProjects, underProjects, underList } = useSelector(
     (state) => state.shareProject
   );
+
+  console.log(underProjects);
   ////// HOOKS //////
   const width = useWidth();
 
@@ -223,164 +225,182 @@ const Association = () => {
                   shareProjects.map((data) => {
                     return (
                       <Wrapper
-                        width={width < 1000 ? `100%` : `49%`}
                         margin={`10px 0`}
+                        al={`flex-start`}
+                        position={`relative`}
                       >
-                        <Wrapper
-                          wrap={`nowrap`}
-                          borderBottom={`2px solid ${Theme.basicTheme_C}`}
-                          padding={`0 0 20px`}
-                          dr={`row`}
-                          ju={`flex-start`}
-                          fontSize={width < 900 ? `18px` : `20px`}
-                          fontWeight={`700`}
-                        >
+                        <Wrapper width={width < 700 ? `100%` : `45%`}>
+                          <Wrapper
+                            wrap={`nowrap`}
+                            borderBottom={`2px solid ${Theme.basicTheme_C}`}
+                            padding={`0 0 20px`}
+                            dr={`row`}
+                            ju={`flex-start`}
+                            fontSize={width < 900 ? `18px` : `20px`}
+                            fontWeight={`700`}
+                          >
+                            <Image
+                              alt="icon"
+                              src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
+                              width={`14px`}
+                              margin={`0 6px 0 0`}
+                            />
+                            {data.viewType}
+                          </Wrapper>
                           <Image
-                            alt="icon"
-                            src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
-                            width={`14px`}
-                            margin={`0 6px 0 0`}
+                            alt="image"
+                            src={data.imagePath}
+                            onClick={() => moveLinkHandler(data.link)}
+                            cursor={`pointer`}
+                            height={`300px`}
                           />
-                          {data.viewType}
-                        </Wrapper>
-                        <Image
-                          alt="image"
-                          src={data.imagePath}
-                          onClick={() => moveLinkHandler(data.link)}
-                          cursor={`pointer`}
-                          height={`300px`}
-                        />
-                        <Wrapper
-                          dr={`row`}
-                          height={`55px`}
-                          fontSize={`16px`}
-                          borderTop={`1px solid ${Theme.lightGrey2_C}`}
-                        >
                           <Wrapper
-                            fontWeight={`bold`}
-                            color={Theme.grey2_C}
-                            width={width < 900 ? `100px` : `180px`}
+                            dr={`row`}
+                            height={`55px`}
+                            fontSize={`16px`}
+                            borderTop={`1px solid ${Theme.lightGrey2_C}`}
                           >
-                            조합명
+                            <Wrapper
+                              fontWeight={`bold`}
+                              color={Theme.grey2_C}
+                              width={width < 900 ? `100px` : `180px`}
+                            >
+                              조합명
+                            </Wrapper>
+                            <Wrapper
+                              width={
+                                width < 900
+                                  ? `calc(100% - 100px)`
+                                  : `calc(100% - 180px)`
+                              }
+                              al={`flex-start`}
+                            >
+                              {data.name}
+                            </Wrapper>
+                          </Wrapper>
+
+                          <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                            <Wrapper
+                              fontWeight={`bold`}
+                              color={Theme.grey2_C}
+                              width={width < 900 ? `100px` : `180px`}
+                            >
+                              대표자명
+                            </Wrapper>
+                            <Wrapper
+                              width={
+                                width < 900
+                                  ? `calc(100% - 100px)`
+                                  : `calc(100% - 180px)`
+                              }
+                              al={`flex-start`}
+                            >
+                              {data.repreName}
+                            </Wrapper>
+                          </Wrapper>
+                          <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                            <Wrapper
+                              fontWeight={`bold`}
+                              color={Theme.grey2_C}
+                              width={width < 900 ? `100px` : `180px`}
+                            >
+                              설립연도
+                            </Wrapper>
+                            <Wrapper
+                              width={
+                                width < 900
+                                  ? `calc(100% - 100px)`
+                                  : `calc(100% - 180px)`
+                              }
+                              al={`flex-start`}
+                            >
+                              {data.viewEstimateDate}
+                            </Wrapper>
+                          </Wrapper>
+                          <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                            <Wrapper
+                              fontWeight={`bold`}
+                              color={Theme.grey2_C}
+                              width={width < 900 ? `100px` : `180px`}
+                            >
+                              직원수
+                            </Wrapper>
+                            <Wrapper
+                              width={
+                                width < 900
+                                  ? `calc(100% - 100px)`
+                                  : `calc(100% - 180px)`
+                              }
+                              al={`flex-start`}
+                            >
+                              {data.viewEmpCnt}
+                            </Wrapper>
+                          </Wrapper>
+                          <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
+                            <Wrapper
+                              fontWeight={`bold`}
+                              color={Theme.grey2_C}
+                              width={width < 900 ? `100px` : `180px`}
+                            >
+                              업종
+                            </Wrapper>
+                            <Wrapper
+                              width={
+                                width < 900
+                                  ? `calc(100% - 100px)`
+                                  : `calc(100% - 180px)`
+                              }
+                              al={`flex-start`}
+                            >
+                              {data.jobType}
+                            </Wrapper>
                           </Wrapper>
                           <Wrapper
-                            width={
-                              width < 900
-                                ? `calc(100% - 100px)`
-                                : `calc(100% - 180px)`
-                            }
-                            al={`flex-start`}
+                            dr={`row`}
+                            height={`75px`}
+                            fontSize={`16px`}
+                            borderBottom={`1px solid ${Theme.lightGrey2_C}`}
                           >
-                            {data.name}
+                            <Wrapper
+                              fontWeight={`bold`}
+                              color={Theme.grey2_C}
+                              width={width < 900 ? `100px` : `180px`}
+                            >
+                              주업무
+                            </Wrapper>
+                            <Wrapper
+                              width={
+                                width < 900
+                                  ? `calc(100% - 100px)`
+                                  : `calc(100% - 180px)`
+                              }
+                              al={`flex-start`}
+                              fontSize={`14px`}
+                            >
+                              {data.importantWork}
+                            </Wrapper>
                           </Wrapper>
                         </Wrapper>
 
-                        <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                          <Wrapper
-                            fontWeight={`bold`}
-                            color={Theme.grey2_C}
-                            width={width < 900 ? `100px` : `180px`}
-                          >
-                            대표자명
-                          </Wrapper>
-                          <Wrapper
-                            width={
-                              width < 900
-                                ? `calc(100% - 100px)`
-                                : `calc(100% - 180px)`
-                            }
-                            al={`flex-start`}
-                          >
-                            {data.repreName}
-                          </Wrapper>
-                        </Wrapper>
-                        <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                          <Wrapper
-                            fontWeight={`bold`}
-                            color={Theme.grey2_C}
-                            width={width < 900 ? `100px` : `180px`}
-                          >
-                            설립연도
-                          </Wrapper>
-                          <Wrapper
-                            width={
-                              width < 900
-                                ? `calc(100% - 100px)`
-                                : `calc(100% - 180px)`
-                            }
-                            al={`flex-start`}
-                          >
-                            {data.viewEstimateDate}
-                          </Wrapper>
-                        </Wrapper>
-                        <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                          <Wrapper
-                            fontWeight={`bold`}
-                            color={Theme.grey2_C}
-                            width={width < 900 ? `100px` : `180px`}
-                          >
-                            직원수
-                          </Wrapper>
-                          <Wrapper
-                            width={
-                              width < 900
-                                ? `calc(100% - 100px)`
-                                : `calc(100% - 180px)`
-                            }
-                            al={`flex-start`}
-                          >
-                            {data.viewEmpCnt}
-                          </Wrapper>
-                        </Wrapper>
-                        <Wrapper dr={`row`} height={`55px`} fontSize={`16px`}>
-                          <Wrapper
-                            fontWeight={`bold`}
-                            color={Theme.grey2_C}
-                            width={width < 900 ? `100px` : `180px`}
-                          >
-                            업종
-                          </Wrapper>
-                          <Wrapper
-                            width={
-                              width < 900
-                                ? `calc(100% - 100px)`
-                                : `calc(100% - 180px)`
-                            }
-                            al={`flex-start`}
-                          >
-                            {data.jobType}
-                          </Wrapper>
-                        </Wrapper>
                         <Wrapper
-                          dr={`row`}
-                          height={`75px`}
-                          fontSize={`16px`}
-                          borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                          width={width < 700 ? `100%` : `55%`}
+                          position={width < 700 ? `` : `absolute`}
+                          bottom={`0`}
+                          right={`0`}
                         >
-                          <Wrapper
-                            fontWeight={`bold`}
-                            color={Theme.grey2_C}
-                            width={width < 900 ? `100px` : `180px`}
-                          >
-                            주업무
-                          </Wrapper>
-                          <Wrapper
-                            width={
-                              width < 900
-                                ? `calc(100% - 100px)`
-                                : `calc(100% - 180px)`
-                            }
-                            al={`flex-start`}
-                            fontSize={`14px`}
-                          >
-                            {data.importantWork}
-                          </Wrapper>
-
-                          <Wrapper al={`flex-end`}>
-                            <CommonButton onClick={() => vModalToggle(data)}>
-                              자세히 보기
-                            </CommonButton>
-                          </Wrapper>
+                          {underProjects.filter(
+                            (value) => value.ShareProjectId === data.id
+                          ).length === 0 ? (
+                            <Wrapper height={width < 700 ? `500px` : `700px`}>
+                              <Empty description="산하기업이 없습니다." />
+                            </Wrapper>
+                          ) : (
+                            <ShareProdSlider
+                              datum={underProjects.filter(
+                                (value) => value.ShareProjectId === data.id
+                              )}
+                            />
+                          )}
                         </Wrapper>
                       </Wrapper>
                     );

@@ -2,6 +2,7 @@ import produce from "../util/produce";
 
 export const initailState = {
   shareProjects: [],
+  underProjects: [],
 
   previewImagePath1: null,
   previewImagePath2: null,
@@ -121,7 +122,8 @@ const reducer = (state = initailState, action) =>
         draft.st_shareProjectLoading = false;
         draft.st_shareProjectDone = true;
         draft.st_shareProjectError = null;
-        draft.shareProjects = action.data;
+        draft.shareProjects = action.data.share;
+        draft.underProjects = action.data.underList;
         break;
       }
       case SHARE_PROJECT_FAILURE: {
