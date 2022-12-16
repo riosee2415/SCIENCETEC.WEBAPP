@@ -93,15 +93,20 @@ const Perform = () => {
                 fontSize={width < 900 ? `16px` : `18px`}
               >
                 • 우수 조합 사례
-                <CommonButton
-                  width={`82px`}
-                  height={`20px`}
-                  padding={`0`}
-                  kindOf={`grey2`}
-                  margin={`0 0 0 10px`}
+                <a
+                  href={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/file/%E1%84%8E%E1%85%A1%E1%86%B7%E1%84%80%E1%85%A9)%2B%E1%84%80%E1%85%AA%E1%84%92%E1%85%A1%E1%86%A8%E1%84%80%E1%85%B5%E1%84%89%E1%85%AE%E1%86%AF%E1%84%8B%E1%85%B5%E1%86%AB%2B%E1%84%92%E1%85%A7%E1%86%B8%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8C%E1%85%A9%E1%84%92%E1%85%A1%E1%86%B8%2B%E1%84%8B%E1%85%AE%E1%84%89%E1%85%AE%E1%84%89%E1%85%A1%E1%84%85%E1%85%A8%E1%84%8C%E1%85%B5%E1%86%B8_.pdf`}
+                  download
                 >
-                  다운로드 <DownloadOutlined />
-                </CommonButton>
+                  <CommonButton
+                    width={`82px`}
+                    height={`20px`}
+                    padding={`0`}
+                    kindOf={`grey2`}
+                    margin={`0 0 0 10px`}
+                  >
+                    다운로드 <DownloadOutlined />
+                  </CommonButton>
+                </a>
               </Wrapper>
               <Wrapper
                 al={`flex-start`}
