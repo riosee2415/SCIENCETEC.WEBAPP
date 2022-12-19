@@ -44,6 +44,18 @@ import {
   UNDER_DELETE_REQUEST,
   UNDER_DELETE_SUCCESS,
   UNDER_DELETE_FAILURE,
+  //
+  SHARE_PROJECT_ADMIN_LIST_REQUEST,
+  SHARE_PROJECT_ADMIN_LIST_SUCCESS,
+  SHARE_PROJECT_ADMIN_LIST_FAILURE,
+  //
+  SHARE_PROJECT_IMAGE_UPDATE_REQUEST,
+  SHARE_PROJECT_IMAGE_UPDATE_SUCCESS,
+  SHARE_PROJECT_IMAGE_UPDATE_FAILURE,
+  //
+  SHARE_PROJECT_UNDER_IMAGE_UPDATE_REQUEST,
+  SHARE_PROJECT_UNDER_IMAGE_UPDATE_SUCCESS,
+  SHARE_PROJECT_UNDER_IMAGE_UPDATE_FAILURE,
 } from "../reducers/shareProject";
 
 // ******************************************************************************************************************
@@ -330,6 +342,75 @@ function* underDelete(action) {
   }
 }
 
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function shareProjectAdminListAPI(data) {
+  return await axios.post(`/api/share/admin/list`, data);
+}
+
+function* shareProjectAdminList(action) {
+  try {
+    const result = yield call(shareProjectAdminListAPI, action.data);
+
+    yield put({
+      type: SHARE_PROJECT_ADMIN_LIST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SHARE_PROJECT_ADMIN_LIST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function shareProjectImageUpdateAPI(data) {
+  return await axios.post(`/api/share/image/update`, data);
+}
+
+function* shareProjectImageUpdate(action) {
+  try {
+    const result = yield call(shareProjectImageUpdateAPI, action.data);
+
+    yield put({
+      type: SHARE_PROJECT_IMAGE_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SHARE_PROJECT_IMAGE_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function shareProjectUnderImageUpdateAPI(data) {
+  return await axios.post(`/api/share/under/image/update`, data);
+}
+
+function* shareProjectUnderImageUpdate(action) {
+  try {
+    const result = yield call(shareProjectUnderImageUpdateAPI, action.data);
+
+    yield put({
+      type: SHARE_PROJECT_UNDER_IMAGE_UPDATE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SHARE_PROJECT_UNDER_IMAGE_UPDATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 // ******************************************************************************************************************
 // ******************************************************************************************************************
 // ******************************************************************************************************************
@@ -375,6 +456,18 @@ function* watchUnderUpdate() {
 function* watchUnderDelete() {
   yield takeLatest(UNDER_DELETE_REQUEST, underDelete);
 }
+function* watchShareProjectAdminList() {
+  yield takeLatest(SHARE_PROJECT_ADMIN_LIST_REQUEST, shareProjectAdminList);
+}
+function* watchShareProjectImageUpdate() {
+  yield takeLatest(SHARE_PROJECT_IMAGE_UPDATE_REQUEST, shareProjectImageUpdate);
+}
+function* watchShareProjectUnderImageUpdate() {
+  yield takeLatest(
+    SHARE_PROJECT_UNDER_IMAGE_UPDATE_REQUEST,
+    shareProjectUnderImageUpdate
+  );
+}
 
 //////////////////////////////////////////////////////////////
 export default function* shareSaga() {
@@ -391,6 +484,10 @@ export default function* shareSaga() {
     fork(watchUnderCreate),
     fork(watchUnderUpdate),
     fork(watchUnderDelete),
+    //
+    fork(watchShareProjectAdminList),
+    fork(watchShareProjectImageUpdate),
+    fork(watchShareProjectUnderImageUpdate),
     //
   ]);
 }

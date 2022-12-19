@@ -47,7 +47,9 @@ import {
   SHAREPROJECT_IMAGE2_REQUEST,
   SHAREPROJECT_IMAGE_RESET,
   SHAREPROJECT_UPDATE_REQUEST,
-  SHARE_PROJECT_REQUEST,
+  SHARE_PROJECT_ADMIN_LIST_REQUEST,
+  SHARE_PROJECT_IMAGE_UPDATE_REQUEST,
+  SHARE_PROJECT_UNDER_IMAGE_UPDATE_REQUEST,
   UNDER_CREATE_REQUEST,
   UNDER_DELETE_REQUEST,
   UNDER_LIST_REQUEST,
@@ -78,7 +80,7 @@ const ViewStatusIcon = styled(EyeOutlined)`
 const Association = ({}) => {
   const { st_loadMyInfoDone, me } = useSelector((state) => state.user);
   const {
-    shareProjects,
+    adminList,
     previewImagePath1,
     previewImagePath2,
     underList,
@@ -97,6 +99,12 @@ const Association = ({}) => {
     st_underUpdateDone,
     //
     st_underDeleteDone,
+    //
+    st_shareProjectImageUpdateDone,
+    //
+    st_shareProjecthImage1Error,
+    //
+    st_shareProjectUnderImageUpdateDone,
   } = useSelector((state) => state.shareProject);
 
   const router = useRouter();
@@ -147,6 +155,19 @@ const Association = ({}) => {
 
   ////// USEEFFECT //////
 
+  useEffect(() => {
+    if (st_shareProjectUnderImageUpdateDone) {
+      setUnderUModal(false);
+      setCurrentData(null);
+
+      dispatch({
+        type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
+      });
+
+      return message.success("산하 이미지가 수정되었습니다.");
+    }
+  }, [st_shareProjectUnderImageUpdateDone]);
+
   // --------- 산하 삭제 후 처리 ----------- //
   useEffect(() => {
     if (st_underDeleteDone) {
@@ -158,7 +179,7 @@ const Association = ({}) => {
       });
 
       dispatch({
-        type: SHARE_PROJECT_REQUEST,
+        type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
       });
 
       return message.success("산하가 삭제되었습니다.");
@@ -179,13 +200,30 @@ const Association = ({}) => {
       });
 
       dispatch({
-        type: SHARE_PROJECT_REQUEST,
+        type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
       });
       setUnderUModal(false);
 
       return message.success("산하를 수정했습니다.");
     }
-  }, [st_underUpdateDone]);
+
+    if (st_shareProjectImageUpdateDone) {
+      setCurrentData(null);
+
+      dispatch({
+        type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
+      });
+
+      return message.success("이미지가 수정되었습니다.");
+    }
+    if (st_shareProjecthImage1Error) {
+      return message.error(st_shareProjecthImage1Error);
+    }
+  }, [
+    st_underUpdateDone,
+    st_shareProjectImageUpdateDone,
+    st_shareProjecthImage1Error,
+  ]);
   // --------- 산하 생성 후 처리 ----------- //
   useEffect(() => {
     if (st_underCreateDone) {
@@ -203,7 +241,7 @@ const Association = ({}) => {
   useEffect(() => {
     if (st_shareProjecthDeleteDone) {
       dispatch({
-        type: SHARE_PROJECT_REQUEST,
+        type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
       });
       setCurrentData(null);
 
@@ -214,7 +252,7 @@ const Association = ({}) => {
   useEffect(() => {
     if (st_shareProjecthUpdateDone) {
       dispatch({
-        type: SHARE_PROJECT_REQUEST,
+        type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
       });
       dispatch({
         type: SHAREPROJECT_IMAGE_RESET,
@@ -227,7 +265,7 @@ const Association = ({}) => {
   useEffect(() => {
     if (st_shareProjecthCreateDone) {
       dispatch({
-        type: SHARE_PROJECT_REQUEST,
+        type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
       });
 
       setCModal(false);
@@ -312,20 +350,10 @@ const Association = ({}) => {
   // 산하 이미지 수정하기
   const imageUnderUpdateHandler = useCallback(() => {
     dispatch({
-      type: UNDER_UPDATE_REQUEST,
+      type: SHARE_PROJECT_UNDER_IMAGE_UPDATE_REQUEST,
       data: {
-        shareProjectId: currentData.id,
         id: currentUnderData.id,
-        name: currentUnderData.name,
         imagePath: previewImagePath2,
-        link: currentUnderData.link,
-        repreName: currentUnderData.repreName,
-        estimateDate: moment(currentUnderData.estimateDate).format(
-          "YYYY-MM-DD"
-        ),
-        empCnt: currentUnderData.empCnt,
-        jobType: currentUnderData.jobType,
-        importantWork: currentUnderData.importantWork,
       },
     });
   }, [currentData, previewImagePath2]);
@@ -411,18 +439,10 @@ const Association = ({}) => {
   // image update
   const imageUpdateHandler = useCallback(() => {
     dispatch({
-      type: SHAREPROJECT_UPDATE_REQUEST,
+      type: SHARE_PROJECT_IMAGE_UPDATE_REQUEST,
       data: {
         id: currentData.id,
-        name: currentData.name,
-        type: currentData.type,
         imagePath: previewImagePath1,
-        link: currentData.link,
-        repreName: currentData.repreName,
-        estimateDate: moment(currentData.estimateDate).format("YYYY-MM-DD"),
-        empCnt: currentData.empCnt,
-        jobType: currentData.jobType,
-        importantWork: currentData.importantWork,
       },
     });
   }, [currentData, previewImagePath1]);
@@ -628,7 +648,7 @@ const Association = ({}) => {
             style={{ width: "100%" }}
             rowKey="id"
             columns={col}
-            dataSource={shareProjects}
+            dataSource={adminList}
             size="small"
             onRow={(record, index) => {
               return {
@@ -1097,7 +1117,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     });
 
     context.store.dispatch({
-      type: SHARE_PROJECT_REQUEST,
+      type: SHARE_PROJECT_ADMIN_LIST_REQUEST,
     });
 
     // 구현부 종료

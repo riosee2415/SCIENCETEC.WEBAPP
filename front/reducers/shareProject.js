@@ -11,6 +11,7 @@ export const initailState = {
 
   //
   underList: [], // 산하 리스트
+  adminList: [],
 
   //
   st_shareProjectLoading: false,
@@ -58,6 +59,18 @@ export const initailState = {
   st_underDeleteLoading: false, // under 삭제하기
   st_underDeleteDone: false,
   st_underDeleteError: null,
+  //
+  st_shareProjectAdminListLoading: false, // admin List
+  st_shareProjectAdminListDone: false,
+  st_shareProjectAdminListError: null,
+  //
+  st_sharePrjectImageUpdateLoading: false,
+  st_sharePrjectImageUpdateDone: false,
+  st_sharePrjectImageUpdateError: null,
+  //
+  st_sharePrjectUnderImageUpdateLoading: false,
+  st_sharePrjectUnderImageUpdateDone: false,
+  st_sharePrjectUnderImageUpdateError: null,
   //
 };
 
@@ -108,6 +121,29 @@ export const UNDER_UPDATE_FAILURE = "UNDER_UPDATE_FAILURE";
 export const UNDER_DELETE_REQUEST = "UNDER_DELETE_REQUEST";
 export const UNDER_DELETE_SUCCESS = "UNDER_DELETE_SUCCESS";
 export const UNDER_DELETE_FAILURE = "UNDER_DELETE_FAILURE";
+
+//
+
+export const SHARE_PROJECT_ADMIN_LIST_REQUEST =
+  "SHARE_PROJECT_ADMIN_LIST_REQUEST";
+export const SHARE_PROJECT_ADMIN_LIST_SUCCESS =
+  "SHARE_PROJECT_ADMIN_LIST_SUCCESS";
+export const SHARE_PROJECT_ADMIN_LIST_FAILURE =
+  "SHARE_PROJECT_ADMIN_LIST_FAILURE";
+
+export const SHARE_PROJECT_IMAGE_UPDATE_REQUEST =
+  "SHARE_PROJECT_IMAGE_UPDATE_REQUEST";
+export const SHARE_PROJECT_IMAGE_UPDATE_SUCCESS =
+  "SHARE_PROJECT_IMAGE_UPDATE_SUCCESS";
+export const SHARE_PROJECT_IMAGE_UPDATE_FAILURE =
+  "SHARE_PROJECT_IMAGE_UPDATE_FAILURE";
+
+export const SHARE_PROJECT_UNDER_IMAGE_UPDATE_REQUEST =
+  "SHARE_PROJECT_UNDER_IMAGE_UPDATE_REQUEST";
+export const SHARE_PROJECT_UNDER_IMAGE_UPDATE_SUCCESS =
+  "SHARE_PROJECT_UNDER_IMAGE_UPDATE_SUCCESS";
+export const SHARE_PROJECT_UNDER_IMAGE_UPDATE_FAILURE =
+  "SHARE_PROJECT_UNDER_IMAGE_UPDATE_FAILURE";
 
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
@@ -342,6 +378,67 @@ const reducer = (state = initailState, action) =>
         draft.st_underDeleteLoading = false;
         draft.st_underDeleteDone = false;
         draft.st_underDeleteError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+      case SHARE_PROJECT_ADMIN_LIST_REQUEST: {
+        draft.st_shareProjectAdminListLoading = true;
+        draft.st_shareProjectAdminListDone = false;
+        draft.st_shareProjectAdminListError = null;
+        break;
+      }
+      case SHARE_PROJECT_ADMIN_LIST_SUCCESS: {
+        draft.st_shareProjectAdminListLoading = false;
+        draft.st_shareProjectAdminListDone = true;
+        draft.st_shareProjectAdminListError = null;
+        draft.adminList = action.data.share;
+        break;
+      }
+      case SHARE_PROJECT_ADMIN_LIST_FAILURE: {
+        draft.st_shareProjectAdminListLoading = false;
+        draft.st_shareProjectAdminListDone = false;
+        draft.st_shareProjectAdminListError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+      case SHARE_PROJECT_IMAGE_UPDATE_REQUEST: {
+        draft.st_shareProjectImageUpdateLoading = true;
+        draft.st_shareProjectImageUpdateDone = false;
+        draft.st_shareProjectImageUpdateError = null;
+        break;
+      }
+      case SHARE_PROJECT_IMAGE_UPDATE_SUCCESS: {
+        draft.st_shareProjectImageUpdateLoading = false;
+        draft.st_shareProjectImageUpdateDone = true;
+        draft.st_shareProjectImageUpdateError = null;
+        break;
+      }
+      case SHARE_PROJECT_IMAGE_UPDATE_FAILURE: {
+        draft.st_shareProjectImageUpdateLoading = false;
+        draft.st_shareProjectImageUpdateDone = false;
+        draft.st_shareProjectImageUpdateError = action.error;
+        break;
+      }
+
+      //////////////////////////////////////////////
+      case SHARE_PROJECT_UNDER_IMAGE_UPDATE_REQUEST: {
+        draft.st_shareProjectUnderImageUpdateLoading = true;
+        draft.st_shareProjectUnderImageUpdateDone = false;
+        draft.st_shareProjectUnderImageUpdateError = null;
+        break;
+      }
+      case SHARE_PROJECT_UNDER_IMAGE_UPDATE_SUCCESS: {
+        draft.st_shareProjectUnderImageUpdateLoading = false;
+        draft.st_shareProjectUnderImageUpdateDone = true;
+        draft.st_shareProjectUnderImageUpdateError = null;
+        break;
+      }
+      case SHARE_PROJECT_UNDER_IMAGE_UPDATE_FAILURE: {
+        draft.st_shareProjectUnderImageUpdateLoading = false;
+        draft.st_shareProjectUnderImageUpdateDone = false;
+        draft.st_shareProjectUnderImageUpdateError = action.error;
         break;
       }
 
