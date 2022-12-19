@@ -90,7 +90,7 @@ const Index = ({}) => {
                     fontSize={width < 700 ? `18px` : `20px`}
                     fontWeight={`600`}
                   >
-                    기관형 과학기술인 협동조합 교류회 설립절차
+                    기관형 과학기술인 협동조합 설립절차
                   </Wrapper>
                 </Wrapper>
 
