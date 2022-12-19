@@ -52,7 +52,7 @@ const ShareProdSlider = ({
 
   const [slideDatum, setSlideDatum] = useState(null);
 
-  const [currentTab, setCurrentTab] = useState(1);
+  const [currentTab, setCurrentTab] = useState(0);
 
   const slideRef = useRef();
 
@@ -172,7 +172,7 @@ const ShareProdSlider = ({
         initialSlide={0} // 초기에 몇번째 슬라이드를 보여줄 것인지 결정
         variableWidth={false} // 각각 다른 크기를 지정할 수 있음
         verticalSwiping={false}
-        draggable={true}
+        draggable={false}
       >
         {slideDatum.map((slide, idx) => {
           return (
