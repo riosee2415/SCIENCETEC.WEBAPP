@@ -264,6 +264,7 @@ const Association = ({}) => {
         setCurrentUnderData(record);
         underForm.setFieldsValue({
           type: record.type,
+          name: record.name,
           repreName: record.repreName,
           jobType: record.jobType,
           importantWork: record.importantWork,
@@ -315,6 +316,7 @@ const Association = ({}) => {
       data: {
         shareProjectId: currentData.id,
         id: currentUnderData.id,
+        name: currentUnderData.name,
         imagePath: previewImagePath2,
         link: currentUnderData.link,
         repreName: currentUnderData.repreName,
@@ -350,6 +352,7 @@ const Association = ({}) => {
         data: {
           shareProjectId: currentData.id,
           id: currentUnderData.id,
+          name: data.name,
           imagePath: currentUnderData.imagePath,
           link: data.link,
           repreName: data.repreName,
@@ -390,6 +393,7 @@ const Association = ({}) => {
         type: SHAREPROJECT_UPDATE_REQUEST,
         data: {
           id: currentData.id,
+          name: data.name,
           type: data.type,
           imagePath: currentData.imagePath,
           link: data.link,
@@ -410,6 +414,7 @@ const Association = ({}) => {
       type: SHAREPROJECT_UPDATE_REQUEST,
       data: {
         id: currentData.id,
+        name: currentData.name,
         type: currentData.type,
         imagePath: previewImagePath1,
         link: currentData.link,
@@ -457,6 +462,7 @@ const Association = ({}) => {
       });
 
       infoForm.setFieldsValue({
+        name: record.name,
         type: record.type,
         repreName: record.repreName,
         jobType: record.jobType,
@@ -555,6 +561,8 @@ const Association = ({}) => {
     },
   ];
 
+  console.log(currentData);
+
   return (
     <AdminLayout>
       {/* MENU TAB */}
@@ -598,6 +606,9 @@ const Association = ({}) => {
           </GuideLi>
           <GuideLi isImpo={true}>
             수정하는 즉시 화면에 반영되니 신중한 처리바랍니다.
+          </GuideLi>
+          <GuideLi isImpo={true}>
+            이미지는 5MB 이하로 올려주셔야 합니다.
           </GuideLi>
         </GuideUl>
       </Wrapper>
@@ -699,6 +710,18 @@ const Association = ({}) => {
                 size="small"
                 onFinish={updateHandler}
               >
+                <Form.Item
+                  label="조합명"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "회원조합 타입은 필수 입력사항 입니다.",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
                 <Form.Item
                   label="회원조합타입"
                   name="type"
@@ -883,6 +906,12 @@ const Association = ({}) => {
         title="산하 수정하기"
         width="900px"
       >
+        <GuideUl>
+          <GuideLi isImpo={true}>
+            이미지는 5MB 이하로 올려주셔야 합니다.
+          </GuideLi>
+        </GuideUl>
+
         <Wrapper>
           <Image
             style={{ width: `100%` }}
@@ -933,6 +962,18 @@ const Association = ({}) => {
           form={underForm}
           onFinish={underUpdateHandler}
         >
+          <Form.Item
+            label="조합명"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: "조합명 필수 입력사항 입니다.",
+              },
+            ]}
+          >
+            <Input size="small" />
+          </Form.Item>
           <Form.Item
             label="대표자명"
             name="repreName"
