@@ -223,13 +223,13 @@ const AdminLayout = ({ children }) => {
         ju={`space-around`}
       >
         <Wrapper width={`400px`} height={`100%`} position={`relative`}>
-          <Image
+          {/* <Image
             position={`absolute`}
             top={`10px`}
             left={`10px`}
             width={`100px`}
             src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/4LEAFSOFTWARE/assets/images/LOGO/logo2.png`}
-          />
+          /> */}
 
           <Image
             width={`100px`}
