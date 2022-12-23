@@ -616,6 +616,7 @@ const Question = ({}) => {
             변경된 정보는 홈페이지에 즉시 적용되기 때문에, 신중한 처리를 필요로
             합니다.
           </GuideLi>
+          <GuideLi isImpo={true}>중복선택여부는 선택형만 적용됩니다.</GuideLi>
         </GuideUl>
       </Wrapper>
 

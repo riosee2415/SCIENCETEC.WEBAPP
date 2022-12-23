@@ -73,7 +73,9 @@ const Status = ({ surveyList }) => {
               ? `textInput${idx}`
               : value.innerType === 2
               ? `textArea${idx}`
-              : `checkBox${idx}`
+              : value.innerType === 3
+              ? `checkBox${idx}`
+              : `scale${idx}`
           }":${
             value.innerType === 1 ? '""' : value.innerType === 2 ? '""' : `[]`
           }${data.inner.length !== idx + 1 ? "," : ""}`;
@@ -165,16 +167,25 @@ const Status = ({ surveyList }) => {
                         let isError = false;
                         let errorType = 0;
 
+                        // console.log(data.inner);
+
                         data.inner.map((value) => {
-                          // input, area
-                          value.innerType === 1 || value.innerType === 2
-                            ? Object.values(values)
-                                .filter((item) => typeof item === "string")
-                                .map(
-                                  (item) =>
-                                    item.trim().length === 0 &&
-                                    ((isError = true), (errorType = 0))
-                                )
+                          // input, area, scale
+                          value.innerType === 1 ||
+                          value.innerType === 2 ||
+                          value.innerType === 4
+                            ? value.innerType === 4
+                              ? Object.values(values).filter(
+                                  (item) => typeof item === "number"
+                                ).length === 0 &&
+                                ((isError = true), (errorType = 1))
+                              : Object.values(values)
+                                  .filter((item) => typeof item === "string")
+                                  .map(
+                                    (item) =>
+                                      item.trim().length === 0 &&
+                                      ((isError = true), (errorType = 0))
+                                  )
                             : // checkbox
                             data.isOverlap
                             ? // 선택 안했을때 않넣음
