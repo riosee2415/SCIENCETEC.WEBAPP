@@ -262,24 +262,41 @@ const Business = ({ surveyList }) => {
                                 </Checkbox.Group>
                               </Form.Item>
                             </Wrapper>
+                          ) : v.innerType === 1 ? (
+                            <Wrapper key={v.id}>
+                              {v.questionValue && (
+                                <Text fontSize={`16px`} margin={`0 0 14px`}>
+                                  {v.questionValue}
+                                </Text>
+                              )}
+                              <Form.Item name={`textInput${idx}`}>
+                                <TextInput
+                                  type="text"
+                                  width={`100%`}
+                                  height={`55px`}
+                                  placeholder={v.placeholderValue}
+                                  radius={`5px`}
+                                  margin={`0 0 8px 0`}
+                                />
+                              </Form.Item>
+                            </Wrapper>
                           ) : (
-                            v.innerType === 1 && (
-                              <Wrapper key={v.id}>
-                                {v.questionValue && (
-                                  <Text fontSize={`16px`} margin={`0 0 14px`}>
-                                    {v.questionValue}
-                                  </Text>
-                                )}
-                                <Form.Item name={`textInput${idx}`}>
-                                  <TextInput
-                                    type="text"
-                                    width={`100%`}
-                                    height={`55px`}
-                                    placeholder={v.placeholderValue}
-                                    radius={`5px`}
-                                    margin={`0 0 8px 0`}
-                                  />
+                            v.innerType === 4 && (
+                              <Wrapper dr={`row`}>
+                                <Text margin={`0 20px 0 0`}>매우 낮음</Text>
+                                <Form.Item
+                                  style={{ width: `auto` }}
+                                  name={`scale${idx}`}
+                                >
+                                  <Radio.Group>
+                                    <Radio value={1}>1</Radio>
+                                    <Radio value={2}>2</Radio>
+                                    <Radio value={3}>3</Radio>
+                                    <Radio value={4}>4</Radio>
+                                    <Radio value={5}>5</Radio>
+                                  </Radio.Group>
                                 </Form.Item>
+                                <Text>매우 높음</Text>
                               </Wrapper>
                             )
                           );

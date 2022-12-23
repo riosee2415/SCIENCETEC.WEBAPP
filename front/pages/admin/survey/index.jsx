@@ -925,6 +925,7 @@ const Question = ({}) => {
                     <Radio value={1}>주관식</Radio>
                     <Radio value={2}>장문</Radio>
                     <Radio value={3}>선택형</Radio>
+                    <Radio value={4}>스케일형</Radio>
                   </Radio.Group>
                 </Form.Item>
 
@@ -1144,6 +1145,7 @@ const Question = ({}) => {
               <Radio value={1}>주관식</Radio>
               <Radio value={2}>장문</Radio>
               <Radio value={3}>선택형</Radio>
+              <Radio value={4}>스케일형</Radio>
             </Radio.Group>
           </Form.Item>
 
