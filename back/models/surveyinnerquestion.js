@@ -26,6 +26,14 @@ module.exports = class SurveyInnerQuestion extends Model {
           allowNull: false,
           defaultValue: false,
         },
+        scaleMin: {
+          type: DataTypes.STRING(300), // 스케일형 최소 문구
+          allowNull: true,
+        },
+        scaleMax: {
+          type: DataTypes.STRING(300), // 스케일형 최대 문구
+          allowNull: true,
+        },
         deletedAt: {
           type: DataTypes.DATE,
           allowNull: true,
