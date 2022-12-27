@@ -1030,7 +1030,7 @@ const Index = () => {
                         type="number"
                         width={`96%`}
                         height={`55px`}
-                        placeholder="자본금을 입력해주세요."
+                        placeholder="백만원 단위로 숫자만 입력해 주세요."
                         radius={`5px`}
                         {...importantBusinessCapitalInput}
                       />
@@ -1052,7 +1052,7 @@ const Index = () => {
                         type="number"
                         width={`96%`}
                         height={`55px`}
-                        placeholder="매출액을 입력해주세요."
+                        placeholder="백만원 단위로 숫자만 입력해 주세요."
                         radius={`5px`}
                         {...importantBusinessPriceInput}
                       />

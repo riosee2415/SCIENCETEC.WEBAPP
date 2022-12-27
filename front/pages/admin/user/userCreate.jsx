@@ -1150,7 +1150,12 @@ const UserCreate = ({}) => {
                       },
                     ]}
                   >
-                    <Input size="small" type="number" allowClear />
+                    <Input
+                      size="small"
+                      type="number"
+                      placeholder="백만원 단위로 숫자만 입력해 주세요."
+                      allowClear
+                    />
                   </Form.Item>
 
                   <Form.Item
@@ -1163,7 +1168,12 @@ const UserCreate = ({}) => {
                       },
                     ]}
                   >
-                    <Input size="small" type="number" allowClear />
+                    <Input
+                      size="small"
+                      type="number"
+                      placeholder="백만원 단위로 숫자만 입력해 주세요."
+                      allowClear
+                    />
                   </Form.Item>
 
                   <Wrapper al="flex-end">
@@ -1698,7 +1708,12 @@ const UserCreate = ({}) => {
                   },
                 ]}
               >
-                <Input size="small" type="number" allowClear />
+                <Input
+                  size="small"
+                  type="number"
+                  placeholder="백만원 단위로 숫자만 입력해 주세요."
+                  allowClear
+                />
               </Form.Item>
 
               <Form.Item
@@ -1711,7 +1726,12 @@ const UserCreate = ({}) => {
                   },
                 ]}
               >
-                <Input size="small" type="number" allowClear />
+                <Input
+                  size="small"
+                  type="number"
+                  placeholder="백만원 단위로 숫자만 입력해 주세요."
+                  allowClear
+                />
               </Form.Item>
 
               <Wrapper al="flex-end">
