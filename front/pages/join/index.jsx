@@ -203,8 +203,19 @@ const Index = () => {
 
   // 일반회원 create
   const createHandler = useCallback(() => {
+    const userReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
+
+    const passwordReg =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{5,}$/;
+
     if (!idInput.value) {
       return message.error("아이디를 입력해주세요.");
+    }
+
+    if (!userReg.test(idInput.value)) {
+      return message.error(
+        "아이디는 영문, 숫자를 혼합하여 5자 이상으로 입력해주세요."
+      );
     }
 
     if (!pwInput.value) {
@@ -217,6 +228,12 @@ const Index = () => {
 
     if (pwInput.value !== pwCheckInput.value) {
       return message.error("비밀번호가 일치하지 않습니다.");
+    }
+
+    if (!passwordReg.test(pwInput.value)) {
+      return message.error(
+        "비밀번호는 영문, 숫자, 특수문자를를 혼합하여 5자 이상으로 입력해주세요."
+      );
     }
 
     if (!combiNameInput.value) {
