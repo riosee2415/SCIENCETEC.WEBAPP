@@ -297,7 +297,9 @@ const Status = ({ surveyList }) => {
                             ) : (
                               v.innerType === 4 && (
                                 <Wrapper dr={`row`}>
-                                  <Text margin={`0 20px 0 0`}>매우 낮음</Text>
+                                  <Text margin={`0 20px 0 0`}>
+                                    {v.scaleMin}
+                                  </Text>
                                   <Form.Item
                                     style={{ width: `auto` }}
                                     name={`scale${idx}`}
@@ -310,7 +312,7 @@ const Status = ({ surveyList }) => {
                                       <Radio value={5}>5</Radio>
                                     </Radio.Group>
                                   </Form.Item>
-                                  <Text>매우 높음</Text>
+                                  <Text>{v.scaleMax}</Text>
                                 </Wrapper>
                               )
                             );

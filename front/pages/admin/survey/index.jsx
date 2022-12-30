@@ -154,6 +154,9 @@ const Question = ({}) => {
 
   const [surveyType, setSurveyType] = useState(null);
 
+  const [innerCreateType, setInnerCreateType] = useState(null);
+  const [innerUpdateType, setInnerUpdateType] = useState(null);
+
   ////// USEEFFECT //////
 
   useEffect(() => {
@@ -199,6 +202,7 @@ const Question = ({}) => {
           surveyId: typeValue,
         },
       });
+      return;
     }
 
     if (st_surveyQuesCreateError) {
@@ -217,6 +221,7 @@ const Question = ({}) => {
           surveyId: typeValue,
         },
       });
+      return;
     }
 
     if (st_surveyQuesUpdateError) {
@@ -237,6 +242,7 @@ const Question = ({}) => {
           surveyId: typeValue,
         },
       });
+      return;
     }
 
     if (st_surveyQuesDeleteError) {
@@ -248,6 +254,7 @@ const Question = ({}) => {
   useEffect(() => {
     if (st_surveyInnerCreateDone) {
       message.success("답변이 생성되었습니다.");
+      setInnerCreateType(null);
 
       innerCreateForm.resetFields();
       innerCreateModalToggle();
@@ -258,6 +265,7 @@ const Question = ({}) => {
           surveyQuestionId: currentData.id,
         },
       });
+      return;
     }
 
     if (st_surveyInnerCreateError) {
@@ -269,6 +277,7 @@ const Question = ({}) => {
   useEffect(() => {
     if (st_surveyInnerUpdateDone) {
       message.success("답변이 수정되었습니다.");
+      setInnerUpdateType(null);
 
       dispatch({
         type: SURVEY_INNER_LIST_REQUEST,
@@ -276,6 +285,7 @@ const Question = ({}) => {
           surveyQuestionId: currentData.id,
         },
       });
+      return;
     }
 
     if (st_surveyInnerUpdateError) {
@@ -296,6 +306,7 @@ const Question = ({}) => {
           surveyQuestionId: currentData.id,
         },
       });
+      return;
     }
 
     if (st_surveyInnerDeleteError) {
@@ -328,6 +339,20 @@ const Question = ({}) => {
       setSurveyType(type);
     },
     [surveyType]
+  );
+
+  const innerCreateTypeToggle = useCallback(
+    (type) => {
+      setInnerCreateType(type.target.value);
+    },
+    [innerCreateType]
+  );
+
+  const innerUpdateTypeToggle = useCallback(
+    (type) => {
+      setInnerUpdateType(type.target.value);
+    },
+    [innerUpdateType]
   );
 
   ////// HANDLER //////
@@ -415,6 +440,9 @@ const Question = ({}) => {
   const innerSetDataHandler = useCallback(
     (record) => {
       setInnerData(record);
+      setInnerUpdateType(record.innerType);
+
+      console.log(record);
 
       innerUpdateForm.setFieldsValue({
         surveyQuestionId: record.SurveyQuestionId,
@@ -422,16 +450,18 @@ const Question = ({}) => {
         sort: record.sort,
         questionValue: record.questionValue,
         placeholderValue: record.placeholderValue,
-
+        scaleMin: record.scaleMin,
+        scaleMax: record.scaleMax,
         createdAt: record.viewCreatedAt,
         updatedAt: record.viewUpdatedAt,
         updator: record.updator,
       });
     },
-    [innerData, innerUpdateForm]
+    [innerData, innerUpdateType, innerUpdateForm]
   );
 
   const innerCreateHandler = useCallback((data) => {
+    console.log(data);
     dispatch({
       type: SURVEY_INNER_CREATE_REQUEST,
       data: {
@@ -440,6 +470,8 @@ const Question = ({}) => {
         sort: data.sort,
         questionValue: data.questionValue,
         placeholderValue: data.placeholderValue,
+        scaleMin: data.scaleMin,
+        scaleMax: data.scaleMax,
       },
     });
   }, []);
@@ -454,6 +486,8 @@ const Question = ({}) => {
           sort: data.sort,
           questionValue: data.questionValue,
           placeholderValue: data.placeholderValue,
+          scaleMin: data.scaleMin,
+          scaleMax: data.scaleMax,
         },
       });
     },
@@ -922,7 +956,7 @@ const Question = ({}) => {
                     },
                   ]}
                 >
-                  <Radio.Group size="small">
+                  <Radio.Group size="small" onChange={innerUpdateTypeToggle}>
                     <Radio value={1}>주관식</Radio>
                     <Radio value={2}>장문</Radio>
                     <Radio value={3}>선택형</Radio>
@@ -945,6 +979,37 @@ const Question = ({}) => {
                     placeholder="안내문구을 입력해주세요."
                   />
                 </Form.Item>
+
+                {innerUpdateType === 4 && (
+                  <>
+                    <Form.Item
+                      label="최소문구"
+                      name="scaleMin"
+                      rules={[
+                        { required: true, message: "최소문구를 입력해주세요." },
+                      ]}
+                    >
+                      <Input
+                        size="small"
+                        allowClear
+                        placeholder="최소문구를 적어주세요."
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="최대문구"
+                      name="scaleMax"
+                      rules={[
+                        { required: true, message: "최대문구를 입력해주세요." },
+                      ]}
+                    >
+                      <Input
+                        size="small"
+                        allowClear
+                        placeholder="최대문구를 적어주세요."
+                      />
+                    </Form.Item>
+                  </>
+                )}
 
                 <Form.Item
                   label="순서"
@@ -1142,7 +1207,7 @@ const Question = ({}) => {
               },
             ]}
           >
-            <Radio.Group size="small">
+            <Radio.Group size="small" onChange={innerCreateTypeToggle}>
               <Radio value={1}>주관식</Radio>
               <Radio value={2}>장문</Radio>
               <Radio value={3}>선택형</Radio>
@@ -1161,6 +1226,37 @@ const Question = ({}) => {
               placeholder="안내문구을 입력해주세요."
             />
           </Form.Item>
+
+          {innerCreateType === 4 && (
+            <>
+              <Form.Item
+                label="최소문구"
+                name="scaleMin"
+                rules={[
+                  { required: true, message: "최소문구를 입력해주세요." },
+                ]}
+              >
+                <Input
+                  size="small"
+                  allowClear
+                  placeholder="최소문구를 적어주세요."
+                />
+              </Form.Item>
+              <Form.Item
+                label="최대문구"
+                name="scaleMax"
+                rules={[
+                  { required: true, message: "최대문구를 입력해주세요." },
+                ]}
+              >
+                <Input
+                  size="small"
+                  allowClear
+                  placeholder="최대문구를 적어주세요."
+                />
+              </Form.Item>
+            </>
+          )}
 
           <Form.Item
             label="순서"
