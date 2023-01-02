@@ -122,6 +122,14 @@ const Demand = () => {
     (data) => {
       setCurrentTab(data);
 
+      if (data === 1) {
+        // 현황조사
+        router.push("/operate/demand?type=status");
+      } else {
+        // 수요조사
+        router.push("/operate/demand?type=business");
+      }
+
       dispatch({
         type: SURVEY_LIST_REQUEST,
         data: {
