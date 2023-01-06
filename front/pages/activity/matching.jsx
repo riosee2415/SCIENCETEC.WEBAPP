@@ -22,7 +22,7 @@ import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import { Checkbox, Empty, Form, message, Modal } from "antd";
+import { Checkbox, Empty, Form, message, Modal, Radio } from "antd";
 import { CloseOutlined, FileOutlined } from "@ant-design/icons";
 import {
   FILE_RESET,
@@ -122,7 +122,9 @@ const Project = () => {
               ? `textInput${idx}`
               : value.innerType === 2
               ? `textArea${idx}`
-              : `checkBox${idx}`
+              : value.innerType === 3
+              ? `checkBox${idx}`
+              : `scale${idx}`
           }":${
             value.innerType === 1 ? '""' : value.innerType === 2 ? '""' : `[]`
           }${data.inner.length !== idx + 1 ? "," : ""}`;
@@ -352,19 +354,25 @@ const Project = () => {
                                   let errorType = 0;
 
                                   data.inner.map((value) => {
-                                    // input, area
+                                    // input, area, scale
                                     value.innerType === 1 ||
-                                    value.innerType === 2
-                                      ? Object.values(values)
-                                          .filter(
-                                            (item) => typeof item === "string"
-                                          )
-                                          .map(
-                                            (item) =>
-                                              item.trim().length === 0 &&
-                                              ((isError = true),
-                                              (errorType = 0))
-                                          )
+                                    value.innerType === 2 ||
+                                    value.innerType === 4
+                                      ? value.innerType === 4
+                                        ? Object.values(values).filter(
+                                            (item) => typeof item === "number"
+                                          ).length === 0 &&
+                                          ((isError = true), (errorType = 1))
+                                        : Object.values(values)
+                                            .filter(
+                                              (item) => typeof item === "string"
+                                            )
+                                            .map(
+                                              (item) =>
+                                                item.trim().length === 0 &&
+                                                ((isError = true),
+                                                (errorType = 0))
+                                            )
                                       : // checkbox
                                       data.isOverlap
                                       ? // 선택 안했을때 않넣음
@@ -470,27 +478,46 @@ const Project = () => {
                                             </Checkbox.Group>
                                           </Form.Item>
                                         </Wrapper>
+                                      ) : v.innerType === 1 ? (
+                                        <Wrapper key={v.id}>
+                                          {v.questionValue && (
+                                            <Text
+                                              fontSize={`16px`}
+                                              margin={`0 0 14px`}
+                                            >
+                                              {v.questionValue}
+                                            </Text>
+                                          )}
+                                          <Form.Item name={`textInput${idx}`}>
+                                            <TextInput
+                                              type="text"
+                                              width={`100%`}
+                                              height={`55px`}
+                                              placeholder={v.placeholderValue}
+                                              radius={`5px`}
+                                              margin={`0 0 8px 0`}
+                                            />
+                                          </Form.Item>
+                                        </Wrapper>
                                       ) : (
-                                        v.innerType === 1 && (
-                                          <Wrapper key={v.id}>
-                                            {v.questionValue && (
-                                              <Text
-                                                fontSize={`16px`}
-                                                margin={`0 0 14px`}
-                                              >
-                                                {v.questionValue}
-                                              </Text>
-                                            )}
-                                            <Form.Item name={`textInput${idx}`}>
-                                              <TextInput
-                                                type="text"
-                                                width={`100%`}
-                                                height={`55px`}
-                                                placeholder={v.placeholderValue}
-                                                radius={`5px`}
-                                                margin={`0 0 8px 0`}
-                                              />
+                                        v.innerType === 4 && (
+                                          <Wrapper dr={`row`}>
+                                            <Text margin={`0 20px 0 0`}>
+                                              {v.scaleMin}
+                                            </Text>
+                                            <Form.Item
+                                              style={{ width: `auto` }}
+                                              name={`scale${idx}`}
+                                            >
+                                              <Radio.Group>
+                                                <Radio value={1}>1</Radio>
+                                                <Radio value={2}>2</Radio>
+                                                <Radio value={3}>3</Radio>
+                                                <Radio value={4}>4</Radio>
+                                                <Radio value={5}>5</Radio>
+                                              </Radio.Group>
                                             </Form.Item>
+                                            <Text>{v.scaleMax}</Text>
                                           </Wrapper>
                                         )
                                       );

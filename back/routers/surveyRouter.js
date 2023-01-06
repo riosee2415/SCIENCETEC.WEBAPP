@@ -97,6 +97,8 @@ router.post("/list", async (req, res, next) => {
             A.sort,
             A.questionValue,
             A.placeholderValue,
+            A.scaleMin,
+            A.scaleMax,
             A.SurveyQuestionId,
             B.username                                AS updator,
             A.createdAt,
@@ -325,6 +327,8 @@ router.post("/inner/list", async (req, res, next) => {
           A.sort,
           A.questionValue,
           A.placeholderValue,
+          A.scaleMin,
+          A.scaleMax,
           A.SurveyQuestionId,
           B.username                                AS updator,
           A.createdAt,
@@ -351,8 +355,15 @@ router.post("/inner/list", async (req, res, next) => {
 });
 
 router.post("/inner/create", async (req, res, next) => {
-  const { surveyQuestionId, innerType, sort, questionValue, placeholderValue } =
-    req.body;
+  const {
+    surveyQuestionId,
+    innerType,
+    sort,
+    questionValue,
+    placeholderValue,
+    scaleMin,
+    scaleMax,
+  } = req.body;
 
   const insertQuery = `
   INSERT    INTO    surveyInnerQuestion
@@ -361,6 +372,8 @@ router.post("/inner/create", async (req, res, next) => {
     sort,
     questionValue,
     placeholderValue,
+    scaleMin,
+    scaleMax,
     SurveyQuestionId,
     createdAt,
     updatedAt,
@@ -372,6 +385,8 @@ router.post("/inner/create", async (req, res, next) => {
     ${sort},
     ${questionValue ? `"${questionValue}"` : null},
     ${placeholderValue ? `"${placeholderValue}"` : null},
+    ${scaleMin ? `"${scaleMin}"` : null},
+    ${scaleMax ? `"${scaleMax}"` : null},
     ${surveyQuestionId},
     NOW(),
     NOW(),
@@ -410,7 +425,15 @@ router.post("/inner/create", async (req, res, next) => {
 });
 
 router.post("/inner/update", async (req, res, next) => {
-  const { id, innerType, sort, questionValue, placeholderValue } = req.body;
+  const {
+    id,
+    innerType,
+    sort,
+    questionValue,
+    placeholderValue,
+    scaleMin,
+    scaleMax,
+  } = req.body;
 
   const updateQuery = `
   UPDATE  surveyInnerQuestion
@@ -420,6 +443,8 @@ router.post("/inner/update", async (req, res, next) => {
           placeholderValue = ${
             placeholderValue ? `"${placeholderValue}"` : null
           },
+          scaleMin = ${scaleMin ? `"${scaleMin}"` : null},
+          scaleMax = ${scaleMax ? `"${scaleMax}"` : null},
           updatedAt = NOW()
    WHERE  id = ${id}
   `;

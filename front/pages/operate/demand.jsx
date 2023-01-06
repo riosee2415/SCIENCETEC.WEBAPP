@@ -24,6 +24,7 @@ import Status from "../../components/demand/Status";
 import Business from "../../components/demand/Business";
 import { SURVEY_LIST_REQUEST } from "../../reducers/survey";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const Btn = styled(Wrapper)`
   width: 335px;
@@ -55,6 +56,7 @@ const Demand = () => {
 
   ////// HOOKS //////
   const width = useWidth();
+  const router = useRouter();
 
   const dispatch = useDispatch();
 
@@ -83,6 +85,33 @@ const Demand = () => {
     }
   }, [quesList, innerList]);
 
+  useEffect(() => {
+    if (router.query) {
+      if (router.query.type === "status") {
+        setCurrentTab(1);
+
+        dispatch({
+          type: SURVEY_LIST_REQUEST,
+          data: {
+            type: 1,
+          },
+        });
+        return;
+      }
+      if (router.query.type === "business") {
+        setCurrentTab(2);
+
+        dispatch({
+          type: SURVEY_LIST_REQUEST,
+          data: {
+            type: 2,
+          },
+        });
+        return;
+      }
+    }
+  }, [router.query]);
+
   ////// TOGGLE //////
   const visibleToggle = useCallback(() => {
     isVisible((prev) => !prev);
@@ -92,6 +121,14 @@ const Demand = () => {
   const typeHandler = useCallback(
     (data) => {
       setCurrentTab(data);
+
+      if (data === 1) {
+        // 현황조사
+        router.push("/operate/demand?type=status");
+      } else {
+        // 수요조사
+        router.push("/operate/demand?type=business");
+      }
 
       dispatch({
         type: SURVEY_LIST_REQUEST,

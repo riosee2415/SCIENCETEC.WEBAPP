@@ -136,7 +136,10 @@ const Perform = () => {
                     기장 및 회계 <LinkOutlined />
                   </Text>
                 </a>
-                <a href={`https://posep.org/`} target={`_blank`}>
+                <a
+                  href={`https://icast.or.kr/activity/matching`}
+                  target={`_blank`}
+                >
                   <Text isHover margin={`0 0 12px`}>
                     비즈니스 <LinkOutlined />
                   </Text>

@@ -6,7 +6,7 @@ module.exports = class SurveyInnerQuestion extends Model {
     return super.init(
       {
         innerType: {
-          type: DataTypes.INTEGER, // [1.단답 | 2.장문 | 3.체크박스]
+          type: DataTypes.INTEGER, // [1.단답 | 2.장문 | 3.체크박스 | 4. 스케일형 질문]
           allowNull: false,
         },
         sort: {
@@ -25,6 +25,14 @@ module.exports = class SurveyInnerQuestion extends Model {
           type: DataTypes.BOOLEAN,
           allowNull: false,
           defaultValue: false,
+        },
+        scaleMin: {
+          type: DataTypes.STRING(300), // 스케일형 최소 문구
+          allowNull: true,
+        },
+        scaleMax: {
+          type: DataTypes.STRING(300), // 스케일형 최대 문구
+          allowNull: true,
         },
         deletedAt: {
           type: DataTypes.DATE,
