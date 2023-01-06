@@ -89,7 +89,6 @@ const Index = () => {
 
   // 구글 로그인
   const { data: session } = useSession();
-  console.log(session);
 
   const width = useWidth();
   const router = useRouter();
@@ -98,6 +97,13 @@ const Index = () => {
   const [currentTab, setCurrentTab] = useState(0);
   ////// REDUX //////
   ////// USEEFFECT //////
+
+  // 네이버로그인
+  useEffect(() => {
+    if (router.query.naver) {
+      naver.handleTokenResponse();
+    }
+  }, [router.query]);
 
   useEffect(() => {
     if (st_loginDone) {
