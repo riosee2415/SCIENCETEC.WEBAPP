@@ -37,6 +37,38 @@ module.exports = class Notice extends Model {
           type: DataTypes.STRING(300),
           allowNull: true,
         },
+        file2: {
+          type: DataTypes.STRING(2000),
+          allowNull: true,
+        },
+        filename2: {
+          type: DataTypes.STRING(300),
+          allowNull: true,
+        },
+        file3: {
+          type: DataTypes.STRING(2000),
+          allowNull: true,
+        },
+        filename3: {
+          type: DataTypes.STRING(300),
+          allowNull: true,
+        },
+        file4: {
+          type: DataTypes.STRING(2000),
+          allowNull: true,
+        },
+        filename4: {
+          type: DataTypes.STRING(300),
+          allowNull: true,
+        },
+        file5: {
+          type: DataTypes.STRING(2000),
+          allowNull: true,
+        },
+        filename5: {
+          type: DataTypes.STRING(300),
+          allowNull: true,
+        },
         isDelete: {
           type: DataTypes.BOOLEAN,
           allowNull: false,
