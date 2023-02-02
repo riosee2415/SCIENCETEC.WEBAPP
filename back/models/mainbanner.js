@@ -24,7 +24,7 @@ module.exports = class MainBanner extends Model {
           defaultValue: false,
         },
         link: {
-          type: DataTypes.STRING(300),
+          type: DataTypes.STRING(2000),
           allowNull: true, // 필수
         },
         linkUseYn: {
