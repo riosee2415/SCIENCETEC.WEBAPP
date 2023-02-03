@@ -177,6 +177,10 @@ const MainSlider = ({ banner }) => {
                 bgImg={`url(${data.imageURL})`}
                 position={`relative`}
                 display={`flex !important`}
+                onClick={() =>
+                  data.linkUseYn === 1 && moveLinkHandler(data.link)
+                }
+                cursor={data.linkUseYn === 1 && `pointer`}
               >
                 <Wrapper>
                   <Wrapper
@@ -194,12 +198,6 @@ const MainSlider = ({ banner }) => {
                   >
                     {data.contentUseYn === 1 && <Text>{data.content}</Text>}
                   </ColWrapper>
-
-                  {data.linkUseYn === 1 && (
-                    <CommonButton onClick={() => moveLinkHandler(data.link)}>
-                      링크이동
-                    </CommonButton>
-                  )}
                 </Wrapper>
               </ColWrapper>
             );
