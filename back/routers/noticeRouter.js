@@ -562,8 +562,8 @@ router.post("/update/file", isAdminCheck, async (req, res, next) => {
 
   const updateQ = `
       UPDATE  notices
-        SET   file = "${filepath}",
-              filename = "${filename}",
+        SET   file = ${filepath ? `"${filepath}"` : null},
+              filename = ${filename ? `"${filename}"` : null},
               file2 = ${file2 ? `"${file2}"` : null},
               filename2 = ${filename2 ? `"${filename2}"` : null},
               file3 = ${file3 ? `"${file3}"` : null},
