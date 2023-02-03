@@ -220,7 +220,7 @@ const OpDetail = () => {
                 padding={`18px 20px`}
                 al={`flex-start`}
               >
-                <Text isNeo>첨부파일</Text>
+                <Text isNeo>첨부파일 1</Text>
               </Wrapper>
               <Wrapper
                 width={width < 900 ? `100%` : `calc(100% - 180px)`}
@@ -239,7 +239,130 @@ const OpDetail = () => {
               </Wrapper>
             </Wrapper>
           )}
-          {console.log(noticeDetail)}
+          {noticeDetail.file2 && (
+            <Wrapper
+              dr={`row`}
+              fontSize={`16px`}
+              borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+              bgColor={Theme.subTheme4_C}
+            >
+              <Wrapper
+                width={width < 900 ? `100%` : `180px`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+              >
+                <Text isNeo>첨부파일 2</Text>
+              </Wrapper>
+              <Wrapper
+                width={width < 900 ? `100%` : `calc(100% - 180px)`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+                bgColor={Theme.white_C}
+              >
+                <ATag type="download" href={noticeDetail.file2}>
+                  <Text width={`100%`} fontSize={`16px`} isHover isEllipsis>
+                    <SpanText color={Theme.basicTheme_C} margin={`0 5px 0 0`}>
+                      <FileFilled />
+                    </SpanText>
+                    {noticeDetail.filename2}
+                  </Text>
+                </ATag>
+              </Wrapper>
+            </Wrapper>
+          )}
+          {noticeDetail.file3 && (
+            <Wrapper
+              dr={`row`}
+              fontSize={`16px`}
+              borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+              bgColor={Theme.subTheme4_C}
+            >
+              <Wrapper
+                width={width < 900 ? `100%` : `180px`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+              >
+                <Text isNeo>첨부파일 3</Text>
+              </Wrapper>
+              <Wrapper
+                width={width < 900 ? `100%` : `calc(100% - 180px)`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+                bgColor={Theme.white_C}
+              >
+                <ATag type="download" href={noticeDetail.file3}>
+                  <Text width={`100%`} fontSize={`16px`} isHover isEllipsis>
+                    <SpanText color={Theme.basicTheme_C} margin={`0 5px 0 0`}>
+                      <FileFilled />
+                    </SpanText>
+                    {noticeDetail.filename3}
+                  </Text>
+                </ATag>
+              </Wrapper>
+            </Wrapper>
+          )}
+          {noticeDetail.file4 && (
+            <Wrapper
+              dr={`row`}
+              fontSize={`16px`}
+              borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+              bgColor={Theme.subTheme4_C}
+            >
+              <Wrapper
+                width={width < 900 ? `100%` : `180px`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+              >
+                <Text isNeo>첨부파일 4</Text>
+              </Wrapper>
+              <Wrapper
+                width={width < 900 ? `100%` : `calc(100% - 180px)`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+                bgColor={Theme.white_C}
+              >
+                <ATag type="download" href={noticeDetail.file4}>
+                  <Text width={`100%`} fontSize={`16px`} isHover isEllipsis>
+                    <SpanText color={Theme.basicTheme_C} margin={`0 5px 0 0`}>
+                      <FileFilled />
+                    </SpanText>
+                    {noticeDetail.filename4}
+                  </Text>
+                </ATag>
+              </Wrapper>
+            </Wrapper>
+          )}
+          {noticeDetail.file5 && (
+            <Wrapper
+              dr={`row`}
+              fontSize={`16px`}
+              borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+              bgColor={Theme.subTheme4_C}
+            >
+              <Wrapper
+                width={width < 900 ? `100%` : `180px`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+              >
+                <Text isNeo>첨부파일 5</Text>
+              </Wrapper>
+              <Wrapper
+                width={width < 900 ? `100%` : `calc(100% - 180px)`}
+                padding={`18px 20px`}
+                al={`flex-start`}
+                bgColor={Theme.white_C}
+              >
+                <ATag type="download" href={noticeDetail.file5}>
+                  <Text width={`100%`} fontSize={`16px`} isHover isEllipsis>
+                    <SpanText color={Theme.basicTheme_C} margin={`0 5px 0 0`}>
+                      <FileFilled />
+                    </SpanText>
+                    {noticeDetail.filename5}
+                  </Text>
+                </ATag>
+              </Wrapper>
+            </Wrapper>
+          )}
           <Wrapper
             margin={`60px 0 30px`}
             borderTop={`1px solid ${Theme.lightGrey2_C}`}
