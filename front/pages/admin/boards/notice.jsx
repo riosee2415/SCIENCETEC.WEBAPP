@@ -972,7 +972,6 @@ const Notice = ({}) => {
                         개 입니다.
                       </Text>
                     </Wrapper>
-                    {console.log(currentData)}
                     <Wrapper>
                       {currentData && (
                         <>
