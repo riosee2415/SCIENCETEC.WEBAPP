@@ -34,7 +34,7 @@ module.exports = class Notice extends Model {
           allowNull: true,
         },
         filename: {
-          type: DataTypes.STRING(300),
+          type: DataTypes.STRING(3000),
           allowNull: true,
         },
         file2: {
@@ -42,7 +42,7 @@ module.exports = class Notice extends Model {
           allowNull: true,
         },
         filename2: {
-          type: DataTypes.STRING(300),
+          type: DataTypes.STRING(3000),
           allowNull: true,
         },
         file3: {
@@ -50,7 +50,7 @@ module.exports = class Notice extends Model {
           allowNull: true,
         },
         filename3: {
-          type: DataTypes.STRING(300),
+          type: DataTypes.STRING(3000),
           allowNull: true,
         },
         file4: {
@@ -58,7 +58,7 @@ module.exports = class Notice extends Model {
           allowNull: true,
         },
         filename4: {
-          type: DataTypes.STRING(300),
+          type: DataTypes.STRING(3000),
           allowNull: true,
         },
         file5: {
@@ -66,7 +66,7 @@ module.exports = class Notice extends Model {
           allowNull: true,
         },
         filename5: {
-          type: DataTypes.STRING(300),
+          type: DataTypes.STRING(3000),
           allowNull: true,
         },
         isDelete: {
