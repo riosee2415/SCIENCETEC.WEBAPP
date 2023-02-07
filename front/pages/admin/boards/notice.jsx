@@ -120,6 +120,10 @@ const Notice = ({}) => {
   const [filename, setFilename] = useState(null);
 
   const fileRef = useRef();
+  const fileRef2 = useRef();
+  const fileRef3 = useRef();
+  const fileRef4 = useRef();
+  const fileRef5 = useRef();
 
   const moveLinkHandler = useCallback((link) => {
     router.push(link);
@@ -152,16 +156,18 @@ const Notice = ({}) => {
 
   useEffect(() => {
     if (st_noticeFileDone) {
-      setCurrentData((prev) => {
-        return {
-          ...prev,
-          file: fileType === 1 ? uploadFilePath : prev.file,
-          file2: fileType === 2 ? uploadFilePath : prev.file2,
-          file3: fileType === 3 ? uploadFilePath : prev.file3,
-          file4: fileType === 4 ? uploadFilePath : prev.file4,
-          file5: fileType === 5 ? uploadFilePath : prev.file5,
-        };
-      });
+      if (currentData) {
+        setCurrentData((prev) => {
+          return {
+            ...prev,
+            file: fileType === 1 ? uploadFilePath : prev.file,
+            file2: fileType === 2 ? uploadFilePath : prev.file2,
+            file3: fileType === 3 ? uploadFilePath : prev.file3,
+            file4: fileType === 4 ? uploadFilePath : prev.file4,
+            file5: fileType === 5 ? uploadFilePath : prev.file5,
+          };
+        });
+      }
 
       return message.success(
         "파일이 업로드되었습니다. 적용하기 버튼을 눌러주세요."
@@ -169,7 +175,6 @@ const Notice = ({}) => {
     }
   }, [st_noticeFileDone]);
 
-  console.log(currentData);
   // ********************** 공지사항 리스트 후처리 *************************
 
   useEffect(() => {
@@ -367,6 +372,12 @@ const Notice = ({}) => {
     }
   }, [st_noticeFileInfoError]);
 
+  useEffect(() => {
+    if (adminNotices && currentData) {
+      setCurrentData(adminNotices.find((data) => data.id === currentData.id));
+    }
+  }, [adminNotices, currentData]);
+
   // ********************** 공지사항 파일정보 적용 *************************
   useEffect(() => {
     if (st_noticeFileInfoDone) {
@@ -491,10 +502,44 @@ const Notice = ({}) => {
 
   const clickFileUpload = useCallback(
     (type) => {
+      if (uploadFilePath && filename) {
+        return message.error("적용하기 또는 취소 버튼을 누른후 이용해주세요.");
+      }
+
       setFileType(type);
-      fileRef.current.click();
+      setFilename(null);
+      if (type === 1) {
+        fileRef.current.click();
+      } else if (type === 2) {
+        fileRef2.current.click();
+      } else if (type === 3) {
+        fileRef3.current.click();
+      } else if (type === 4) {
+        fileRef4.current.click();
+      } else if (type === 5) {
+        fileRef5.current.click();
+      }
     },
-    [fileRef.current]
+    [
+      uploadFilePath,
+      filename,
+      fileRef.current,
+      fileRef2.current,
+      fileRef3.current,
+      fileRef4.current,
+      fileRef5.current,
+    ]
+  );
+
+  const clickCancelHandler = useCallback(
+    (data) => {
+      dispatch({
+        type: UPLOAD_PATH_INIT,
+      });
+      setFileType(null);
+      setFilename(null);
+    },
+    [fileType, filename, uploadFilePath]
   );
 
   const onChangeFiles = useCallback(
@@ -505,7 +550,9 @@ const Notice = ({}) => {
         formData.append("file", file);
       });
 
-      setFilename(e.target.files[0].name);
+      if (e.target.files[0]) {
+        setFilename(e.target.files[0].name);
+      }
 
       dispatch({
         type: NOTICE_FILE_REQUEST,
@@ -516,6 +563,10 @@ const Notice = ({}) => {
   );
 
   const fileDownloadHandler = useCallback(async (filepath) => {
+    if (!filepath) {
+      return message.error("다운로드 할 수 있는 파일이 없습니다.");
+    }
+
     const filename = "web_notice_file";
     const ext = filepath.split(".");
     const _ext = ext[ext.length - 1];
@@ -583,16 +634,16 @@ const Notice = ({}) => {
         type: NOTICE_FILE_INFO_REQUEST,
         data: {
           id: currentData.id,
-          filename: type === 1 ? filename : currentData.file,
-          filepath: type === 1 ? uploadFilePath : currentData.filename,
-          filename2: type === 2 ? filename : currentData.file2,
-          file2: type === 2 ? uploadFilePath : currentData.filename2,
-          filename3: type === 3 ? filename : currentData.file3,
-          file3: type === 3 ? uploadFilePath : currentData.filename3,
-          filename4: type === 4 ? filename : currentData.file4,
-          file4: type === 4 ? uploadFilePath : currentData.filename4,
-          filename5: type === 5 ? filename : currentData.file5,
-          file5: type === 5 ? uploadFilePath : currentData.filename5,
+          filename: type === 1 ? filename : currentData.filename,
+          filepath: type === 1 ? uploadFilePath : currentData.file,
+          filename2: type === 2 ? filename : currentData.filename2,
+          file2: type === 2 ? uploadFilePath : currentData.file2,
+          filename3: type === 3 ? filename : currentData.filename3,
+          file3: type === 3 ? uploadFilePath : currentData.file3,
+          filename4: type === 4 ? filename : currentData.filename4,
+          file4: type === 4 ? uploadFilePath : currentData.file4,
+          filename5: type === 5 ? filename : currentData.filename5,
+          file5: type === 5 ? uploadFilePath : currentData.file5,
           title: currentData.title,
           type: currentData.type,
         },
@@ -921,351 +972,354 @@ const Notice = ({}) => {
                         개 입니다.
                       </Text>
                     </Wrapper>
-                    {currentData.file ? (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Text>{filename}</Text>
-                        <Wrapper dr="row" ju="flex-start">
-                          <Button
-                            type="defalut"
-                            size="small"
-                            onClick={() =>
-                              fileDownloadHandler(currentData.file)
-                            }
-                          >
-                            다운로드
-                          </Button>
-
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
-
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(1)}
-                            loading={st_noticeFileLoading}
-                          >
-                            수정하기
-                          </Button>
-
-                          {uploadFilePath && fileType === 1 && (
+                    {console.log(currentData)}
+                    <Wrapper>
+                      {currentData && (
+                        <>
+                          {/* 파일 업로드 1 */}
+                          {/* 파일 업로드 1 */}
+                          {/* 파일 업로드 1 */}
+                          <Wrapper dr="row" ju="flex-start" margin={`0 0 20px`}>
+                            <Wrapper al={`flex-start`}>
+                              <Text>
+                                {fileType
+                                  ? fileType === 1
+                                    ? filename
+                                      ? filename
+                                      : currentData.filename
+                                    : currentData.filename
+                                    ? currentData.filename
+                                    : "파일이 없습니다."
+                                  : currentData.filename
+                                  ? currentData.filename
+                                  : "파일이 없습니다."}
+                              </Text>
+                            </Wrapper>
                             <Button
-                              type="primary"
+                              type="defalut"
                               size="small"
-                              style={{ marginLeft: "10px" }}
-                              onClick={() => applyFileHandler(1)}
+                              onClick={() =>
+                                fileDownloadHandler(currentData.file)
+                              }
                             >
-                              적용하기
+                              다운로드
                             </Button>
-                          )}
-                        </Wrapper>
-                      </Wrapper>
-                    ) : (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Wrapper ju="flex-start" dr="row">
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
 
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(1)}
-                            loading={st_noticeFileLoading}
-                          >
-                            등록하기
-                          </Button>
-                        </Wrapper>
-                      </Wrapper>
-                    )}
-                    {currentData.file2 ? (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Text>{filename}</Text>
-                        <Wrapper dr="row" ju="flex-start">
-                          <Button
-                            type="defalut"
-                            size="small"
-                            onClick={() =>
-                              fileDownloadHandler(currentData.file2)
-                            }
-                          >
-                            다운로드
-                          </Button>
+                            <input
+                              type="file"
+                              name="file"
+                              // accept=".png, .jpg"
+                              // multiple
+                              hidden
+                              ref={fileRef}
+                              onChange={onChangeFiles}
+                            />
 
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
-
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(2)}
-                            loading={st_noticeFileLoading}
-                          >
-                            수정하기
-                          </Button>
-
-                          {uploadFilePath && fileType === 2 && (
                             <Button
-                              type="primary"
+                              type="danger"
                               size="small"
-                              style={{ marginLeft: "10px" }}
-                              onClick={() => applyFileHandler(2)}
+                              onClick={() => clickFileUpload(1)}
+                              loading={st_noticeFileLoading}
                             >
-                              적용하기
+                              업로드
                             </Button>
-                          )}
-                        </Wrapper>
-                      </Wrapper>
-                    ) : (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Wrapper ju="flex-start" dr="row">
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
 
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(2)}
-                            loading={st_noticeFileLoading}
-                          >
-                            등록하기
-                          </Button>
-                        </Wrapper>
-                      </Wrapper>
-                    )}
-                    {currentData.file3 ? (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Text>{filename}</Text>
-                        <Wrapper dr="row" ju="flex-start">
-                          <Button
-                            type="defalut"
-                            size="small"
-                            onClick={() =>
-                              fileDownloadHandler(currentData.file3)
-                            }
-                          >
-                            다운로드
-                          </Button>
-
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
-
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(3)}
-                            loading={st_noticeFileLoading}
-                          >
-                            수정하기
-                          </Button>
-
-                          {uploadFilePath && fileType === 3 && (
+                            {uploadFilePath && fileType === 1 && (
+                              <>
+                                <Button
+                                  type="primary"
+                                  size="small"
+                                  style={{ marginLeft: "10px" }}
+                                  onClick={() => applyFileHandler(1)}
+                                >
+                                  적용하기
+                                </Button>
+                                <Button
+                                  type="danger"
+                                  size="small"
+                                  onClick={() => clickCancelHandler(1)}
+                                >
+                                  취소하기
+                                </Button>
+                              </>
+                            )}
+                          </Wrapper>
+                          {/* 파일 업로드 2 */}
+                          {/* 파일 업로드 2 */}
+                          {/* 파일 업로드 2 */}
+                          <Wrapper dr="row" ju="flex-start" margin={`0 0 20px`}>
+                            <Wrapper al={`flex-start`}>
+                              <Text>
+                                {fileType
+                                  ? fileType === 2
+                                    ? filename
+                                      ? filename
+                                      : currentData.filename2
+                                    : currentData.filename2
+                                    ? currentData.filename2
+                                    : "파일이 없습니다."
+                                  : currentData.filename2
+                                  ? currentData.filename2
+                                  : "파일이 없습니다."}
+                              </Text>
+                            </Wrapper>
                             <Button
-                              type="primary"
+                              type="defalut"
                               size="small"
-                              style={{ marginLeft: "10px" }}
-                              onClick={() => applyFileHandler(3)}
+                              onClick={() =>
+                                fileDownloadHandler(currentData.file2)
+                              }
                             >
-                              적용하기
+                              다운로드
                             </Button>
-                          )}
-                        </Wrapper>
-                      </Wrapper>
-                    ) : (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Wrapper ju="flex-start" dr="row">
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
 
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(3)}
-                            loading={st_noticeFileLoading}
-                          >
-                            등록하기
-                          </Button>
-                        </Wrapper>
-                      </Wrapper>
-                    )}
-                    {currentData.file4 ? (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Text>{filename}</Text>
-                        <Wrapper dr="row" ju="flex-start">
-                          <Button
-                            type="defalut"
-                            size="small"
-                            onClick={() =>
-                              fileDownloadHandler(currentData.file4)
-                            }
-                          >
-                            다운로드
-                          </Button>
+                            <input
+                              type="file"
+                              name="file"
+                              // accept=".png, .jpg"
+                              // multiple
+                              hidden
+                              ref={fileRef2}
+                              onChange={onChangeFiles}
+                            />
 
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
-
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(4)}
-                            loading={st_noticeFileLoading}
-                          >
-                            수정하기
-                          </Button>
-
-                          {uploadFilePath && fileType === 4 && (
                             <Button
-                              type="primary"
+                              type="danger"
                               size="small"
-                              style={{ marginLeft: "10px" }}
-                              onClick={() => applyFileHandler(4)}
+                              onClick={() => clickFileUpload(2)}
+                              loading={st_noticeFileLoading}
                             >
-                              적용하기
+                              업로드
                             </Button>
-                          )}
-                        </Wrapper>
-                      </Wrapper>
-                    ) : (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Wrapper ju="flex-start" dr="row">
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
 
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(4)}
-                            loading={st_noticeFileLoading}
-                          >
-                            등록하기
-                          </Button>
-                        </Wrapper>
-                      </Wrapper>
-                    )}
-                    {currentData.file5 ? (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Text>{filename}</Text>
-                        <Wrapper dr="row" ju="flex-start">
-                          <Button
-                            type="defalut"
-                            size="small"
-                            onClick={() =>
-                              fileDownloadHandler(currentData.file5)
-                            }
-                          >
-                            다운로드
-                          </Button>
-
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
-
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(5)}
-                            loading={st_noticeFileLoading}
-                          >
-                            수정하기
-                          </Button>
-
-                          {uploadFilePath && fileType === 5 && (
+                            {uploadFilePath && fileType === 2 && (
+                              <>
+                                <Button
+                                  type="primary"
+                                  size="small"
+                                  style={{ marginLeft: "10px" }}
+                                  onClick={() => applyFileHandler(2)}
+                                >
+                                  적용하기
+                                </Button>
+                                <Button
+                                  type="danger"
+                                  size="small"
+                                  onClick={() => clickCancelHandler(2)}
+                                >
+                                  취소하기
+                                </Button>
+                              </>
+                            )}
+                          </Wrapper>
+                          {/* 파일 업로드 3 */}
+                          {/* 파일 업로드 3 */}
+                          {/* 파일 업로드 3 */}
+                          <Wrapper dr="row" ju="flex-start" margin={`0 0 20px`}>
+                            <Wrapper al={`flex-start`}>
+                              <Text>
+                                {fileType
+                                  ? fileType === 3
+                                    ? filename
+                                      ? filename
+                                      : currentData.filename3
+                                    : currentData.filename3
+                                    ? currentData.filename3
+                                    : "파일이 없습니다."
+                                  : currentData.filename3
+                                  ? currentData.filename3
+                                  : "파일이 없습니다."}
+                              </Text>
+                            </Wrapper>
                             <Button
-                              type="primary"
+                              type="defalut"
                               size="small"
-                              style={{ marginLeft: "10px" }}
-                              onClick={() => applyFileHandler(5)}
+                              onClick={() =>
+                                fileDownloadHandler(currentData.file3)
+                              }
                             >
-                              적용하기
+                              다운로드
                             </Button>
-                          )}
-                        </Wrapper>
-                      </Wrapper>
-                    ) : (
-                      <Wrapper al="flex-start" margin={`0 0 10px`}>
-                        <Wrapper ju="flex-start" dr="row">
-                          <input
-                            type="file"
-                            name="file"
-                            // accept=".png, .jpg"
-                            // multiple
-                            hidden
-                            ref={fileRef}
-                            onChange={onChangeFiles}
-                          />
 
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => clickFileUpload(5)}
-                            loading={st_noticeFileLoading}
-                          >
-                            등록하기
-                          </Button>
-                        </Wrapper>
-                      </Wrapper>
-                    )}
+                            <input
+                              type="file"
+                              name="file"
+                              // accept=".png, .jpg"
+                              // multiple
+                              hidden
+                              ref={fileRef3}
+                              onChange={onChangeFiles}
+                            />
+
+                            <Button
+                              type="danger"
+                              size="small"
+                              onClick={() => clickFileUpload(3)}
+                              loading={st_noticeFileLoading}
+                            >
+                              업로드
+                            </Button>
+
+                            {uploadFilePath && fileType === 3 && (
+                              <>
+                                <Button
+                                  type="primary"
+                                  size="small"
+                                  style={{ marginLeft: "10px" }}
+                                  onClick={() => applyFileHandler(3)}
+                                >
+                                  적용하기
+                                </Button>
+                                <Button
+                                  type="danger"
+                                  size="small"
+                                  onClick={() => clickCancelHandler(3)}
+                                >
+                                  취소하기
+                                </Button>
+                              </>
+                            )}
+                          </Wrapper>
+                          {/* 파일 업로드 4 */}
+                          {/* 파일 업로드 4 */}
+                          {/* 파일 업로드 4 */}
+                          <Wrapper dr="row" ju="flex-start" margin={`0 0 20px`}>
+                            <Wrapper al={`flex-start`}>
+                              <Text>
+                                {fileType
+                                  ? fileType === 4
+                                    ? filename
+                                      ? filename
+                                      : currentData.filename4
+                                    : currentData.filename4
+                                    ? currentData.filename4
+                                    : "파일이 없습니다."
+                                  : currentData.filename4
+                                  ? currentData.filename4
+                                  : "파일이 없습니다."}
+                              </Text>
+                            </Wrapper>
+                            <Button
+                              type="defalut"
+                              size="small"
+                              onClick={() =>
+                                fileDownloadHandler(currentData.file4)
+                              }
+                            >
+                              다운로드
+                            </Button>
+
+                            <input
+                              type="file"
+                              name="file"
+                              // accept=".png, .jpg"
+                              // multiple
+                              hidden
+                              ref={fileRef4}
+                              onChange={onChangeFiles}
+                            />
+
+                            <Button
+                              type="danger"
+                              size="small"
+                              onClick={() => clickFileUpload(4)}
+                              loading={st_noticeFileLoading}
+                            >
+                              업로드
+                            </Button>
+
+                            {uploadFilePath && fileType === 4 && (
+                              <>
+                                <Button
+                                  type="primary"
+                                  size="small"
+                                  style={{ marginLeft: "10px" }}
+                                  onClick={() => applyFileHandler(4)}
+                                >
+                                  적용하기
+                                </Button>
+                                <Button
+                                  type="danger"
+                                  size="small"
+                                  onClick={() => clickCancelHandler(4)}
+                                >
+                                  취소하기
+                                </Button>
+                              </>
+                            )}
+                          </Wrapper>
+
+                          {/* 파일 업로드 5 */}
+                          {/* 파일 업로드 5 */}
+                          {/* 파일 업로드 5 */}
+                          <Wrapper dr="row" ju="flex-start" margin={`0 0 20px`}>
+                            <Wrapper al={`flex-start`}>
+                              <Text>
+                                {fileType
+                                  ? fileType === 5
+                                    ? filename
+                                      ? filename
+                                      : currentData.filename5
+                                    : currentData.filename5
+                                    ? currentData.filename5
+                                    : "파일이 없습니다."
+                                  : currentData.filename5
+                                  ? currentData.filename5
+                                  : "파일이 없습니다."}
+                              </Text>
+                            </Wrapper>
+                            <Button
+                              type="defalut"
+                              size="small"
+                              onClick={() =>
+                                fileDownloadHandler(currentData.file5)
+                              }
+                            >
+                              다운로드
+                            </Button>
+
+                            <input
+                              type="file"
+                              name="file"
+                              // accept=".png, .jpg"
+                              // multiple
+                              hidden
+                              ref={fileRef5}
+                              onChange={onChangeFiles}
+                            />
+
+                            <Button
+                              type="danger"
+                              size="small"
+                              onClick={() => clickFileUpload(5)}
+                              loading={st_noticeFileLoading}
+                            >
+                              업로드
+                            </Button>
+
+                            {uploadFilePath && fileType === 5 && (
+                              <>
+                                <Button
+                                  type="primary"
+                                  size="small"
+                                  style={{ marginLeft: "10px" }}
+                                  onClick={() => applyFileHandler(5)}
+                                >
+                                  적용하기
+                                </Button>
+                                <Button
+                                  type="danger"
+                                  size="small"
+                                  onClick={() => clickCancelHandler(5)}
+                                >
+                                  취소하기
+                                </Button>
+                              </>
+                            )}
+                          </Wrapper>
+                        </>
+                      )}
+                    </Wrapper>
                   </Wrapper>
 
                   <Wrapper
