@@ -95,6 +95,7 @@ router.post("/main/list", async (req, res, next) => {
           A.filename4,
           A.file5,
           A.filename5,
+          A.useYn,
           A.answer,
           A.answeredAt,
           A.createdAt,
@@ -131,6 +132,7 @@ router.post("/main/list", async (req, res, next) => {
           A.filename4,
           A.file5,
           A.filename5,
+          A.useYn,
           A.answer,
           A.answeredAt,
           A.createdAt,
@@ -202,6 +204,7 @@ router.post("/list", async (req, res, next) => {
           A.filename4,
           A.file5,
           A.filename5,
+          A.useYn,
           A.answer,
           A.answeredAt,
           A.createdAt,
@@ -238,6 +241,7 @@ router.post("/list", async (req, res, next) => {
           A.filename4,
           A.file5,
           A.filename5,
+          A.useYn,
           A.answer,
           A.answeredAt,
           A.createdAt,
@@ -305,6 +309,7 @@ router.post("/admin/list", async (req, res, next) => {
           A.filename4,
           A.file5,
           A.filename5,
+          A.useYn,
           A.answer,
           A.answeredAt,
           A.createdAt,
@@ -355,6 +360,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         type,
         file,
         filename,
+        useYn,
         updator,
         createdAt,
         updatedAt
@@ -367,6 +373,7 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
         "${type}",
         NULL,
         NULL,
+        0,
         ${req.user.id},
         now(),
         now()
@@ -407,6 +414,27 @@ router.post("/create", isLoggedIn, async (req, res, next) => {
   } catch (error) {
     console.error(error);
     return res.status(401).send("게시글을 등록할 수 없습니다. [CODE 077]");
+  }
+});
+
+router.post("/update/toggle", isLoggedIn, async (req, res, next) => {
+  const { id, useYn } = req.body;
+
+  const updateQ = `
+    UPDATE  notices
+      SET   useYn = ${useYn},
+            updatedAt = now(),
+            updator = ${req.user.id}
+     WHERE  id = ${id}
+  `;
+
+  try {
+    await models.sequelize.query(updateQ);
+
+    return res.status(200).json({ result: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).send("게시글 노출 여부를 할 수 없습니다.");
   }
 });
 
@@ -688,6 +716,7 @@ router.post("/detail", async (req, res, next) => {
           A.filename4,
           A.file5,
           A.filename5,
+          A.useYn,
           A.answer,
           A.answeredAt,
           DATE_FORMAT(A.answeredAt, "%Y년 %m월 %d일") 		  AS viewAnsweredAt,

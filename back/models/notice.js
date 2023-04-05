@@ -78,6 +78,11 @@ module.exports = class Notice extends Model {
           type: DataTypes.DATE,
           allowNull: true,
         },
+        useYn: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },
         updator: {
           type: DataTypes.INTEGER,
           allowNull: false,
