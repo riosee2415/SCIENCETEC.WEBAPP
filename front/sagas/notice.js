@@ -17,6 +17,10 @@ import {
   NOTICE_CREATE_SUCCESS,
   NOTICE_CREATE_FAILURE,
   //
+  NOTICE_UPDATE_TOGGLE_REQUEST,
+  NOTICE_UPDATE_TOGGLE_SUCCESS,
+  NOTICE_UPDATE_TOGGLE_FAILURE,
+  //
   NOTICE_UPDATE_REQUEST,
   NOTICE_UPDATE_SUCCESS,
   NOTICE_UPDATE_FAILURE,
@@ -153,6 +157,33 @@ function* noticeCreate(action) {
     console.error(err);
     yield put({
       type: NOTICE_CREATE_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+// ******************************************************************************************************************
+
+// SAGA AREA ********************************************************************************************************
+// ******************************************************************************************************************
+async function noticeUpdateToggleAPI(data) {
+  return await axios.post(`/api/notice/update/toggle`, data);
+}
+
+function* noticeUpdateToggle(action) {
+  try {
+    const result = yield call(noticeUpdateToggleAPI, action.data);
+
+    yield put({
+      type: NOTICE_UPDATE_TOGGLE_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: NOTICE_UPDATE_TOGGLE_FAILURE,
       error: err.response.data,
     });
   }
@@ -395,6 +426,10 @@ function* watchNoticeCreate() {
   yield takeLatest(NOTICE_CREATE_REQUEST, noticeCreate);
 }
 
+function* watchNoticeUpdateToggle() {
+  yield takeLatest(NOTICE_UPDATE_TOGGLE_REQUEST, noticeUpdateToggle);
+}
+
 function* watchNoticeUpdate() {
   yield takeLatest(NOTICE_UPDATE_REQUEST, noticeUpdate);
 }
@@ -434,6 +469,7 @@ export default function* noticeSaga() {
     fork(watchMainBoard),
     fork(watchNoticeAdminList),
     fork(watchNoticeCreate),
+    fork(watchNoticeUpdateToggle),
     fork(watchNoticeUpdate),
     fork(watchNoticeUpdateTop),
     fork(watchNoticeDelete),

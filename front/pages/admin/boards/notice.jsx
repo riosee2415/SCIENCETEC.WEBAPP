@@ -41,6 +41,7 @@ import {
   UPLOAD_PATH_INIT,
   NOTICE_CREATE_REQUEST,
   NOTICE_DELETE_REQUEST,
+  NOTICE_UPDATE_TOGGLE_REQUEST,
 } from "../../../reducers/notice";
 import Theme from "../../../components/Theme";
 import { items } from "../../../components/AdminLayout";
@@ -99,6 +100,10 @@ const Notice = ({}) => {
     st_noticeDeleteLoading,
     st_noticeDeleteDone,
     st_noticeDeleteError,
+    //
+    st_noticeUpdateToggleLoading,
+    st_noticeUpdateToggleDone,
+    st_noticeUpdateToggleError,
   } = useSelector((state) => state.notice);
 
   const router = useRouter();
@@ -118,6 +123,8 @@ const Notice = ({}) => {
   const [infoForm] = Form.useForm();
 
   const [filename, setFilename] = useState(null);
+
+  const [isUseYn, setIsUseYn] = useState(false);
 
   const fileRef = useRef();
   const fileRef2 = useRef();
@@ -277,6 +284,53 @@ const Notice = ({}) => {
       return message.error(st_noticeDeleteError);
     }
   }, [st_noticeDeleteDone, st_noticeDeleteError]);
+
+  // ********************** 공지사항 수정 *************************
+  useEffect(() => {
+    if (st_noticeUpdateToggleDone) {
+      message.success("정보가 업데이트 되었습니다.");
+
+      let sendType = "";
+
+      switch (tab) {
+        case 0:
+          sendType = "";
+          break;
+
+        case 1:
+          sendType = "공지사항";
+          break;
+
+        case 2:
+          sendType = "자료실";
+          break;
+
+        case 3:
+          sendType = "커뮤니티";
+          break;
+
+        case 4:
+          sendType = "FAQ";
+          break;
+
+        default:
+          break;
+      }
+
+      dispatch({
+        type: NOTICE_ADMIN_LIST_REQUEST,
+        data: {
+          type: sendType,
+        },
+      });
+    }
+  }, [st_noticeUpdateToggleDone]);
+
+  useEffect(() => {
+    if (st_noticeUpdateToggleError) {
+      return message.error(st_noticeUpdateToggleError);
+    }
+  }, [st_noticeUpdateToggleError]);
 
   // ********************** 공지사항 수정 *************************
   useEffect(() => {
@@ -609,8 +663,10 @@ const Notice = ({}) => {
         updator: record.updator,
         author: record.author,
       });
+
+      setIsUseYn(record.useYn);
     },
-    [currentData, infoForm, currentTop]
+    [currentData, infoForm, currentTop, isUseYn]
   );
 
   const infoFormFinish = useCallback(
@@ -676,6 +732,18 @@ const Notice = ({}) => {
       },
     });
   }, [currentData]);
+
+  const useYnChangeHandler = useCallback(() => {
+    setIsUseYn((prev) => !prev);
+
+    dispatch({
+      type: NOTICE_UPDATE_TOGGLE_REQUEST,
+      data: {
+        id: currentData.id,
+        useYn: isUseYn ? 0 : 1,
+      },
+    });
+  }, [currentData, isUseYn]);
 
   ////// DATAVIEW //////
 
@@ -838,6 +906,30 @@ const Notice = ({}) => {
                 bgColor={Theme.lightGrey_C}
                 margin={`30px 0px`}
               ></Wrapper>
+
+              <Wrapper margin={`0px 0px 5px 0px`}>
+                <InfoTitle>
+                  <CheckOutlined />
+                  게시판 사용여부
+                </InfoTitle>
+              </Wrapper>
+
+              <Form
+                labelCol={{ span: 3 }}
+                wrapperCol={{ span: 21 }}
+                style={{ width: "100%", paddingRight: "20px" }}
+              >
+                <Form.Item label="사용 여부">
+                  <Switch
+                    checked={isUseYn}
+                    onChange={useYnChangeHandler}
+                    loading={st_noticeUpdateToggleLoading}
+                    size="small"
+                    checkedChildren="사용"
+                    unCheckedChildren="미사용"
+                  />
+                </Form.Item>
+              </Form>
 
               <Wrapper margin={`0px 0px 5px 0px`}>
                 <InfoTitle>

@@ -32,6 +32,10 @@ export const initailState = {
   st_noticeCreateDone: false,
   st_noticeCreateError: null,
   //
+  st_noticeUpdateToggleLoading: false, // 공지사항 사용여부 업데이트
+  st_noticeUpdateToggleDone: false,
+  st_noticeUpdateToggleError: null,
+  //
   st_noticeUpdateLoading: false, // 공지사항 업데이트
   st_noticeUpdateDone: false,
   st_noticeUpdateError: null,
@@ -80,6 +84,10 @@ export const NOTICE_ADMIN_LIST_FAILURE = "NOTICE_ADMIN_LIST_FAILURE";
 export const NOTICE_CREATE_REQUEST = "NOTICE_CREATE_REQUEST";
 export const NOTICE_CREATE_SUCCESS = "NOTICE_CREATE_SUCCESS";
 export const NOTICE_CREATE_FAILURE = "NOTICE_CREATE_FAILURE";
+//
+export const NOTICE_UPDATE_TOGGLE_REQUEST = "NOTICE_UPDATE_TOGGLE_REQUEST";
+export const NOTICE_UPDATE_TOGGLE_SUCCESS = "NOTICE_UPDATE_TOGGLE_SUCCESS";
+export const NOTICE_UPDATE_TOGGLE_FAILURE = "NOTICE_UPDATE_TOGGLE_FAILURE";
 //
 export const NOTICE_UPDATE_REQUEST = "NOTICE_UPDATE_REQUEST";
 export const NOTICE_UPDATE_SUCCESS = "NOTICE_UPDATE_SUCCESS";
@@ -203,6 +211,25 @@ const reducer = (state = initailState, action) =>
         draft.st_noticeCreateLoading = false;
         draft.st_noticeCreateDone = false;
         draft.st_noticeCreateError = action.error;
+        break;
+      }
+      ///////////////////////////////////////////////////////
+      case NOTICE_UPDATE_TOGGLE_REQUEST: {
+        draft.st_noticeUpdateToggleLoading = true;
+        draft.st_noticeUpdateToggleDone = false;
+        draft.st_noticeUpdateToggleError = null;
+        break;
+      }
+      case NOTICE_UPDATE_TOGGLE_SUCCESS: {
+        draft.st_noticeUpdateToggleLoading = false;
+        draft.st_noticeUpdateToggleDone = true;
+        draft.st_noticeUpdateToggleError = null;
+        break;
+      }
+      case NOTICE_UPDATE_TOGGLE_FAILURE: {
+        draft.st_noticeUpdateToggleLoading = false;
+        draft.st_noticeUpdateToggleDone = false;
+        draft.st_noticeUpdateToggleError = action.error;
         break;
       }
       ///////////////////////////////////////////////////////
