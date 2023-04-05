@@ -109,6 +109,7 @@ router.post("/main/list", async (req, res, next) => {
     JOIN	users		  B
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
+     AND  A.useYn = 1
      AND	A.title LIKE "%${_title}%"
      AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
@@ -146,6 +147,7 @@ router.post("/main/list", async (req, res, next) => {
     JOIN	users		  B
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
+     AND  A.useYn = 1
      AND	A.title LIKE "%${_title}%"
      AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
@@ -218,6 +220,7 @@ router.post("/list", async (req, res, next) => {
     JOIN	users		  B
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
+     AND  A.useYn = 1
      AND	A.title LIKE "%${_title}%"
      AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
@@ -255,6 +258,7 @@ router.post("/list", async (req, res, next) => {
     JOIN	users		  B
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
+     AND  A.useYn = 1
      AND	A.title LIKE "%${_title}%"
      AND	A.content LIKE "%${_content}%"
           ${_type !== `` ? ` AND  A.type = "${_type}"` : ``}
@@ -732,6 +736,7 @@ router.post("/detail", async (req, res, next) => {
       ON	A.updator = B.id
    WHERE	A.isDelete = 0
      AND	A.id = ${id}
+     AND  A.useYn = 1
   `;
 
   const selectQuery = `
