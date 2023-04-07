@@ -184,7 +184,7 @@ const Index = () => {
   // 네이버
   const naverLoginHandler = useCallback(async () => {
     const clientId = "kuOuSirjF7Z6X0ioR48B";
-    const callbackUrl = "http://localhost:3000/join?naver=true";
+    const callbackUrl = "https://icast.or.kr/join?naver=true";
     const auth = await naver.login(clientId, callbackUrl);
     const accessToken = auth.access_token;
 
