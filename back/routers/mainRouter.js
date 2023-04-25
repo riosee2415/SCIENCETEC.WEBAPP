@@ -34,7 +34,18 @@ router.post("/list", async (req, res, next) => {
      WHERE  isExit = 0
        AND  type = 2
      GROUP  BY DATE_FORMAT(combiEstimateDate, "%Y")
-     ORDER BY year ASC
+     ORDER  BY year ASC
+    `;
+
+  const allCountQuery = `
+    SELECT  CONCAT(COUNT(*), "개 조합")        AS cnt,
+            (
+              SELECT  DATE_FORMAT(NOW(), "%Y년 %m월 %d일 기준")   AS today    
+                FROM  DUAL
+            )               AS today
+      FROM  users
+     WHERE  type = 2
+       AND  isExit = 0
     `;
 
   // 사업 유형 별 그래프
@@ -57,6 +68,7 @@ router.post("/list", async (req, res, next) => {
   try {
     const bannerData = await models.sequelize.query(bannerQuery);
     const yearData = await models.sequelize.query(yearQuery);
+    const allCountData = await models.sequelize.query(allCountQuery);
     const businessData = await models.sequelize.query(businessQuery);
     const cityData = await models.sequelize.query(cityQuery);
 
@@ -64,6 +76,7 @@ router.post("/list", async (req, res, next) => {
       bannerData: bannerData[0].length !== 0 ? bannerData[0] : [],
       businessData: businessData[0].length !== 0 ? businessData[0] : [],
       yearData: yearData[0].length !== 0 ? yearData[0] : [],
+      allCountData: allCountData[0].length !== 0 ? allCountData[0][0] : null,
       cityData: cityData[0].length !== 0 ? cityData[0] : [],
     });
   } catch (error) {

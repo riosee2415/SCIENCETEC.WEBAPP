@@ -77,6 +77,8 @@ SELECT	ROW_NUMBER()	OVER(ORDER	BY createdAt)			AS num,
         CASE
             WHEN	type = 1 THEN "개인"
             WHEN	type = 2 THEN "조합"
+            WHEN	type = 3 THEN "전문가"
+            WHEN	type = 4 THEN "기업"
         END									        		AS viewType,
         userId,
         combiName,
@@ -169,6 +171,8 @@ router.post("/status/list", async (req, res, next) => {
             CASE
                 WHEN	type = 1 THEN "개인"
                 WHEN	type = 2 THEN "조합"
+                WHEN	type = 3 THEN "전문가"
+                WHEN	type = 4 THEN "기업"
             END									        		AS viewType,
             userId,
             combiName,
@@ -270,6 +274,8 @@ router.post("/detail", isAdminCheck, async (req, res, next) => {
             CASE
                 WHEN	type = 1 THEN "개인"
                 WHEN	type = 2 THEN "조합"
+                WHEN	type = 3 THEN "전문가"
+                WHEN	type = 4 THEN "기업"
             END									        		AS viewType,
             userId,
             combiName,
@@ -722,6 +728,9 @@ router.post("/signup", async (req, res, next) => {
     importantBusiness3,
     importantBusinessCapital,
     importantBusinessPrice,
+    career,
+    companyName,
+    agentName,
     kakaoId,
     isKakao,
     isPremium,
@@ -794,6 +803,9 @@ router.post("/signup", async (req, res, next) => {
     importantBusiness3,
     importantBusinessCapital,
     importantBusinessPrice,
+    career,
+    companyName,
+    agentName,
     kakaoId,
     isKakao,
     isPremium,
@@ -822,8 +834,11 @@ router.post("/signup", async (req, res, next) => {
     ${importantBusiness1 ? `"${importantBusiness1}"` : null},
     ${importantBusiness2 ? `"${importantBusiness2}"` : null},
     ${importantBusiness3 ? `"${importantBusiness3}"` : null},
-    ${importantBusinessCapital ? `"${importantBusinessCapital}"` : null},
-    ${importantBusinessPrice ? `"${importantBusinessPrice}"` : null},
+    ${importantBusinessCapital ? `${importantBusinessCapital}` : null},
+    ${importantBusinessPrice ? `${importantBusinessPrice}` : null},
+    ${career ? `"${career}"` : null},
+    ${companyName ? `"${companyName}"` : null},
+    ${agentName ? `"${agentName}"` : null},
     ${kakaoId ? `"${kakaoId}"` : null},
     ${isKakao},
     ${isPremium},
@@ -957,7 +972,6 @@ router.get("/me", isLoggedIn, async (req, res, next) => {
 router.post("/update", async (req, res, next) => {
   const {
     id,
-    type,
     combiName,
     combiHomepage,
     combiEstimateDate,
@@ -975,6 +989,9 @@ router.post("/update", async (req, res, next) => {
     importantBusiness3,
     importantBusinessCapital,
     importantBusinessPrice,
+    career,
+    companyName,
+    agentName,
     businessType,
     combiType,
     sector,
@@ -993,147 +1010,22 @@ router.post("/update", async (req, res, next) => {
   }
 
   try {
-    if (type === 1) {
-      const updateQuery = `
+    const updateQuery = `
       UPDATE  users
-         SET  combiName = "${combiName}",
-              postCode = "${postCode}",
-              address = "${address}",
-              detailAddress = "${detailAddress}",
-              mobile = "${mobile}",
-              email = "${email}",
-              updatedAt = NOW()
-       WHERE  id = ${id}
-      `;
-
-      const deleteQuery1 = `
-      DELETE
-        FROM  userBusinessTypes
-       WHERE  UserId = ${id}
-      `;
-      const deleteQuery2 = `
-      DELETE
-        FROM  userCombiTypes
-       WHERE  UserId = ${id}
-      `;
-      const deleteQuery3 = `
-      DELETE
-        FROM  userSectors
-       WHERE  UserId = ${id}
-      `;
-
-      await models.sequelize.query(updateQuery);
-      /////////////////////////////////////////////
-      await models.sequelize.query(deleteQuery1);
-      await models.sequelize.query(deleteQuery2);
-      await models.sequelize.query(deleteQuery3);
-      /////////////////////////////////////////////
-      await Promise.all(
-        businessType.map(async (data) => {
-          const insertQuery = `
-          INSERT  INTO  userBusinessTypes
-          (
-            value,
-            createdAt,
-            updatedAt,
-            UserId
-          )
-          VALUES
-          (
-            "${data}",
-            NOW(),
-            NOW(),
-            ${id}
-          )
-          `;
-
-          await models.sequelize.query(insertQuery);
-        })
-      );
-
-      await Promise.all(
-        combiType.map(async (data) => {
-          const insertQuery = `
-          INSERT  INTO  userCombiTypes
-          (
-            value,
-            createdAt,
-            updatedAt,
-            UserId
-          )
-          VALUES
-          (
-            "${data}",
-            NOW(),
-            NOW(),
-            ${id}
-          )
-          `;
-
-          await models.sequelize.query(insertQuery);
-        })
-      );
-
-      await Promise.all(
-        sector.map(async (data) => {
-          const insertQuery = `
-          INSERT  INTO  userSectors
-          (
-            value,
-            createdAt,
-            updatedAt,
-            UserId
-          )
-          VALUES
-          (
-            "${data}",
-            NOW(),
-            NOW(),
-            ${id}
-          )
-          `;
-
-          await models.sequelize.query(insertQuery);
-        })
-      );
-
-      const historyInsertQuery = `
-      INSERT  INTO  userHistory
-      (
-        value,
-        content,
-        updator,
-        createdAt,
-        updatedAt
-      )
-      VALUES
-      (
-        "회원 수정",
-        "${combiName}",
-        ${req.user.id},
-        NOW(),
-        NOW()
-      )
-      `;
-
-      await models.sequelize.query(historyInsertQuery);
-
-      return res.status(200).json({ result: true });
-    }
-
-    if (type === 2) {
-      const updateQuery = `
-      UPDATE  users
-         SET  combiName = "${combiName}",
-              combiHomepage = "${combiHomepage}",
-              combiEstimateDate = "${combiEstimateDate}",
-              combiArea = "${combiArea}",
-              corporationCnt = ${corporationCnt},
-              personalCnt = ${personalCnt},
-              repreName = "${repreName}",
-              postCode = "${postCode}",
-              address = "${address}",
-              detailAddress = "${detailAddress}",
+         SET  combiName = ${combiName ? `"${combiName}"` : null},
+              combiHomepage = ${combiHomepage ? `"${combiHomepage}"` : null},
+              combiEstimateDate = ${
+                combiEstimateDate ? `"${combiEstimateDate}"` : null
+              },
+              combiArea = ${combiArea ? `"${combiArea}"` : null},
+              corporationCnt =  ${
+                corporationCnt ? `"${corporationCnt}"` : null
+              },
+              personalCnt = ${personalCnt ? `"${personalCnt}"` : null},
+              repreName = ${repreName ? `"${repreName}"` : null},
+              postCode = ${postCode ? `"${postCode}"` : null},
+              address = ${address ? `"${address}"` : null},
+              detailAddress =${detailAddress ? `"${detailAddress}"` : null},
               mobile = "${mobile}",
               email = "${email}",
               importantBusiness1 = ${
@@ -1151,35 +1043,38 @@ router.post("/update", async (req, res, next) => {
               importantBusinessPrice = ${
                 importantBusinessPrice ? `${importantBusinessPrice}` : null
               },
+              career = ${career ? `"${career}"` : null},
+              companyName = ${companyName ? `"${companyName}"` : null},
+              agentName = ${agentName ? `"${agentName}"` : null},
               updatedAt = NOW()
        WHERE  id = ${id}
       `;
 
-      const deleteQuery1 = `
+    const deleteQuery1 = `
       DELETE
         FROM  userBusinessTypes
        WHERE  UserId = ${id}
       `;
-      const deleteQuery2 = `
+    const deleteQuery2 = `
       DELETE
         FROM  userCombiTypes
        WHERE  UserId = ${id}
       `;
-      const deleteQuery3 = `
+    const deleteQuery3 = `
       DELETE
         FROM  userSectors
        WHERE  UserId = ${id}
       `;
 
-      await models.sequelize.query(updateQuery);
-      /////////////////////////////////////////////
-      await models.sequelize.query(deleteQuery1);
-      await models.sequelize.query(deleteQuery2);
-      await models.sequelize.query(deleteQuery3);
-      /////////////////////////////////////////////
-      await Promise.all(
-        businessType.map(async (data) => {
-          const insertQuery = `
+    await models.sequelize.query(updateQuery);
+    /////////////////////////////////////////////
+    await models.sequelize.query(deleteQuery1);
+    await models.sequelize.query(deleteQuery2);
+    await models.sequelize.query(deleteQuery3);
+    /////////////////////////////////////////////
+    await Promise.all(
+      businessType.map(async (data) => {
+        const insertQuery = `
           INSERT  INTO  userBusinessTypes
           (
             value,
@@ -1196,13 +1091,13 @@ router.post("/update", async (req, res, next) => {
           )
           `;
 
-          await models.sequelize.query(insertQuery);
-        })
-      );
+        await models.sequelize.query(insertQuery);
+      })
+    );
 
-      await Promise.all(
-        combiType.map(async (data) => {
-          const insertQuery = `
+    await Promise.all(
+      combiType.map(async (data) => {
+        const insertQuery = `
           INSERT  INTO  userCombiTypes
           (
             value,
@@ -1219,13 +1114,13 @@ router.post("/update", async (req, res, next) => {
           )
           `;
 
-          await models.sequelize.query(insertQuery);
-        })
-      );
+        await models.sequelize.query(insertQuery);
+      })
+    );
 
-      await Promise.all(
-        sector.map(async (data) => {
-          const insertQuery = `
+    await Promise.all(
+      sector.map(async (data) => {
+        const insertQuery = `
           INSERT  INTO  userSectors
           (
             value,
@@ -1242,11 +1137,11 @@ router.post("/update", async (req, res, next) => {
           )
           `;
 
-          await models.sequelize.query(insertQuery);
-        })
-      );
+        await models.sequelize.query(insertQuery);
+      })
+    );
 
-      const historyInsertQuery = `
+    const historyInsertQuery = `
       INSERT  INTO  userHistory
       (
         value,
@@ -1265,10 +1160,9 @@ router.post("/update", async (req, res, next) => {
       )
       `;
 
-      await models.sequelize.query(historyInsertQuery);
+    await models.sequelize.query(historyInsertQuery);
 
-      return res.status(200).json({ result: true });
-    }
+    return res.status(200).json({ result: true });
   } catch (error) {
     console.error(error);
     return res.status(401).send("정보를 수정할 수 없습니다.");

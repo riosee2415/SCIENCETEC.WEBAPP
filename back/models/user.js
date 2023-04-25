@@ -6,7 +6,7 @@ module.exports = class User extends Model {
     return super.init(
       {
         type: {
-          type: DataTypes.INTEGER, // [1. 개인 | 2. 조합]
+          type: DataTypes.INTEGER, // [1. 개인 | 2. 조합 | 3. 전문가 | 4. 기업]
           allowNull: false,
         },
         userId: {
@@ -88,6 +88,18 @@ module.exports = class User extends Model {
         },
         importantBusinessPrice: {
           type: DataTypes.INTEGER, // 주요사업 매출액
+          allowNull: true,
+        },
+        career: {
+          type: DataTypes.STRING(50), // 경력
+          allowNull: true,
+        },
+        companyName: {
+          type: DataTypes.STRING(100), // 회사명
+          allowNull: true,
+        },
+        agentName: {
+          type: DataTypes.STRING(50), // 대표자명
           allowNull: true,
         },
         level: {
