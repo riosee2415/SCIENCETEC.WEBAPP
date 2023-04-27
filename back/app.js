@@ -29,6 +29,7 @@ const shareProjectRouter = require("./routers/shareProjectRouter");
 const surveyRouter = require("./routers/surveyRouter");
 const mainRouter = require("./routers/mainRouter");
 const festivalRouter = require("./routers/festivalRouter");
+const mailSendRouter = require("./routers/mailSendRouter");
 
 // Config Settings
 db.sequelize
@@ -68,7 +69,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: 25 }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use(
@@ -113,6 +114,7 @@ app.use("/api/share", shareProjectRouter);
 app.use("/api/survey", surveyRouter);
 app.use("/api/main", mainRouter);
 app.use("/api/festival", festivalRouter);
+app.use("/api/send", mailSendRouter);
 
 // second minute hour day-of-month month day-of-week
 const task = cron.schedule(
