@@ -107,6 +107,7 @@ export const WholeWrapper = styled.section`
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   border-radius: ${(props) => props.radius};
+  border-top: ${(props) => props.borderTop};
 `;
 
 export const Wrapper = styled.div`
@@ -400,7 +401,7 @@ export const Text = styled.p`
     transition : 0.5s;
     cursor:pointer;
     &:hover{
-      color :${props.theme.basicTheme_C};
+      color :${props.hoverColor || props.theme.basicTheme_C};
     }
   `};
 `;
@@ -620,7 +621,9 @@ export const CustomSelect = styled(Wrapper)`
   }
 
   /* 클릭했을 시 색 */
-  .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-focused:not(.ant-select-disabled).ant-select:not(
+      .ant-select-customize-input
+    )
     .ant-select-selector {
     border-color: ${(props) => props.theme.basicTheme_C} !important;
   }
