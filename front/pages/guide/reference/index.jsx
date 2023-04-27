@@ -85,16 +85,21 @@ const Index = ({}) => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
+          <LeftMenu />
 
+          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper
-              width={width < 1100 ? `100%` : `calc(100% - 280px)`}
               ju={`flex-start`}
               al={`flex-start`}
-              margin={`0 0 100px`}
+              margin={width < 900 ? `50px 0 100px` : `100px 0 100px`}
             >
-              <BreadCrumb />
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
+              >
+                자료실
+              </Text>
               {viewType === "list" && (
                 <>
                   <Wrapper>
@@ -120,123 +125,145 @@ const Index = ({}) => {
                       </Wrapper>
                     </Wrapper>
 
-                    {/* <Wrapper overflow={`auto`} wrap={`nowrap`} al={`flex-start`}>
-                  <Wrapper al={`flex-start`}>
-                    <Wrapper
-                      borderTop={`2px solid ${Theme.basicTheme_C}`}
-                      dr={`row`}
-                      height={`48px`}
-                      bgColor={Theme.subTheme4_C}
-                      borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                    {/* <Wrapper
+                      overflow={`auto`}
+                      wrap={`nowrap`}
+                      al={`flex-start`}
                     >
-                      <Wrapper
-                        height={`100%`}
-                        width={width < 700 ? `10%` : `5%`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          번호
-                        </Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        width={width < 700 ? `90%` : `65%`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          제목
-                        </Text>
-                      </Wrapper>
-
-                      <Wrapper
-                        height={`100%`}
-                        width={`15%`}
-                        display={width < 700 ? `none` : `flex`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          일시
-                        </Text>
-                      </Wrapper>
-                      <Wrapper
-                        height={`100%`}
-                        width={`15%`}
-                        display={width < 700 ? `none` : `flex`}
-                      >
-                        <Text fontSize={`14px`} isNeo={true} fontWeight={`700`}>
-                          비고
-                        </Text>
-                      </Wrapper>
-                    </Wrapper>
-
-                    {notices.notices &&
-                      (notices.notices.length === 0 ? (
-                        <Wrapper margin={`100px 0`}>
-                          <Empty description="자료가 없습니다." />
-                        </Wrapper>
-                      ) : (
-                        notices.notices.map((data) => {
-                          return (
-                            <Box
-                              dr={`row`}
-                              height={`48px`}
-                              borderBottom={`1px solid ${Theme.lightGrey2_C}`}
-                              onClick={() =>
-                                moveLinkHandler(`/guide/reference/${data.id}`)
-                              }
+                      <Wrapper al={`flex-start`}>
+                        <Wrapper
+                          borderTop={`2px solid ${Theme.basicTheme_C}`}
+                          dr={`row`}
+                          height={`48px`}
+                          bgColor={Theme.subTheme4_C}
+                          borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                        >
+                          <Wrapper
+                            height={`100%`}
+                            width={width < 700 ? `10%` : `5%`}
+                          >
+                            <Text
+                              fontSize={`14px`}
+                              isNeo={true}
+                              fontWeight={`700`}
                             >
-                              <Wrapper
-                                height={`100%`}
-                                width={width < 700 ? `10%` : `5%`}
-                              >
-                                <Text
-                                  fontSize={`14px`}
-                                  isNeo={true}
-                                  fontWeight={`700`}
-                                >
-                                  {data.num}
-                                </Text>
-                              </Wrapper>
-                              <Wrapper
-                                height={`100%`}
-                                width={width < 700 ? `90%` : `65%`}
-                              >
-                                <Text
-                                  fontSize={`14px`}
-                                  isNeo={true}
-                                  fontWeight={`700`}
-                                >
-                                  {data.title}
-                                </Text>
-                              </Wrapper>
+                              번호
+                            </Text>
+                          </Wrapper>
+                          <Wrapper
+                            height={`100%`}
+                            width={width < 700 ? `90%` : `65%`}
+                          >
+                            <Text
+                              fontSize={`14px`}
+                              isNeo={true}
+                              fontWeight={`700`}
+                            >
+                              제목
+                            </Text>
+                          </Wrapper>
 
-                              <Wrapper
-                                height={`100%`}
-                                width={`15%`}
-                                display={width < 700 ? `none` : `flex`}
-                              >
-                                <Text
-                                  fontSize={`14px`}
-                                  isNeo={true}
-                                  fontWeight={`700`}
+                          <Wrapper
+                            height={`100%`}
+                            width={`15%`}
+                            display={width < 700 ? `none` : `flex`}
+                          >
+                            <Text
+                              fontSize={`14px`}
+                              isNeo={true}
+                              fontWeight={`700`}
+                            >
+                              일시
+                            </Text>
+                          </Wrapper>
+                          <Wrapper
+                            height={`100%`}
+                            width={`15%`}
+                            display={width < 700 ? `none` : `flex`}
+                          >
+                            <Text
+                              fontSize={`14px`}
+                              isNeo={true}
+                              fontWeight={`700`}
+                            >
+                              비고
+                            </Text>
+                          </Wrapper>
+                        </Wrapper>
+
+                        {notices.notices &&
+                          (notices.notices.length === 0 ? (
+                            <Wrapper margin={`100px 0`}>
+                              <Empty description="자료가 없습니다." />
+                            </Wrapper>
+                          ) : (
+                            notices.notices.map((data) => {
+                              return (
+                                <Box
+                                  dr={`row`}
+                                  height={`48px`}
+                                  borderBottom={`1px solid ${Theme.lightGrey2_C}`}
+                                  onClick={() =>
+                                    moveLinkHandler(
+                                      `/guide/reference/${data.id}`
+                                    )
+                                  }
                                 >
-                                  {data.viewCreatedAt}
-                                </Text>
-                              </Wrapper>
-                              <Wrapper
-                                height={`100%`}
-                                width={`15%`}
-                                display={width < 700 ? `none` : `flex`}
-                              >
-                                <Text
-                                  fontSize={`14px`}
-                                  isNeo={true}
-                                  fontWeight={`700`}
-                                ></Text>
-                              </Wrapper>
-                            </Box>
-                          );
-                        })
-                      ))}
-                  </Wrapper>
-                </Wrapper> */}
+                                  <Wrapper
+                                    height={`100%`}
+                                    width={width < 700 ? `10%` : `5%`}
+                                  >
+                                    <Text
+                                      fontSize={`14px`}
+                                      isNeo={true}
+                                      fontWeight={`700`}
+                                    >
+                                      {data.num}
+                                    </Text>
+                                  </Wrapper>
+                                  <Wrapper
+                                    height={`100%`}
+                                    width={width < 700 ? `90%` : `65%`}
+                                  >
+                                    <Text
+                                      fontSize={`14px`}
+                                      isNeo={true}
+                                      fontWeight={`700`}
+                                    >
+                                      {data.title}
+                                    </Text>
+                                  </Wrapper>
+
+                                  <Wrapper
+                                    height={`100%`}
+                                    width={`15%`}
+                                    display={width < 700 ? `none` : `flex`}
+                                  >
+                                    <Text
+                                      fontSize={`14px`}
+                                      isNeo={true}
+                                      fontWeight={`700`}
+                                    >
+                                      {data.viewCreatedAt}
+                                    </Text>
+                                  </Wrapper>
+                                  <Wrapper
+                                    height={`100%`}
+                                    width={`15%`}
+                                    display={width < 700 ? `none` : `flex`}
+                                  >
+                                    <Text
+                                      fontSize={`14px`}
+                                      isNeo={true}
+                                      fontWeight={`700`}
+                                    ></Text>
+                                  </Wrapper>
+                                </Box>
+                              );
+                            })
+                          ))}
+                      </Wrapper>
+                    </Wrapper> */}
 
                     <OpBoard
                       data={notices.notices}

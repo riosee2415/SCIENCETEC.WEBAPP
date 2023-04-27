@@ -47,17 +47,21 @@ const Greetings = ({}) => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
+          <LeftMenu />
 
+          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper
-              width={width < 1100 ? `100%` : `calc(100% - 280px)`}
               ju={`flex-start`}
               al={`flex-start`}
-              margin={`0 0 100px`}
+              margin={width < 900 ? `50px 0 100px` : `100px 0 100px`}
             >
-              <BreadCrumb />
-
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
+              >
+                인사말
+              </Text>
               <Wrapper>
                 <Wrapper
                   dr={`row`}

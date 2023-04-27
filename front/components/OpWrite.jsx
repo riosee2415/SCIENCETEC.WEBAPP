@@ -73,6 +73,15 @@ const OpWrite = () => {
 
   return (
     <Wrapper al={`flex-start`}>
+      <Wrapper al={`flex-start`}>
+        <Text
+          fontSize={`32px`}
+          fontWeight={`600`}
+          margin={width < 900 ? `0 0 15px` : `0 0 36px`}
+        >
+          커뮤니티 작성하기
+        </Text>
+      </Wrapper>
       <Wrapper
         wrap={`nowrap`}
         dr={`row`}
@@ -86,7 +95,7 @@ const OpWrite = () => {
           width={`14px`}
           margin={`0 6px 0 0`}
         />
-        글 작성하기
+        기관형 과학기술인 협동조합 커뮤니티 자유게시판
       </Wrapper>
 
       <Text fontWeight={`bold`} color={Theme.grey2_C} margin={`30px 0 0`}>
@@ -107,7 +116,7 @@ const OpWrite = () => {
       <TextArea
         type="text"
         width={`100%`}
-        height={`160px`}
+        height={`120px`}
         placeholder="내용을 입력해주세요."
         radius={`5px`}
         margin={`14px 0 0`}

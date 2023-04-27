@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { menus } from "./clientMenus";
-import { WholeWrapper, Wrapper, Text } from "./commonComponents";
+import { WholeWrapper, Wrapper, Text, RsWrapper } from "./commonComponents";
 import styled from "styled-components";
 import Theme from "./Theme";
 import Link from "next/link";
 import useWidth from "../hooks/useWidth";
 
-const Title = styled.h1`
-  font-size: 26px;
-  font-weight: bold;
-  color: ${(props) => props.theme.basicTheme_C};
-  z-index: 1;
-  font-family: "NanumSquare Neo", sans-serif;
-  margin: 0;
+const Menu = styled.h3`
+  font-size: 20px;
+  font-weight: 600;
+  color: ${(props) => (props.isActive ? Theme.basicTheme_C : Theme.grey_C)};
+  margin: 0 65px 0 0;
+  font-weight: ${(props) => (props.isActive ? `600` : `300`)};
+  display: ${(props) => props.display};
 
-  @media (max-width: 700px) {
-    font-size: 20px;
+  @media (max-width < 900) {
+    font-size: 16px;
+  }
+  &:last-child {
+    margin: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+    color: ${Theme.basicTheme_C};
   }
 `;
 
@@ -53,59 +61,26 @@ const LeftMenu = () => {
   }, []);
 
   return (
-    <WholeWrapper
-      width={width < 1100 ? `100%` : `280px`}
-      padding={width < 1100 ? `0` : `0 40px 0 0`}
-      margin={`40px 0 0`}
-      position={width < 1100 ? `` : `sticky`}
-      top={`150px`}
-      left={`0`}
-    >
+    <WholeWrapper>
       <Wrapper
-        width={`100%`}
-        radius={`10px`}
-        bgColor={Theme.lightGrey_C}
-        height={width < 900 ? `60px` : `85px`}
-      >
-        <Title>{parentMenuName} </Title>
-      </Wrapper>
-
-      <Wrapper
-        dr={width < 1100 ? `row` : ``}
-        ju={width < 1100 ? `space-around` : `center`}
-        al={`flex-start`}
-        fontSize={width < 900 ? `15px` : `18px`}
-        padding={`15px 16px 0`}
+        dr={`row`}
+        height={`70px`}
+        borderBottom={`1px solid ${Theme.lightGrey2_C}`}
       >
         {currentAllMenus.map((value, idx) => {
           if (value === currentMenuName) {
             return (
-              <Text
-                isNeo
-                height={`50px`}
-                lineHeight={`50px`}
-                fontWeight={`bold`}
-                color={Theme.basicTheme_C}
-                key={value}
-              >
+              <Menu isActive key={value}>
                 {value}
-              </Text>
+              </Menu>
             );
           } else {
             return (
-              <Link href={currentAllLinks && currentAllLinks[idx]} key={value}>
-                <a>
-                  <Text
-                    isHover
-                    height={`50px`}
-                    lineHeight={`50px`}
-                    isNeo
-                    cursor={`pointer`}
-                  >
-                    {value}
-                  </Text>
-                </a>
-              </Link>
+              <Menu display={width < 700 ? `none` : `block`} key={value}>
+                <Link href={currentAllLinks && currentAllLinks[idx]}>
+                  <a>{value} </a>
+                </Link>
+              </Menu>
             );
           }
         })}

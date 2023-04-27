@@ -60,22 +60,27 @@ const Status = () => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
+          <LeftMenu />
 
+          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper
-              width={width < 1100 ? `100%` : `calc(100% - 280px)`}
               ju={`flex-start`}
               al={`flex-start`}
-              margin={`0 0 100px`}
+              margin={width < 900 ? `50px 0 100px` : `100px 0 100px`}
             >
-              <BreadCrumb />
-
-              <Wrapper>
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
+              >
+                현황
+              </Text>
+              <Wrapper dr={`row`} ju={`space-between`}>
                 <Wrapper
+                  width={`auto`}
                   dr={`row`}
                   ju={`flex-start`}
-                  margin={`0 0 30px`}
+                  margin={width < 900 ? `0 0 15px` : `0 0 30px`}
                   al={width < 700 ? `flex-start` : `center`}
                 >
                   <Image
@@ -93,8 +98,8 @@ const Status = () => {
                     기관형 과학기술인 협동조합 교류회 현황
                   </Wrapper>
                 </Wrapper>
-
                 <Wrapper
+                  width={`auto`}
                   dr={`row`}
                   ju={width < 700 ? `space-between` : `flex-start`}
                   margin={`0 0 20px`}
@@ -124,7 +129,6 @@ const Status = () => {
                     검색하기
                   </CommonButton>
                 </Wrapper>
-
                 <Wrapper overflow={`auto`} wrap={`nowrap`} al={`flex-start`}>
                   <Wrapper minWidth={`1100px`}>
                     <Wrapper

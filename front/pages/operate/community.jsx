@@ -11,6 +11,7 @@ import {
   CustomSelect,
   Image,
   RsWrapper,
+  Text,
   TextInput,
   WholeWrapper,
   Wrapper,
@@ -161,14 +162,28 @@ const Community = () => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
-            <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
-              <BreadCrumb />
+          <LeftMenu />
 
-              {viewType === "list" && (
-                <>
+          <RsWrapper
+            dr={`row`}
+            al={`flex-start`}
+            position={`relative`}
+            margin={width < 900 ? `50px 0 0` : `100px 0 0`}
+          >
+            <Wrapper al={`flex-start`}>
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
+              >
+                커뮤니티
+              </Text>
+            </Wrapper>
+            {viewType === "list" && (
+              <>
+                <Wrapper dr={`row`} al={`flex-start`} ju={`space-between`}>
                   <Wrapper
+                    width={`auto`}
                     wrap={`nowrap`}
                     dr={`row`}
                     ju={`flex-start`}
@@ -183,7 +198,12 @@ const Community = () => {
                     />
                     기관형 과학기술인 협동조합 커뮤니티 자유게시판
                   </Wrapper>
-                  <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 20px`}>
+                  <Wrapper
+                    width={`auto`}
+                    dr={`row`}
+                    ju={`flex-start`}
+                    margin={width < 900 ? `15px 0 20px` : `0 0 20px`}
+                  >
                     <CustomSelect width={`90px`}>
                       <Select
                         defaultValue={0}
@@ -212,18 +232,19 @@ const Community = () => {
                       검색하기
                     </CommonButton>
                   </Wrapper>
-                  <OpBoard
-                    data={notices.notices}
-                    maxPage={maxPage}
-                    currentPage={currentPage}
-                    otherPageCall={otherPageCall}
-                    boardType="커뮤니티"
-                  />
-                </>
-              )}
-              {viewType === "write" && <OpWrite />}
-              {viewType === "detail" && <OpDetail />}
-            </Wrapper>
+                </Wrapper>
+
+                <OpBoard
+                  data={notices.notices}
+                  maxPage={maxPage}
+                  currentPage={currentPage}
+                  otherPageCall={otherPageCall}
+                  boardType="커뮤니티"
+                />
+              </>
+            )}
+            {viewType === "write" && <OpWrite />}
+            {viewType === "detail" && <OpDetail />}
           </RsWrapper>
         </WholeWrapper>
       </ClientLayout>

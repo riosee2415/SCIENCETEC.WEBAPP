@@ -157,7 +157,7 @@ export const Wrapper = styled.div`
 `;
 
 export const RsWrapper = styled.article`
-  width: 1450px;
+  width: 1300px;
   height: ${(props) => props.height || `100%`};
   ${(props) => props.minHeight}
   color: ${(props) => props.color};
