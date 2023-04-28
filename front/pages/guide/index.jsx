@@ -17,6 +17,7 @@ import Theme from "../../components/Theme";
 import Head from "next/head";
 import LeftMenu from "../../components/LeftMenu";
 import SubBanner from "../../components/SubBanner";
+import styled from "styled-components";
 
 const GuideTitle = styled(Wrapper)`
   width: auto;
