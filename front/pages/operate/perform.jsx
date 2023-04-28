@@ -40,7 +40,7 @@ const Perform = () => {
             dr={`row`}
             al={`flex-start`}
             position={`relative`}
-            margin={width < 900 ? `50px 0 0` : `100px 0 160px`}
+            margin={width < 900 ? `50px 0 100px` : `100px 0 160px`}
           >
             <Wrapper al={`flex-start`}>
               <Text
