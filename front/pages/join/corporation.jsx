@@ -64,7 +64,7 @@ const Btn = styled(Wrapper)`
   }
 `;
 
-const Business = () => {
+const Corporation = () => {
   ////// GLOBAL STATE //////
   const {
     userCheck,
@@ -1143,4 +1143,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default Business;
+export default Corporation;

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import ClientLayout from "../../components/ClientLayout";
 import Head from "next/head";
 import wrapper from "../../store/configureStore";
@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../../hooks/useWidth";
 import {
   CommonButton,
-  CustomSelect,
   Image,
   RsWrapper,
   SpanText,
@@ -24,27 +23,16 @@ import {
 } from "../../components/commonComponents";
 import styled from "styled-components";
 import Theme from "../../components/Theme";
-import { Checkbox, DatePicker, message, Modal, Select } from "antd";
-import { useRouter } from "next/router";
+import Link from "next/link";
+import { Button, Checkbox, message, Modal } from "antd";
 import useInput from "../../hooks/useInput";
-import DaumPostcode from "react-daum-postcode";
+import { useCallback } from "react";
+import DaumPostCode from "react-daum-postcode";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
 import { useSession, signIn, signOut } from "next-auth/react";
-
-const Circle = styled(Wrapper)`
-  width: 44px;
-  height: 44px;
-  border-radius: 100%;
-  background: ${Theme.lightGrey_C};
-  position: absolute;
-  left: 20px;
-
-  & img {
-    width: 24px;
-  }
-`;
 
 const Btn = styled(Wrapper)`
   width: 135px;
@@ -64,7 +52,20 @@ const Btn = styled(Wrapper)`
   }
 `;
 
-const Business = () => {
+const Circle = styled(Wrapper)`
+  width: 44px;
+  height: 44px;
+  border-radius: 100%;
+  background: ${Theme.lightGrey_C};
+  position: absolute;
+  left: 20px;
+
+  & img {
+    width: 24px;
+  }
+`;
+
+const Expert = () => {
   ////// GLOBAL STATE //////
   const {
     userCheck,
@@ -76,35 +77,22 @@ const Business = () => {
     st_userGoogleError,
   } = useSelector((state) => state.user);
   ////// HOOKS //////
-  const width = useWidth();
 
+  // 구글 로그인
   const { data: session } = useSession();
 
   // 회원가입
-  const idInput = useInput(``); // 아이디
-  const pwInput = useInput(``); // 비밀번호
-  const pwCheckInput = useInput(``); // 비밀번호 체크
-  const combiNameInput = useInput(``); // 조합명
-  const postCodeInput = useInput(``); // 우편번호
-  const addressInput = useInput(``); // 주소
-  const detailAddressInput = useInput(``); // 상세주소
-  const mobileInput = useInput(``); // 전화번호
-  const emailInput = useInput(``); // 이메일
-  const [typeArr, setTypeArr] = useState([]); // 사업분야
-  const [combiTypeArr, setCombiTypeArr] = useState([]); // 조합사업유형
-  const [combiArr, setCombiArr] = useState([]); // 조합유형
-  const [isCheck, setIsCheck] = useState(false); // 개인정보
-  const combiHomepageInput = useInput(``); // 조합 홈페이지
-  const [combiEstimateDate, setCombiEstimateDate] = useState(null); // 설립년도
-  const [combiArea, setCombiArea] = useState(null); // 지역
-  const corporationCntInput = useInput(``); // 법인조합원수
-  const personalCntInput = useInput(``); // 개인조홥원수
-  const repreNameInput = useInput(``); // 이사장명
-  const importantBusinessCapitalInput = useInput(``); // 자본금
-  const importantBusinessPriceInput = useInput(``); // 매출액
-  const importantBusiness1Input = useInput(``); // 주요사업1
-  const importantBusiness2Input = useInput(``); // 주요사업2
-  const importantBusiness3Input = useInput(``); // 주요사업3
+  const idInput = useInput(``);
+  const pwInput = useInput(``);
+  const pwCheckInput = useInput(``);
+  const combiNameInput = useInput(``);
+  const postCodeInput = useInput(``);
+  const addressInput = useInput(``);
+  const detailAddressInput = useInput(``);
+  const mobileInput = useInput(``);
+  const emailInput = useInput(``);
+  const [typeArr, setTypeArr] = useState([]);
+  const [isCheck, setIsCheck] = useState(false);
 
   // SNS 회원가입 정보
   const [snsData, setSnsData] = useState(null);
@@ -114,11 +102,12 @@ const Business = () => {
 
   // modal
   const [pModal, setPModal] = useState(false);
+
+  const width = useWidth();
   ////// REDUX //////
   const router = useRouter();
   const dispatch = useDispatch();
   ////// USEEFFECT //////
-
   // 구글 로그인
   useEffect(() => {
     if (session) {
@@ -148,10 +137,10 @@ const Business = () => {
     }
   }, [st_userGoogleDone, st_userGoogleError]);
 
+  // 기본
   useEffect(() => {
     if (snsData) {
       setCurrentTab(1);
-
       idInput.setValue(snsData.email);
       emailInput.setValue(snsData.email);
 
@@ -164,14 +153,6 @@ const Business = () => {
   }, [snsData]);
 
   useEffect(() => {
-    const query = router.query;
-
-    if (query.naver) {
-      naver.handleTokenResponse();
-    }
-  }, [router.query]);
-
-  useEffect(() => {
     if (st_signUpError) {
       return message.error(st_signUpError);
     }
@@ -180,10 +161,23 @@ const Business = () => {
   useEffect(() => {
     if (st_signUpDone) {
       router.push(`/login`);
+      setSnsData(null);
+
+      if (session) {
+        signOut();
+      }
 
       return message.success("회원가입이 되었습니다.");
     }
   }, [st_signUpDone]);
+
+  useEffect(() => {
+    const query = router.query;
+
+    if (query.naver) {
+      naver.handleTokenResponse();
+    }
+  }, [router.query]);
   ////// TOGGLE //////
   ////// HANDLER //////
 
@@ -200,7 +194,14 @@ const Business = () => {
     setSnsData(profile.response);
   }, []);
 
-  // 조합회원 create
+  // 주소검색
+  const completeHandler = useCallback((data) => {
+    addressInput.setValue(data.address);
+    postCodeInput.setValue(data.zonecode);
+    setPModal(false);
+  }, []);
+
+  // 일반회원 create
   const createHandler = useCallback(() => {
     const userReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
 
@@ -235,31 +236,11 @@ const Business = () => {
       );
     }
 
-    if (!combiHomepageInput.value) {
-      return message.error("조합 홈페이지를 입력해주세요.");
+    if (!combiNameInput.value) {
+      return message.error("비밀번호를 재입력해주세요.");
     }
 
-    if (!combiEstimateDate) {
-      return message.error("설립년도를 선택해주세요.");
-    }
-
-    if (!combiArea) {
-      return message.error("조합 활동지역을 검색해주세요.");
-    }
-
-    if (!corporationCntInput.value) {
-      return message.error("법인조합원수를 입력해주세요.");
-    }
-
-    if (!personalCntInput.value) {
-      return message.error("개인조합원수를 입력해주세요.");
-    }
-
-    if (!repreNameInput.value) {
-      return message.error("이사장명을 입력해주세요.");
-    }
-
-    if (!addressInput.value) {
+    if (!postCodeInput.value) {
       return message.error("주소를 검색해주세요.");
     }
 
@@ -275,28 +256,8 @@ const Business = () => {
       return message.error("이메일을 입력해주세요.");
     }
 
-    if (combiTypeArr.length === 0) {
-      return message.error("조합유형은 필수 선택사항입니다.");
-    }
-
-    if (combiArr.length === 0) {
-      return message.error("조합사업유형은 필수 선택사항입니다.");
-    }
-
     if (typeArr.length === 0) {
-      return message.error("사업분야는 필수 선택사항입니다.");
-    }
-
-    if (!importantBusiness1Input.value) {
-      return message.error("주요사항을 입력해주세요.");
-    }
-
-    if (!importantBusinessCapitalInput.value) {
-      return message.error("자본금을 입력해주세요.");
-    }
-
-    if (!importantBusinessPriceInput.value) {
-      return message.error("매출액을 입력해주세요.");
+      return message.error("관심분야는 필수 선택사항입니다.");
     }
 
     if (!isCheck) {
@@ -304,144 +265,64 @@ const Business = () => {
     }
 
     if (snsData) {
+      // 개인회원
       dispatch({
         type: SIGNUP_REQUEST,
         data: {
-          type: 2,
+          type: 1,
           userId: idInput.value,
           password: pwCheckInput.value,
           combiName: combiNameInput.value,
-          combiHomepage: combiHomepageInput.value,
-          combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
-          combiArea: combiArea,
-          corporationCnt: corporationCntInput.value,
-          personalCnt: personalCntInput.value,
-          repreName: repreNameInput.value,
           postCode: postCodeInput.value,
           address: addressInput.value,
           detailAddress: detailAddressInput.value,
           mobile: mobileInput.value,
           email: emailInput.value,
-          importantBusiness1: importantBusiness1Input.value,
-          importantBusiness2: importantBusiness2Input.value,
-          importantBusiness3: importantBusiness3Input.value,
-          importantBusinessCapital: importantBusinessCapitalInput.value,
-          importantBusinessPrice: importantBusinessPriceInput.value,
           terms: isCheck,
-          kakaoId: idInput.value,
+          kakaoId: snsData.email,
           isKakao: true,
           isPremium: false,
-          businessType: combiTypeArr,
-          combiType: combiArr,
+          businessType: [],
+          combiType: [],
           sector: typeArr,
         },
       });
     } else {
-      // 조합회원
+      // 개인회원
       dispatch({
         type: SIGNUP_REQUEST,
         data: {
-          type: 2,
+          type: 1,
           userId: idInput.value,
           password: pwCheckInput.value,
           combiName: combiNameInput.value,
-          combiHomepage: combiHomepageInput.value,
-          combiEstimateDate: combiEstimateDate.format("YYYY-MM-DD"),
-          combiArea: combiArea,
-          corporationCnt: corporationCntInput.value,
-          personalCnt: personalCntInput.value,
-          repreName: repreNameInput.value,
           postCode: postCodeInput.value,
           address: addressInput.value,
           detailAddress: detailAddressInput.value,
           mobile: mobileInput.value,
           email: emailInput.value,
-          importantBusiness1: importantBusiness1Input.value,
-          importantBusiness2: importantBusiness2Input.value,
-          importantBusiness3: importantBusiness3Input.value,
-          importantBusinessCapital: importantBusinessCapitalInput.value,
-          importantBusinessPrice: importantBusinessPriceInput.value,
           terms: isCheck,
           isKakao: false,
           isPremium: false,
-          businessType: combiTypeArr,
-          combiType: combiArr,
+          businessType: [],
+          combiType: [],
           sector: typeArr,
         },
       });
     }
   }, [
+    snsData,
     idInput,
+    pwInput,
     pwCheckInput,
     combiNameInput,
-    combiHomepageInput,
-    combiEstimateDate,
-    combiArea,
-    corporationCntInput,
-    personalCntInput,
-    repreNameInput,
     postCodeInput,
-    addressInput,
     detailAddressInput,
     mobileInput,
     emailInput,
-    importantBusiness1Input,
-    importantBusiness2Input,
-    importantBusiness3Input,
-    importantBusinessCapitalInput,
-    importantBusinessPriceInput,
-    isCheck,
-    combiTypeArr,
-    combiArr,
     typeArr,
-    snsData,
+    isCheck,
   ]);
-
-  // 설립년도
-  const combiEstimateDateHandler = useCallback((data) => {
-    setCombiEstimateDate(data);
-  }, []);
-
-  // 지역
-  const combiAreaHandler = useCallback((data) => {
-    setCombiArea(data);
-  }, []);
-
-  // 조합유형
-  const combiArrHandler = useCallback(
-    (e) => {
-      let arr = combiArr ? combiArr.map((data) => data) : [];
-      const currentId = combiArr.findIndex((value) => value === e.target.value);
-
-      if (currentId === -1) {
-        arr.push(e.target.value);
-      } else {
-        arr.splice(currentId, 1);
-      }
-
-      setCombiArr(arr);
-    },
-    [combiArr]
-  );
-
-  // 조합사업
-  const combiTypeHandler = useCallback(
-    (e) => {
-      let arr = combiTypeArr ? combiTypeArr.map((data) => data) : [];
-      const currentId = combiTypeArr.findIndex(
-        (value) => value === e.target.value
-      );
-
-      if (currentId === -1) {
-        arr.push(e.target.value);
-      } else {
-        arr.splice(currentId, 1);
-      }
-
-      setCombiTypeArr(arr);
-    },
-    [combiTypeArr]
-  );
 
   // 사업분야
   const checkArrHandler = useCallback(
@@ -460,32 +341,7 @@ const Business = () => {
     [typeArr]
   );
 
-  // 주소검색
-  const completeHandler = useCallback((data) => {
-    addressInput.setValue(data.address);
-    postCodeInput.setValue(data.zonecode);
-    setPModal(false);
-  }, []);
   ////// DATAVIEW //////
-
-  const combiData = [
-    "다중이해",
-    "생산자",
-    "소비자",
-    "사업자",
-    "직원",
-    "개발자",
-    "기타",
-  ];
-
-  const combiTypeData = [
-    "R&D형",
-    "비즈니스형",
-    "교육훈련 및 문화활동형",
-    "지역사회문제해결형",
-    "경력연계형",
-    "기타",
-  ];
 
   const arr = [
     "ICT",
@@ -502,6 +358,13 @@ const Business = () => {
     "바이오",
     "기타",
   ];
+
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const clientId =
+    "409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com";
 
   return (
     <>
@@ -522,12 +385,15 @@ const Business = () => {
                 회원가입
               </Text>
               <Wrapper dr={`row`} margin={`26px 0 35px`}>
-                <Btn margin={`0 6px 0 0`} onClick={() => router.push(`/join`)}>
+                <Btn isActive margin={`0 6px 0 0`}>
                   개인회원
                 </Btn>
-                <Btn isActive>조합회원</Btn>
+                <Link href={`/join/business`}>
+                  <a>
+                    <Btn>조합회원</Btn>
+                  </a>
+                </Link>
               </Wrapper>
-
               {currentTab === 0 ? (
                 <>
                   <CommonButton
@@ -547,8 +413,41 @@ const Business = () => {
                     </Wrapper>
                   </CommonButton>
 
+                  {/* <CommonButton
+                    width={`100%`}
+                    height={`70px`}
+                    kindOf={`grey`}
+                    onClick={initHandler}
+                    id="GgCustomLogin"
+                  >
+                    <Wrapper position={`relative`} fontSize={`18px`}>
+                      <Circle>
+                        <Image
+                          alt="google"
+                          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/login/icon_google.png`}
+                        />
+                      </Circle>
+                      구글로 시작하기
+                    </Wrapper>
+                  </CommonButton> */}
+
+                  {/* <GoogleOAuthProvider
+                    clientId={
+                      "409877389928-29aakfjb2haapulsqvtif7jrfmokdht0.apps.googleusercontent.com"
+                    }
+                  >
+                    <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse);
+                      }}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </GoogleOAuthProvider> */}
+
                   <KakaoLogin
-                    jsKey={process.env.KAKAO_LOGIN_KEY}
+                    jsKey={process.env.NEXT_PUBLIC_KAKAO_LOGIN_KEY}
                     onSuccess={(data) => {
                       setSnsData(data.profile.kakao_account);
                     }}
@@ -598,7 +497,6 @@ const Business = () => {
                       네이버로 시작하기
                     </Wrapper>
                   </CommonButton>
-
                   <Text
                     color={Theme.grey_C}
                     fontSize={`16px`}
@@ -632,6 +530,7 @@ const Business = () => {
                       height={`55px`}
                       placeholder="아이디를 입력해주세요."
                       radius={`5px`}
+                      readOnly={snsData ? true : false}
                       {...idInput}
                     />
                   </Wrapper>
@@ -686,169 +585,11 @@ const Business = () => {
                       margin={`0 0 14px`}
                       color={Theme.grey2_C}
                     >
-                      조합 홈페이지
-                    </Text>
-                    <TextInput
-                      type="text"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="www가 붙지 않은 홈페이지 주소를 입력해주세요."
-                      radius={`5px`}
-                      {...combiHomepageInput}
-                    />
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      설립년도
-                    </Text>
-
-                    <DatePicker
-                      style={{
-                        width: `100%`,
-                        height: `55px`,
-                        borderRadius: `5px`,
-                      }}
-                      placeholder="조합 설립년도를 선택해주세요."
-                      onChange={combiEstimateDateHandler}
-                      value={combiEstimateDate}
-                    />
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      지역
-                    </Text>
-                    <CustomSelect radius={`5px`} width={`100%`} height={`55px`}>
-                      <Select
-                        placeholder="조합 활동 지역을 입력해주세요."
-                        onChange={combiAreaHandler}
-                        value={combiArea}
-                      >
-                        <Select.Option value={"서울특별시"}>
-                          서울특별시
-                        </Select.Option>
-                        <Select.Option value={"대전광역시"}>
-                          대전광역시
-                        </Select.Option>
-                        <Select.Option value={"인천광역시"}>
-                          인천광역시
-                        </Select.Option>
-                        <Select.Option value={"대구광역시"}>
-                          대구광역시
-                        </Select.Option>
-                        <Select.Option value={"울산광역시"}>
-                          울산광역시
-                        </Select.Option>
-                        <Select.Option value={"부산광역시"}>
-                          부산광역시
-                        </Select.Option>
-                        <Select.Option value={"광주광역시"}>
-                          광주광역시
-                        </Select.Option>
-                        <Select.Option value={"세종특별자치시"}>
-                          세종특별자치시
-                        </Select.Option>
-                        <Select.Option value={"제주특별자치도"}>
-                          제주특별자치도
-                        </Select.Option>
-                        <Select.Option value={"경기도"}>경기도</Select.Option>
-                        <Select.Option value={"강원도"}>강원도</Select.Option>
-                        <Select.Option value={"충청남도"}>
-                          충청남도
-                        </Select.Option>
-                        <Select.Option value={"충청북도"}>
-                          충청북도
-                        </Select.Option>
-                        <Select.Option value={"전라북도"}>
-                          전라북도
-                        </Select.Option>
-                        <Select.Option value={"전라남도"}>
-                          전라남도
-                        </Select.Option>
-                        <Select.Option value={"경상남도"}>
-                          경상남도
-                        </Select.Option>
-                        <Select.Option value={"경상북도"}>
-                          경상북도
-                        </Select.Option>
-                      </Select>
-                    </CustomSelect>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      법인조합원수
-                    </Text>
-                    <Wrapper dr={`row`} ju={`space-between`}>
-                      <TextInput
-                        width={`96%`}
-                        height={`55px`}
-                        placeholder="법인조합원수를 입력해주세요."
-                        radius={`5px`}
-                        type="number"
-                        {...corporationCntInput}
-                      />
-                      인
-                    </Wrapper>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      개인조합원수
-                    </Text>
-                    <Wrapper dr={`row`} ju={`space-between`}>
-                      <TextInput
-                        width={`96%`}
-                        height={`55px`}
-                        placeholder="개인조합원수를 입력해주세요."
-                        radius={`5px`}
-                        type="number"
-                        {...personalCntInput}
-                      />
-                      인
-                    </Wrapper>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      이사장명
-                    </Text>
-                    <TextInput
-                      type="text"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="이사장명을 입력해주세요."
-                      radius={`5px`}
-                      {...repreNameInput}
-                    />
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
                       주소
                     </Text>
                     <Wrapper dr={`row`} ju={`space-between`}>
                       <TextInput
-                        readOnly
+                        readOnly={true}
                         type="text"
                         width={`calc(100% - 150px)`}
                         height={`55px`}
@@ -926,59 +667,7 @@ const Business = () => {
                       margin={`0 0 14px`}
                       color={Theme.grey2_C}
                     >
-                      조합유형
-                      <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
-                    </Text>
-                    <Wrapper dr={`row`} ju={`flex-start`}>
-                      {combiData.map((data) => {
-                        return (
-                          <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                            <Checkbox
-                              onChange={combiArrHandler}
-                              checked={combiArr.find((value) => value === data)}
-                              value={data}
-                            >
-                              {data}
-                            </Checkbox>
-                          </Wrapper>
-                        );
-                      })}
-                    </Wrapper>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      조합사업유형
-                      <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
-                    </Text>
-                    <Wrapper dr={`row`} ju={`flex-start`}>
-                      {combiTypeData.map((data) => {
-                        return (
-                          <Wrapper width={`auto`} margin={`0 20px 10px 0`}>
-                            <Checkbox
-                              onChange={combiTypeHandler}
-                              checked={combiTypeArr.find(
-                                (value) => value === data
-                              )}
-                              value={data}
-                            >
-                              {data}
-                            </Checkbox>
-                          </Wrapper>
-                        );
-                      })}
-                    </Wrapper>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      사업분야
+                      관심분야
                       <SpanText fontWeight={`500`}>(복수선택가능)</SpanText>
                     </Text>
                     <Wrapper dr={`row`} ju={`flex-start`}>
@@ -998,86 +687,7 @@ const Business = () => {
                     </Wrapper>
                   </Wrapper>
 
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      주요사업
-                    </Text>
-
-                    <TextInput
-                      type="text"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="1. 주요사업을 입력해주세요."
-                      radius={`5px`}
-                      {...importantBusiness1Input}
-                    />
-                    <TextInput
-                      type="text"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="2. 주요사업을 입력해주세요."
-                      radius={`5px`}
-                      margin={`8px 0`}
-                      {...importantBusiness2Input}
-                    />
-                    <TextInput
-                      type="text"
-                      width={`100%`}
-                      height={`55px`}
-                      placeholder="3. 주요사업을 입력해주세요."
-                      radius={`5px`}
-                      {...importantBusiness3Input}
-                    />
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      자본금
-                    </Text>
-
-                    <Wrapper dr={`row`} ju={`space-between`}>
-                      <TextInput
-                        type="number"
-                        width={`96%`}
-                        height={`55px`}
-                        placeholder="백만원 단위로 숫자만 입력해 주세요."
-                        radius={`5px`}
-                        {...importantBusinessCapitalInput}
-                      />
-                      원
-                    </Wrapper>
-                  </Wrapper>
-
-                  <Wrapper al={`flex-start`}>
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      매출액
-                    </Text>
-
-                    <Wrapper dr={`row`} ju={`space-between`}>
-                      <TextInput
-                        type="number"
-                        width={`96%`}
-                        height={`55px`}
-                        placeholder="백만원 단위로 숫자만 입력해 주세요."
-                        radius={`5px`}
-                        {...importantBusinessPriceInput}
-                      />
-                      원
-                    </Wrapper>
-                  </Wrapper>
-
-                  <Wrapper margin={`30px 0 14px`} al={`flex-start`}>
+                  <Wrapper margin={`35px 0 14px`} al={`flex-start`}>
                     <Checkbox
                       onChange={() => setIsCheck(!isCheck)}
                       checked={isCheck}
@@ -1108,7 +718,7 @@ const Business = () => {
           title="주소 검색"
           footer={null}
         >
-          <DaumPostcode
+          <DaumPostCode
             onComplete={completeHandler}
             width={`100%`}
             height={`450px`}
@@ -1143,4 +753,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   }
 );
 
-export default Business;
+export default Expert;
