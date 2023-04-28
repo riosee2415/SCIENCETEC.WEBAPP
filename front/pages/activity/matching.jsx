@@ -8,7 +8,6 @@ import { END } from "redux-saga";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CommonButton,
-  CustomPage,
   Image,
   RsWrapper,
   Text,
@@ -17,8 +16,6 @@ import {
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
@@ -31,6 +28,7 @@ import {
   SURVEY_USER_CREATE_REQUEST,
 } from "../../reducers/survey";
 import { useRouter } from "next/router";
+import SubBanner from "../../components/SubBanner";
 
 const CustomForm = styled(Form)`
   width: 100%;
@@ -274,256 +272,259 @@ const Project = () => {
 
       <ClientLayout>
         <WholeWrapper>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
-            <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
-              <BreadCrumb />
-              <Wrapper
-                wrap={`nowrap`}
-                dr={`row`}
-                ju={`flex-start`}
-                fontSize={width < 900 ? `18px` : `20px`}
-                fontWeight={`700`}
+          <SubBanner />
+          <RsWrapper
+            dr={`row`}
+            al={`flex-start`}
+            position={`relative`}
+            margin={width < 900 ? `50px 0 0` : `100px 0 0`}
+          >
+            <Wrapper al={`flex-start`}>
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
               >
-                <Image
-                  alt="icon"
-                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
-                  width={`14px`}
-                  margin={`0 6px 0 0`}
-                />
-                기관형 과학기술인 협동조합 교류회 기술매칭사업
-              </Wrapper>
-              <Wrapper
-                wrap={`nowrap`}
-                dr={`row`}
-                ju={`flex-start`}
-                fontSize={width < 900 ? `18px` : `20px`}
-                margin={`35px 0 16px`}
-                fontWeight={`700`}
-              >
-                <Image
-                  alt="icon"
-                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
-                  width={`8px`}
-                  margin={`0 6px 0 0`}
-                />
-                기술매칭서비스 신청
-              </Wrapper>
-              <Wrapper
-                al={`flex-start`}
-                fontSize={width < 900 ? `16px` : `18px`}
-              >
-                • 기술매칭서비스를 신청하시면 확인 후 담당자가 별도로
-                연락드립니다.
-              </Wrapper>
+                기술매칭사업
+              </Text>
+            </Wrapper>
+            <Wrapper
+              wrap={`nowrap`}
+              dr={`row`}
+              ju={`flex-start`}
+              fontSize={width < 900 ? `18px` : `20px`}
+              fontWeight={`700`}
+            >
+              <Image
+                alt="icon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
+                width={`14px`}
+                margin={`0 6px 0 0`}
+              />
+              기관형 과학기술인 협동조합 교류회 기술매칭사업
+            </Wrapper>
+            <Wrapper
+              wrap={`nowrap`}
+              dr={`row`}
+              ju={`flex-start`}
+              fontSize={width < 900 ? `18px` : `20px`}
+              margin={`35px 0 16px`}
+              fontWeight={`700`}
+            >
+              <Image
+                alt="icon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
+                width={`8px`}
+                margin={`0 6px 0 0`}
+              />
+              기술매칭서비스 신청
+            </Wrapper>
+            <Wrapper al={`flex-start`} fontSize={width < 900 ? `16px` : `18px`}>
+              • 기술매칭서비스를 신청하시면 확인 후 담당자가 별도로
+              연락드립니다.
+            </Wrapper>
 
-              <Wrapper al={`flex-start`}>
-                <CustomForm onFinish={submitHandler} form={form}>
-                  {surveyList &&
-                    (surveyList.length === 0 ? (
-                      <Wrapper margin={`50px 0`}>
-                        <Empty
-                          description={"등록된 수요조사 설문이 없습니다."}
-                        />
-                      </Wrapper>
-                    ) : (
-                      surveyList.map((data) => {
-                        return data.isTitle ? (
-                          <Wrapper al={`flex-start`}>
-                            <Wrapper
-                              width={`auto`}
-                              padding={`14px 36px`}
-                              bgColor={Theme.subTheme4_C}
-                              radius={`50px`}
-                              color={Theme.basicTheme_C}
-                              fontSize={`18px`}
-                              fontWeight={`bold`}
-                              margin={`50px 0 20px`}
-                            >
-                              <Text isNeo>{data.ques}</Text>
-                            </Wrapper>
+            <Wrapper al={`flex-start`}>
+              <CustomForm onFinish={submitHandler} form={form}>
+                {surveyList &&
+                  (surveyList.length === 0 ? (
+                    <Wrapper margin={`50px 0`}>
+                      <Empty description={"등록된 수요조사 설문이 없습니다."} />
+                    </Wrapper>
+                  ) : (
+                    surveyList.map((data) => {
+                      return data.isTitle ? (
+                        <Wrapper al={`flex-start`}>
+                          <Wrapper
+                            width={`auto`}
+                            padding={`14px 36px`}
+                            bgColor={Theme.subTheme4_C}
+                            radius={`50px`}
+                            color={Theme.basicTheme_C}
+                            fontSize={`18px`}
+                            fontWeight={`bold`}
+                            margin={`50px 0 20px`}
+                          >
+                            <Text isNeo>{data.ques}</Text>
                           </Wrapper>
-                        ) : (
-                          <Form.List
-                            key={data.id}
-                            name={data.ques.split("(")[0]}
-                            rules={[
-                              {
-                                validator: async (_, values) => {
-                                  let isError = false;
-                                  let errorType = 0;
+                        </Wrapper>
+                      ) : (
+                        <Form.List
+                          key={data.id}
+                          name={data.ques.split("(")[0]}
+                          rules={[
+                            {
+                              validator: async (_, values) => {
+                                let isError = false;
+                                let errorType = 0;
 
-                                  data.inner.map((value) => {
-                                    // input, area, scale
-                                    value.innerType === 1 ||
-                                    value.innerType === 2 ||
-                                    value.innerType === 4
-                                      ? value.innerType === 4
-                                        ? Object.values(values).filter(
-                                            (item) => typeof item === "number"
-                                          ).length === 0 &&
-                                          ((isError = true), (errorType = 1))
-                                        : Object.values(values)
-                                            .filter(
-                                              (item) => typeof item === "string"
-                                            )
-                                            .map(
-                                              (item) =>
-                                                item.trim().length === 0 &&
-                                                ((isError = true),
-                                                (errorType = 0))
-                                            )
-                                      : // checkbox
-                                      data.isOverlap
-                                      ? // 선택 안했을때 않넣음
-                                        Object.values(values)
-                                          .filter(
-                                            (item) => typeof item === "object"
-                                          )
-                                          .filter((item) => item.length !== 0)
-                                          .length === 0 &&
+                                data.inner.map((value) => {
+                                  // input, area, scale
+                                  value.innerType === 1 ||
+                                  value.innerType === 2 ||
+                                  value.innerType === 4
+                                    ? value.innerType === 4
+                                      ? Object.values(values).filter(
+                                          (item) => typeof item === "number"
+                                        ).length === 0 &&
                                         ((isError = true), (errorType = 1))
                                       : Object.values(values)
                                           .filter(
-                                            (item) => typeof item === "object"
+                                            (item) => typeof item === "string"
                                           )
-                                          .filter((item) => item.length !== 0)
-                                          .length > 1
-                                      ? ((isError = true), (errorType = 2))
-                                      : Object.values(values)
-                                          .filter(
-                                            (item) => typeof item === "object"
+                                          .map(
+                                            (item) =>
+                                              item.trim().length === 0 &&
+                                              ((isError = true),
+                                              (errorType = 0))
                                           )
-                                          .filter((item) => item.length !== 0)
-                                          .length === 0
-                                      ? ((isError = true), (errorType = 1))
-                                      : ((isError = false), (errorType = 1));
-                                  });
+                                    : // checkbox
+                                    data.isOverlap
+                                    ? // 선택 안했을때 않넣음
+                                      Object.values(values)
+                                        .filter(
+                                          (item) => typeof item === "object"
+                                        )
+                                        .filter((item) => item.length !== 0)
+                                        .length === 0 &&
+                                      ((isError = true), (errorType = 1))
+                                    : Object.values(values)
+                                        .filter(
+                                          (item) => typeof item === "object"
+                                        )
+                                        .filter((item) => item.length !== 0)
+                                        .length > 1
+                                    ? ((isError = true), (errorType = 2))
+                                    : Object.values(values)
+                                        .filter(
+                                          (item) => typeof item === "object"
+                                        )
+                                        .filter((item) => item.length !== 0)
+                                        .length === 0
+                                    ? ((isError = true), (errorType = 1))
+                                    : ((isError = false), (errorType = 1));
+                                });
 
-                                  if (isError) {
-                                    if (errorType === 0) {
-                                      return Promise.reject(
-                                        new Error(
-                                          `${data.ques}를 입력해주세요.`
-                                        )
-                                      );
-                                    } else if (errorType === 2) {
-                                      return Promise.reject(
-                                        new Error(
-                                          `${data.ques}는 중복선택 불가능 입니다.`
-                                        )
-                                      );
-                                    } else {
-                                      return Promise.reject(
-                                        new Error(
-                                          `${data.ques}를 선택해주세요.`
-                                        )
-                                      );
-                                    }
+                                if (isError) {
+                                  if (errorType === 0) {
+                                    return Promise.reject(
+                                      new Error(`${data.ques}를 입력해주세요.`)
+                                    );
+                                  } else if (errorType === 2) {
+                                    return Promise.reject(
+                                      new Error(
+                                        `${data.ques}는 중복선택 불가능 입니다.`
+                                      )
+                                    );
+                                  } else {
+                                    return Promise.reject(
+                                      new Error(`${data.ques}를 선택해주세요.`)
+                                    );
                                   }
-                                },
+                                }
                               },
-                            ]}
-                          >
-                            {(fields, { add, remove }, { errors }) => {
-                              return (
-                                <Wrapper
-                                  width={width < 900 ? `100%` : `470px`}
-                                  bgColor={Theme.lightGrey_C}
-                                  radius={`5px`}
-                                  al={`flex-start`}
-                                  padding={`15px`}
-                                  margin={`0 0 20px`}
+                            },
+                          ]}
+                        >
+                          {(fields, { add, remove }, { errors }) => {
+                            return (
+                              <Wrapper
+                                width={width < 900 ? `100%` : `470px`}
+                                bgColor={Theme.lightGrey_C}
+                                radius={`5px`}
+                                al={`flex-start`}
+                                padding={`15px`}
+                                margin={`0 0 20px`}
+                              >
+                                <Text
+                                  fontWeight={`bold`}
+                                  margin={`0 0 14px`}
+                                  color={Theme.grey2_C}
                                 >
-                                  <Text
-                                    fontWeight={`bold`}
-                                    margin={`0 0 14px`}
-                                    color={Theme.grey2_C}
-                                  >
-                                    {data.ques}
-                                    {data.isOverlap ? "(복수선택가능)" : ""}
-                                  </Text>
+                                  {data.ques}
+                                  {data.isOverlap ? "(복수선택가능)" : ""}
+                                </Text>
 
-                                  {data.inner &&
-                                    data.inner.map((v, idx) => {
-                                      return v.innerType === 2 ? (
-                                        <Wrapper key={v.id}>
-                                          {v.questionValue && (
-                                            <Text
-                                              fontSize={`16px`}
-                                              margin={`0 0 14px`}
-                                            >
+                                {data.inner &&
+                                  data.inner.map((v, idx) => {
+                                    return v.innerType === 2 ? (
+                                      <Wrapper key={v.id}>
+                                        {v.questionValue && (
+                                          <Text
+                                            fontSize={`16px`}
+                                            margin={`0 0 14px`}
+                                          >
+                                            {v.questionValue}
+                                          </Text>
+                                        )}
+                                        <Form.Item name={`textArea${idx}`}>
+                                          <TextArea
+                                            placeholder={v.placeholderValue}
+                                            height={`120px`}
+                                            width={`100%`}
+                                          />
+                                        </Form.Item>
+                                      </Wrapper>
+                                    ) : v.innerType === 3 ? (
+                                      <Wrapper
+                                        key={v.id}
+                                        al={`flex-start`}
+                                        margin={`0 0 10px`}
+                                      >
+                                        <Form.Item name={`checkBox${idx}`}>
+                                          <Checkbox.Group>
+                                            <Checkbox value={v.questionValue}>
                                               {v.questionValue}
-                                            </Text>
-                                          )}
-                                          <Form.Item name={`textArea${idx}`}>
-                                            <TextArea
-                                              placeholder={v.placeholderValue}
-                                              height={`120px`}
-                                              width={`100%`}
-                                            />
+                                            </Checkbox>
+                                          </Checkbox.Group>
+                                        </Form.Item>
+                                      </Wrapper>
+                                    ) : v.innerType === 1 ? (
+                                      <Wrapper key={v.id}>
+                                        {v.questionValue && (
+                                          <Text
+                                            fontSize={`16px`}
+                                            margin={`0 0 14px`}
+                                          >
+                                            {v.questionValue}
+                                          </Text>
+                                        )}
+                                        <Form.Item name={`textInput${idx}`}>
+                                          <TextInput
+                                            type="text"
+                                            width={`100%`}
+                                            height={`55px`}
+                                            placeholder={v.placeholderValue}
+                                            radius={`5px`}
+                                            margin={`0 0 8px 0`}
+                                          />
+                                        </Form.Item>
+                                      </Wrapper>
+                                    ) : (
+                                      v.innerType === 4 && (
+                                        <Wrapper dr={`row`}>
+                                          <Text margin={`0 20px 0 0`}>
+                                            {v.scaleMin}
+                                          </Text>
+                                          <Form.Item
+                                            style={{ width: `auto` }}
+                                            name={`scale${idx}`}
+                                          >
+                                            <Radio.Group>
+                                              <Radio value={1}>1</Radio>
+                                              <Radio value={2}>2</Radio>
+                                              <Radio value={3}>3</Radio>
+                                              <Radio value={4}>4</Radio>
+                                              <Radio value={5}>5</Radio>
+                                            </Radio.Group>
                                           </Form.Item>
+                                          <Text>{v.scaleMax}</Text>
                                         </Wrapper>
-                                      ) : v.innerType === 3 ? (
-                                        <Wrapper
-                                          key={v.id}
-                                          al={`flex-start`}
-                                          margin={`0 0 10px`}
-                                        >
-                                          <Form.Item name={`checkBox${idx}`}>
-                                            <Checkbox.Group>
-                                              <Checkbox value={v.questionValue}>
-                                                {v.questionValue}
-                                              </Checkbox>
-                                            </Checkbox.Group>
-                                          </Form.Item>
-                                        </Wrapper>
-                                      ) : v.innerType === 1 ? (
-                                        <Wrapper key={v.id}>
-                                          {v.questionValue && (
-                                            <Text
-                                              fontSize={`16px`}
-                                              margin={`0 0 14px`}
-                                            >
-                                              {v.questionValue}
-                                            </Text>
-                                          )}
-                                          <Form.Item name={`textInput${idx}`}>
-                                            <TextInput
-                                              type="text"
-                                              width={`100%`}
-                                              height={`55px`}
-                                              placeholder={v.placeholderValue}
-                                              radius={`5px`}
-                                              margin={`0 0 8px 0`}
-                                            />
-                                          </Form.Item>
-                                        </Wrapper>
-                                      ) : (
-                                        v.innerType === 4 && (
-                                          <Wrapper dr={`row`}>
-                                            <Text margin={`0 20px 0 0`}>
-                                              {v.scaleMin}
-                                            </Text>
-                                            <Form.Item
-                                              style={{ width: `auto` }}
-                                              name={`scale${idx}`}
-                                            >
-                                              <Radio.Group>
-                                                <Radio value={1}>1</Radio>
-                                                <Radio value={2}>2</Radio>
-                                                <Radio value={3}>3</Radio>
-                                                <Radio value={4}>4</Radio>
-                                                <Radio value={5}>5</Radio>
-                                              </Radio.Group>
-                                            </Form.Item>
-                                            <Text>{v.scaleMax}</Text>
-                                          </Wrapper>
-                                        )
-                                      );
-                                    })}
-                                  <Form.ErrorList errors={errors} />
-                                  {/* {data.inner &&
+                                      )
+                                    );
+                                  })}
+                                <Form.ErrorList errors={errors} />
+                                {/* {data.inner &&
                 data.inner.map((v) => {
                   return (
                     v.innerType === 3 && (
@@ -556,121 +557,119 @@ const Project = () => {
                     )
                   );
                 })} */}
-                                </Wrapper>
-                              );
-                            }}
-                          </Form.List>
-                        );
-                      })
-                    ))}
+                              </Wrapper>
+                            );
+                          }}
+                        </Form.List>
+                      );
+                    })
+                  ))}
 
-                  <Wrapper
-                    width={`240px`}
-                    height={`50px`}
-                    bgColor={Theme.subTheme4_C}
-                    radius={`50px`}
-                    color={Theme.basicTheme_C}
-                    fontSize={`18px`}
+                <Wrapper
+                  width={`240px`}
+                  height={`50px`}
+                  bgColor={Theme.subTheme4_C}
+                  radius={`50px`}
+                  color={Theme.basicTheme_C}
+                  fontSize={`18px`}
+                  fontWeight={`bold`}
+                  margin={`50px 0 20px`}
+                >
+                  <Text isNeo>개인정보 수집 및 활용</Text>
+                </Wrapper>
+
+                <Wrapper
+                  bgColor={Theme.lightGrey_C}
+                  radius={`5px`}
+                  al={`flex-start`}
+                  padding={`15px`}
+                  margin={`0 0 20px`}
+                >
+                  <Text
                     fontWeight={`bold`}
-                    margin={`50px 0 20px`}
+                    margin={`0 0 14px`}
+                    color={Theme.grey2_C}
                   >
-                    <Text isNeo>개인정보 수집 및 활용</Text>
-                  </Wrapper>
+                    개인정보 수집 및 활용
+                  </Text>
+                  <Checkbox checked={isAgree} onChange={isAgreeToggle}>
+                    (필수)본인은 icast측의 원활한 기술매칭서비스 상담을 위해
+                    개인정보 수집 및 활용에 동의합니다.
+                  </Checkbox>
+                </Wrapper>
 
-                  <Wrapper
-                    bgColor={Theme.lightGrey_C}
-                    radius={`5px`}
-                    al={`flex-start`}
-                    padding={`15px`}
-                    margin={`0 0 20px`}
+                <Wrapper
+                  width={`155px`}
+                  height={`50px`}
+                  bgColor={Theme.subTheme4_C}
+                  radius={`50px`}
+                  color={Theme.basicTheme_C}
+                  fontSize={`18px`}
+                  fontWeight={`bold`}
+                  margin={`50px 0 20px`}
+                >
+                  <Text isNeo>파일 첨부</Text>
+                </Wrapper>
+                <Wrapper dr={`row`} ju={`flex-start`}>
+                  <input
+                    type="file"
+                    hidden
+                    ref={fileRef}
+                    onChange={fileUploadHandler}
+                  />
+                  <CommonButton
+                    onClick={fileClickHandler}
+                    width={`90px`}
+                    height={`40px`}
+                    fontSize={`16px`}
+                    loading={st_surveyFileUploadLoading}
                   >
-                    <Text
-                      fontWeight={`bold`}
-                      margin={`0 0 14px`}
-                      color={Theme.grey2_C}
-                    >
-                      개인정보 수집 및 활용
-                    </Text>
-                    <Checkbox checked={isAgree} onChange={isAgreeToggle}>
-                      (필수)본인은 icast측의 원활한 기술매칭서비스 상담을 위해
-                      개인정보 수집 및 활용에 동의합니다.
-                    </Checkbox>
-                  </Wrapper>
+                    첨부하기
+                  </CommonButton>
 
-                  <Wrapper
-                    width={`155px`}
-                    height={`50px`}
-                    bgColor={Theme.subTheme4_C}
-                    radius={`50px`}
-                    color={Theme.basicTheme_C}
-                    fontSize={`18px`}
-                    fontWeight={`bold`}
-                    margin={`50px 0 20px`}
-                  >
-                    <Text isNeo>파일 첨부</Text>
-                  </Wrapper>
-                  <Wrapper dr={`row`} ju={`flex-start`}>
-                    <input
-                      type="file"
-                      hidden
-                      ref={fileRef}
-                      onChange={fileUploadHandler}
-                    />
-                    <CommonButton
-                      onClick={fileClickHandler}
-                      width={`90px`}
+                  {fileData && (
+                    <Wrapper
+                      width={width < 900 ? `100%` : `auto`}
+                      dr={`row`}
+                      ju={`space-between`}
                       height={`40px`}
+                      bgColor={Theme.lightGrey_C}
                       fontSize={`16px`}
-                      loading={st_surveyFileUploadLoading}
+                      padding={`0 16px`}
+                      color={Theme.grey_C}
                     >
-                      첨부하기
-                    </CommonButton>
-
-                    {fileData && (
+                      <Text>
+                        <FileOutlined />
+                        &nbsp;&nbsp;{fileData.name}
+                      </Text>
                       <Wrapper
-                        width={width < 900 ? `100%` : `auto`}
-                        dr={`row`}
-                        ju={`space-between`}
-                        height={`40px`}
-                        bgColor={Theme.lightGrey_C}
-                        fontSize={`16px`}
-                        padding={`0 16px`}
-                        color={Theme.grey_C}
+                        width={`auto`}
+                        margin={`0 0 0 10px`}
+                        cursor={`pointer`}
                       >
-                        <Text>
-                          <FileOutlined />
-                          &nbsp;&nbsp;{fileData.name}
-                        </Text>
-                        <Wrapper
-                          width={`auto`}
-                          margin={`0 0 0 10px`}
-                          cursor={`pointer`}
-                        >
-                          <CloseOutlined onClick={fileDelHandler} />
-                        </Wrapper>
+                        <CloseOutlined onClick={fileDelHandler} />
                       </Wrapper>
-                    )}
-
-                    <Wrapper>
-                      <CommonButton
-                        kindOf={`subTheme`}
-                        width={`150px`}
-                        height={`55px`}
-                        fontSize={`18px`}
-                        margin={`50px 0 160px`}
-                        fontWeight={`bold`}
-                        htmlType="submit"
-                        loading={
-                          st_surveyFileUploadLoading ||
-                          st_surveyUserCreateLoading
-                        }
-                      >
-                        신청하기
-                      </CommonButton>
                     </Wrapper>
+                  )}
+
+                  <Wrapper>
+                    <CommonButton
+                      kindOf={`subTheme`}
+                      width={`150px`}
+                      height={`55px`}
+                      fontSize={`18px`}
+                      margin={`50px 0 160px`}
+                      fontWeight={`bold`}
+                      htmlType="submit"
+                      loading={
+                        st_surveyFileUploadLoading || st_surveyUserCreateLoading
+                      }
+                    >
+                      신청하기
+                    </CommonButton>
                   </Wrapper>
-                </CustomForm>
-              </Wrapper>
+                </Wrapper>
+              </CustomForm>
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>

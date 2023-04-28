@@ -13,8 +13,6 @@ import {
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
@@ -25,6 +23,7 @@ import Business from "../../components/demand/Business";
 import { SURVEY_LIST_REQUEST } from "../../reducers/survey";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import SubBanner from "../../components/SubBanner";
 
 const Btn = styled(Wrapper)`
   width: 335px;
@@ -150,7 +149,7 @@ const Demand = () => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper
             dr={`row`}

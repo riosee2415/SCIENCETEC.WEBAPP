@@ -5,7 +5,6 @@ import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
 import {
   CommonButton,
   Image,
@@ -14,12 +13,10 @@ import {
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
-import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
 import { DownloadOutlined, LinkOutlined } from "@ant-design/icons";
+import SubBanner from "../../components/SubBanner";
 
 const Perform = () => {
   ////// GLOBAL STATE //////
@@ -39,7 +36,7 @@ const Perform = () => {
 
       <ClientLayout>
         <WholeWrapper>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper
             dr={`row`}

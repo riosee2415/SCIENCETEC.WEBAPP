@@ -14,12 +14,11 @@ import {
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
 import { FORUM_LIST_REQUEST } from "../../reducers/forum";
 import { Empty, message } from "antd";
+import SubBanner from "../../components/SubBanner";
 
 const Box = styled(Wrapper)`
   width: calc(100% / 3 - 12px);
@@ -103,69 +102,80 @@ const Forum = () => {
 
       <ClientLayout>
         <WholeWrapper>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
-            <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
-              <BreadCrumb />
-              <Wrapper
-                dr={`row`}
-                ju={`flex-start`}
-                fontSize={width < 900 ? `18px` : `20px`}
-                fontWeight={`700`}
+          <SubBanner />
+          <RsWrapper
+            dr={`row`}
+            al={`flex-start`}
+            position={`relative`}
+            margin={width < 900 ? `50px 0 0` : `100px 0 0`}
+          >
+            <Wrapper al={`flex-start`}>
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
               >
-                <Image
-                  alt="icon"
-                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
-                  width={`14px`}
-                  margin={`0 6px 0 0`}
-                />
-                기관형 과학기술인 협동조합 iCAST Forum
-              </Wrapper>
-
-              <Wrapper
-                al={`flex-start`}
-                fontSize={width < 900 ? `14px` : `16px`}
-                margin={`16px 0 36px`}
-              >
-                과학기술 트렌드, 이슈, 이해당사자들간의 연결의 장 iCAST Forum을
-                소개합니다.
-              </Wrapper>
-
-              <Wrapper dr={`row`} ju={`flex-start`} al={`flex-start`}>
-                {forumList &&
-                  (forumList.length === 0 ? (
-                    <Wrapper margin={`20px 0`}>
-                      <Empty description="포럼이 없습니다." />
-                    </Wrapper>
-                  ) : (
-                    forumList.map((data) => {
-                      return (
-                        <Box key={data.id}>
-                          <iframe
-                            src={data.youtubeLink}
-                            style={{
-                              margin: `0 0 10px`,
-                              border: 0,
-                              height: width < 700 ? `150px` : `210px`,
-                            }}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                          />
-                          <Text fontSize={width < 900 ? `14px` : `16px`}>
-                            {data.title}
-                          </Text>
-                        </Box>
-                      );
-                    })
-                  ))}
-              </Wrapper>
-
-              <CustomPage
-                defaultCurrent={1}
-                current={currentPage}
-                total={maxPage * 10}
-                onChange={otherPageCall}
-              />
+                포럼
+              </Text>
             </Wrapper>
+            <Wrapper
+              dr={`row`}
+              ju={`flex-start`}
+              fontSize={width < 900 ? `18px` : `20px`}
+              fontWeight={`700`}
+            >
+              <Image
+                alt="icon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
+                width={`14px`}
+                margin={`0 6px 0 0`}
+              />
+              기관형 과학기술인 협동조합 iCAST Forum
+            </Wrapper>
+
+            <Wrapper
+              al={`flex-start`}
+              fontSize={width < 900 ? `14px` : `16px`}
+              margin={`16px 0 36px`}
+            >
+              과학기술 트렌드, 이슈, 이해당사자들간의 연결의 장 iCAST Forum을
+              소개합니다.
+            </Wrapper>
+
+            <Wrapper dr={`row`} ju={`flex-start`} al={`flex-start`}>
+              {forumList &&
+                (forumList.length === 0 ? (
+                  <Wrapper margin={`20px 0`}>
+                    <Empty description="포럼이 없습니다." />
+                  </Wrapper>
+                ) : (
+                  forumList.map((data) => {
+                    return (
+                      <Box key={data.id}>
+                        <iframe
+                          src={data.youtubeLink}
+                          style={{
+                            margin: `0 0 10px`,
+                            border: 0,
+                            height: width < 700 ? `150px` : `210px`,
+                          }}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                        />
+                        <Text fontSize={width < 900 ? `14px` : `16px`}>
+                          {data.title}
+                        </Text>
+                      </Box>
+                    );
+                  })
+                ))}
+            </Wrapper>
+
+            <CustomPage
+              defaultCurrent={1}
+              current={currentPage}
+              total={maxPage * 10}
+              onChange={otherPageCall}
+            />
           </RsWrapper>
         </WholeWrapper>
       </ClientLayout>

@@ -16,14 +16,10 @@ import {
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
 import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
-import Theme from "../../components/Theme";
 import { Form, Select } from "antd";
 import OpBoard from "../../components/OpBoard";
-import OpWrite from "../../components/OpWrite";
 import OpDetail from "../../components/OpDetail";
 import {
   NOTICE_DETAIL_REQUEST,
@@ -31,6 +27,7 @@ import {
   SET_TEMP_TYPE,
 } from "../../reducers/notice";
 import { useRouter } from "next/router";
+import SubBanner from "../../components/SubBanner";
 
 const CustomForm = styled(Form)`
   display: flex;
@@ -129,7 +126,7 @@ const Notice = () => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper
             dr={`row`}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import ClientLayout from "../../components/ClientLayout";
 import axios from "axios";
@@ -12,10 +12,8 @@ import {
   Text,
 } from "../../components/commonComponents";
 import useWidth from "../../hooks/useWidth";
-import Theme from "../../components/Theme";
 import Head from "next/head";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
+import SubBanner from "../../components/subBanner";
 
 const Group = ({}) => {
   const width = useWidth();
@@ -37,7 +35,8 @@ const Group = ({}) => {
 
       <ClientLayout>
         <WholeWrapper>
-          <LeftMenu />
+          <SubBanner />
+
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper
               ju={`flex-start`}
