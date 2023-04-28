@@ -187,13 +187,18 @@ export const items = {
       useYn: true,
     },
     {
-      name: "수요조사설문관리",
+      name: "(구) 수요조사설문관리",
       link: "/admin/survey",
       useYn: true,
     },
     {
-      name: "수요조사설문리스트",
+      name: "(구) 수요조사설문리스트",
       link: "/admin/survey/list",
+      useYn: true,
+    },
+    {
+      name: "(현) 수요조사설문리스트",
+      link: "/admin/survey/festival",
       useYn: true,
     },
   ],
