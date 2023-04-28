@@ -359,17 +359,113 @@ const Home = ({}) => {
 
       <ClientLayout>
         <WholeWrapper>
+          <Wrapper
+            height={`100vh`}
+            color={Theme.white_C}
+            bgImg={`url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/banner.png")`}
+          >
+            <Text fontSize={`54px`} lineHeight={`70px`} fontWeight={`900`}>
+              Institutional Cooperative Association
+            </Text>
+            <Text fontSize={`54px`} lineHeight={`70px`} fontWeight={`900`}>
+              of Scientists and Technologists
+            </Text>
+            <Text fontSize={`20px`} margin={`20px 0 0`}>
+              과학 기술원을 중심으로 과학 기술을 주된 사업으로 활동하는
+              협동조합입니다.
+            </Text>
+          </Wrapper>
+
+          <RsWrapper padding={width < 700 ? `80px 0` : `120px 0`}>
+            <Wrapper dr={`row`}>
+              <Wrapper
+                width={width < 700 ? `100%` : `60%`}
+                radius={`20px`}
+                overflow={`hidden`}
+              >
+                <Mainslider banner={banner} />
+              </Wrapper>
+              <Wrapper width={`40%`} padding={`0 0 0 40px`} al={`flex-start`}>
+                <Text fontSize={`42px`} fontWeight={`900`}>
+                  기관형과학기술인
+                </Text>
+                <Text fontSize={`42px`} fontWeight={`900`}>
+                  협동조합교류회 소개
+                </Text>
+                <Text fontSize={`16px`} margin={`20px 0 0`}>
+                  기관형 과학기술인 협동조합 성장지원 사업을 지원해 오고
+                  있습니다.
+                </Text>
+              </Wrapper>
+            </Wrapper>
+          </RsWrapper>
+          <Wrapper
+            bgImg={
+              width < 700
+                ? `url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/img_section2_m.png")`
+                : `url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/img_section2.png")`
+            }
+            padding={`80px 0`}
+            position={`relative`}
+          >
+            <RsWrapper>
+              <Text
+                fontSize={`18px`}
+                fontWeight={`600`}
+                color={Theme.basicTheme_C}
+              >
+                Current situation
+              </Text>
+              <Text fontSize={`34px`} fontWeigt={`600`} margin={`12px 0 60px`}>
+                전국의 기과협 가입 현황을 안내해드립니다.
+              </Text>
+
+              <Wrapper width={`547px`}>
+                <Image
+                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/img_map.png`}
+                />
+
+                {point.map((data) => {
+                  return (
+                    <Wrapper>
+                      {city &&
+                        city.map((v) => {
+                          if (data.name === v.combiArea) {
+                            return (
+                              <Popover
+                                key={v.id}
+                                placement="top"
+                                content={
+                                  <Wrapper>
+                                    <Text>
+                                      {v.combiArea} {v.cnt}개
+                                    </Text>
+                                  </Wrapper>
+                                }
+                              >
+                                <Image
+                                  position={`absolute`}
+                                  src={data.src}
+                                  width={`20px`}
+                                  height={`20px`}
+                                  top={data.top}
+                                  right={data.right}
+                                />
+                              </Popover>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })}
+                    </Wrapper>
+                  );
+                })}
+              </Wrapper>
+            </RsWrapper>
+          </Wrapper>
           <Wrapper bgColor={Theme.lightGrey_C} padding={`50px 0`}>
             <RsWrapper>
               <Wrapper dr={`row`} ju={`space-between`} margin={`0 0 100px`}>
-                <Wrapper
-                  width={width < 700 ? `100%` : `49%`}
-                  radius={`20px`}
-                  overflow={`hidden`}
-                >
-                  <Mainslider banner={banner} />
-                </Wrapper>
-
                 <Wrapper
                   width={width < 700 ? `100%` : `49%`}
                   margin={width < 700 ? `20px 0 0` : `0`}
