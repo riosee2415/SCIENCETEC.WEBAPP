@@ -91,6 +91,7 @@ const Expert = () => {
   const detailAddressInput = useInput(``);
   const mobileInput = useInput(``);
   const emailInput = useInput(``);
+  const careerInput = useInput(``);
   const [typeArr, setTypeArr] = useState([]);
   const [isCheck, setIsCheck] = useState(false);
 
@@ -256,6 +257,10 @@ const Expert = () => {
       return message.error("이메일을 입력해주세요.");
     }
 
+    if (!careerInput.value) {
+      return message.error("경력을 입력해주세요.");
+    }
+
     if (typeArr.length === 0) {
       return message.error("관심분야는 필수 선택사항입니다.");
     }
@@ -269,7 +274,7 @@ const Expert = () => {
       dispatch({
         type: SIGNUP_REQUEST,
         data: {
-          type: 1,
+          type: 3,
           userId: idInput.value,
           password: pwCheckInput.value,
           combiName: combiNameInput.value,
@@ -278,6 +283,7 @@ const Expert = () => {
           detailAddress: detailAddressInput.value,
           mobile: mobileInput.value,
           email: emailInput.value,
+          career: careerInput.value,
           terms: isCheck,
           kakaoId: snsData.email,
           isKakao: true,
@@ -292,7 +298,7 @@ const Expert = () => {
       dispatch({
         type: SIGNUP_REQUEST,
         data: {
-          type: 1,
+          type: 3,
           userId: idInput.value,
           password: pwCheckInput.value,
           combiName: combiNameInput.value,
@@ -301,6 +307,7 @@ const Expert = () => {
           detailAddress: detailAddressInput.value,
           mobile: mobileInput.value,
           email: emailInput.value,
+          career: careerInput.value,
           terms: isCheck,
           isKakao: false,
           isPremium: false,
@@ -320,6 +327,7 @@ const Expert = () => {
     detailAddressInput,
     mobileInput,
     emailInput,
+    careerInput,
     typeArr,
     isCheck,
   ]);
@@ -384,16 +392,32 @@ const Expert = () => {
               >
                 회원가입
               </Text>
-              <Wrapper dr={`row`} margin={`26px 0 35px`}>
-                <Btn isActive margin={`0 6px 0 0`}>
-                  개인회원
-                </Btn>
-                <Link href={`/join/business`}>
-                  <a>
-                    <Btn>조합회원</Btn>
-                  </a>
-                </Link>
+
+              <Wrapper margin={`26px 0 35px`}>
+                <Wrapper dr={`row`}>
+                  <Link href={`/join`}>
+                    <a>
+                      <Btn margin={`0 6px 0 0`}>개인회원</Btn>
+                    </a>
+                  </Link>
+                  <Btn isActive margin={`0 6px 0 0`}>
+                    전문가
+                  </Btn>
+                </Wrapper>
+                <Wrapper dr={`row`} margin={`10px 0 0`}>
+                  <Link href={`/join/business`}>
+                    <a>
+                      <Btn margin={`0 6px 0 0`}>조합회원</Btn>
+                    </a>
+                  </Link>
+                  <Link href={`/join/corporation`}>
+                    <a>
+                      <Btn>기업회원</Btn>
+                    </a>
+                  </Link>
+                </Wrapper>
               </Wrapper>
+
               {currentTab === 0 ? (
                 <>
                   <CommonButton
@@ -661,6 +685,25 @@ const Expert = () => {
                       {...emailInput}
                     />
                   </Wrapper>
+
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      경력
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="경력을 입력해주세요."
+                      radius={`5px`}
+                      {...careerInput}
+                    />
+                  </Wrapper>
+
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
                     <Text
                       fontWeight={`bold`}

@@ -32,6 +32,7 @@ import { useEffect } from "react";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
 
 const Circle = styled(Wrapper)`
   width: 44px;
@@ -105,6 +106,8 @@ const Corporation = () => {
   const importantBusiness1Input = useInput(``); // 주요사업1
   const importantBusiness2Input = useInput(``); // 주요사업2
   const importantBusiness3Input = useInput(``); // 주요사업3
+  const companyNameInput = useInput(``); // 회사명
+  const agentNameInput = useInput(``); // 대표자명
 
   // SNS 회원가입 정보
   const [snsData, setSnsData] = useState(null);
@@ -259,6 +262,14 @@ const Corporation = () => {
       return message.error("이사장명을 입력해주세요.");
     }
 
+    if (!companyNameInput.value) {
+      return message.error("회사명을 입력해주세요.");
+    }
+
+    if (!agentNameInput.value) {
+      return message.error("대표자명을 입력해주세요.");
+    }
+
     if (!addressInput.value) {
       return message.error("주소를 검색해주세요.");
     }
@@ -307,7 +318,7 @@ const Corporation = () => {
       dispatch({
         type: SIGNUP_REQUEST,
         data: {
-          type: 2,
+          type: 4,
           userId: idInput.value,
           password: pwCheckInput.value,
           combiName: combiNameInput.value,
@@ -327,6 +338,8 @@ const Corporation = () => {
           importantBusiness3: importantBusiness3Input.value,
           importantBusinessCapital: importantBusinessCapitalInput.value,
           importantBusinessPrice: importantBusinessPriceInput.value,
+          companyName: companyNameInput.value,
+          agentName: agentNameInput.value,
           terms: isCheck,
           kakaoId: idInput.value,
           isKakao: true,
@@ -341,7 +354,7 @@ const Corporation = () => {
       dispatch({
         type: SIGNUP_REQUEST,
         data: {
-          type: 2,
+          type: 4,
           userId: idInput.value,
           password: pwCheckInput.value,
           combiName: combiNameInput.value,
@@ -361,6 +374,8 @@ const Corporation = () => {
           importantBusiness3: importantBusiness3Input.value,
           importantBusinessCapital: importantBusinessCapitalInput.value,
           importantBusinessPrice: importantBusinessPriceInput.value,
+          companyName: companyNameInput.value,
+          agentName: agentNameInput.value,
           terms: isCheck,
           isKakao: false,
           isPremium: false,
@@ -390,6 +405,8 @@ const Corporation = () => {
     importantBusiness3Input,
     importantBusinessCapitalInput,
     importantBusinessPriceInput,
+    companyNameInput,
+    agentNameInput,
     isCheck,
     combiTypeArr,
     combiArr,
@@ -521,11 +538,28 @@ const Corporation = () => {
               >
                 회원가입
               </Text>
-              <Wrapper dr={`row`} margin={`26px 0 35px`}>
-                <Btn margin={`0 6px 0 0`} onClick={() => router.push(`/join`)}>
-                  개인회원
-                </Btn>
-                <Btn isActive>조합회원</Btn>
+
+              <Wrapper margin={`26px 0 35px`}>
+                <Wrapper dr={`row`}>
+                  <Link href={`/join`}>
+                    <a>
+                      <Btn margin={`0 6px 0 0`}>개인회원</Btn>
+                    </a>
+                  </Link>
+                  <Link href={`/join/expert`}>
+                    <a>
+                      <Btn margin={`0 6px 0 0`}>전문가</Btn>
+                    </a>
+                  </Link>
+                </Wrapper>
+                <Wrapper dr={`row`} margin={`10px 0 0`}>
+                  <Link href={`/join/business`}>
+                    <a>
+                      <Btn margin={`0 6px 0 0`}>조합회원</Btn>
+                    </a>
+                  </Link>
+                  <Btn isActive>기업회원</Btn>
+                </Wrapper>
               </Wrapper>
 
               {currentTab === 0 ? (
@@ -838,6 +872,43 @@ const Corporation = () => {
                       {...repreNameInput}
                     />
                   </Wrapper>
+
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      회사명
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="회사명을 입력해주세요."
+                      radius={`5px`}
+                      {...companyNameInput}
+                    />
+                  </Wrapper>
+
+                  <Wrapper al={`flex-start`} margin={`0 0 20px`}>
+                    <Text
+                      fontWeight={`bold`}
+                      margin={`0 0 14px`}
+                      color={Theme.grey2_C}
+                    >
+                      대표자명
+                    </Text>
+                    <TextInput
+                      type="text"
+                      width={`100%`}
+                      height={`55px`}
+                      placeholder="대표자명을 입력해주세요."
+                      radius={`5px`}
+                      {...agentNameInput}
+                    />
+                  </Wrapper>
+
                   <Wrapper al={`flex-start`} margin={`0 0 20px`}>
                     <Text
                       fontWeight={`bold`}
