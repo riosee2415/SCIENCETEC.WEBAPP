@@ -70,7 +70,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true, limit: 25 }));
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use(
