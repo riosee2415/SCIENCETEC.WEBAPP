@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../hooks/useWidth";
 import { LOGO_GET_REQUEST } from "../reducers/logo";
 import { useSession, signOut } from "next-auth/react";
+import Bounce from "react-reveal/Bounce";
 
 const WebRow = styled(WholeWrapper)`
   position: fixed;
@@ -474,304 +475,281 @@ const AppHeader = () => {
             </Wrapper>
           </RsWrapper>
         </Wrapper>
-        {drawar && (
-          <Drawer
-            placement="right"
-            closable={true}
-            onClose={drawarToggle}
-            visible={drawarToggle}
-            getContainer={false}
+        <Drawer
+          placement="right"
+          closable={false}
+          onClose={drawarToggle}
+          open={drawar}
+        >
+          <Wrapper
+            position={`relative`}
+            color={Theme.black2_C}
+            fontSize={`17px`}
           >
             <Wrapper
-              position={`relative`}
-              color={Theme.black2_C}
-              fontSize={`17px`}
+              position={`absolute`}
+              top={`0`}
+              right={`0px`}
+              width={`40px`}
+              height={`40px`}
+              radius={`8px`}
+              fontSize={`1.2rem`}
+              zIndex={`1`}
             >
-              <Wrapper
-                position={`absolute`}
-                top={`0`}
-                right={`0px`}
-                width={`40px`}
-                height={`40px`}
-                radius={`8px`}
-                fontSize={`1.2rem`}
-                zIndex={`1`}
-              >
-                <CloseOutlined onClick={drawarToggle} />
-              </Wrapper>
+              <CloseOutlined onClick={drawarToggle} />
+            </Wrapper>
 
-              <ColWrapper width={`100%`} al={`flex-start`} padding={`60px 0 0`}>
-                <ColWrapper
-                  margin={`0 0 10px`}
-                  width={`100%`}
-                  al={`flex-start`}
-                >
-                  <Wrapper
-                    ju={`space-between`}
-                    dr={`row`}
-                    color={Theme.grey2_C}
-                    fontSize={`14px`}
-                  >
-                    교류회
-                  </Wrapper>
-                </ColWrapper>
+            <ColWrapper width={`100%`} al={`flex-start`} padding={`60px 0 0`}>
+              <ColWrapper margin={`0 0 10px`} width={`100%`} al={`flex-start`}>
                 <Wrapper
-                  al={`flex-start`}
-                  padding={`0 0 20px`}
-                  margin={`0 0 20px`}
-                  borderBottom={`1px solid ${Theme.lightGrey_C}`}
+                  ju={`space-between`}
+                  dr={`row`}
+                  color={Theme.grey2_C}
+                  fontSize={`14px`}
                 >
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/meeting`}>
-                      <a>교류회란</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/meeting/status`}>
-                      <a>현황</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/meeting/group`}>
-                      <a>조직</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/meeting/greetings`}>
-                      <a>인사말</a>
-                    </Link>
-                  </Wrapper>
-
-                  <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/meeting/location`}>
-                      <a>오시는 길</a>
-                    </Link>
-                  </Wrapper>
-                </Wrapper>
-                <ColWrapper
-                  margin={`0 0 10px`}
-                  width={`100%`}
-                  al={`flex-start`}
-                >
-                  <Wrapper
-                    ju={`space-between`}
-                    dr={`row`}
-                    color={Theme.grey2_C}
-                    fontSize={`14px`}
-                  >
-                    설립안내
-                  </Wrapper>
-                </ColWrapper>
-                <Wrapper
-                  al={`flex-start`}
-                  padding={`0 0 20px`}
-                  margin={`0 0 20px`}
-                  borderBottom={`1px solid ${Theme.lightGrey_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/guide`}>
-                      <a>설립절차</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/guide/document`}>
-                      <a>서류</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/guide/statute`}>
-                      <a>관련법령</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/guide/reference`}>
-                      <a>자료실</a>
-                    </Link>
-                  </Wrapper>
-                </Wrapper>
-                <ColWrapper
-                  margin={`0 0 10px`}
-                  width={`100%`}
-                  al={`flex-start`}
-                >
-                  <Wrapper
-                    ju={`space-between`}
-                    dr={`row`}
-                    color={Theme.grey2_C}
-                    fontSize={`14px`}
-                  >
-                    운영안내
-                  </Wrapper>
-                </ColWrapper>
-                <Wrapper
-                  al={`flex-start`}
-                  padding={`0 0 20px`}
-                  margin={`0 0 20px`}
-                  borderBottom={`1px solid ${Theme.lightGrey_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/operate/perform`}>
-                      <a>사업수행</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    margin={`0 0 10px`}
-                    al={`flex-start`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/operate/knowHow`}>
-                      <a>운영 노하우</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    margin={`0 0 10px`}
-                    al={`flex-start`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/operate/demand`}>
-                      <a>수요조사</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/operate/community`}>
-                      <a>커뮤니티</a>
-                    </Link>
-                  </Wrapper>
-
-                  <Wrapper
-                    margin={`0 0 10px`}
-                    al={`flex-start`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/operate/reference`}>
-                      <a>자료실</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/operate/notice`}>
-                      <a>공지사항</a>
-                    </Link>
-                  </Wrapper>
-                </Wrapper>
-                <ColWrapper
-                  margin={`0 0 10px`}
-                  width={`100%`}
-                  al={`flex-start`}
-                >
-                  <Wrapper
-                    ju={`space-between`}
-                    dr={`row`}
-                    color={Theme.grey2_C}
-                    fontSize={`14px`}
-                  >
-                    주요활동
-                  </Wrapper>
-                </ColWrapper>
-                <Wrapper
-                  al={`flex-start`}
-                  padding={`0 0 20px`}
-                  margin={`0 0 20px`}
-                  borderBottom={`1px solid ${Theme.lightGrey_C}`}
-                >
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/activity/forum`}>
-                      <a>포럼</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/activity/project`}>
-                      <a>공동 프로젝트</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    margin={`0 0 10px`}
-                    onClick={drawarToggle}
-                  >
-                    <Link href={`/activity/business`}>
-                      <a>공동 비즈니스</a>
-                    </Link>
-                  </Wrapper>
-                  <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/activity/matching`}>
-                      <a>기술매칭사업</a>
-                    </Link>
-                  </Wrapper>
-                </Wrapper>
-                <ColWrapper
-                  margin={`0 0 10px`}
-                  width={`100%`}
-                  al={`flex-start`}
-                >
-                  <Wrapper
-                    ju={`space-between`}
-                    dr={`row`}
-                    color={Theme.grey2_C}
-                    fontSize={`14px`}
-                  >
-                    회원조합소개
-                  </Wrapper>
-                </ColWrapper>
-                <Wrapper
-                  al={`flex-start`}
-                  padding={`0 0 20px`}
-                  margin={`0 0 20px`}
-                  borderBottom={`1px solid ${Theme.lightGrey_C}`}
-                >
-                  <Wrapper al={`flex-start`} onClick={drawarToggle}>
-                    <Link href={`/association`}>
-                      <a>회원조합소개</a>
-                    </Link>
-                  </Wrapper>
+                  교류회
                 </Wrapper>
               </ColWrapper>
-            </Wrapper>
-          </Drawer>
-        )}
+              <Wrapper
+                al={`flex-start`}
+                padding={`0 0 20px`}
+                margin={`0 0 20px`}
+                borderBottom={`1px solid ${Theme.lightGrey_C}`}
+              >
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/meeting`}>
+                    <a>교류회란</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/meeting/status`}>
+                    <a>현황</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/meeting/group`}>
+                    <a>조직</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/meeting/greetings`}>
+                    <a>인사말</a>
+                  </Link>
+                </Wrapper>
+
+                <Wrapper al={`flex-start`} onClick={drawarToggle}>
+                  <Link href={`/meeting/location`}>
+                    <a>오시는 길</a>
+                  </Link>
+                </Wrapper>
+              </Wrapper>
+              <ColWrapper margin={`0 0 10px`} width={`100%`} al={`flex-start`}>
+                <Wrapper
+                  ju={`space-between`}
+                  dr={`row`}
+                  color={Theme.grey2_C}
+                  fontSize={`14px`}
+                >
+                  설립안내
+                </Wrapper>
+              </ColWrapper>
+              <Wrapper
+                al={`flex-start`}
+                padding={`0 0 20px`}
+                margin={`0 0 20px`}
+                borderBottom={`1px solid ${Theme.lightGrey_C}`}
+              >
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/guide`}>
+                    <a>설립절차</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/guide/document`}>
+                    <a>서류</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/guide/statute`}>
+                    <a>관련법령</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper al={`flex-start`} onClick={drawarToggle}>
+                  <Link href={`/guide/reference`}>
+                    <a>자료실</a>
+                  </Link>
+                </Wrapper>
+              </Wrapper>
+              <ColWrapper margin={`0 0 10px`} width={`100%`} al={`flex-start`}>
+                <Wrapper
+                  ju={`space-between`}
+                  dr={`row`}
+                  color={Theme.grey2_C}
+                  fontSize={`14px`}
+                >
+                  운영안내
+                </Wrapper>
+              </ColWrapper>
+              <Wrapper
+                al={`flex-start`}
+                padding={`0 0 20px`}
+                margin={`0 0 20px`}
+                borderBottom={`1px solid ${Theme.lightGrey_C}`}
+              >
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/operate/perform`}>
+                    <a>사업수행</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  margin={`0 0 10px`}
+                  al={`flex-start`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/operate/knowHow`}>
+                    <a>운영 노하우</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  margin={`0 0 10px`}
+                  al={`flex-start`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/operate/demand`}>
+                    <a>수요조사</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/operate/community`}>
+                    <a>커뮤니티</a>
+                  </Link>
+                </Wrapper>
+
+                <Wrapper
+                  margin={`0 0 10px`}
+                  al={`flex-start`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/operate/reference`}>
+                    <a>자료실</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper al={`flex-start`} onClick={drawarToggle}>
+                  <Link href={`/operate/notice`}>
+                    <a>공지사항</a>
+                  </Link>
+                </Wrapper>
+              </Wrapper>
+              <ColWrapper margin={`0 0 10px`} width={`100%`} al={`flex-start`}>
+                <Wrapper
+                  ju={`space-between`}
+                  dr={`row`}
+                  color={Theme.grey2_C}
+                  fontSize={`14px`}
+                >
+                  주요활동
+                </Wrapper>
+              </ColWrapper>
+              <Wrapper
+                al={`flex-start`}
+                padding={`0 0 20px`}
+                margin={`0 0 20px`}
+                borderBottom={`1px solid ${Theme.lightGrey_C}`}
+              >
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/activity/forum`}>
+                    <a>포럼</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/activity/project`}>
+                    <a>공동 프로젝트</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  margin={`0 0 10px`}
+                  onClick={drawarToggle}
+                >
+                  <Link href={`/activity/business`}>
+                    <a>공동 비즈니스</a>
+                  </Link>
+                </Wrapper>
+                <Wrapper al={`flex-start`} onClick={drawarToggle}>
+                  <Link href={`/activity/matching`}>
+                    <a>기술매칭사업</a>
+                  </Link>
+                </Wrapper>
+              </Wrapper>
+              <ColWrapper margin={`0 0 10px`} width={`100%`} al={`flex-start`}>
+                <Wrapper
+                  ju={`space-between`}
+                  dr={`row`}
+                  color={Theme.grey2_C}
+                  fontSize={`14px`}
+                >
+                  회원조합소개
+                </Wrapper>
+              </ColWrapper>
+              <Wrapper
+                al={`flex-start`}
+                padding={`0 0 20px`}
+                margin={`0 0 20px`}
+                borderBottom={`1px solid ${Theme.lightGrey_C}`}
+              >
+                <Wrapper al={`flex-start`} onClick={drawarToggle}>
+                  <Link href={`/association`}>
+                    <a>회원조합소개</a>
+                  </Link>
+                </Wrapper>
+              </Wrapper>
+            </ColWrapper>
+          </Wrapper>
+        </Drawer>
       </MobileRow>
     </>
   );
