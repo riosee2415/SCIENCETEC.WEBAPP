@@ -16,11 +16,7 @@ import {
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
-import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
-import Theme from "../../components/Theme";
 import { message, Select } from "antd";
 import OpBoard from "../../components/OpBoard";
 import OpWrite from "../../components/OpWrite";
@@ -34,6 +30,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import useInput from "../../hooks/useInput";
 import { useRouter } from "next/router";
+import SubBanner from "../../components/SubBanner";
 
 const Community = () => {
   ////// GLOBAL STATE //////
@@ -162,7 +159,7 @@ const Community = () => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper
             dr={`row`}

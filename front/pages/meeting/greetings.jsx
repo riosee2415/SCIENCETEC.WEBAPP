@@ -24,8 +24,7 @@ import Head from "next/head";
 
 import { useState } from "react";
 import { useCallback } from "react";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
+import SubBanner from "../../components/subBanner";
 
 const Greetings = ({}) => {
   const width = useWidth();
@@ -47,7 +46,7 @@ const Greetings = ({}) => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper

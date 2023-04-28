@@ -528,7 +528,7 @@ const Corporation = () => {
 
       <ClientLayout>
         <WholeWrapper>
-          <RsWrapper padding={`100px 0`}>
+          <RsWrapper padding={width < 900 ? `150px 0 80px` : `200px 0 100px`}>
             <Wrapper width={width < 800 ? `100%` : `500px`}>
               <Text
                 fontSize={width < 800 ? `25px` : `32px`}

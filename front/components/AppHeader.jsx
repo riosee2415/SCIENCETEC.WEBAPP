@@ -169,7 +169,15 @@ const AppHeader = () => {
 
   return (
     <>
-      <WebRow bgColor={headerScroll === true && `rgba(0, 0, 0, 0.5)`}>
+      <WebRow
+        bgColor={
+          (router.pathname === `/login` ||
+            router.pathname.includes(`/join`) ||
+            router.pathname.includes(`/find`) ||
+            headerScroll === true) &&
+          `rgba(0, 0, 0, 0.5)`
+        }
+      >
         <Wrapper dr={`row`} ju={`space-between`}>
           <ATag
             width={width < 1250 ? (1165 ? `auto` : `230px`) : `320px`}
@@ -346,31 +354,45 @@ const AppHeader = () => {
               width={`20px`}
               margin={width < 1165 ? `0 20px 0 0` : `0 54px 0 0`}
             />
-            <Link href={`/login`}>
-              <a>
-                <Text
-                  fontSize={`16px`}
-                  isHover
-                  margin={width < 1165 ? `0 15px 0 0` : `0 28px 0 0`}
-                >
-                  로그인
-                </Text>
-              </a>
-            </Link>
-            <Link href={`/join`}>
-              <a>
-                <Text fontSize={`16px`} isHover>
-                  회원가입
-                </Text>
-              </a>
-            </Link>
+            {me ? (
+              <Text onClick={logoutHandler} fontSize={`16px`} isHover>
+                로그아웃
+              </Text>
+            ) : (
+              <>
+                <Link href={`/login`}>
+                  <a>
+                    <Text
+                      fontSize={`16px`}
+                      isHover
+                      margin={width < 1165 ? `0 15px 0 0` : `0 28px 0 0`}
+                    >
+                      로그인
+                    </Text>
+                  </a>
+                </Link>
+                <Link href={`/join`}>
+                  <a>
+                    <Text fontSize={`16px`} isHover>
+                      회원가입
+                    </Text>
+                  </a>
+                </Link>
+              </>
+            )}
           </Wrapper>
         </Wrapper>
       </WebRow>
       {/* mobile */}
       <MobileRow
         justify={`center`}
-        bgColor={headerScroll === true && `rgba(0, 0, 0, 0.5)`}
+        bgColor={
+          (router.pathname === `/login` ||
+            router.pathname.includes(`/join`) ||
+            router.pathname.includes(`/find`) ||
+            headerScroll === true) &&
+          `rgba(0, 0, 0, 0.5)`
+        }
       >
         <Wrapper
           padding={`5px 0`}
@@ -408,18 +430,26 @@ const AppHeader = () => {
               color={Theme.white_C}
               fontSize={`15px`}
             >
-              <Link href={`/login`}>
-                <a>
-                  <Text isHover margin={`0 22px 0 0`}>
-                    로그인
-                  </Text>
-                </a>
-              </Link>
-              <Link href={`/join`}>
-                <a>
-                  <Text isHover>회원가입</Text>
-                </a>
-              </Link>
+              {me ? (
+                <Text onClick={logoutHandler} isHover>
+                  로그아웃
+                </Text>
+              ) : (
+                <>
+                  <Link href={`/login`}>
+                    <a>
+                      <Text isHover margin={`0 22px 0 0`}>
+                        로그인
+                      </Text>
+                    </a>
+                  </Link>
+                  <Link href={`/join`}>
+                    <a>
+                      <Text isHover>회원가입</Text>
+                    </a>
+                  </Link>
+                </>
+              )}
             </Wrapper>
           </RsWrapper>
         </Wrapper>

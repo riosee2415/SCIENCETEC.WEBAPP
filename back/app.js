@@ -30,6 +30,7 @@ const surveyRouter = require("./routers/surveyRouter");
 const mainRouter = require("./routers/mainRouter");
 const festivalRouter = require("./routers/festivalRouter");
 const mailSendRouter = require("./routers/mailSendRouter");
+const tableSurveyRouter = require("./routers/tableSurveyRouter");
 
 // Config Settings
 db.sequelize
@@ -115,6 +116,7 @@ app.use("/api/survey", surveyRouter);
 app.use("/api/main", mainRouter);
 app.use("/api/festival", festivalRouter);
 app.use("/api/send", mailSendRouter);
+app.use("/api/tableSurvey", tableSurveyRouter);
 
 // second minute hour day-of-month month day-of-week
 const task = cron.schedule(

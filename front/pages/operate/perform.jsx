@@ -5,21 +5,16 @@ import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import { END } from "redux-saga";
-import { useSelector } from "react-redux";
 import {
   CommonButton,
-  CustomPage,
   Image,
   RsWrapper,
   Text,
   WholeWrapper,
   Wrapper,
 } from "../../components/commonComponents";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
-import styled from "styled-components";
 import useWidth from "../../hooks/useWidth";
-import Theme from "../../components/Theme";
+import SubBanner from "../../components/SubBanner";
 
 const Perform = () => {
   ////// GLOBAL STATE //////
@@ -39,13 +34,13 @@ const Perform = () => {
 
       <ClientLayout>
         <WholeWrapper>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper
             dr={`row`}
             al={`flex-start`}
             position={`relative`}
-            margin={width < 900 ? `50px 0 0` : `100px 0 160px`}
+            margin={width < 900 ? `50px 0 100px` : `100px 0 160px`}
           >
             <Wrapper al={`flex-start`}>
               <Text

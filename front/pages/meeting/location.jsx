@@ -14,8 +14,7 @@ import {
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
 import Head from "next/head";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
+import SubBanner from "../../components/subBanner";
 
 const Location = ({}) => {
   const width = useWidth();
@@ -94,7 +93,7 @@ const Location = ({}) => {
 
       <ClientLayout>
         <WholeWrapper>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper

@@ -15,7 +15,6 @@ import {
   WholeWrapper,
   Wrapper,
   RsWrapper,
-  SpanText,
   Text,
   CommonButton,
   ATag,
@@ -28,38 +27,57 @@ import Mainslider from "../components/slide/MainSlider";
 import { MAIN_REQUEST } from "../reducers/main";
 import { Empty, Popover } from "antd";
 import { MAIN_BOARD_REQUEST } from "../reducers/notice";
-import {
-  LeftOutlined,
-  LoadingOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const BoardTypeButton = styled(CommonButton)`
+const BoardTypeButton = styled(Wrapper)`
+  width: auto;
+  height: 45px;
+  padding: 0 25px;
+  border-radius: 45px;
   background-color: ${(props) => props.isCheck && props.theme.basicTheme_C};
   color: ${(props) => props.isCheck && props.theme.white_C};
   border: ${(props) => props.isCheck && `1px solid ${props.theme.white_C}`};
-`;
-
-const BoardWrapper = styled(Wrapper)`
-  flex-direction: row;
-  height: 60px;
-  border-bottom: 1px dashed ${(props) => props.theme.lightGrey2_C};
 
   &:hover {
-    background-color: ${(props) => props.theme.subTheme4_C};
+    cursor: pointer;
+    background: ${Theme.basicTheme_C};
+    color: ${Theme.white_C};
   }
 `;
 
-const MainBtn = styled(CommonButton)`
-  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
-  margin-right: 8px;
-  color: ${Theme.basicTheme_C};
-  padding: 0px;
+const BoardWrapper = styled(Wrapper)`
+  width: calc(100% / 4 - 23px);
+  margin: 0 30px 20px 0;
+  padding: 40px 30px;
+  border: 1px solid ${Theme.lightGrey2_C};
+  min-height: 250px;
+  background: ${Theme.white_C};
+  justify-content: space-between;
+
+  &:nth-child(4n) {
+    margin: 0 0 20px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: ${(props) => props.theme.subTheme4_C};
+  }
+
+  @media (max-width: 900px) {
+    width: 49%;
+    margin: 0 0 15px;
+    min-height: auto;
+    padding: 15px;
+
+    &:nth-child(4n) {
+      margin: 0 0 15px;
+    }
+  }
 `;
 
 const Home = ({}) => {
@@ -223,29 +241,6 @@ const Home = ({}) => {
 
   ////// DATAVIEW //////
 
-  const boardImage = [
-    {
-      type: "전체",
-      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board1.png",
-    },
-    {
-      type: "공지사항",
-      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board2.png",
-    },
-    {
-      type: "커뮤니티",
-      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board3.png",
-    },
-    {
-      type: "자료실",
-      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board4.png",
-    },
-    {
-      type: "FAQ",
-      url: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_board5.png",
-    },
-  ];
-
   const point = [
     {
       name: "서울특별시",
@@ -361,16 +356,27 @@ const Home = ({}) => {
         <WholeWrapper>
           <Wrapper
             height={`100vh`}
+            padding={`0 10px`}
             color={Theme.white_C}
             bgImg={`url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/banner.png")`}
           >
-            <Text fontSize={`54px`} lineHeight={`70px`} fontWeight={`900`}>
+            <Text
+              textAlign={`center`}
+              fontSize={width < 1100 ? (width < 900 ? `30px` : `40px`) : `54px`}
+              lineHeight={width < 900 ? `1.2` : `70px`}
+              fontWeight={`900`}
+            >
               Institutional Cooperative Association
             </Text>
-            <Text fontSize={`54px`} lineHeight={`70px`} fontWeight={`900`}>
+            <Text
+              textAlign={`center`}
+              fontSize={width < 1100 ? (width < 900 ? `30px` : `40px`) : `54px`}
+              lineHeight={width < 900 ? `1.2` : `70px`}
+              fontWeight={`900`}
+            >
               of Scientists and Technologists
             </Text>
-            <Text fontSize={`20px`} margin={`20px 0 0`}>
+            <Text textAlign={`center`} fontSize={`20px`} margin={`20px 0 0`}>
               과학 기술원을 중심으로 과학 기술을 주된 사업으로 활동하는
               협동조합입니다.
             </Text>
@@ -379,17 +385,31 @@ const Home = ({}) => {
           <RsWrapper padding={width < 700 ? `80px 0` : `120px 0`}>
             <Wrapper dr={`row`}>
               <Wrapper
-                width={width < 700 ? `100%` : `60%`}
+                width={width < 900 ? `100%` : `60%`}
                 radius={`20px`}
                 overflow={`hidden`}
               >
                 <Mainslider banner={banner} />
               </Wrapper>
-              <Wrapper width={`40%`} padding={`0 0 0 40px`} al={`flex-start`}>
-                <Text fontSize={`42px`} fontWeight={`900`}>
+              <Wrapper
+                width={width < 900 ? `100%` : `40%`}
+                padding={width < 900 ? `20px 0 0` : `0 0 0 40px`}
+                al={`flex-start`}
+              >
+                <Text
+                  fontSize={
+                    width < 1100 ? (width < 900 ? `25px` : `35px`) : `42px`
+                  }
+                  fontWeight={`900`}
+                >
                   기관형과학기술인
                 </Text>
-                <Text fontSize={`42px`} fontWeight={`900`}>
+                <Text
+                  fontSize={
+                    width < 1100 ? (width < 900 ? `25px` : `35px`) : `42px`
+                  }
+                  fontWeight={`900`}
+                >
                   협동조합교류회 소개
                 </Text>
                 <Text fontSize={`16px`} margin={`20px 0 0`}>
@@ -416,11 +436,15 @@ const Home = ({}) => {
               >
                 Current situation
               </Text>
-              <Text fontSize={`34px`} fontWeigt={`600`} margin={`12px 0 60px`}>
+              <Text
+                fontSize={width < 900 ? `20px` : `34px`}
+                fontWeight={`600`}
+                margin={`12px 0 60px`}
+              >
                 전국의 기과협 가입 현황을 안내해드립니다.
               </Text>
 
-              <Wrapper width={`547px`}>
+              <Wrapper width={width < 900 ? `100%` : `60%`}>
                 <Image
                   src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/img_map.png`}
                 />
@@ -463,25 +487,51 @@ const Home = ({}) => {
               </Wrapper>
             </RsWrapper>
           </Wrapper>
-          <Wrapper bgColor={Theme.lightGrey_C} padding={`50px 0`}>
+          <Wrapper padding={width < 700 ? `80px 0` : `120px 0`}>
             <RsWrapper>
-              <Wrapper dr={`row`} ju={`space-between`} margin={`0 0 100px`}>
-                <Wrapper
-                  width={width < 700 ? `100%` : `49%`}
-                  margin={width < 700 ? `20px 0 0` : `0`}
-                  height={width < 700 ? `520px` : `440px`}
-                  bgColor={Theme.white_C}
-                  radius={`20px`}
-                  position={`relative`}
+              <Text
+                fontSize={`18px`}
+                fontWeight={`600`}
+                color={Theme.basicTheme_C}
+              >
+                Current situation
+              </Text>
+              {width < 900 ? (
+                <>
+                  <Text
+                    fontSize={width < 900 ? `20px` : `34px`}
+                    fontWeight={`600`}
+                    margin={`12px 0 0`}
+                  >
+                    사업분류와 년도별 기과협
+                  </Text>
+                  <Text
+                    fontSize={width < 900 ? `20px` : `34px`}
+                    fontWeight={`600`}
+                    margin={`0 0 60px`}
+                  >
+                    가입 현황을 확인해보세요.
+                  </Text>
+                </>
+              ) : (
+                <Text
+                  fontSize={width < 900 ? `20px` : `34px`}
+                  fontWeight={`600`}
+                  margin={`12px 0 60px`}
                 >
-                  <Wrapper
+                  사업분류와 년도별 기과협 가입 현황을 확인해보세요.
+                </Text>
+              )}
+
+              <Wrapper dr={`row`} ju={`space-between`}>
+                {/* <Wrapper
                     position={`absolute`}
                     width={`auto`}
                     top={`0`}
                     left={`0`}
                     padding={`10px`}
                   >
-                    <Text fontSize={`24px`}>
+                    <Text fontSize={`20px`}>
                       <SpanText color={Theme.basicTheme_C}>기과협</SpanText>
                       <SpanText color={Theme.subTheme_C}>&nbsp;현황</SpanText>
                       <SpanText margin={`0 0 0 10px`}>① 120 개 조합</SpanText>
@@ -489,239 +539,185 @@ const Home = ({}) => {
                         (2022년 12월 31일 기준)
                       </SpanText>
                     </Text>
-                  </Wrapper>
+                  </Wrapper> */}
 
-                  {type === 0 && (
-                    <Wrapper overflow="hidden" overflowX={`auto`}>
-                      {chartConfig2 ? (
-                        <Chart
-                          options={{
-                            ...chartConfig2.options,
-                            plotOptions: {
-                              width: "20px",
-                              bar: {
-                                borderRadius: 4,
-                                horizontal: width < 700 ? false : true,
-                              },
-                            },
-                          }}
-                          series={chartConfig2.series}
-                          type="line"
-                          width={width < 700 ? "350px" : "650px"}
-                          height={width < 700 ? "450px" : "390px"}
-                        />
-                      ) : (
-                        // <Text>test</Text>
-                        <LoadingOutlined spin />
-                      )}
-                    </Wrapper>
+                <Wrapper
+                  shadow={`3px 3px 20px rgba(0, 0, 0, 0.1)`}
+                  padding={`20px`}
+                  bgColor={Theme.white_C}
+                  radius={`20px`}
+                  width={width < 900 ? `100%` : `49%`}
+                >
+                  {chartConfig2 ? (
+                    <Chart
+                      options={{
+                        ...chartConfig2.options,
+                        plotOptions: {
+                          width: "20px",
+                          bar: {
+                            borderRadius: 4,
+                            horizontal: width < 700 ? false : true,
+                          },
+                        },
+                      }}
+                      series={chartConfig2.series}
+                      type="line"
+                      width={
+                        width < 1280
+                          ? width < 900
+                            ? `300px`
+                            : `350px`
+                          : `600px`
+                      }
+                      height={width < 700 ? "400px" : "390px"}
+                    />
+                  ) : (
+                    // <Text>test</Text>
+                    <LoadingOutlined spin />
                   )}
-
-                  {type === 1 && (
-                    <Wrapper overflow="hidden" overflowX={`auto`}>
-                      {chartConfig ? (
-                        <Chart
-                          options={{
-                            ...chartConfig.options,
-                            plotOptions: {
-                              width: "20px",
-                              bar: {
-                                borderRadius: 4,
-                                horizontal: width < 700 ? false : true,
-                              },
-                            },
-                          }}
-                          series={chartConfig.series}
-                          type="bar"
-                          width={width < 700 ? "350px" : "650px"}
-                          height={width < 700 ? "450px" : "390px"}
-                        />
-                      ) : (
-                        <LoadingOutlined spin />
-                      )}
-                    </Wrapper>
-                  )}
-
-                  {type === 2 && (
-                    <Wrapper>
-                      <Image
-                        src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/img_map.png`}
-                      />
-
-                      {point.map((data) => {
-                        return (
-                          <Wrapper>
-                            {city &&
-                              city.map((v) => {
-                                if (data.name === v.combiArea) {
-                                  return (
-                                    <Popover
-                                      key={v.id}
-                                      placement="top"
-                                      content={
-                                        <Wrapper>
-                                          <Text>
-                                            {v.combiArea} {v.cnt}개
-                                          </Text>
-                                        </Wrapper>
-                                      }
-                                    >
-                                      <Image
-                                        position={`absolute`}
-                                        src={data.src}
-                                        width={`20px`}
-                                        height={`20px`}
-                                        top={data.top}
-                                        right={data.right}
-                                      />
-                                    </Popover>
-                                  );
-                                } else {
-                                  return null;
-                                }
-                              })}
-                          </Wrapper>
-                        );
-                      })}
-                    </Wrapper>
-                  )}
-
-                  <Wrapper
-                    position={`absolute`}
-                    width={`auto`}
-                    bottom={`0`}
-                    right={`0`}
-                    padding={`10px`}
-                    dr={`row`}
-                  >
-                    <MainBtn
-                      kindOf={`white`}
-                      radius={`100%`}
-                      width={`30px`}
-                      height={`30px`}
-                      onClick={() => setType(type - 1 >= 0 ? type - 1 : type)}
-                    >
-                      <LeftOutlined />
-                    </MainBtn>
-                    <MainBtn
-                      kindOf={`white`}
-                      radius={`100%`}
-                      width={`30px`}
-                      height={`30px`}
-                      onClick={() => setType(type + 1 <= 2 ? type + 1 : type)}
-                    >
-                      <RightOutlined />
-                    </MainBtn>
-                  </Wrapper>
                 </Wrapper>
-              </Wrapper>
 
-              <Wrapper dr={`row`} ju={`flex-start`} margin={`0 0 25px`}>
-                <Text fontSize={`24px`} isNeo={true} color={Theme.subTheme_C}>
-                  <SpanText color={Theme.basicTheme_C}>공지</SpanText>
-                  사항
-                </Text>
-
-                <Text fontSize={`16px`} margin={`0 0 0 20px`}>
-                  기관형 과학기술인 협동조합 교류화의 소식
-                </Text>
+                <Wrapper
+                  shadow={`3px 3px 20px rgba(0, 0, 0, 0.1)`}
+                  padding={`20px`}
+                  bgColor={Theme.white_C}
+                  radius={`20px`}
+                  width={width < 900 ? `100%` : `49%`}
+                  margin={width < 900 && `20px 0 0`}
+                >
+                  {chartConfig ? (
+                    <Chart
+                      options={{
+                        ...chartConfig.options,
+                        plotOptions: {
+                          width: "20px",
+                          bar: {
+                            borderRadius: 4,
+                            horizontal: width < 700 ? false : true,
+                          },
+                        },
+                      }}
+                      series={chartConfig.series}
+                      type="bar"
+                      width={
+                        width < 1280
+                          ? width < 900
+                            ? `300px`
+                            : `350px`
+                          : `600px`
+                      }
+                      height={width < 700 ? "400px" : "390px"}
+                    />
+                  ) : (
+                    <LoadingOutlined spin />
+                  )}
+                </Wrapper>
               </Wrapper>
             </RsWrapper>
           </Wrapper>
 
-          <RsWrapper>
-            <Wrapper
-              padding={`40px`}
-              border={`6px solid ${Theme.subTheme2_C}`}
-              radius={`10px`}
-              dr={`row`}
-              margin={`0 0 100px`}
-              al={`flex-start`}
-            >
-              <Wrapper
-                width={width < 1280 ? `100%` : `calc(100% - 450px)`}
-                padding={width < 1280 ? `0 0 30px` : `0 50px 0 0`}
+          <Wrapper
+            bgColor={Theme.lightGrey_C}
+            padding={width < 700 ? `80px 0` : `100px 0`}
+          >
+            <RsWrapper>
+              <Text
+                fontSize={`18px`}
+                fontWeight={`600`}
+                color={Theme.basicTheme_C}
               >
-                <Wrapper
-                  dr={`row`}
-                  ju={width < 700 ? `space-around` : `flex-start`}
-                  margin={`0 0 30px`}
+                News
+              </Text>
+              <Text
+                fontSize={width < 900 ? `20px` : `34px`}
+                fontWeight={`600`}
+                margin={`12px 0 34px`}
+              >
+                교류회의 최근 소식을 만나보세요.
+              </Text>
+              <Wrapper dr={`row`} margin={`0 0 60px`}>
+                <BoardTypeButton
+                  onClick={() => boardTypeToggle("전체")}
+                  isCheck={boardType === "전체"}
                 >
-                  <BoardTypeButton
-                    kindOf={`white`}
-                    width={`auto`}
-                    height={width < 700 ? `30px` : `50px`}
-                    padding={width < 700 ? `0 10px` : `0 30px`}
-                    radius={`50px`}
-                    margin={width < 700 ? `0 0 5px` : `0`}
-                    onClick={() => boardTypeToggle("전체")}
-                    isCheck={boardType === "전체"}
-                  >
-                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
-                      전체
-                    </Text>
-                  </BoardTypeButton>
+                  <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                    전체
+                  </Text>
+                </BoardTypeButton>
+                {boardType === "공지사항" || boardType === "전체" ? null : (
+                  <Wrapper
+                    width={`5px`}
+                    height={`5px`}
+                    radius={`100%`}
+                    bgColor={Theme.basicTheme_C}
+                  ></Wrapper>
+                )}
+                <BoardTypeButton
+                  onClick={() => boardTypeToggle("공지사항")}
+                  isCheck={boardType === "공지사항"}
+                >
+                  <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                    공지사항
+                  </Text>
+                </BoardTypeButton>
+                {boardType === "공지사항" || boardType === "커뮤니티" ? null : (
+                  <Wrapper
+                    width={`5px`}
+                    height={`5px`}
+                    radius={`100%`}
+                    bgColor={Theme.basicTheme_C}
+                  ></Wrapper>
+                )}
 
-                  <BoardTypeButton
-                    kindOf={`white`}
-                    width={`auto`}
-                    height={width < 700 ? `30px` : `50px`}
-                    padding={width < 700 ? `0 10px` : `0 30px`}
-                    radius={`50px`}
-                    margin={width < 700 ? `0 0 5px` : `0`}
-                    onClick={() => boardTypeToggle("공지사항")}
-                    isCheck={boardType === "공지사항"}
-                  >
-                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
-                      공지사항
-                    </Text>
-                  </BoardTypeButton>
-                  <BoardTypeButton
-                    kindOf={`white`}
-                    width={`auto`}
-                    height={width < 700 ? `30px` : `50px`}
-                    padding={width < 700 ? `0 10px` : `0 30px`}
-                    radius={`50px`}
-                    margin={width < 700 ? `0 0 5px` : `0`}
-                    onClick={() => boardTypeToggle("커뮤니티")}
-                    isCheck={boardType === "커뮤니티"}
-                  >
-                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
-                      커뮤니티
-                    </Text>
-                  </BoardTypeButton>
-                  <BoardTypeButton
-                    kindOf={`white`}
-                    width={`auto`}
-                    height={width < 700 ? `30px` : `50px`}
-                    padding={width < 700 ? `0 10px` : `0 30px`}
-                    radius={`50px`}
-                    margin={width < 700 ? `0 0 5px` : `0`}
-                    onClick={() => boardTypeToggle("자료실")}
-                    isCheck={boardType === "자료실"}
-                  >
-                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
-                      자료실
-                    </Text>
-                  </BoardTypeButton>
-                  <BoardTypeButton
-                    kindOf={`white`}
-                    width={`auto`}
-                    height={width < 700 ? `30px` : `50px`}
-                    padding={width < 700 ? `0 10px` : `0 30px`}
-                    radius={`50px`}
-                    margin={width < 700 ? `0 0 5px` : `0`}
-                    onClick={() => boardTypeToggle("FAQ")}
-                    isCheck={boardType === "FAQ"}
-                  >
-                    <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
-                      FAQ
-                    </Text>
-                  </BoardTypeButton>
-                </Wrapper>
+                <BoardTypeButton
+                  onClick={() => boardTypeToggle("커뮤니티")}
+                  isCheck={boardType === "커뮤니티"}
+                >
+                  <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                    커뮤니티
+                  </Text>
+                </BoardTypeButton>
+                {boardType === "자료실" || boardType === "커뮤니티" ? null : (
+                  <Wrapper
+                    width={`5px`}
+                    height={`5px`}
+                    radius={`100%`}
+                    bgColor={Theme.basicTheme_C}
+                  ></Wrapper>
+                )}
+                <BoardTypeButton
+                  onClick={() => boardTypeToggle("자료실")}
+                  isCheck={boardType === "자료실"}
+                >
+                  <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                    자료실
+                  </Text>
+                </BoardTypeButton>
+                {boardType === "자료실" || boardType === "FAQ" ? null : (
+                  <Wrapper
+                    width={`5px`}
+                    height={`5px`}
+                    radius={`100%`}
+                    bgColor={Theme.basicTheme_C}
+                  ></Wrapper>
+                )}
+                <BoardTypeButton
+                  onClick={() => boardTypeToggle("FAQ")}
+                  isCheck={boardType === "FAQ"}
+                >
+                  <Text fontSize={width < 700 ? `14px` : `18px`} isNeo={true}>
+                    FAQ
+                  </Text>
+                </BoardTypeButton>
+              </Wrapper>
+              <Wrapper
+                dr={`row`}
+                ju={width < 900 ? `space-between` : `flex-start`}
+                al={`flex-start`}
+              >
                 {mainBoard &&
                   (mainBoard.length === 0 ? (
-                    <Wrapper margin={`100px 0`}>
+                    <Wrapper margin={`50px 0`}>
                       <Empty description="게시글이 없습니다." />
                     </Wrapper>
                   ) : (
@@ -742,27 +738,27 @@ const Home = ({}) => {
                             )
                           }
                         >
-                          <Wrapper
-                            al={`flex-start`}
-                            width={width < 700 ? `25%` : `10%`}
-                            fontSize={width < 700 ? `13px` : `16px`}
-                            fontWeight={`700`}
-                            color={Theme.subTheme_C}
-                          >
-                            {data.type}
+                          <Wrapper>
+                            <Wrapper
+                              al={`flex-start`}
+                              fontSize={width < 700 ? `13px` : `16px`}
+                              fontWeight={`700`}
+                              color={Theme.subTheme_C}
+                            >
+                              {data.type}
+                            </Wrapper>
+                            <Wrapper
+                              al={`flex-start`}
+                              fontWeight={`600`}
+                              fontSize={width < 700 ? `13px` : `22px`}
+                            >
+                              <Text>{data.title}</Text>
+                            </Wrapper>
                           </Wrapper>
                           <Wrapper
-                            al={`flex-start`}
-                            width={`75%`}
-                            fontSize={width < 700 ? `13px` : `16px`}
-                          >
-                            <Text>{data.title}</Text>
-                          </Wrapper>
-                          <Wrapper
-                            display={width < 700 ? `none` : `flex`}
                             al={`flex-end`}
-                            width={`15%`}
-                            fontSize={`16px`}
+                            margin={width < 700 && `10px 0 0`}
+                            fontSize={width < 700 ? `13px` : `16px`}
                             color={Theme.grey_C}
                           >
                             {data.viewFrontCreatedAt}
@@ -772,27 +768,36 @@ const Home = ({}) => {
                     })
                   ))}
               </Wrapper>
-              <Image
-                src={boardImage.find((data) => data.type === boardType).url}
-                alt="img"
-                height={`380px`}
-                width={width < 1280 ? `100%` : `450px`}
-                display={width < 700 ? `none` : `flex`}
-              />
-            </Wrapper>
-          </RsWrapper>
-          <Wrapper
-            bgColor={Theme.lightGrey_C}
-            padding={`30px 0`}
-            wrap={`nowrap`}
-            overflow={`auto`}
-          >
+            </RsWrapper>
+          </Wrapper>
+          <Wrapper padding={width < 700 ? `80px 0` : `120px 0`}>
             <RsWrapper>
-              <Wrapper dr={`row`} ju={`space-between`} minWidth={`900px`}>
+              <Text
+                fontSize={`18px`}
+                fontWeight={`600`}
+                color={Theme.basicTheme_C}
+              >
+                With ICAST
+              </Text>
+              <Text
+                fontSize={width < 900 ? `20px` : `34px`}
+                fontWeight={`600`}
+                margin={`12px 0 60px`}
+              >
+                함께 한 파트너사를 소개합니다.
+              </Text>
+              <Wrapper
+                dr={`row`}
+                ju={`space-between`}
+                wrap={`nowrap`}
+                overflow={`auto`}
+              >
                 <ATag
                   href={`https://www.msit.go.kr/index.do`}
                   width={`15%`}
                   target={`_blank`}
+                  minWidth={`120px`}
+                  margin={width < 900 ? `0 10px` : `0`}
                 >
                   <Image
                     src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_gover.png"
@@ -803,6 +808,8 @@ const Home = ({}) => {
                   href={`https://www.nrf.re.kr/index`}
                   width={`10%`}
                   target={`_blank`}
+                  minWidth={`120px`}
+                  margin={width < 900 ? `0 10px` : `0`}
                 >
                   <Image
                     src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_nrf.png"
@@ -813,6 +820,8 @@ const Home = ({}) => {
                   href={`https://www.coop.go.kr/home/index.do`}
                   width={`10%`}
                   target={`_blank`}
+                  minWidth={`120px`}
+                  margin={width < 900 ? `0 10px` : `0`}
                 >
                   <Image
                     src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_coop.png"
@@ -823,6 +832,8 @@ const Home = ({}) => {
                   href={`https://www.setcoop.net/`}
                   width={`18%`}
                   target={`_blank`}
+                  minWidth={`120px`}
+                  margin={width < 900 ? `0 10px` : `0`}
                 >
                   <Image
                     src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_setcoop.png"
@@ -833,6 +844,8 @@ const Home = ({}) => {
                   href={`http://www.djse.org/app/main/index`}
                   width={`10%`}
                   target={`_blank`}
+                  minWidth={`120px`}
+                  margin={width < 900 ? `0 10px` : `0`}
                 >
                   <Image
                     src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_social.png"
@@ -843,6 +856,8 @@ const Home = ({}) => {
                   href={`https://posep.org/`}
                   width={`20%`}
                   target={`_blank`}
+                  minWidth={`120px`}
+                  margin={width < 900 ? `0 10px` : `0`}
                 >
                   <Image
                     src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/logo_posep.png"

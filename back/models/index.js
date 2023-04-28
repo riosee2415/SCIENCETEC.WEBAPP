@@ -41,6 +41,7 @@ const usersurveyquestion = require("./usersurveyquestion");
 const festival = require("./festival");
 const festivalticket = require("./festivalticket");
 const festivalhistory = require("./festivalhistory");
+const tablesurvey = require("./tablesurvey");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -95,6 +96,7 @@ db.UserSurveyQuestion = usersurveyquestion;
 db.Festival = festival;
 db.FestivalTicket = festivalticket;
 db.FestivalHistory = festivalhistory;
+db.TableSurvey = tablesurvey;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);
