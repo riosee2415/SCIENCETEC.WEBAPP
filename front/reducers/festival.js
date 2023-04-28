@@ -79,6 +79,8 @@ export const FESTIVAL_HISTORY_REQUEST = "FESTIVAL_HISTORY_REQUEST";
 export const FESTIVAL_HISTORY_SUCCESS = "FESTIVAL_HISTORY_SUCCESS";
 export const FESTIVAL_HISTORY_FAILURE = "FESTIVAL_HISTORY_FAILURE";
 
+export const FESTIVAL_STATE_RESET = "FESTIVAL_STATE_RESET";
+
 const reducer = (state = initailState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
@@ -267,6 +269,28 @@ const reducer = (state = initailState, action) =>
         break;
       }
       //////////////////////////////////////////////
+
+      case FESTIVAL_STATE_RESET: {
+        draft.st_festivalListDone = false;
+        draft.st_festivalListError = null;
+        draft.st_festivalAdminListDone = false;
+        draft.st_festivalAdminListError = null;
+        draft.st_festivalCreateDone = false;
+        draft.st_festivalCreateError = null;
+        draft.st_festivalUpdateDone = false;
+        draft.st_festivalUpdateError = null;
+        draft.st_festivalOnOffDone = false;
+        draft.st_festivalOnOffError = null;
+        draft.st_festivalDeleteDone = false;
+        draft.st_festivalDeleteError = null;
+        draft.st_festivalTicketListDone = false;
+        draft.st_festivalTicketListError = null;
+        draft.st_festivalTicketCreateDone = false;
+        draft.st_festivalTicketCreateError = null;
+        draft.st_festivalHistoryDone = false;
+        draft.st_festivalHistoryError = null;
+        break;
+      }
 
       default:
         break;
