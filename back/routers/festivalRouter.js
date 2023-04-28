@@ -183,6 +183,7 @@ router.post("/update", isAdminCheck, async (req, res, next) => {
     festivalEndDate,
     festivalLocation,
     schedule,
+    onOff,
   } = req.body;
 
   const updateQuery = `
@@ -191,6 +192,7 @@ router.post("/update", isAdminCheck, async (req, res, next) => {
             festivalStartDate = "${festivalStartDate}",
             festivalEndDate = "${festivalEndDate}",
             festivalLocation = "${festivalLocation}",
+            onOff = ${onOff},
             schedule = "${schedule}",
             updator = ${req.user.id},
             updatedAt = NOW()
