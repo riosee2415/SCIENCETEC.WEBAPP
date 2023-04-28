@@ -500,6 +500,7 @@ export const ATag = styled.a`
   flex-wrap: ${(props) => props.wrap || `wrap`};
   background: ${(props) => props.bgColor};
   color: ${(props) => props.color};
+  margin: ${(props) => props.margin};
 `;
 
 export const SpanText = styled.span`
