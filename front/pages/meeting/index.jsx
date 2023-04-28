@@ -19,8 +19,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCallback } from "react";
 import { Modal } from "antd";
-import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
+
 import SubBanner from "../../components/subBanner";
 
 const Home = ({}) => {
@@ -47,7 +46,7 @@ const Home = ({}) => {
 
       <ClientLayout>
         <WholeWrapper ju={`flex-start`}>
-          <LeftMenu />
+          <SubBanner />
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper
               ju={`flex-start`}

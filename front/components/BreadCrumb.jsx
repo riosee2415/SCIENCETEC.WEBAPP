@@ -47,20 +47,16 @@ const BreadCrumb = () => {
   }, []);
 
   return (
-    <Wrapper
-      margin={`40px 0 24px`}
-      padding={`20px 0 0`}
-      borderBottom={`1px solid ${Theme.lightGrey2_C}`}
-    >
+    <Wrapper margin={width < 700 ? `20px 0 40px` : `20px 0 80px`}>
       <Wrapper
         dr={`row`}
         ju={`flex-start`}
         fontSize={`16px`}
-        color={Theme.grey2_C}
+        color={Theme.white_C}
       >
         <Image
           alt="home icon"
-          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/home.png`}
+          src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/home-W.png`}
           width={`16px`}
           margin={`0 4px 0 0`}
         />
@@ -73,9 +69,6 @@ const BreadCrumb = () => {
           <RightOutlined />
         </SpanText>
         {currentMenuName}
-      </Wrapper>
-      <Wrapper al={`flex-start`} margin={`26px 0`}>
-        <Title>{currentMenuName}</Title>
       </Wrapper>
     </Wrapper>
   );

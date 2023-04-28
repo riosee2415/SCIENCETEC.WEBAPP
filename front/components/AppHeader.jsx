@@ -22,19 +22,6 @@ import { useDispatch, useSelector } from "react-redux";
 import useWidth from "../hooks/useWidth";
 import { LOGO_GET_REQUEST } from "../reducers/logo";
 import { useSession, signOut } from "next-auth/react";
-import SubBanner from "./subBanner";
-
-const HoverWrapper = styled(Wrapper)`
-  position: absolute;
-  top: 136px;
-  left: 0;
-  background: ${Theme.white_C};
-  padding: 30px 0;
-  transition: 0.2s;
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.102);
-  opacity: 0;
-  visibility: hidden;
-`;
 
 const WebRow = styled(WholeWrapper)`
   position: fixed;
@@ -42,15 +29,11 @@ const WebRow = styled(WholeWrapper)`
   left: 0;
   z-index: 1000;
   transition: 0.5s;
-  border-bottom: 1px solid ${Theme.lightGrey2_C};
+  height: 100px;
+  padding: 0 50px;
+  color: ${Theme.white_C};
 
-  &:hover {
-    ${HoverWrapper} {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-  @media (max-width: 900px) {
+  @media (max-width: 1005px) {
     display: none;
   }
 `;
@@ -69,54 +52,52 @@ const MobileRow = styled(WholeWrapper)`
   .ant-drawer-header-no-title .ant-drawer-close {
     display: none;
   }
-  @media (max-width: 900px) {
+  @media (max-width: 1005px) {
     display: flex;
   }
 `;
 
+const SubMenu = styled(Wrapper)`
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  margin: 0 0 0 -81px;
+  width: 162px;
+  padding: 26px 0;
+  background: ${Theme.white_C};
+  color: ${Theme.darkGrey_C};
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+
+  opacity: 0;
+  visibility: hidden;
+`;
+
 const Menu = styled.h2`
-  margin: ${(props) => props.margin || `0 97px 0 0`};
-  color: ${(props) => props.color || props.theme.grey2_C};
+  margin: ${(props) => props.margin || `0 65px 0 0`};
+  color: ${(props) => props.color || props.theme.white_C};
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  transition: 0.3s;
+  transition: 0.6s;
   cursor: pointer;
-  font-family: "NanumSquare Neo", sans-serif;
+  position: relative;
+  height: 100px;
+  line-height: 100px;
 
   &:hover {
-    color: ${Theme.basicTheme_C};
-  }
+    color: ${Theme.subTheme2_C};
 
-  @media (max-width: 1350px) {
-    margin: ${(props) => props.margin || `0 30px 0 0`};
-  }
-`;
-
-const SubMenu = styled.h2`
-  width: 20%;
-
-  font-family: "NanumSquare Neo", sans-serif;
-
-  & .menu {
-    position: relative;
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    height: 70px;
-    border-bottom: 1px solid ${Theme.lightGrey2_C};
-    margin: 0 0 22px;
-  }
-
-  & ${Wrapper} ${Text}:hover {
-    color: ${Theme.subTheme_C};
-  }
-  &:hover {
-    cursor: pointer;
-    & .menu {
-      color: ${Theme.basicTheme_C};
-      border-bottom: 2px solid ${Theme.basicTheme_C};
+    ${SubMenu} {
+      opacity: 1;
+      visibility: visible;
     }
+  }
+
+  @media (max-width: 1430px) {
+    margin: ${(props) => props.margin || `0 30px 0 0`};
   }
 `;
 
@@ -188,307 +169,243 @@ const AppHeader = () => {
 
   return (
     <>
-      {/* <SubBanner /> */}
-      <WebRow bgColor={Theme.white_C}>
-        <Wrapper
-          bgColor={Theme.lightGrey_C}
-          borderBottom={`1px solid ${Theme.lightGrey2_C}`}
-          padding={`8px 0`}
-        >
-          <RsWrapper dr={`row`} ju={`space-between`}>
-            <Wrapper width={`auto`} dr={`row`}>
-              <Image
-                alt="faceicon"
-                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_face-book.png`}
-                width={`38px`}
-                margin={`0 8px 0 0`}
-              />
-              <Image
-                alt="youtubeicon"
-                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_youtube.png`}
-                width={`38px`}
-                margin={`0 8px 0 0`}
-              />
-              <Image
-                alt="instaicon"
-                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_insta.png`}
-                width={`38px`}
-                margin={`0 8px 0 0`}
-              />
-              <Image
-                alt="blogicon"
-                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_blog.png`}
-                width={`38px`}
-              />
-            </Wrapper>
-            <Wrapper
-              width={`auto`}
-              dr={`row`}
-              color={Theme.darkGrey_C}
-              fontSize={`15px`}
-            >
-              {me ? (
-                <>
-                  <Text isHover margin={`0 22px 0 0`} onClick={logoutHandler}>
-                    로그아웃
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Link href={`/login`}>
-                    <a>
-                      <Text isHover margin={`0 22px 0 0`}>
-                        로그인
-                      </Text>
-                    </a>
-                  </Link>
-                  <Link href={`/join`}>
-                    <a>
-                      <Text isHover>회원가입</Text>
-                    </a>
-                  </Link>
-                </>
-              )}
-            </Wrapper>
-          </RsWrapper>
-        </Wrapper>
-        <RsWrapper dr={`row`} ju={`space-between`} padding={`15px 0`}>
-          {/* web */}
-          <ATag href="/" width={`205px`} ju={`flex-start`}>
+      <WebRow bgColor={headerScroll === true && `rgba(0, 0, 0, 0.5)`}>
+        <Wrapper dr={`row`} ju={`space-between`}>
+          <ATag
+            width={width < 1250 ? (1165 ? `auto` : `230px`) : `320px`}
+            ju={`flex-start`}
+            href="/"
+          >
             {logos && logos.find((data) => data.typeOf === "H") && (
               <Image
+                width={width < 1165 ? `120px` : `206px`}
                 src={logos.find((data) => data.typeOf === "H").imageURL}
                 alt="logo"
               />
             )}
           </ATag>
-          <Wrapper dr={`row`} width={`auto`}>
-            <Link href={`/meeting`}>
-              <a>
-                <Menu
-                  color={
-                    router.pathname.includes(`/meeting`) && Theme.subTheme_C
-                  }
-                >
-                  교류회
-                </Menu>
-              </a>
-            </Link>
-            <Link href={`/guide`}>
-              <a>
-                <Menu
-                  color={router.pathname.includes(`/guide`) && Theme.subTheme_C}
-                >
-                  설립안내
-                </Menu>
-              </a>
-            </Link>
-            <Link href={`/operate/perform`}>
-              <a>
-                <Menu
-                  color={
-                    router.pathname.includes(`/operate`) && Theme.subTheme_C
-                  }
-                >
-                  운영안내
-                </Menu>
-              </a>
-            </Link>
-            <Link href={`/activity/forum`}>
-              <a>
-                <Menu
-                  color={
-                    router.pathname.includes(`/activity`) && Theme.subTheme_C
-                  }
-                >
-                  주요활동
-                </Menu>
-              </a>
-            </Link>
-            <Link href={`/association`}>
-              <a>
-                <Menu
-                  margin={`0`}
-                  color={
-                    router.pathname.includes(`/association`) && Theme.subTheme_C
-                  }
-                >
-                  회원조합소개
-                </Menu>
-              </a>
-            </Link>
-          </Wrapper>
-          <Wrapper width={width < 1100 ? `0` : `205px`}></Wrapper>
-        </RsWrapper>
-
-        <HoverWrapper>
-          <RsWrapper dr={`row`} ju={`space-between`} al={`flex-start`}>
-            <SubMenu>
-              <Text className="menu">교류회</Text>
-              <Wrapper fontSize={`17px`}>
-                <Text margin={`0 0 14px`}>
-                  <Link href={`/meeting`}>
-                    <a>교류회란</a>
-                  </Link>
-                </Text>
-                <Text margin={`0 0 14px`}>
+          <Wrapper width={`auto`} dr={`row`}>
+            <Menu>
+              <Link href={`/meeting`}>
+                <a>교류회 </a>
+              </Link>
+              <SubMenu>
+                <Link href={`/meeting`}>
+                  <a>
+                    <Text isHover margin={`0 0 14px`}>
+                      교류회란
+                    </Text>
+                  </a>
+                </Link>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/meeting/status`}>
                     <a>현황</a>
                   </Link>
                 </Text>
                 <Link href={`/meeting/group`}>
                   <a>
-                    <Text margin={`0 0 14px`}>조직</Text>
+                    <Text isHover margin={`0 0 14px`}>
+                      조직
+                    </Text>
                   </a>
                 </Link>
-                <Text margin={`0 0 14px`}>
+
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/meeting/greetings`}>
                     <a>인사말</a>
                   </Link>
                 </Text>
-
-                <Text>
+                <Text isHover>
                   <Link href={`/meeting/location`}>
                     <a>오시는 길</a>
                   </Link>
                 </Text>
-              </Wrapper>
-            </SubMenu>
-            <SubMenu>
-              <Text className="menu">설립안내</Text>
-              <Wrapper fontSize={`17px`}>
-                <Text margin={`0 0 14px`}>
+              </SubMenu>
+            </Menu>
+            <Menu>
+              <Link href={`/guide`}>
+                <a>설립안내</a>
+              </Link>
+              <SubMenu>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/guide`}>
                     <a>설립절차</a>
                   </Link>
                 </Text>
-                <Text margin={`0 0 14px`}>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/guide/document`}>
                     <a>서류</a>
                   </Link>
                 </Text>
-                <Text margin={`0 0 14px`}>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/guide/statute`}>
                     <a>관련법령</a>
                   </Link>
                 </Text>
                 <Link href={`/guide/reference`}>
                   <a>
-                    <Text>자료실</Text>
+                    <Text isHover>자료실</Text>
                   </a>
                 </Link>
-              </Wrapper>
-            </SubMenu>
-            <SubMenu>
-              <Text className="menu">운영안내</Text>
-              <Wrapper fontSize={`17px`}>
-                <Text margin={`0 0 14px`}>
+              </SubMenu>
+            </Menu>
+            <Menu>
+              <Link href={`/operate/perform`}>
+                <a>운영안내</a>
+              </Link>
+              <SubMenu>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/operate/perform`}>
                     <a>사업수행</a>
                   </Link>
                 </Text>
-                <Text margin={`0 0 14px`}>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/operate/knowHow`}>
                     <a>운영 노하우</a>
                   </Link>
                 </Text>
-                <Text margin={`0 0 14px`}>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/operate/demand`}>
                     <a>수요조사</a>
                   </Link>
                 </Text>
-                <Text margin={`0 0 14px`}>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/operate/community`}>
                     <a>커뮤니티</a>
                   </Link>
                 </Text>
                 <Link href={`/operate/reference`}>
                   <a>
-                    <Text margin={`0 0 14px`}>자료실</Text>
+                    <Text isHover margin={`0 0 14px`}>
+                      자료실
+                    </Text>
                   </a>
                 </Link>
                 <Link href={`/operate/notice`}>
                   <a>
-                    <Text>공지사항</Text>
+                    <Text isHover>공지사항</Text>
                   </a>
                 </Link>
-              </Wrapper>
-            </SubMenu>
-            <SubMenu>
-              <Text className="menu">주요활동</Text>
-              <Wrapper fontSize={`17px`}>
-                <Text margin={`0 0 14px`}>
+              </SubMenu>
+            </Menu>
+            <Menu>
+              <Link href={`/activity/forum`}>
+                <a>주요활동</a>
+              </Link>
+              <SubMenu>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/activity/forum`}>
                     <a>포럼</a>
                   </Link>
                 </Text>
-                <Text margin={`0 0 14px`}>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/activity/project`}>
                     <a>공동 프로젝트</a>
                   </Link>
                 </Text>
-                <Text margin={`0 0 14px`}>
+                <Text isHover margin={`0 0 14px`}>
                   <Link href={`/activity/business`}>
                     <a>공동 비즈니스</a>
                   </Link>
                 </Text>
                 <Link href={`/activity/matching`}>
                   <a>
-                    <Text>기술매칭사업</Text>
+                    <Text isHover>기술매칭사업</Text>
                   </a>
                 </Link>
-              </Wrapper>
-            </SubMenu>
-            <SubMenu>
-              <Text className="menu">회원조합소개</Text>
-              <Wrapper fontSize={`17px`}>
-                <Text>
-                  <Link href={`/association`}>
-                    <a>회원조합소개</a>
-                  </Link>
+              </SubMenu>
+            </Menu>
+            <Menu>
+              <Link href={`/association`}>
+                <a>회원조합소개</a>
+              </Link>
+            </Menu>
+          </Wrapper>
+          <Wrapper dr={`row`} width={width < 1165 ? `auto` : `320px`}>
+            <Image
+              alt="faceicon"
+              src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_face.png`}
+              width={`20px`}
+              margin={`0 20px 0 0`}
+            />
+            <Image
+              alt="youtubeicon"
+              src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_youtube.png`}
+              width={`20px`}
+              margin={`0 20px 0 0`}
+            />
+            <Image
+              alt="instaicon"
+              src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_icon.png`}
+              width={`20px`}
+              margin={`0 20px 0 0`}
+            />
+            <Image
+              alt="blogicon"
+              src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_blog.png`}
+              width={`20px`}
+              margin={width < 1165 ? `0 20px 0 0` : `0 54px 0 0`}
+            />
+            <Link href={`/login`}>
+              <a>
+                <Text
+                  fontSize={`16px`}
+                  isHover
+                  margin={width < 1165 ? `0 15px 0 0` : `0 28px 0 0`}
+                >
+                  로그인
                 </Text>
-              </Wrapper>
-            </SubMenu>
-          </RsWrapper>
-        </HoverWrapper>
+              </a>
+            </Link>
+            <Link href={`/join`}>
+              <a>
+                <Text fontSize={`16px`} isHover>
+                  회원가입
+                </Text>
+              </a>
+            </Link>
+          </Wrapper>
+        </Wrapper>
       </WebRow>
       {/* mobile */}
-      <MobileRow justify={`center`} bgColor={Theme.white_C}>
+      <MobileRow
+        justify={`center`}
+        bgColor={headerScroll === true && `rgba(0, 0, 0, 0.5)`}
+      >
         <Wrapper
-          bgColor={Theme.lightGrey_C}
-          borderBottom={`1px solid ${Theme.lightGrey2_C}`}
-          padding={`8px 0`}
+          padding={`5px 0`}
+          borderBottom={`1px solid ${Theme.subTheme_C}`}
         >
           <RsWrapper dr={`row`} ju={`space-between`}>
             <Wrapper width={`auto`} dr={`row`}>
               <Image
                 alt="faceicon"
-                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_face-book.png`}
-                width={`30px`}
-                margin={`0 8px 0 0`}
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_face.png`}
+                width={`20px`}
+                margin={`0 20px 0 0`}
               />
               <Image
                 alt="youtubeicon"
                 src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_youtube.png`}
-                width={`30px`}
-                margin={`0 8px 0 0`}
+                width={`20px`}
+                margin={`0 20px 0 0`}
               />
               <Image
                 alt="instaicon"
-                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_insta.png`}
-                width={`30px`}
-                margin={`0 8px 0 0`}
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_icon.png`}
+                width={`20px`}
+                margin={`0 20px 0 0`}
               />
               <Image
                 alt="blogicon"
                 src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/header/icon_blog.png`}
-                width={`30px`}
+                width={`20px`}
               />
             </Wrapper>
             <Wrapper
               width={`auto`}
               dr={`row`}
-              color={Theme.darkGrey_C}
+              color={Theme.white_C}
               fontSize={`15px`}
             >
               <Link href={`/login`}>
@@ -511,13 +428,18 @@ const AppHeader = () => {
             <ATag width={`auto`} href="/">
               {logos && logos.find((data) => data.typeOf === "H") && (
                 <Image
-                  width={`170px`}
+                  width={`140px`}
                   src={logos.find((data) => data.typeOf === "H").imageURL}
                   alt="logo"
                 />
               )}
             </ATag>
-            <Wrapper width={`20px`} al={`flex-end`} fontSize={`1.3rem`}>
+            <Wrapper
+              width={`20px`}
+              al={`flex-end`}
+              fontSize={`1.3rem`}
+              color={Theme.white_C}
+            >
               <MenuOutlined onClick={drawarToggle} />
             </Wrapper>
           </RsWrapper>

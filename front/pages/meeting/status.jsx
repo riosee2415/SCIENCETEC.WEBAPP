@@ -23,6 +23,7 @@ import BreadCrumb from "../../components/BreadCrumb";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
+import SubBanner from "../../components/subBanner";
 
 const Find = styled(Text)`
   &:nth-child(n + 2):nth-child(-n + 14) {
@@ -60,7 +61,7 @@ const Status = () => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper
