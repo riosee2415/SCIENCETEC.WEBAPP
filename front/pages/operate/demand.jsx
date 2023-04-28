@@ -24,6 +24,8 @@ import { SURVEY_LIST_REQUEST } from "../../reducers/survey";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import SubBanner from "../../components/SubBanner";
+import { FESTIVAL_LIST_REQUEST } from "../../reducers/festival";
+import Festival from "../../components/demand/Festival";
 
 const Btn = styled(Wrapper)`
   width: 335px;
@@ -52,6 +54,7 @@ const Demand = () => {
   ////// GLOBAL STATE //////
 
   const { quesList, innerList } = useSelector((state) => state.survey);
+  const { festivalList } = useSelector((state) => state.festival);
 
   ////// HOOKS //////
   const width = useWidth();
@@ -108,6 +111,14 @@ const Demand = () => {
         });
         return;
       }
+      if (router.query.type === "festival") {
+        setCurrentTab(3);
+
+        dispatch({
+          type: FESTIVAL_LIST_REQUEST,
+        });
+        return;
+      }
     }
   }, [router.query]);
 
@@ -124,9 +135,12 @@ const Demand = () => {
       if (data === 1) {
         // 현황조사
         router.push("/operate/demand?type=status");
-      } else {
+      } else if (data === 2) {
         // 수요조사
         router.push("/operate/demand?type=business");
+      } else if (data === 3) {
+        // 행사 참가 신청서
+        router.push("/operate/demand?type=festival");
       }
 
       dispatch({
@@ -185,14 +199,24 @@ const Demand = () => {
             {currentTab === 0 && (
               <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 100px`}>
                 <Btn
-                  margin={width < 800 ? `0 0 20px` : `0 20px 0 0`}
+                  margin={width < 800 ? `0 0 20px` : `0 20px 20px 0`}
                   onClick={() => typeHandler(1)}
                 >
                   사업수행 현황조사 참여하기&nbsp;
                   <RightCircleOutlined />
                 </Btn>
-                <Btn onClick={() => typeHandler(2)}>
+                <Btn
+                  margin={width < 800 ? `0 0 20px` : `0 20px 20px 0`}
+                  onClick={() => typeHandler(2)}
+                >
                   사업 수요조사 참여하기&nbsp;
+                  <RightCircleOutlined />
+                </Btn>
+                <Btn
+                  margin={width < 800 ? `0 0 20px` : `0 0 20px 0`}
+                  onClick={() => typeHandler(3)}
+                >
+                  행사 참가 신청서&nbsp;
                   <RightCircleOutlined />
                 </Btn>
               </Wrapper>
@@ -321,6 +345,28 @@ const Demand = () => {
                 </Wrapper>
 
                 <Business surveyList={surveyList} />
+              </>
+            )}
+            {currentTab === 3 && (
+              <>
+                <Wrapper
+                  wrap={`nowrap`}
+                  dr={`row`}
+                  ju={`flex-start`}
+                  fontSize={width < 900 ? `18px` : `20px`}
+                  margin={`35px 0 16px`}
+                  fontWeight={`700`}
+                >
+                  <Image
+                    alt="icon"
+                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
+                    width={`8px`}
+                    margin={`0 6px 0 0`}
+                  />
+                  행사 참여 신청서
+                </Wrapper>
+
+                <Festival festivalList={festivalList} />
               </>
             )}
           </RsWrapper>

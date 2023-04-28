@@ -197,7 +197,7 @@ export const items = {
       useYn: true,
     },
     {
-      name: "(현) 수요조사설문리스트",
+      name: "행사 참가 신청관리",
       link: "/admin/survey/festival",
       useYn: true,
     },
