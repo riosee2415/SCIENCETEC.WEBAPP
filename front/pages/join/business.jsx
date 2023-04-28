@@ -32,6 +32,7 @@ import { useEffect } from "react";
 import KakaoLogin from "react-kakao-login";
 import naver from "naver-id-login";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
 
 const Circle = styled(Wrapper)`
   width: 44px;
@@ -521,11 +522,31 @@ const Business = () => {
               >
                 회원가입
               </Text>
-              <Wrapper dr={`row`} margin={`26px 0 35px`}>
-                <Btn margin={`0 6px 0 0`} onClick={() => router.push(`/join`)}>
-                  개인회원
-                </Btn>
-                <Btn isActive>조합회원</Btn>
+
+              <Wrapper margin={`26px 0 35px`}>
+                <Wrapper dr={`row`}>
+                  <Link href={`/join`}>
+                    <a>
+                      <Btn margin={`0 6px 0 0`}>개인회원</Btn>
+                    </a>
+                  </Link>
+                  <Link href={`/join/expert`}>
+                    <a>
+                      <Btn margin={`0 6px 0 0`}>전문가</Btn>
+                    </a>
+                  </Link>
+                </Wrapper>
+                <Wrapper dr={`row`} margin={`10px 0 0`}>
+                  <Btn isActive margin={`0 6px 0 0`}>
+                    조합회원
+                  </Btn>
+
+                  <Link href={`/join/corporation`}>
+                    <a>
+                      <Btn>기업회원</Btn>
+                    </a>
+                  </Link>
+                </Wrapper>
               </Wrapper>
 
               {currentTab === 0 ? (

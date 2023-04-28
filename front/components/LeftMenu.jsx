@@ -8,16 +8,13 @@ import Link from "next/link";
 import useWidth from "../hooks/useWidth";
 
 const Menu = styled.h3`
+  height: 100%;
   font-size: 20px;
   font-weight: 600;
-  color: ${(props) => (props.isActive ? Theme.basicTheme_C : Theme.grey_C)};
-  margin: 0 65px 0 0;
+  color: ${(props) => (props.isActive ? Theme.basicTheme_C : Theme.darkGrey_C)};
   font-weight: ${(props) => (props.isActive ? `600` : `300`)};
   display: ${(props) => props.display};
 
-  @media (max-width < 900) {
-    font-size: 16px;
-  }
   &:last-child {
     margin: 0;
   }
@@ -25,6 +22,32 @@ const Menu = styled.h3`
   &:hover {
     cursor: pointer;
     color: ${Theme.basicTheme_C};
+    border-bottom: 2px solid ${Theme.basicTheme_C};
+  }
+`;
+const MenuBox = styled(Wrapper)`
+  position: relative;
+  width: 10%;
+  height: 100%;
+
+  &:before {
+    content: "";
+    width: 1px;
+    height: 10px;
+    background: ${Theme.lightGrey2_C};
+    position: absolute;
+    right: 0;
+    top: 14%;
+  }
+
+  &:last-child:before {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    width: 20%;
+    height: 50%;
+    font-size: 16px;
   }
 `;
 
@@ -70,17 +93,21 @@ const LeftMenu = () => {
         {currentAllMenus.map((value, idx) => {
           if (value === currentMenuName) {
             return (
-              <Menu isActive key={value}>
-                {value}
-              </Menu>
+              <MenuBox>
+                <Menu isActive key={value}>
+                  {value}
+                </Menu>
+              </MenuBox>
             );
           } else {
             return (
-              <Menu display={width < 700 ? `none` : `block`} key={value}>
-                <Link href={currentAllLinks && currentAllLinks[idx]}>
-                  <a>{value} </a>
-                </Link>
-              </Menu>
+              <MenuBox>
+                <Menu key={value}>
+                  <Link href={currentAllLinks && currentAllLinks[idx]}>
+                    <a>{value} </a>
+                  </Link>
+                </Menu>
+              </MenuBox>
             );
           }
         })}

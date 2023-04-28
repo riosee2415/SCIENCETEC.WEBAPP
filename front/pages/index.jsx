@@ -484,6 +484,10 @@ const Home = ({}) => {
                     <Text fontSize={`24px`}>
                       <SpanText color={Theme.basicTheme_C}>기과협</SpanText>
                       <SpanText color={Theme.subTheme_C}>&nbsp;현황</SpanText>
+                      <SpanText margin={`0 0 0 10px`}>① 120 개 조합</SpanText>
+                      <SpanText fontSize={`12px`} margin={`0 0 0 10px`}>
+                        (2022년 12월 31일 기준)
+                      </SpanText>
                     </Text>
                   </Wrapper>
 

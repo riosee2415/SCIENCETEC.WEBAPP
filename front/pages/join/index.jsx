@@ -401,7 +401,7 @@ const Index = () => {
                       <Btn margin={`0 6px 0 0`}>조합회원</Btn>
                     </a>
                   </Link>
-                  <Link href={`/join/business`}>
+                  <Link href={`/join/corporation`}>
                     <a>
                       <Btn>기업회원</Btn>
                     </a>
