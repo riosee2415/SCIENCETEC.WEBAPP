@@ -17,6 +17,21 @@ import Theme from "../../components/Theme";
 import Head from "next/head";
 import LeftMenu from "../../components/LeftMenu";
 import SubBanner from "../../components/SubBanner";
+import styled from "styled-components";
+
+const GuideTitle = styled(Wrapper)`
+  width: auto;
+  padding: 5px 15px;
+  font-size: 16px;
+  background-color: ${Theme.subTheme2_C};
+  color: ${Theme.basicTheme_C};
+  border-radius: 30px;
+  margin: 15px 0 10px;
+
+  @media (max-width: 800px) {
+    font-size: 14px;
+  }
+`;
 
 const Index = ({}) => {
   ////// GLOBAL STATE //////
@@ -134,16 +149,247 @@ const Index = ({}) => {
                   </Wrapper>
                 </Wrapper>
 
-                <Wrapper al={`flex-start`}>
-                  <Image
-                    src={
-                      width < 700
-                        ? "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/img_process_m.png"
-                        : "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/img_process.png"
-                    }
-                    alt="img"
-                    width={width < 700 ? `100%` : `auto`}
-                  />
+                <Wrapper dr={`row`} ju={`flex-start`} al={`flex-start`}>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process1.png"
+                    />
+
+                    <GuideTitle>1. 발기인 모집</GuideTitle>
+                    <Text color={Theme.grey2_C}>5인 이상 혹은</Text>
+                    <Text color={Theme.grey2_C}>50% 이상 과학기술인</Text>
+                    <Text color={Theme.grey2_C}>(법인)</Text>
+                  </Wrapper>
+                  <Wrapper height={`130px`} width={`auto`}>
+                    <Image
+                      alt="icon"
+                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                      width={`15px`}
+                      margin={`0 20px`}
+                    />
+                  </Wrapper>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process2.png"
+                    />
+
+                    <GuideTitle>2. 정관작성</GuideTitle>
+                    <Text color={Theme.grey2_C}>발기인이 작성,</Text>
+                    <Text color={Theme.grey2_C}>발기인 전원</Text>
+                    <Text color={Theme.grey2_C}>기명 날인</Text>
+                  </Wrapper>
+                  {width < 800 ? null : (
+                    <Wrapper height={`130px`} width={`auto`}>
+                      <Image
+                        alt="icon"
+                        src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                        width={`15px`}
+                        margin={`0 20px`}
+                      />
+                    </Wrapper>
+                  )}
+
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process3.png"
+                    />
+
+                    <GuideTitle>3. 설립동의자 모집</GuideTitle>
+                    <Text color={Theme.grey2_C}>발기인에게</Text>
+                    <Text color={Theme.grey2_C}>설립동의서 제출</Text>
+                  </Wrapper>
+                  <Wrapper height={`130px`} width={`auto`}>
+                    <Image
+                      alt="icon"
+                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                      width={`15px`}
+                      margin={`0 20px`}
+                    />
+                  </Wrapper>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process4.png"
+                    />
+
+                    <GuideTitle>4. 창립총회 공고</GuideTitle>
+                    <Text color={Theme.grey2_C}>창립총회 개최</Text>
+                    <Text color={Theme.grey2_C}>7일 전까지</Text>
+                  </Wrapper>
+                </Wrapper>
+                <Wrapper dr={`row`} ju={`flex-start`} al={`flex-start`}>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process5.png"
+                    />
+
+                    <GuideTitle>5. 창립총회 개최</GuideTitle>
+                    <Text color={Theme.grey2_C}>창립총회의사록 작성</Text>
+                  </Wrapper>
+                  <Wrapper height={`130px`} width={`auto`}>
+                    <Image
+                      alt="icon"
+                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                      width={`15px`}
+                      margin={`0 20px`}
+                    />
+                  </Wrapper>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process6.png"
+                    />
+
+                    <GuideTitle>6. 사무인수인계</GuideTitle>
+                    <Text color={Theme.grey2_C}>발기인 → 주사무소</Text>
+                    <Text color={Theme.grey2_C}>소재지 관할</Text>
+                    <Text color={Theme.grey2_C}>시·도지사</Text>
+                  </Wrapper>
+                  {width < 800 ? null : (
+                    <Wrapper height={`130px`} width={`auto`}>
+                      <Image
+                        alt="icon"
+                        src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                        width={`15px`}
+                        margin={`0 20px`}
+                      />
+                    </Wrapper>
+                  )}
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process7.png"
+                    />
+
+                    <GuideTitle>7. 신고확인증 발급</GuideTitle>
+                    <Text color={Theme.grey2_C}>신고를 받은 날부터</Text>
+                    <Text color={Theme.grey2_C}>20알 이내,</Text>
+                    <Text color={Theme.grey2_C}>시도지사 → 발기인</Text>
+                  </Wrapper>
+                  <Wrapper height={`130px`} width={`auto`}>
+                    <Image
+                      alt="icon"
+                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                      width={`15px`}
+                      margin={`0 20px`}
+                    />
+                  </Wrapper>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process8.png"
+                    />
+
+                    <GuideTitle>8. 설립사무의 인계</GuideTitle>
+                    <Text color={Theme.grey2_C}>발기인 → 이사장</Text>
+                    <Text color={Theme.grey2_C}>으로의 인계</Text>
+                  </Wrapper>
+                </Wrapper>
+                <Wrapper dr={`row`} ju={`flex-start`} al={`flex-start`}>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process9.png"
+                    />
+
+                    <GuideTitle>9. 출자금 납입</GuideTitle>
+                    <Text color={Theme.grey2_C}>조합원 → 이사장</Text>
+                  </Wrapper>
+                  <Wrapper height={`130px`} width={`auto`}>
+                    <Image
+                      alt="icon"
+                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                      width={`15px`}
+                      margin={`0 20px`}
+                    />
+                  </Wrapper>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0 0 30px` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process10.png"
+                    />
+
+                    <GuideTitle>10. 설립등기</GuideTitle>
+                    <Text color={Theme.grey2_C}>주된 사무소 소재지</Text>
+                    <Text color={Theme.grey2_C}>관할 등기소</Text>
+                  </Wrapper>
+                  {width < 800 ? null : (
+                    <Wrapper height={`130px`} width={`auto`}>
+                      <Image
+                        alt="icon"
+                        src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                        width={`15px`}
+                        margin={`0 20px`}
+                      />
+                    </Wrapper>
+                  )}
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process11.png"
+                    />
+
+                    <GuideTitle>11. 출자금 납입</GuideTitle>
+                    <Text color={Theme.grey2_C}>주된 사무소 소재지</Text>
+                    <Text color={Theme.grey2_C}>관할 세무서</Text>
+                  </Wrapper>
+                  <Wrapper height={`130px`} width={`auto`}>
+                    <Image
+                      alt="icon"
+                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/arrow.png`}
+                      width={`15px`}
+                      margin={`0 20px`}
+                    />
+                  </Wrapper>
+                  <Wrapper
+                    width={width < 800 ? `40%` : `auto`}
+                    margin={width < 800 ? `0` : `0 0 55px`}
+                  >
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process12.png"
+                    />
+
+                    <GuideTitle>12. 협동조합 설립</GuideTitle>
+                    <Text color={Theme.grey2_C}>협동조합 설립</Text>
+                  </Wrapper>
                 </Wrapper>
               </Wrapper>
             </Wrapper>

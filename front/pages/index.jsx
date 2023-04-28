@@ -5,7 +5,6 @@ import {
   LOAD_MY_INFO_REQUEST,
   LOGIN_REQUEST,
 } from "../reducers/user";
-import useInput from "../hooks/useInput";
 import ClientLayout from "../components/ClientLayout";
 import axios from "axios";
 import wrapper from "../store/configureStore";
@@ -16,7 +15,6 @@ import {
   Wrapper,
   RsWrapper,
   Text,
-  CommonButton,
   ATag,
 } from "../components/commonComponents";
 import useWidth from "../hooks/useWidth";
@@ -30,6 +28,8 @@ import { MAIN_BOARD_REQUEST } from "../reducers/notice";
 import { LoadingOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import Fade from "react-reveal/Fade";
+
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -244,105 +244,105 @@ const Home = ({}) => {
   const point = [
     {
       name: "서울특별시",
-      top: "19%",
-      right: "59%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "39%",
+      right: "54.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "대전광역시",
-      top: "47%",
-      right: "55.5%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "57%",
+      right: "53%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "인천광역시",
-      top: "19%",
-      right: "62.5%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "39%",
+      right: "56%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "대구광역시",
-      top: "60%",
-      right: "43%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "66%",
+      right: "46.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "울산광역시",
-      top: "67%",
-      right: "36%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "71%",
+      right: "43%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "부산광역시",
-      top: "75%",
-      right: "38%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "76%",
+      right: "44.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "광주광역시",
-      top: "73%",
-      right: "63.5%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "74%",
+      right: "56.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "세종특별자치시",
-      top: "42%",
-      right: "56.5%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "53.5%",
+      right: "53.5%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "제주특별자치도",
-      top: "76%",
-      right: "23%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "76.5%",
+      right: "37%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "경기도",
-      top: "25%",
-      right: "56%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "43%",
+      right: "53%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "강원도",
-      top: "18%",
-      right: "45%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "38%",
+      right: "47%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "충청남도",
-      top: "40%",
-      right: "62%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "54%",
+      right: "56%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "충청북도",
-      top: "37%",
-      right: "52%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "52%",
+      right: "51%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "전라북도",
-      top: "60%",
-      right: "59%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "66%",
+      right: "54%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "전라남도",
       top: "79%",
-      right: "61%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      right: "56%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "경상남도",
-      top: "70%",
-      right: "47%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "72%",
+      right: "49%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
     {
       name: "경상북도",
-      top: "47%",
-      right: "41%",
-      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main/icon_pin.png",
+      top: "57%",
+      right: "46%",
+      src: "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/icon_pin.png",
     },
   ];
 
@@ -360,26 +360,36 @@ const Home = ({}) => {
             color={Theme.white_C}
             bgImg={`url("https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/main2/banner.png")`}
           >
-            <Text
-              textAlign={`center`}
-              fontSize={width < 1100 ? (width < 900 ? `30px` : `40px`) : `54px`}
-              lineHeight={width < 900 ? `1.2` : `70px`}
-              fontWeight={`900`}
-            >
-              Institutional Cooperative Association
-            </Text>
-            <Text
-              textAlign={`center`}
-              fontSize={width < 1100 ? (width < 900 ? `30px` : `40px`) : `54px`}
-              lineHeight={width < 900 ? `1.2` : `70px`}
-              fontWeight={`900`}
-            >
-              of Scientists and Technologists
-            </Text>
-            <Text textAlign={`center`} fontSize={`20px`} margin={`20px 0 0`}>
-              과학 기술원을 중심으로 과학 기술을 주된 사업으로 활동하는
-              협동조합입니다.
-            </Text>
+            <Fade bottom delay={0}>
+              <Text
+                textAlign={`center`}
+                fontSize={
+                  width < 1100 ? (width < 900 ? `30px` : `40px`) : `54px`
+                }
+                lineHeight={width < 900 ? `1.2` : `70px`}
+                fontWeight={`900`}
+              >
+                Institutional Cooperative Association
+              </Text>
+            </Fade>
+            <Fade bottom delay={100}>
+              <Text
+                textAlign={`center`}
+                fontSize={
+                  width < 1100 ? (width < 900 ? `30px` : `40px`) : `54px`
+                }
+                lineHeight={width < 900 ? `1.2` : `70px`}
+                fontWeight={`900`}
+              >
+                of Scientists and Technologists
+              </Text>
+            </Fade>
+            <Fade bottom delay={200}>
+              <Text textAlign={`center`} fontSize={`20px`} margin={`20px 0 0`}>
+                과학 기술원을 중심으로 과학 기술을 주된 사업으로 활동하는
+                협동조합입니다.
+              </Text>
+            </Fade>
           </Wrapper>
 
           <RsWrapper padding={width < 700 ? `80px 0` : `120px 0`}>
@@ -396,26 +406,28 @@ const Home = ({}) => {
                 padding={width < 900 ? `20px 0 0` : `0 0 0 40px`}
                 al={`flex-start`}
               >
-                <Text
-                  fontSize={
-                    width < 1100 ? (width < 900 ? `25px` : `35px`) : `42px`
-                  }
-                  fontWeight={`900`}
-                >
-                  기관형과학기술인
-                </Text>
-                <Text
-                  fontSize={
-                    width < 1100 ? (width < 900 ? `25px` : `35px`) : `42px`
-                  }
-                  fontWeight={`900`}
-                >
-                  협동조합교류회 소개
-                </Text>
-                <Text fontSize={`16px`} margin={`20px 0 0`}>
-                  기관형 과학기술인 협동조합 성장지원 사업을 지원해 오고
-                  있습니다.
-                </Text>
+                <Fade bottom>
+                  <Text
+                    fontSize={
+                      width < 1100 ? (width < 900 ? `25px` : `35px`) : `42px`
+                    }
+                    fontWeight={`900`}
+                  >
+                    기관형과학기술인
+                  </Text>
+                  <Text
+                    fontSize={
+                      width < 1100 ? (width < 900 ? `25px` : `35px`) : `42px`
+                    }
+                    fontWeight={`900`}
+                  >
+                    협동조합교류회 소개
+                  </Text>
+                  <Text fontSize={`16px`} margin={`20px 0 0`}>
+                    기관형 과학기술인 협동조합 성장지원 사업을 지원해 오고
+                    있습니다.
+                  </Text>
+                </Fade>
               </Wrapper>
             </Wrapper>
           </RsWrapper>
@@ -429,20 +441,22 @@ const Home = ({}) => {
             position={`relative`}
           >
             <RsWrapper>
-              <Text
-                fontSize={`18px`}
-                fontWeight={`600`}
-                color={Theme.basicTheme_C}
-              >
-                Current situation
-              </Text>
-              <Text
-                fontSize={width < 900 ? `20px` : `34px`}
-                fontWeight={`600`}
-                margin={`12px 0 60px`}
-              >
-                전국의 기과협 가입 현황을 안내해드립니다.
-              </Text>
+              <Fade bottom>
+                <Text
+                  fontSize={`18px`}
+                  fontWeight={`600`}
+                  color={Theme.basicTheme_C}
+                >
+                  Current situation
+                </Text>
+                <Text
+                  fontSize={width < 900 ? `20px` : `34px`}
+                  fontWeight={`600`}
+                  margin={`12px 0 60px`}
+                >
+                  전국의 기과협 가입 현황을 안내해드립니다.
+                </Text>
+              </Fade>
 
               <Wrapper width={width < 900 ? `100%` : `60%`}>
                 <Image
@@ -489,39 +503,41 @@ const Home = ({}) => {
           </Wrapper>
           <Wrapper padding={width < 700 ? `80px 0` : `120px 0`}>
             <RsWrapper>
-              <Text
-                fontSize={`18px`}
-                fontWeight={`600`}
-                color={Theme.basicTheme_C}
-              >
-                Current situation
-              </Text>
-              {width < 900 ? (
-                <>
-                  <Text
-                    fontSize={width < 900 ? `20px` : `34px`}
-                    fontWeight={`600`}
-                    margin={`12px 0 0`}
-                  >
-                    사업분류와 년도별 기과협
-                  </Text>
-                  <Text
-                    fontSize={width < 900 ? `20px` : `34px`}
-                    fontWeight={`600`}
-                    margin={`0 0 60px`}
-                  >
-                    가입 현황을 확인해보세요.
-                  </Text>
-                </>
-              ) : (
+              <Fade bottom>
                 <Text
-                  fontSize={width < 900 ? `20px` : `34px`}
+                  fontSize={`18px`}
                   fontWeight={`600`}
-                  margin={`12px 0 60px`}
+                  color={Theme.basicTheme_C}
                 >
-                  사업분류와 년도별 기과협 가입 현황을 확인해보세요.
+                  Current situation
                 </Text>
-              )}
+                {width < 900 ? (
+                  <>
+                    <Text
+                      fontSize={width < 900 ? `20px` : `34px`}
+                      fontWeight={`600`}
+                      margin={`12px 0 0`}
+                    >
+                      사업분류와 년도별 기과협
+                    </Text>
+                    <Text
+                      fontSize={width < 900 ? `20px` : `34px`}
+                      fontWeight={`600`}
+                      margin={`0 0 60px`}
+                    >
+                      가입 현황을 확인해보세요.
+                    </Text>
+                  </>
+                ) : (
+                  <Text
+                    fontSize={width < 900 ? `20px` : `34px`}
+                    fontWeight={`600`}
+                    margin={`12px 0 60px`}
+                  >
+                    사업분류와 년도별 기과협 가입 현황을 확인해보세요.
+                  </Text>
+                )}
+              </Fade>
 
               <Wrapper dr={`row`} ju={`space-between`}>
                 {/* <Wrapper
@@ -621,20 +637,22 @@ const Home = ({}) => {
             padding={width < 700 ? `80px 0` : `100px 0`}
           >
             <RsWrapper>
-              <Text
-                fontSize={`18px`}
-                fontWeight={`600`}
-                color={Theme.basicTheme_C}
-              >
-                News
-              </Text>
-              <Text
-                fontSize={width < 900 ? `20px` : `34px`}
-                fontWeight={`600`}
-                margin={`12px 0 34px`}
-              >
-                교류회의 최근 소식을 만나보세요.
-              </Text>
+              <Fade bottom>
+                <Text
+                  fontSize={`18px`}
+                  fontWeight={`600`}
+                  color={Theme.basicTheme_C}
+                >
+                  News
+                </Text>
+                <Text
+                  fontSize={width < 900 ? `20px` : `34px`}
+                  fontWeight={`600`}
+                  margin={`12px 0 34px`}
+                >
+                  교류회의 최근 소식을 만나보세요.
+                </Text>
+              </Fade>
               <Wrapper dr={`row`} margin={`0 0 60px`}>
                 <BoardTypeButton
                   onClick={() => boardTypeToggle("전체")}
@@ -772,20 +790,22 @@ const Home = ({}) => {
           </Wrapper>
           <Wrapper padding={width < 700 ? `80px 0` : `120px 0`}>
             <RsWrapper>
-              <Text
-                fontSize={`18px`}
-                fontWeight={`600`}
-                color={Theme.basicTheme_C}
-              >
-                With ICAST
-              </Text>
-              <Text
-                fontSize={width < 900 ? `20px` : `34px`}
-                fontWeight={`600`}
-                margin={`12px 0 60px`}
-              >
-                함께 한 파트너사를 소개합니다.
-              </Text>
+              <Fade bottom>
+                <Text
+                  fontSize={`18px`}
+                  fontWeight={`600`}
+                  color={Theme.basicTheme_C}
+                >
+                  With ICAST
+                </Text>
+                <Text
+                  fontSize={width < 900 ? `20px` : `34px`}
+                  fontWeight={`600`}
+                  margin={`12px 0 60px`}
+                >
+                  함께 한 파트너사를 소개합니다.
+                </Text>
+              </Fade>
               <Wrapper
                 dr={`row`}
                 ju={`space-between`}

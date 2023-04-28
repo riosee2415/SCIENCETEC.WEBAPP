@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { menus } from "./clientMenus";
 import Link from "next/dist/client/link";
 import BreadCrumb from "./BreadCrumb";
+import Fade from "react-reveal/Fade";
 
 const Title = styled.h1`
   font-size: 48px;
@@ -117,7 +118,9 @@ const SubBanner = ({ bgImg }) => {
         bgImg={`url("${currentImagePath ? currentImagePath : bgImg}")`}
       >
         <RsWrapper ju={`flex-end`} al={`flex-start`}>
-          <Title>{parentMenuName}</Title>
+          <Fade bottom>
+            <Title>{parentMenuName}</Title>
+          </Fade>
           <BreadCrumb />
         </RsWrapper>
       </Wrapper>
