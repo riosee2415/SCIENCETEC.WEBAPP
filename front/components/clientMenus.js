@@ -114,18 +114,26 @@ export const menus = [
       {
         subMenuName: "포럼",
         subMenuLink: "/activity/forum",
+        subBannerImagePath:
+          "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/subbanner/activity.png",
       },
       {
         subMenuName: "공동 프로젝트",
         subMenuLink: "/activity/project",
+        subBannerImagePath:
+          "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/subbanner/activity.png",
       },
       {
         subMenuName: "공동 비즈니스",
         subMenuLink: "/activity/business",
+        subBannerImagePath:
+          "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/subbanner/activity.png",
       },
       {
         subMenuName: "기술매칭사업",
         subMenuLink: "/activity/matching",
+        subBannerImagePath:
+          "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/subbanner/activity.png",
       },
     ],
   },
@@ -136,6 +144,8 @@ export const menus = [
       {
         subMenuName: "회원조합소개",
         subMenuLink: "/association",
+        subBannerImagePath:
+          "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/subbanner/usercoop.png",
       },
     ],
   },

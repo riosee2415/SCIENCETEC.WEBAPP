@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
-import useInput from "../../hooks/useInput";
 import ClientLayout from "../../components/ClientLayout";
 import axios from "axios";
 import wrapper from "../../store/configureStore";
@@ -13,16 +11,12 @@ import {
   RsWrapper,
   SpanText,
   Text,
-  CommonButton,
 } from "../../components/commonComponents";
 import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
-import styled, { ThemeContext } from "styled-components";
 import Head from "next/head";
-import { DownloadOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { useCallback } from "react";
 import LeftMenu from "../../components/LeftMenu";
+import SubBanner from "../../components/SubBanner";
 
 const Index = ({}) => {
   ////// GLOBAL STATE //////
@@ -30,14 +24,10 @@ const Index = ({}) => {
   ////// HOOKS //////
   const width = useWidth();
 
-  const [isDown, setIsDown] = useState(false);
   ////// REDUX //////
   ////// USEEFFECT //////
   ////// TOGGLE //////
 
-  const downToggle = useCallback(() => {
-    setIsDown(!isDown);
-  }, [isDown]);
   ////// HANDLER //////
   ////// DATAVIEW //////
 
@@ -49,7 +39,7 @@ const Index = ({}) => {
 
       <ClientLayout>
         <WholeWrapper>
-          <LeftMenu />
+          <SubBanner />
 
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
             <Wrapper
