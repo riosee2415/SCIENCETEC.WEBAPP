@@ -22,6 +22,7 @@
     "apexcharts": "^3.28.1",
     "axios": "^0.21.1",
     "babel-plugin-styled-components": "^1.13.2",
+    "cross-env": "^7.0.3",
     "file-saver": "^2.0.5",
     "immer": "^9.0.5",
     "moment": "2.29.4",

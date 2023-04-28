@@ -13,7 +13,7 @@ const ClientLayout = ({ children, width }) => {
   return (
     <section>
       {/* HEADER */}
-      <AppHeader />
+      {/* <AppHeader /> */}
 
       {/* <MobileCol >
         <CustomRow justify={`space-between`} margin={`10px`}>

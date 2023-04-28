@@ -33,12 +33,13 @@ const sendMail = async (email) => {
   });
 };
 
-const sendSecretMail = (adress, title, content) => {
+const sendSecretMail = (adress, title, content, file) => {
   const email = {
     from: "teamagent.net",
     to: adress,
     subject: title,
     html: content,
+    attachments: file ? file : null,
   };
 
   return sendMail(email);

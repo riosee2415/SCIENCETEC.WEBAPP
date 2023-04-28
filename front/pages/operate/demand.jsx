@@ -150,170 +150,180 @@ const Demand = () => {
 
       <ClientLayout>
         <WholeWrapper minHeight={`calc(100vh - 137px)`} ju={`flex-start`}>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
-            <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
-              <BreadCrumb />
-              <Wrapper
-                wrap={`nowrap`}
-                dr={`row`}
-                ju={`flex-start`}
-                fontSize={width < 900 ? `18px` : `20px`}
-                fontWeight={`700`}
+          <LeftMenu />
+
+          <RsWrapper
+            dr={`row`}
+            al={`flex-start`}
+            position={`relative`}
+            margin={width < 900 ? `50px 0 0` : `100px 0 0`}
+          >
+            <Wrapper al={`flex-start`}>
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
               >
-                <Image
-                  alt="icon"
-                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
-                  width={`14px`}
-                  margin={`0 6px 0 0`}
-                />
-                기관형 과학기술인 커뮤니티 조사
-              </Wrapper>
-
-              {currentTab === 0 && (
-                <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 100px`}>
-                  <Btn
-                    margin={width < 800 ? `0 0 20px` : `0 20px 0 0`}
-                    onClick={() => typeHandler(1)}
-                  >
-                    사업수행 현황조사 참여하기&nbsp;
-                    <RightCircleOutlined />
-                  </Btn>
-                  <Btn onClick={() => typeHandler(2)}>
-                    사업 수요조사 참여하기&nbsp;
-                    <RightCircleOutlined />
-                  </Btn>
-                </Wrapper>
-              )}
-
-              {currentTab === 1 && (
-                <>
-                  <Wrapper
-                    wrap={`nowrap`}
-                    dr={`row`}
-                    ju={`flex-start`}
-                    fontSize={width < 900 ? `18px` : `20px`}
-                    margin={`35px 0 16px`}
-                    fontWeight={`700`}
-                  >
-                    <Image
-                      alt="icon"
-                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
-                      width={`8px`}
-                      margin={`0 6px 0 0`}
-                    />
-                    사업수행 현황조사
-                  </Wrapper>
-                  <Status surveyList={surveyList} />
-                </>
-              )}
-
-              {currentTab === 2 && (
-                <>
-                  <Wrapper
-                    wrap={`nowrap`}
-                    dr={`row`}
-                    ju={`flex-start`}
-                    fontSize={width < 900 ? `18px` : `20px`}
-                    margin={`35px 0 16px`}
-                    fontWeight={`700`}
-                  >
-                    <Image
-                      alt="icon"
-                      src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
-                      width={`8px`}
-                      margin={`0 6px 0 0`}
-                    />
-                    사업 수요조사
-                  </Wrapper>
-                  <Wrapper
-                    al={`flex-start`}
-                    fontSize={width < 900 ? `16px` : `18px`}
-                    margin={`0 0 20px`}
-                  >
-                    • 사업 수요 조사 파악 및 향후 사업 확대와 과학기술인
-                    협동조합 지원을 현실화하고 방향을 재정립하고자실시되는
-                    조사입니다.
-                  </Wrapper>
-                  <Wrapper
-                    bgColor={Theme.subTheme4_C}
-                    radius={`5px`}
-                    padding={`20px`}
-                    dr={`row`}
-                    ju={`flex-start`}
-                    margin={`0 0 40px`}
-                  >
-                    <Text
-                      fontSize={width < 900 ? `16px` : `20px`}
-                      fontWeight={`bold`}
-                      color={Theme.basicTheme_C}
-                      margin={`0 16px 0 0`}
-                    >
-                      기관형 과학기술인 협동조합이란?
-                    </Text>
-                    <Text
-                      fontSize={`16px`}
-                      color={Theme.basicTheme_C}
-                      onClick={visibleToggle}
-                      isHover
-                    >
-                      {visible ? `접기` : `펼치기`}
-                    </Text>
-
-                    {visible && (
-                      <>
-                        <Wrapper al={`flex-start`} margin={`16px 0 0`}>
-                          <Text fontSize={`18px`} fontWeight={`600`}>
-                            • 개념 및 정의
-                          </Text>
-                          <Text
-                            fontSize={width < 900 ? `14px` : `16px`}
-                            padding={`0 0 0 12px`}
-                          >
-                            기관형 과학기술인 협동조합'이란 「협동조합
-                            기본법」에 의해 설립된 협동조합(조합원 5인 이상)으로
-                            이공계 출신 과학기술인 법인 조합원이 50%이상인
-                            협동조합으로서 R&D 전문과학기술인(대학 및 출연연,
-                            연구소 등 개인)과 기업 및 시민사회 등 기관이 협업을
-                            통해 국가혁신 성과증진을 위해 지역 및 사회 혁신을
-                            추진하는 협동조합을 말함
-                          </Text>
-                        </Wrapper>
-                        <Wrapper al={`flex-start`} margin={`16px 0 0`}>
-                          <Text fontSize={`18px`} fontWeight={`600`}>
-                            • 지원내용
-                          </Text>
-                          <Text
-                            fontSize={width < 900 ? `14px` : `16px`}
-                            padding={`0 0 0 12px`}
-                          >
-                            1. 「협동조합 기본법」 에 의해 설립된 협동조합(5인
-                            이상)
-                          </Text>
-                          <Text
-                            fontSize={width < 900 ? `14px` : `16px`}
-                            padding={`0 0 0 12px`}
-                          >
-                            2. 조합원 중 이공계(과학기술인) 법인 조합원이 50%
-                            이상인 협동조합 (법인 조합원의 경우, 이공계 인력이
-                            2명 이상 근무하는 법인은 이공계 조합원 1인으로 간주)
-                          </Text>
-                          <Text
-                            fontSize={width < 900 ? `14px` : `16px`}
-                            padding={`0 0 0 12px`}
-                          >
-                            3. 과학기술 관련 서비스** 등을 주된 사업으로
-                            활동하는 협동조합
-                          </Text>
-                        </Wrapper>
-                      </>
-                    )}
-                  </Wrapper>
-
-                  <Business surveyList={surveyList} />
-                </>
-              )}
+                수요조사
+              </Text>
             </Wrapper>
+            <Wrapper
+              wrap={`nowrap`}
+              dr={`row`}
+              ju={`flex-start`}
+              fontSize={width < 900 ? `18px` : `20px`}
+              fontWeight={`700`}
+            >
+              <Image
+                alt="icon"
+                src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
+                width={`14px`}
+                margin={`0 6px 0 0`}
+              />
+              기관형 과학기술인 커뮤니티 조사
+            </Wrapper>
+
+            {currentTab === 0 && (
+              <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 100px`}>
+                <Btn
+                  margin={width < 800 ? `0 0 20px` : `0 20px 0 0`}
+                  onClick={() => typeHandler(1)}
+                >
+                  사업수행 현황조사 참여하기&nbsp;
+                  <RightCircleOutlined />
+                </Btn>
+                <Btn onClick={() => typeHandler(2)}>
+                  사업 수요조사 참여하기&nbsp;
+                  <RightCircleOutlined />
+                </Btn>
+              </Wrapper>
+            )}
+
+            {currentTab === 1 && (
+              <>
+                <Wrapper
+                  wrap={`nowrap`}
+                  dr={`row`}
+                  ju={`flex-start`}
+                  fontSize={width < 900 ? `18px` : `20px`}
+                  margin={`35px 0 16px`}
+                  fontWeight={`700`}
+                >
+                  <Image
+                    alt="icon"
+                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
+                    width={`8px`}
+                    margin={`0 6px 0 0`}
+                  />
+                  사업수행 현황조사
+                </Wrapper>
+                <Status surveyList={surveyList} />
+              </>
+            )}
+
+            {currentTab === 2 && (
+              <>
+                <Wrapper
+                  wrap={`nowrap`}
+                  dr={`row`}
+                  ju={`flex-start`}
+                  fontSize={width < 900 ? `18px` : `20px`}
+                  margin={`35px 0 16px`}
+                  fontWeight={`700`}
+                >
+                  <Image
+                    alt="icon"
+                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
+                    width={`8px`}
+                    margin={`0 6px 0 0`}
+                  />
+                  사업 수요조사
+                </Wrapper>
+                <Wrapper
+                  al={`flex-start`}
+                  fontSize={width < 900 ? `16px` : `18px`}
+                  margin={`0 0 20px`}
+                >
+                  • 사업 수요 조사 파악 및 향후 사업 확대와 과학기술인 협동조합
+                  지원을 현실화하고 방향을 재정립하고자실시되는 조사입니다.
+                </Wrapper>
+                <Wrapper
+                  bgColor={Theme.subTheme4_C}
+                  radius={`5px`}
+                  padding={`20px`}
+                  dr={`row`}
+                  ju={`flex-start`}
+                  margin={`0 0 40px`}
+                >
+                  <Text
+                    fontSize={width < 900 ? `16px` : `20px`}
+                    fontWeight={`bold`}
+                    color={Theme.basicTheme_C}
+                    margin={`0 16px 0 0`}
+                  >
+                    기관형 과학기술인 협동조합이란?
+                  </Text>
+                  <Text
+                    fontSize={`16px`}
+                    color={Theme.basicTheme_C}
+                    onClick={visibleToggle}
+                    isHover
+                  >
+                    {visible ? `접기` : `펼치기`}
+                  </Text>
+
+                  {visible && (
+                    <>
+                      <Wrapper al={`flex-start`} margin={`16px 0 0`}>
+                        <Text fontSize={`18px`} fontWeight={`600`}>
+                          • 개념 및 정의
+                        </Text>
+                        <Text
+                          fontSize={width < 900 ? `14px` : `16px`}
+                          padding={`0 0 0 12px`}
+                        >
+                          기관형 과학기술인 협동조합'이란 「협동조합 기본법」에
+                          의해 설립된 협동조합(조합원 5인 이상)으로 이공계 출신
+                          과학기술인 법인 조합원이 50%이상인 협동조합으로서 R&D
+                          전문과학기술인(대학 및 출연연, 연구소 등 개인)과 기업
+                          및 시민사회 등 기관이 협업을 통해 국가혁신 성과증진을
+                          위해 지역 및 사회 혁신을 추진하는 협동조합을 말함
+                        </Text>
+                      </Wrapper>
+                      <Wrapper al={`flex-start`} margin={`16px 0 0`}>
+                        <Text fontSize={`18px`} fontWeight={`600`}>
+                          • 지원내용
+                        </Text>
+                        <Text
+                          fontSize={width < 900 ? `14px` : `16px`}
+                          padding={`0 0 0 12px`}
+                        >
+                          1. 「협동조합 기본법」 에 의해 설립된 협동조합(5인
+                          이상)
+                        </Text>
+                        <Text
+                          fontSize={width < 900 ? `14px` : `16px`}
+                          padding={`0 0 0 12px`}
+                        >
+                          2. 조합원 중 이공계(과학기술인) 법인 조합원이 50%
+                          이상인 협동조합 (법인 조합원의 경우, 이공계 인력이 2명
+                          이상 근무하는 법인은 이공계 조합원 1인으로 간주)
+                        </Text>
+                        <Text
+                          fontSize={width < 900 ? `14px` : `16px`}
+                          padding={`0 0 0 12px`}
+                        >
+                          3. 과학기술 관련 서비스** 등을 주된 사업으로 활동하는
+                          협동조합
+                        </Text>
+                      </Wrapper>
+                    </>
+                  )}
+                </Wrapper>
+
+                <Business surveyList={surveyList} />
+              </>
+            )}
           </RsWrapper>
         </WholeWrapper>
       </ClientLayout>

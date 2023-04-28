@@ -37,50 +37,51 @@ const Group = ({}) => {
 
       <ClientLayout>
         <WholeWrapper>
+          <LeftMenu />
           <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
-
             <Wrapper
-              width={width < 1100 ? `100%` : `calc(100% - 280px)`}
               ju={`flex-start`}
               al={`flex-start`}
-              margin={`0 0 100px`}
+              margin={width < 900 ? `50px 0 100px` : `100px 0 100px`}
             >
-              <BreadCrumb />
-
-              <Wrapper>
-                <Wrapper
-                  dr={`row`}
-                  ju={`flex-start`}
-                  margin={`0 0 30px`}
-                  al={width < 700 ? `flex-start` : `center`}
-                >
-                  <Image
-                    src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
-                    alt="icon"
-                    width={`14px`}
-                    margin={width < 700 ? `6px 10px 0 0` : `0 10px 0 0`}
-                  />
-                  <Wrapper
-                    width={`calc(100% - 14px - 10px)`}
-                    al={`flex-start`}
-                    fontSize={width < 700 ? `18px` : `20px`}
-                    fontWeight={`600`}
-                  >
-                    기관형 과학기술인 협동조합 교류회 조직(안)
-                  </Wrapper>
-                </Wrapper>
-
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
+              >
+                조직
+              </Text>
+              <Wrapper
+                dr={`row`}
+                ju={`flex-start`}
+                margin={width < 900 ? `0 0 15px` : `0 0 30px`}
+                al={width < 700 ? `flex-start` : `center`}
+              >
                 <Image
-                  src={
-                    width < 700
-                      ? "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/img_group_m.png"
-                      : "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/img_group.png"
-                  }
-                  alt="img"
-                  margin={`30px 0 0`}
+                  src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png"
+                  alt="icon"
+                  width={`14px`}
+                  margin={width < 700 ? `6px 10px 0 0` : `0 10px 0 0`}
                 />
+                <Wrapper
+                  width={`calc(100% - 14px - 10px)`}
+                  al={`flex-start`}
+                  fontSize={width < 700 ? `18px` : `20px`}
+                  fontWeight={`600`}
+                >
+                  기관형 과학기술인 협동조합 교류회 조직(안)
+                </Wrapper>
               </Wrapper>
+
+              <Image
+                src={
+                  width < 700
+                    ? "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/img_group_m.png"
+                    : "https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/about-page/img_group.png"
+                }
+                alt="img"
+                margin={`30px 0 0`}
+              />
             </Wrapper>
           </RsWrapper>
         </WholeWrapper>

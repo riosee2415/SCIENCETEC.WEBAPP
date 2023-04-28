@@ -7,6 +7,7 @@ import axios from "axios";
 import { END } from "redux-saga";
 import { useSelector } from "react-redux";
 import {
+  CommonButton,
   CustomPage,
   Image,
   RsWrapper,
@@ -37,26 +38,52 @@ const Perform = () => {
       </Head>
 
       <ClientLayout>
-        <WholeWrapper padding={`0 0 160px`}>
-          <RsWrapper dr={`row`} al={`flex-start`} position={`relative`}>
-            <LeftMenu />
-            <Wrapper width={width < 1100 ? `100%` : `calc(100% - 280px)`}>
-              <BreadCrumb />
-              <Wrapper
-                wrap={`nowrap`}
-                dr={`row`}
-                ju={`flex-start`}
-                fontSize={width < 900 ? `18px` : `20px`}
-                fontWeight={`700`}
+        <WholeWrapper>
+          <LeftMenu />
+
+          <RsWrapper
+            dr={`row`}
+            al={`flex-start`}
+            position={`relative`}
+            margin={width < 900 ? `50px 0 0` : `100px 0 160px`}
+          >
+            <Wrapper al={`flex-start`}>
+              <Text
+                fontSize={`32px`}
+                fontWeight={`600`}
+                margin={width < 900 ? `0 0 15px` : `0 0 36px`}
               >
-                <Image
-                  alt="icon"
-                  src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
-                  width={`14px`}
-                  margin={`0 6px 0 0`}
-                />
-                기관형 과학기술인 협동조합 성장지원 사업 수행 안내
+                사업수행
+              </Text>
+              <Wrapper dr={`row`} ju={`space-between`}>
+                <Wrapper
+                  width={`auto`}
+                  wrap={`nowrap`}
+                  dr={`row`}
+                  ju={`flex-start`}
+                  fontSize={width < 900 ? `16px` : `20px`}
+                  fontWeight={`700`}
+                >
+                  <Image
+                    alt="icon"
+                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle.png`}
+                    width={`14px`}
+                    margin={`0 6px 0 0`}
+                  />
+                  기관형 과학기술인 협동조합 성장지원 사업 수행 안내
+                </Wrapper>
+                <Wrapper margin={width < 900 ? `10px 0 0` : `0`} width={`auto`}>
+                  <CommonButton
+                    width={width < 900 ? `190px` : `210px`}
+                    height={width < 900 ? `30px` : `40px`}
+                    fontSize={`16px`}
+                    padding={`0`}
+                  >
+                    사업계획서 제출 자세히 보기
+                  </CommonButton>
+                </Wrapper>
               </Wrapper>
+
               <Image
                 margin={`30px 0 0`}
                 alt="process"
