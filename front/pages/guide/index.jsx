@@ -1,18 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  KAKAO_LOGIN_REQUEST,
-  LOAD_MY_INFO_REQUEST,
-  LOGIN_REQUEST,
-} from "../../reducers/user";
+import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import useInput from "../../hooks/useInput";
 import ClientLayout from "../../components/ClientLayout";
 import axios from "axios";
 import wrapper from "../../store/configureStore";
 import { END } from "redux-saga";
 import {
-  ColWrapper,
-  RowWrapper,
   Image,
   WholeWrapper,
   Wrapper,
@@ -25,22 +19,17 @@ import useWidth from "../../hooks/useWidth";
 import Theme from "../../components/Theme";
 import styled, { ThemeContext } from "styled-components";
 import Head from "next/head";
-import Popup from "../../components/popup/popup";
-import Mainslider from "../../components/slide/MainSlider";
-import ToastEditorComponent from "../../components/editor/ToastEditorComponent";
-import CC01 from "../../components/common/CC01";
 import { DownloadOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCallback } from "react";
-import { Modal } from "antd";
 import LeftMenu from "../../components/LeftMenu";
-import BreadCrumb from "../../components/BreadCrumb";
 
 const Index = ({}) => {
-  const width = useWidth();
   ////// GLOBAL STATE //////
 
   ////// HOOKS //////
+  const width = useWidth();
+
   const [isDown, setIsDown] = useState(false);
   ////// REDUX //////
   ////// USEEFFECT //////
