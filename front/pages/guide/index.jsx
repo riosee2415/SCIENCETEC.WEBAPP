@@ -24,6 +24,16 @@ import { useState } from "react";
 import { useCallback } from "react";
 import LeftMenu from "../../components/LeftMenu";
 
+const GuideTitle = styled(Wrapper)`
+  width: auto;
+  padding: 5px 15px;
+  font-size: 16px;
+  background-color: ${Theme.subTheme2_C};
+  color: ${Theme.basicTheme_C};
+  border-radius: 30px;
+  margin: 15px 0 10px;
+`;
+
 const Index = ({}) => {
   ////// GLOBAL STATE //////
 
@@ -145,6 +155,15 @@ const Index = ({}) => {
                 </Wrapper>
 
                 <Wrapper al={`flex-start`}>
+                  <Wrapper>
+                    <Image
+                      width={`130px`}
+                      src="https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/establish-page/process1.png"
+                    />
+
+                    <GuideTitle>1. 발기인 모집</GuideTitle>
+                  </Wrapper>
+
                   <Image
                     src={
                       width < 700
