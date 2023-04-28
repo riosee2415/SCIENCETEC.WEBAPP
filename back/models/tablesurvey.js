@@ -169,5 +169,7 @@ module.exports = class TableSurvey extends Model {
       }
     );
   }
-  static associate(db) {}
+  static associate(db) {
+    db.TableSurvey.belongsTo(db.User);
+  }
 };
