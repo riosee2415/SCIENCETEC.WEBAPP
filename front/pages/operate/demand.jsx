@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import SubBanner from "../../components/SubBanner";
 import { FESTIVAL_LIST_REQUEST } from "../../reducers/festival";
 import Festival from "../../components/demand/Festival";
+import TableSurvey from "../../components/demand/TableSurvey";
 
 const Btn = styled(Wrapper)`
   width: 335px;
@@ -90,14 +91,14 @@ const Demand = () => {
   useEffect(() => {
     if (router.query) {
       if (router.query.type === "status") {
-        setCurrentTab(1);
+        setCurrentTab(4);
 
-        dispatch({
-          type: SURVEY_LIST_REQUEST,
-          data: {
-            type: 1,
-          },
-        });
+        // dispatch({
+        //   type: SURVEY_LIST_REQUEST,
+        //   data: {
+        //     type: 1,
+        //   },
+        // });
         return;
       }
       if (router.query.type === "business") {
@@ -132,7 +133,7 @@ const Demand = () => {
     (data) => {
       setCurrentTab(data);
 
-      if (data === 1) {
+      if (data === 4) {
         // 현황조사
         router.push("/operate/demand?type=status");
       } else if (data === 2) {
@@ -200,7 +201,7 @@ const Demand = () => {
               <Wrapper dr={`row`} ju={`flex-start`} margin={`30px 0 100px`}>
                 <Btn
                   margin={width < 800 ? `0 0 20px` : `0 20px 20px 0`}
-                  onClick={() => typeHandler(1)}
+                  onClick={() => typeHandler(4)}
                 >
                   사업수행 현황조사 참여하기&nbsp;
                   <RightCircleOutlined />
@@ -222,7 +223,7 @@ const Demand = () => {
               </Wrapper>
             )}
 
-            {currentTab === 1 && (
+            {/* {currentTab === 1 && (
               <>
                 <Wrapper
                   wrap={`nowrap`}
@@ -242,7 +243,7 @@ const Demand = () => {
                 </Wrapper>
                 <Status surveyList={surveyList} />
               </>
-            )}
+            )} */}
 
             {currentTab === 2 && (
               <>
@@ -367,6 +368,28 @@ const Demand = () => {
                 </Wrapper>
 
                 <Festival festivalList={festivalList} />
+              </>
+            )}
+            {currentTab === 4 && (
+              <>
+                <Wrapper
+                  wrap={`nowrap`}
+                  dr={`row`}
+                  ju={`flex-start`}
+                  fontSize={width < 900 ? `18px` : `20px`}
+                  margin={`35px 0 16px`}
+                  fontWeight={`700`}
+                >
+                  <Image
+                    alt="icon"
+                    src={`https://4leaf-s3.s3.ap-northeast-2.amazonaws.com/sciencetec/assets/images/icon/title_circle-small.png`}
+                    width={`8px`}
+                    margin={`0 6px 0 0`}
+                  />
+                  사업수행 현황조사 참여하기
+                </Wrapper>
+
+                <TableSurvey />
               </>
             )}
           </RsWrapper>

@@ -15,6 +15,7 @@ import shareSaga from "./shareProject";
 import surveySaga from "./survey";
 import mainSaga from "./main";
 import festivalSaga from "./festival";
+import tableSurveySaga from "./tableSurvey";
 //
 import axios from "axios";
 import backURL from "../config/config";
@@ -40,6 +41,7 @@ export default function* rootSaga() {
     fork(surveySaga),
     fork(mainSaga),
     fork(festivalSaga),
+    fork(tableSurveySaga),
     //
   ]);
 }

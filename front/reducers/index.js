@@ -16,6 +16,7 @@ import shareProject from "./shareProject";
 import survey from "./survey";
 import main from "./main";
 import festival from "./festival";
+import tableSurvey from "./tableSurvey";
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -40,6 +41,7 @@ const rootReducer = (state, action) => {
         shareProject,
         main,
         festival,
+        tableSurvey,
       });
       return combinedReducer(state, action);
     }

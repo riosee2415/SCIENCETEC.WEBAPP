@@ -91,8 +91,8 @@ const Festival = ({ festivalList }) => {
             festivalList.map((data, idx) => {
               return (
                 <>
-                  {console.log(data.id)}
                   <Wrapper
+                    key={idx}
                     border={`1px solid ${Theme.lightGrey2_C}`}
                     margin={` 0 0 20px`}
                   >
