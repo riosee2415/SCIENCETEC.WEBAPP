@@ -201,6 +201,11 @@ export const items = {
       link: "/admin/survey/festival",
       useYn: true,
     },
+    {
+      name: "행사 참가 신청리스트관리",
+      link: "/admin/survey/festivalView",
+      useYn: true,
+    },
   ],
 };
 
