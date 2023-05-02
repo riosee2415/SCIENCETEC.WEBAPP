@@ -379,7 +379,6 @@ router.post("/ticket/list", isAdminCheck, async (req, res, next) => {
             C.address,
             C.detailAddress,
             C.mobile,
-            C.email,
             C.username,
             C.importantBusiness1,
             C.importantBusiness2,
