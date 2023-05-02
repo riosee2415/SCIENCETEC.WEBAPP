@@ -343,6 +343,7 @@ router.post("/ticket/list", isAdminCheck, async (req, res, next) => {
 
   const selectQuery = `
   SELECT    ROW_NUMBER()    OVER(ORDER  BY A.createdAt)                                                                 AS num,
+            A.id,
             B.id                                                                                                        AS festivalId,
             B.festivalName,
             B.festivalStartDate,
