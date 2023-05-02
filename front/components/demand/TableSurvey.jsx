@@ -234,7 +234,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 조합명
               </Wrapper>
               <Wrapper
@@ -246,7 +246,7 @@ const TableSurvey = () => {
                   <TextInput border={`none`} width={`100%`} />
                 </Form.Item>
               </Wrapper>
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 사업구분
               </Wrapper>
               <Wrapper
@@ -267,7 +267,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 과제명
               </Wrapper>
               <Wrapper
@@ -279,7 +279,7 @@ const TableSurvey = () => {
                   <TextInput border={`none`} width={`100%`} />
                 </Form.Item>
               </Wrapper>
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 사업책임자
               </Wrapper>
               <Wrapper
@@ -296,7 +296,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 설립년도
               </Wrapper>
               <Wrapper
@@ -308,7 +308,7 @@ const TableSurvey = () => {
                   <TextInput border={`none`} width={`100%`} />
                 </Form.Item>
               </Wrapper>
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 실무책임자
               </Wrapper>
               <Wrapper
@@ -325,7 +325,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 조합원
               </Wrapper>
 
@@ -361,7 +361,7 @@ const TableSurvey = () => {
                   </Form.Item>
                 </Wrapper>
               </Wrapper>
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 매출액
               </Wrapper>
               <Wrapper
@@ -399,7 +399,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 계획
               </Wrapper>
               <Wrapper
@@ -411,7 +411,7 @@ const TableSurvey = () => {
                   <TextInput border={`none`} width={`100%`} />
                 </Form.Item>
               </Wrapper>
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 달성률
               </Wrapper>
               <Wrapper
@@ -427,7 +427,7 @@ const TableSurvey = () => {
             <Wrapper
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
-              fontSize={width < 700 ? `16px` : `20px`}
+              fontSize={width < 700 ? `14px` : `20px`}
             >
               <Wrapper width={`20%`}>예산</Wrapper>
               <Wrapper
@@ -435,7 +435,7 @@ const TableSurvey = () => {
                 borderLeft={`1px solid ${Theme.lightGrey2_C}`}
                 borderRight={`1px solid ${Theme.lightGrey2_C}`}
               >
-                총계(자동합계)
+                총계
               </Wrapper>
               <Wrapper width={`20%`}>집행</Wrapper>
               <Wrapper
@@ -443,16 +443,16 @@ const TableSurvey = () => {
                 borderLeft={`1px solid ${Theme.lightGrey2_C}`}
                 borderRight={`1px solid ${Theme.lightGrey2_C}`}
               >
-                총계(자동합계)
+                총계
               </Wrapper>
-              <Wrapper width={`15%`}>집행률(자동계산)</Wrapper>
+              <Wrapper width={`15%`}>집행률</Wrapper>
             </Wrapper>
 
             <Wrapper
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 직접비
               </Wrapper>
               <Wrapper
@@ -485,7 +485,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 - 인건비
               </Wrapper>
               <Wrapper
@@ -528,7 +528,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 - 시설장비비
               </Wrapper>
               <Wrapper
@@ -571,7 +571,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 - 재료비
               </Wrapper>
               <Wrapper
@@ -614,7 +614,7 @@ const TableSurvey = () => {
               dr={`row`}
               borderBottom={`1px solid ${Theme.lightGrey2_C}`}
             >
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 - 연구활동비
               </Wrapper>
               <Wrapper
@@ -654,7 +654,7 @@ const TableSurvey = () => {
             </Wrapper>
 
             <Wrapper dr={`row`}>
-              <Wrapper width={`20%`} fontSize={width < 700 ? `16px` : `20px`}>
+              <Wrapper width={`20%`} fontSize={width < 700 ? `14px` : `20px`}>
                 간접비
               </Wrapper>
               <Wrapper
@@ -696,7 +696,7 @@ const TableSurvey = () => {
                     padding={`20px 0`}
                   >
                     <Text
-                      fontSize={width < 700 ? `16px` : `20px`}
+                      fontSize={width < 700 ? `14px` : `20px`}
                       fontWeight={`600`}
                     >
                       {data}
