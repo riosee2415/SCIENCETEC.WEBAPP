@@ -274,7 +274,6 @@ const FestivalView = ({}) => {
                 labelCol={{ span: 3 }}
                 wrapperCol={{ span: 21 }}
                 style={{ width: `100%` }}
-                onFinish={festivalTicketList}
               >
                 <Form.Item name="festivalName" label="행사명">
                   <Input size="small" readOnly />

@@ -41,7 +41,7 @@ const reducer = (state = initailState, action) =>
       case TABLE_SURVEY_LIST_FAILURE: {
         draft.st_tableSurveyListLoading = false;
         draft.st_tableSurveyListDone = false;
-        draft.st_tableSurveyListError = action.data;
+        draft.st_tableSurveyListError = action.error;
         break;
       }
       ///////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ const reducer = (state = initailState, action) =>
       case TABLE_SURVEY_CREATE_FAILURE: {
         draft.st_tableSurveyCreateLoading = false;
         draft.st_tableSurveyCreateDone = false;
-        draft.st_tableSurveyCreateError = action.data;
+        draft.st_tableSurveyCreateError = action.error;
         break;
       }
 
