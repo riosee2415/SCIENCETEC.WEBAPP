@@ -17,6 +17,7 @@ import survey from "./survey";
 import main from "./main";
 import festival from "./festival";
 import tableSurvey from "./tableSurvey";
+import mailSend from "./mailSend";
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -42,6 +43,7 @@ const rootReducer = (state, action) => {
         main,
         festival,
         tableSurvey,
+        mailSend,
       });
       return combinedReducer(state, action);
     }

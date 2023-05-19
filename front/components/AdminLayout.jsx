@@ -115,6 +115,11 @@ export const items = {
       link: "/admin/user/userCreate",
       useYn: true,
     },
+    {
+      name: "문자/이메일발송관리",
+      link: "/admin/user/send",
+      useYn: true,
+    },
   ],
   고객지원관리: [
     {
